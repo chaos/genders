@@ -28,7 +28,7 @@ genders API that is compatible with earlier releases of genders
 %setup  -q -n %{name}-%{version}-%{release}
 
 %build
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT"
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT/%{_prefix}"
 make 
 
 %install

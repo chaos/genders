@@ -1,8 +1,7 @@
 2004-12-14  Albert Chu  <chu11@llnl.gov>
 
-	* genders.spec.in, src/Genders/Makefile.am,
-	src/Libgenders/Makefile.am: Backport fixes for x86_64 build
-	problems.
+	* genders.spec.in, src/Genders/Makefile.am: Backport fixes for
+	x86_64 build problems and random cleanup.
 
 	* META: Updated for new release.
 
