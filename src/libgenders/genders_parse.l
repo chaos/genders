@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_parse.l,v 1.3 2004-06-10 16:59:01 achu Exp $
+ *  $Id: genders_parse.l,v 1.4 2004-11-10 22:59:44 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -38,5 +38,6 @@
 \|                            return PIPETOK;
 &                             return AMPERSANDTOK;
 -                             return MINUSTOK;
+~                             return TILDETOK;
 [ \t\n]+                      /* ignore whitespace */
 %%

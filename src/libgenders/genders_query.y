@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.13 2004-11-10 21:52:26 achu Exp $
+ *  $Id: genders_query.y,v 1.14 2004-11-10 22:59:44 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,6 +37,7 @@ struct genders_treenode {
   char *str;
   struct genders_treenode *left;
   struct genders_treenode *right;
+  int complement;
 };
 
 int genders_query_err; 
@@ -66,8 +67,16 @@ genders_makenode(char *str, void *left, void *right)
 
   t->left = left;
   t->right = right;
+  t->complement = 0;
   return t;
 } 
+
+static void
+genders_set_complement_flag(void *node)
+{
+  struct genders_treenode *t = (struct genders_treenode *)node; 
+  t->complement++;
+}
 
 /* for debugging */
 static void
@@ -164,9 +173,10 @@ _parse_query(genders_t handle, char *query)
 static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
+  hostlist_t h = NULL;
+
   if (!t->left && !t->right) {
     char **nodes = NULL;
-    hostlist_t h = NULL;
     int i, len, num;
     char *attr, *val;
     
@@ -193,20 +203,20 @@ _calc_query(genders_t handle, struct genders_treenode *t)
     }
 
     genders_nodelist_destroy(handle, nodes);
-    hostlist_sort(h);
-    return h;
+    hostlist_uniq(h);
+    goto do_complement;
   cleanup_attr:
     genders_nodelist_destroy(handle, nodes);
     hostlist_destroy(h);
     return NULL;
   }
   else {
-    hostlist_t h, l, r;
+    hostlist_t l, r;
     hostlist_iterator_t itr = NULL;
     char buf[HOSTLIST_BUFLEN];
     int rv;
     
-    h = l = r = NULL;
+    l = r = NULL;
 
     /* Is this possible? Leave just in case */
     if (!(t->left && t->right)) {
@@ -248,11 +258,10 @@ _calc_query(genders_t handle, struct genders_treenode *t)
       if (rv > 0)
         hostlist_push(h, buf);
 
-      hostlist_sort(h);
       hostlist_uniq(h);
       hostlist_destroy(l);
       hostlist_destroy(r);
-      return h;
+      goto do_complement;
     }
     else if (strcmp(t->str, "&") == 0) {
       char *node;
@@ -273,12 +282,11 @@ _calc_query(genders_t handle, struct genders_treenode *t)
         free(node);
       }
           
-      hostlist_sort(h);
       hostlist_uniq(h);
       hostlist_iterator_destroy(itr);
       hostlist_destroy(l);
       hostlist_destroy(r);
-      return h;
+      goto do_complement;
     }
     else if (strcmp(t->str, "-") == 0) {
       char *node;
@@ -299,12 +307,11 @@ _calc_query(genders_t handle, struct genders_treenode *t)
         free(node);
       }
           
-      hostlist_sort(h);
       hostlist_uniq(h);
       hostlist_iterator_destroy(itr);
       hostlist_destroy(l);
       hostlist_destroy(r);
-      return h;
+      goto do_complement;
     }
     else {
       handle->errnum = GENDERS_ERR_INTERNAL;
@@ -316,6 +323,49 @@ _calc_query(genders_t handle, struct genders_treenode *t)
       return NULL;
     }
   }
+
+ do_complement:
+  if (t->complement) {
+    hostlist_t ch = NULL;
+    char *node = NULL;
+    char **nodes = NULL;
+    int i, len, num;
+    
+    if ((len = genders_nodelist_create(handle, &nodes)) < 0)
+      return NULL;
+
+    if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0)
+      return NULL;
+
+    if (!(ch = hostlist_create(NULL))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup_attr;
+    }
+
+    for (i = 0; i < num; i++) {
+      if (hostlist_find(h, nodes[i]) < 0) {
+        if (hostlist_push_host(ch, nodes[i]) <= 0) {
+          free(node);
+          handle->errnum = GENDERS_ERR_INTERNAL;
+          goto cleanup_complement;
+        }
+      }
+      free(node);
+    }
+ 
+    genders_nodelist_destroy(handle, nodes);
+    hostlist_uniq(ch);
+    hostlist_destroy(h);
+    h = ch;
+    goto done;
+  cleanup_complement:
+    genders_nodelist_destroy(handle, nodes);
+    hostlist_destroy(ch);
+    hostlist_destroy(h);
+    return NULL;
+  }
+ done:
+  return h;
 }
 
 int
@@ -371,7 +421,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
 %}
 
 %start input
-%token ATTRTOK LPARENTOK RPARENTOK PIPETOK AMPERSANDTOK MINUSTOK
+%token ATTRTOK LPARENTOK RPARENTOK PIPETOK AMPERSANDTOK MINUSTOK TILDETOK
 
 %union {
   char *attr;
@@ -399,6 +449,11 @@ query: term {$$ = $1;}
        | query MINUSTOK term 
            {
              $$ = genders_makenode("-", $1, $3);
+           }
+       | TILDETOK term
+           {
+             genders_set_complement_flag($2);
+             $$ = $2;
            }
        ;
 
