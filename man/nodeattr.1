@@ -1,5 +1,5 @@
 .\"
-.\" $Id: nodeattr.1,v 1.6 2003-08-05 17:08:08 achu Exp $
+.\" $Id: nodeattr.1,v 1.7 2003-08-05 21:13:02 achu Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/man/nodeattr.1,v $
 .\"
 .\" Copyright (C) 2000-2001 Regents of the University of California
@@ -86,10 +86,6 @@ for i in `nodeattr -n login`; do rsh $i who; done
 To verify whether or not this node is a head node:
 .IP
 nodeattr head && echo yes
-.LP
-To determine the cluster this node is on:
-.IP
-nodeattr -v cluster
 .LP
 .SH "FILES"
 /etc/genders
