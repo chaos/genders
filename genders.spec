@@ -87,7 +87,7 @@ install src/libgenders/Libgenders/blib/arch/auto/Libgenders/Libgenders.so $RPM_B
 install src/libgenders/Libgenders/blib/arch/auto/Libgenders/Libgenders.bs $RPM_BUILD_ROOT/usr/lib/genders/auto/Libgenders
 install src/libgenders/Libgenders/blib/lib/Libgenders.pm $RPM_BUILD_ROOT/usr/lib/genders
 install src/libgenders/Libgenders/blib/lib/auto/Libgenders/autosplit.ix $RPM_BUILD_ROOT/usr/lib/genders/auto/Libgenders
-cd src; make DESTDIR="$RPM_BUILD_ROOT" prefix=/usr install 
+cd src; configure --prefix=/usr; make DESTDIR="$RPM_BUILD_ROOT" install 
 
 %files
 %defattr(-,root,root)
