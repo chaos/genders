@@ -59,25 +59,25 @@ if ($ret == -1) {
 #}
 #print "\n";
 
-$temp = &Libgenders::genders_getattr($handle);
-if (&Libgenders::genders_errnum($handle) != 0) {
-    print "Error, genders_getattr()\n";
-    exit(1);
-}
-($attrs, $vals) = @$temp;
+#$temp = &Libgenders::genders_getattr($handle);
+#if (&Libgenders::genders_errnum($handle) != 0) {
+#    print "Error, genders_getattr()\n";
+#    exit(1);
+#}
+#($attrs, $vals) = @$temp;
 
-print "Attributes and Values are:\n";
-$i = 0;
-$len = @$attrs;
-while ($i < $len) {
-    print @$attrs[$i];
-    if (@$vals[$i] ne "") {
-	print "=",@$vals[$i];
-   }
-    print "\n";
-    $i++;
-} 
-print "\n";
+#print "Attributes and Values are:\n";
+#$i = 0;
+#$len = @$attrs;
+#while ($i < $len) {
+#    print @$attrs[$i];
+#    if (@$vals[$i] ne "") {
+#	print "=",@$vals[$i];
+#   }
+#    print "\n";
+#    $i++;
+#} 
+#print "\n";
 
 #$allattr = &Libgenders::genders_getattr_all($handle);
 #if (@$allattr == 0 && &Libgenders::genders_errnum($handle) != 0) {
@@ -95,12 +95,12 @@ print "\n";
 #$ret = &Libgenders::genders_getattrval($handle, "foo", "mdevi");
 #print "getattrval foo - ",$ret,"\n";
 
-$ret = &Libgenders::genders_testattr($handle, "resmgr");
-print "resmgr - ",$ret,"\n";
-$ret = &Libgenders::genders_testattr($handle, "mgmt");
-print "mgmt - ",$ret,"\n";
-$ret = &Libgenders::genders_testattr($handle, "foo");
-print "foo - ",$ret,"\n";
+#$ret = &Libgenders::genders_testattr($handle, "resmgr");
+#print "resmgr - ",$ret,"\n";
+#$ret = &Libgenders::genders_testattr($handle, "mgmt");
+#print "mgmt - ",$ret,"\n";
+#$ret = &Libgenders::genders_testattr($handle, "foo");
+#print "foo - ",$ret,"\n";
 
 #$ret = &Libgenders::genders_testattrval($handle, "resmgr");
 #print "resmgr - ",$ret,"\n";
