@@ -1,3 +1,15 @@
+2003-02-10  Albert Chu  <chu11@llnl.gov>
+	* : Tagged genders-1-0-3
+		- Renamed to genders-1-1-1 shortly thereafter. See below.
+	* : Tagged genders-1-1-1
+		- Initial commit of libgenders.  A C API
+		  to parse and retrieve data from a genders
+		  database.
+		- Initial commit of C implementation of 
+		  'nodeattr' command. 
+                - Makefiles, META, genders.spec all updated
+                  appropriately to reflect additions.
+
 2003-01-21 garlick
 	* Finally getting around to release.
 	* Tag genders-1-0-2
