@@ -156,4 +156,4 @@ cd src; DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/include/genders.h
 /usr/lib/genders/auto/Libgenders/Libgenders.bs
 /usr/lib/genders/auto/Libgenders/Libgenders.so
-/usr/lib/genders/auto/Libgenders/Libgenders.ix
+/usr/lib/genders/auto/Libgenders/autosplit.ix
