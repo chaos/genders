@@ -1,9 +1,0 @@
-##
-# $Id: META,v 1.5 2002-05-31 15:56:45 garlick Exp $
-##
-# Metadata for RPM/TAR makefile targets
-##
-  Meta:		1
-  Name:		genders
-  Version:	0.2
-  Release:	6chaos
