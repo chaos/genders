@@ -3,6 +3,8 @@
 	* src/libgenders/hostlist.h, src/libgenders/hostlist.c,
 	src/nodeattr/hostlist.h, src/nodeattr/hostlist.c: Updated
 	libraries.
+
+	* genders.spec.in: Another attempt to fix multilib.
 	
 2005-01-08  Albert Chu  <chu11@llnl.gov>
 

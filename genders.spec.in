@@ -26,16 +26,6 @@ genders API that is compatible with earlier releases of genders
 
 %prep
 %setup  -q -n %{name}-%{version}-%{release}
-# It doesn't matter if the user chooses a 32bit or 64bit target.  The
-# packaging must work off whatever Perl is installed.  
-INSTALLSITEARCH=`perl -e 'use Config; print $Config{installsitearch};'`
-if echo $INSTALLSITEARCH | grep lib64; then
-%define _perlprefix /usr/lib64
-true;				# no-op
-else
-%define _perlprefix /usr/lib
-true;				# no-op
-fi
 
 %build
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-destdir="$RPM_BUILD_ROOT"
@@ -48,6 +38,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
+# It doesn't matter if the user chooses a 32bit or 64bit target.  The
+# packaging must work off whatever Perl is installed.  
+%define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $T=~/(.*)\\/site_perl.*/; print $1;')
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
 %{_mandir}/man3/libgenders.3* 
@@ -56,7 +49,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_includedir}/*
 %{_bindir}/*
 %{_libdir}/libgenders.*
-%{_perlprefix}/perl*
+%{_perldir}/*
 
 %files compat
 %defattr(-,root,root)
