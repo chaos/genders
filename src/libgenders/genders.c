@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.85 2004-02-02 21:34:42 achu Exp $
+ *  $Id: genders.c,v 1.86 2004-02-03 00:34:29 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -207,6 +207,13 @@ _free_genders_attrval(void *x)
   free(av);
 }
 
+static void
+_free_attrvallist(void *x)
+{
+  List attrvals = (List)x;
+  list_destroy(attrvals);
+}
+
 /* API and API helper functions */
 
 static int 
@@ -353,7 +360,7 @@ genders_handle_create(void)
   if (!(handle->nodeslist = list_create(_free_genders_node)))
     goto cleanup;
 
-  if (!(handle->attrvalslist = list_create(NULL)))
+  if (!(handle->attrvalslist = list_create(_free_attrvallist)))
     goto cleanup;
 
   if (!(handle->attrslist = list_create(free)))
@@ -376,7 +383,7 @@ cleanup:
 }
 
 int 
-genders_handle_destroy(genders_t handle) 
+genders_handle_destroy(genders_t handle)
 {
   if (_handle_error_check(handle) < 0)
     return -1;
@@ -561,7 +568,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	    List debugnodeslist, List debugattrvalslist) 
 {
   char *linebuf, *temp, *attr, *nodenames, *node = NULL;
-  int rv, attrcount = 0, retval = -1;
+  int rv, retval = -1;
   int max_n_subst_vallen = 0;
   int line_maxnodelen = 0;
   List attrvals = NULL;
@@ -597,12 +604,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
     /* should be impossible to hit this */
     return 0;
 
-  if (!(attrvals = list_create(_free_genders_attrval))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-  
-  /* if stresp() sets line == NULL, line has no attributes */
+  /* if strsep() sets line == NULL, line has no attributes */
   if (line) {
     /* move forward to attributes */
     while(isspace(*line))  
@@ -619,6 +621,11 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	goto cleanup;
       }
       
+      if (!(attrvals = list_create(_free_genders_attrval))) {
+        handle->errnum = GENDERS_ERR_OUTMEM;
+        goto cleanup;
+      }
+
       /* parse attributes */
       attr = strtok_r(line,",\0",&linebuf);
       while (attr) {
@@ -666,7 +673,6 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	    goto cleanup;
 	  
 	  handle->numattrs += is_new_attr;
-	  attrcount++;
 	  
 	  handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
 	  if (val) {
@@ -723,21 +729,23 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
     if (!(n =_insert_node(handle, nodelist, node)))
       goto cleanup;
 
-    if ((rv = _duplicate_attr_check(handle, n->attrlist, attrvals)) < 0)
-      goto cleanup;
+    if (attrvals) {
+      if ((rv = _duplicate_attr_check(handle, n->attrlist, attrvals)) < 0)
+        goto cleanup;
 
-    if (rv == 1) {
-      if (line_num > 0) {
-	fprintf(stream, "Line %d: duplicate attributed listed for node %s\n",
-		line_num, node);
-	retval = 1;
+      if (rv == 1) {
+        if (line_num > 0) {
+          fprintf(stream, "Line %d: duplicate attributed listed for node %s\n",
+                  line_num, node);
+          retval = 1;
+        }
+        handle->errnum = GENDERS_ERR_PARSE;
+        goto cleanup;
       }
-      handle->errnum = GENDERS_ERR_PARSE;
-      goto cleanup;
-    }
     
-    if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
-      goto cleanup;
+      if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
+        goto cleanup;
+    }
 
     if (!line_num) {
       handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
@@ -754,9 +762,11 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 			    handle->maxvallen);
 
   /* Append at the very end, so cleanup area cleaner */
-  if (_insert_ptr(handle, attrvalslist, attrvals) < 0)
-    goto cleanup;
-  attrvals = NULL;
+  if (attrvals) {
+    if (_insert_ptr(handle, attrvalslist, attrvals) < 0)
+      goto cleanup;
+    attrvals = NULL;
+  }
 
   retval = 0;
  cleanup:
