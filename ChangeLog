@@ -1,3 +1,8 @@
+2003-08-18  Albert Chu  <chu11@llnl.gov>
+
+	* man/: Replaced "Release 1.2" with "August 2003" in all manpages,
+	to stay consistent with other package's manpages.
+
 2003-08-15  Albert Chu  <chu11@llnl.gov>
 
 	* src/Genders/Genders.pm: Remove automatic exports.
