@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.68 2003-11-03 20:04:55 achu Exp $
+ * $Id: genders.c,v 1.69 2003-11-03 20:06:14 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -950,7 +950,7 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val) {
 
 int genders_parse(genders_t handle, const char *filename, FILE *stream) {
   int line_count = 1;
-  int retval = -1;
+  int retval = 0;
   int rv, ret, fd = -1;
   char buf[GENDERS_READLINE_BUFLEN];
 
