@@ -425,9 +425,14 @@ genders_getnodes(handle, attr=NULL, val=NULL)
 
                 handle_error:
 
+                /* manually destroy lists, to preserve error value */
                 if (nodelist != NULL) {
-                        (void)genders_nodelist_destroy(handle, nodelist);
+                        for (i = 0; i < num; i++) {
+                                free(nodelist[i]);
+                        } 
+                        free(nodelist);
                 }
+
                 RETVAL = newAV();
 
                 the_end:
@@ -481,12 +486,21 @@ genders_getattr(handle, node=NULL)
 
                 handle_error:
 
+                /* manually destroy lists, to preserve error value */
                 if (attrlist != NULL) {
-                        (void)genders_attrlist_destroy(handle, attrlist);
+                        for (i = 0; i < num; i++) {
+                                free(attrlist[i]);
+                        } 
+                        free(attrlist);
                 }
+
                 if (vallist != NULL) {
-                        (void)genders_vallist_destroy(handle, vallist);
+                        for (i = 0; i < num; i++) {
+                                free(vallist[i]);
+                        } 
+                        free(vallist);
                 }
+
                 RETVAL = newAV();
 
                 the_end:
@@ -519,9 +533,14 @@ genders_getattr_all(handle)
 
                 handle_error:
 
+                /* manually destroy lists, to preserve error value */
                 if (attrlist != NULL) {
-                        (void)genders_attrlist_destroy(handle, attrlist);
+                        for (i = 0; i < num; i++) {
+                                free(attrlist[i]);
+                        } 
+                        free(attrlist);
                 }
+
                 RETVAL = newAV();
 
                 the_end:
