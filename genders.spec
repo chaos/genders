@@ -38,7 +38,6 @@ mkdir -p $RPM_BUILD_ROOT/usr/man/man3
 install -d $RPM_BUILD_ROOT/usr/lib/genders
 install compat/gendlib.pl $RPM_BUILD_ROOT/usr/lib/genders
 install compat/hostlist.pl $RPM_BUILD_ROOT/usr/lib/genders
-install -s inst $RPM_BUILD_ROOT/usr/bin
 install dist/dist2 $RPM_BUILD_ROOT/usr/bin
 install dist/dist_all $RPM_BUILD_ROOT/usr/bin
 install dist/dist_local $RPM_BUILD_ROOT/usr/bin
