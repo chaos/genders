@@ -12,4 +12,6 @@
     #! overwrite-flag
     a,b,c,d,e,f,g,h,i   all,attr=val,printer=foo
     g,h,i               printer=bar
+- Rework to allow multiple hashed attrval mappings?
+- Make attr and node hasing automatic?
 - Have genders_getnodes() return nodes in sorted order?
