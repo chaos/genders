@@ -69,7 +69,6 @@ install man/genders_perror.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_strerror.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_testattr.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_testattrval.3.gz $RPM_BUILD_ROOT/usr/man/man3
-install man/genders_getattrval.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_testnode.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_vallist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_vallist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
