@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.31 2003-05-07 19:02:33 achu Exp $
+ * $Id: genders.c,v 1.32 2003-05-07 19:15:21 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -691,37 +691,6 @@ void genders_free_cache(genders_t handle) {
   }
 }
 
-int genders_errnum(genders_t handle) {
-  if (handle == NULL)
-    return GENDERS_ERR_NULLHANDLE;
-  else if (handle->magic != GENDERS_MAGIC_NUM)
-    return GENDERS_ERR_MAGIC;
-  else
-    return handle->errnum;
-}
-
-char *genders_strerror(int errnum) {
-  if (errnum >= GENDERS_ERR_MIN && errnum <= GENDERS_ERR_MAX)
-    return errmsg[errnum];
-  else
-    return errmsg[GENDERS_ERR_ERRNUMRANGE];
-}
-
-char *genders_errormsg(genders_t handle) {
-  return genders_strerror(genders_errnum(handle));
-}
-
-void genders_perror(genders_t handle, const char *msg) {
-  char *errormsg;
-
-  errormsg = genders_strerror(genders_errnum(handle));
-
-  if (msg == NULL)
-    fprintf(stderr, "%s\n", errormsg);
-  else
-    fprintf(stderr, "%s: %s\n", msg, errormsg);
-}
-
 int genders_handle_dump(genders_t handle, FILE *stream) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
@@ -755,6 +724,37 @@ int genders_handle_dump(genders_t handle, FILE *stream) {
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
+}
+
+int genders_errnum(genders_t handle) {
+  if (handle == NULL)
+    return GENDERS_ERR_NULLHANDLE;
+  else if (handle->magic != GENDERS_MAGIC_NUM)
+    return GENDERS_ERR_MAGIC;
+  else
+    return handle->errnum;
+}
+
+char *genders_strerror(int errnum) {
+  if (errnum >= GENDERS_ERR_MIN && errnum <= GENDERS_ERR_MAX)
+    return errmsg[errnum];
+  else
+    return errmsg[GENDERS_ERR_ERRNUMRANGE];
+}
+
+char *genders_errormsg(genders_t handle) {
+  return genders_strerror(genders_errnum(handle));
+}
+
+void genders_perror(genders_t handle, const char *msg) {
+  char *errormsg;
+
+  errormsg = genders_strerror(genders_errnum(handle));
+
+  if (msg == NULL)
+    fprintf(stderr, "%s\n", errormsg);
+  else
+    fprintf(stderr, "%s: %s\n", msg, errormsg);
 }
 
 int genders_getnumnodes(genders_t handle) {
