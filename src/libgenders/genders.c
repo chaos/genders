@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.78 2004-01-26 23:30:18 achu Exp $
+ *  $Id: genders.c,v 1.79 2004-01-27 00:36:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -628,8 +628,8 @@ _parse_line(genders_t handle, char *line,
 
   retval = 0;
  cleanup:
-  hostlist_destroy(hl);
   hostlist_iterator_destroy(hlitr);
+  hostlist_destroy(hl);
   free(node);
   if (attrvals)
     list_destroy(attrvals);
