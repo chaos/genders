@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_getattr.3,v 1.10 2003-12-30 21:47:13 achu Exp $
+\."  $Id: genders_getattr.3,v 1.11 2004-02-03 23:12:46 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,7 +43,7 @@ attribute values list.
 
 To avoid passing in a list that is not large enough to store all the
 attributes and attribute values,
-.BR genders_getmaxattrs (3)
+.BR genders_getnumattrs (3)
 should be used to determine the minimum number of elements \fIattrs\fR
 and \fIvals\fR should be able to store.
 .BR genders_attrlist_create (3) 
@@ -96,5 +96,5 @@ point to a genders handle or \fIhandle\fR has been destroyed by
 /usr/include/genders.h
 .SH SEE ALSO
 libgenders(3), genders_handle_create(3), genders_load_data(3),
-genders_getmaxattrs(3), genders_attrlist_create(3),
+genders_getnumattrs(3), genders_attrlist_create(3),
 genders_vallist_create(3), genders_errnum(3), genders_strerror(3)

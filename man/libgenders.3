@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: libgenders.3,v 1.11 2004-02-02 17:10:27 achu Exp $
+\."  $Id: libgenders.3,v 1.12 2004-02-03 23:12:46 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -46,8 +46,6 @@ libgenders \- a library of functions to parse and retrieve genders data
 .BI "int genders_getnumnodes(genders_t handle);"
 .sp
 .BI "int genders_getnumattrs(genders_t handle);"
-.sp
-.BI "int genders_getmaxattrs(genders_t handle);"
 .sp
 .BI "int genders_getmaxnodelen(genders_t handle);"
 .sp
@@ -157,13 +155,12 @@ Libgenders(3), Genders(3), genders_handle_create(3),
 genders_handle_destroy(3), genders_load_data(3), genders_errnum(3),
 genders_strerror(3), genders_errormsg(3), genders_perror(3),
 genders_getnumnodes(3), genders_getnumattrs(3),
-genders_getmaxattrs(3), genders_getmaxnodelen(3),
-genders_getmaxattrlen(3), genders_getmaxvallen(3),
-genders_nodelist_create(3), genders_nodelist_clear(3),
-genders_nodelist_destroy(3), genders_attrlist_create(3),
-genders_attrlist_clear(3), genders_attrlist_destroy(3),
-genders_vallist_create(3), genders_vallist_clear(3),
-genders_vallist_destroy(3), genders_getnodename(3),
-genders_getnodes(3), genders_getattr(3), genders_getattr_all(3),
-genders_testattr(3), genders_testattrval(3), genders_testnode(3),
-genders_parse(3)
+genders_getmaxnodelen(3), genders_getmaxattrlen(3),
+genders_getmaxvallen(3), genders_nodelist_create(3),
+genders_nodelist_clear(3), genders_nodelist_destroy(3),
+genders_attrlist_create(3), genders_attrlist_clear(3),
+genders_attrlist_destroy(3), genders_vallist_create(3),
+genders_vallist_clear(3), genders_vallist_destroy(3),
+genders_getnodename(3), genders_getnodes(3), genders_getattr(3),
+genders_getattr_all(3), genders_testattr(3), genders_testattrval(3),
+genders_testnode(3), genders_parse(3)
