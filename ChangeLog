@@ -1,3 +1,9 @@
+2004-04-28  Albert Chu  <chu11@llnl.gov>
+
+	* Added attribute indexing.
+
+	* New genders_index_nodes and genders_index_attrs functions.
+	
 2004-04-27  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in: Use %configure macro.
