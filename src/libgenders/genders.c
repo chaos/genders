@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.45 2003-05-27 23:24:17 achu Exp $
+ * $Id: genders.c,v 1.46 2003-05-27 23:27:28 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -374,7 +374,8 @@ cleanup:
 }
 
 int genders_getline(genders_t handle, int fd, char **buf) {
-  int retval, start_offset = 0, buflen = GENDERS_GETLINE_BUFLEN;
+  int retval, start_offset = 0;
+  int buflen = GENDERS_GETLINE_BUFLEN;
   
   /* get beginning seek position */
   if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
