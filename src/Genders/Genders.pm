@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.7 2003-05-22 16:12:24 achu Exp $
+# $Id: Genders.pm,v 1.8 2003-05-22 18:16:42 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -12,12 +12,12 @@ our $VERSION = "2.0";
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(_errormsg GENDERS_DEFAULT_FILE debugkey handlekey);
-our @EXPORT_OK = qw(_errormsg GENDERS_DEFAULT_FILE debugkey handlekey);
-our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg 
-                                   GENDERS_DEFAULT_FILE 
-                                   debugkey 
-                                   handlekey) ] );
+our @EXPORT = qw(&_errormsg $GENDERS_DEFAULT_FILE $debugkey $handlekey);
+our @EXPORT_OK = qw(&_errormsg $GENDERS_DEFAULT_FILE $debugkey $handlekey);
+our %EXPORT_TAGS = ( 'all' => [ qw(&_errormsg 
+                                   $GENDERS_DEFAULT_FILE 
+                                   $debugkey 
+                                   $handlekey) ] );
 
 our $GENDERS_DEFAULT_FILE = Libgenders->GENDERS_DEFAULT_FILE;
 our $debugkey = "_DEBUG";
