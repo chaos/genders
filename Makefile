@@ -9,7 +9,7 @@ PACKAGE=        genders
 CFLAGS = -Wall -g
 
 all: inst
-	cd src;	make 
+	cd src;	./configure; make 
 	cd src/libgenders/Libgenders; perl Makefile.PL; make
 
 install:
