@@ -65,4 +65,7 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include i
 /usr/man/man3/gendlib.3.gz
 /usr/lib/libgenders.a
 /usr/lib/libgenders.la
+/usr/lib/libgenders.so
+/usr/lib/libgenders.so.0
+/usr/lib/libgenders.so.0.0.0
 /usr/include/genders.h
