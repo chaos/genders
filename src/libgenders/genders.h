@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.8 2003-03-11 17:01:15 achu Exp $
+ * $Id: genders.h,v 1.9 2003-03-11 17:03:39 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -27,6 +27,10 @@
 #define GENDERS_ERR_FREEMEM    11 /* memory has not been freed */
 #define GENDERS_ERR_ISFREE     12 /* memory is already free */
 #define GENDERS_ERR_INTERNAL   13 /* internal system error */
+
+#define DEFAULT_GENDERS_FILE        "/etc/genders"
+
+#define GENDERS_ALTNAME_ATTRIBUTE   "altname"
 
 typedef struct genders *genders_t;
 
