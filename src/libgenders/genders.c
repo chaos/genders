@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.98 2004-04-20 22:55:40 achu Exp $
+ *  $Id: genders.c,v 1.99 2004-04-22 22:44:36 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -906,7 +906,8 @@ genders_load_data(genders_t handle, const char *filename)
 
 cleanup:
   close(fd);
-  list_iterator_destroy(itr);
+  if (itr)
+    list_iterator_destroy(itr);
   if (handle->node_index) {
     hash_destroy(handle->node_index);
     handle->node_index = NULL;
