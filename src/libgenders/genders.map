@@ -1,0 +1,6 @@
+{
+  global:
+    genders*;
+  local:
+    *;
+};
