@@ -89,6 +89,8 @@ am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
+ACLOCAL_AMFLAGS = -I config
+
 SUBDIRS = libgenders 
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -124,7 +126,7 @@ $(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
 $(srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
 	cd $(srcdir) && $(AUTOCONF)
 
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.ac 
+$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.ac config/ac_humor.m4
 	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 
 config/config.h: config/stamp-h1
