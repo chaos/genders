@@ -92,7 +92,6 @@ install_sh = @install_sh@
 
 SUBDIRS = \
 	libgenders \
-	libgendersllnl \
 	nodeattr 
 
 subdir = src
