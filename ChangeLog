@@ -7,6 +7,8 @@
 	man/genders_index_attrs.3: Remove unnecessary manpages.
 
 	* man/Makefile.am: Remove unnecessary manpages.
+
+	* man/genders_query.3: Fixed typo.
 	
 2004-10-28  Albert Chu  <chu11@llnl.gov>
 
