@@ -3,7 +3,7 @@
 ##   by Chris Dunlap <cdunlap@llnl.gov>
 ##*
 ## ConManId: Make-rpm.mk,v 1.20 2002/08/16 00:18:29 dun Exp
-## $Id: Make-rpm.mk,v 1.5 2003-04-09 19:54:19 achu Exp $
+## $Id: Make-rpm.mk,v 1.6 2003-04-09 19:56:37 achu Exp $
 ##*
 ## REQUIREMENTS:
 ## - requires project to be under CVS version control
