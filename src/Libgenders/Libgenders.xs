@@ -552,11 +552,11 @@ genders_getattrval(handle, attr, node=NULL)
 
 		memset(buf, '\0', maxvallen+1);
 
-		if ((ret = genders_getattrval(handle, 
-					      node, 
-					      attr, 
-					      buf, 
-					      maxvallen+1)) == -1) {
+		if ((ret = genders_testattr(handle, 
+					    node, 
+					    attr, 
+					    buf, 
+					    maxvallen+1)) == -1) {
 			goto handle_error;
 		}
 
@@ -584,7 +584,7 @@ genders_testattr(handle, attr, node=NULL)
 	char *node
 	char *attr
 	CODE:
-		RETVAL = genders_testattr(handle, node, attr);
+		RETVAL = genders_testattrval(handle, node, attr, NULL);
 	OUTPUT:
 		RETVAL		
 
