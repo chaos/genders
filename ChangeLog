@@ -7,6 +7,7 @@
 	* Added error code/constants accessor functions in Libgenders
 	* Made Libgenders object-oriented.
 	* Nodeattr no longer has -C option
+	* Remoeved dist scripts, now in different package.
 	* Added Genders, an OO based replacement for gendlib.pl
 	  - will eventually phase out gendlib.pl 
 	
