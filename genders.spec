@@ -26,9 +26,6 @@ make
 
 %install
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/usr/man/man1
-mkdir -p $RPM_BUILD_ROOT/usr/man/man3
-mkdir -p $RPM_BUILD_ROOT/usr/lib/genders
 DESTDIR="$RPM_BUILD_ROOT" make install 
 
 %files
