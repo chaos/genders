@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.9.4.1.2.2 2004-12-14 18:35:44 achu Exp $
+## $Id: Makefile.am,v 1.9.4.1.2.3 2004-12-14 18:41:39 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -7,7 +7,7 @@
 # Use Perl's ExtUtils::MakeMaker to get autoconf/automake to install
 # into the correct location
 #
-# PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
+PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 
 all: Makefile.pm
 	$(MAKE) -f Makefile.pm
@@ -21,7 +21,7 @@ Makefile.pm: Makefile.PL
 		cp $(srcdir)/Genders.pm .; \
 	fi
 	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(PERL) Makefile.PL PREFIX=$(DESTDIR)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITEARCH=$(DESTDIR)/$$TEMPINSTALLSITEARCH
+	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITEARCH=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITEARCH
 
 install: Makefile.pm
 	$(MAKE) -f Makefile.pm pure_install
