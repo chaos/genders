@@ -1,6 +1,6 @@
-#!/admin/bin/perl
+#!/usr/bin/perl
 #
-# $Id: dist2,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Id: dist2,v 1.2 2001-07-14 03:31:21 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2,v $
 # 
 # Copyright (C) 2000 Regents of the University of California
@@ -27,14 +27,13 @@
 # - can update all nodes in a cluster or a subset
 #
 
-# require "/admin/lib/gendlib.pl";
-require "./gendlib.pl";
+require "/usr/lib/genders/gendlib.pl";
 
 use Getopt::Std;
 
 $path_vardist =		"/var/dist";
 $path_genders = 	"/var/dist/genders/genders.%s";
-$path_genders_fallback ="/admin/etc/genders";
+$path_genders_fallback ="/etc/genders";
 $path_distfile = 	"/var/dist/Distfile.%s";
 $path_testfile =	"/var/dist/VAR_DIST_IS_MOUNTED";
 $path_openfile =	"/var/dist/VAR_DIST_OPEN_VERSION";
@@ -80,7 +79,7 @@ if ($main::opt_c) {
 	if (!Genders::getnode("all")) {
 		Genders::init($main::path_genders_fallback);
 	}
-	# Fall back to /admin/etc/genders if /var/dist perhaps isn't mounted
+	# Fall back to /etc/genders if /var/dist perhaps isn't mounted
 }
 
 # quit if args make no sense

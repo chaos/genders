@@ -1,6 +1,6 @@
 #!/bin/ksh
 #
-# $Id: dist_all,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Id: dist_all,v 1.2 2001-07-14 03:31:22 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist_all,v $
 # 
 # Copyright (C) 2000 Regents of the University of California
@@ -10,7 +10,7 @@
 # Adapted from IBM SP version for linux 4/00.
 #
 PATH=/admin/scripts:/admin/bin:$PATH
-DIST=/admin/scripts/dist2
+DIST=/usr/bin/dist2
 FANOUT=32
 NUMNODES=`nodeattr -n all|wc -l`
 

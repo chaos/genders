@@ -1,5 +1,5 @@
 .\"
-.\" $Id: dist2.1,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+.\" $Id: dist2.1,v 1.2 2001-07-14 03:31:21 garlick Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2.1,v $
 .\"
 .\" Copyright (C) 2000 Regents of the University of California
@@ -86,7 +86,7 @@ is also specified, line numbers will be prepended to each line.
 /var/dist is actually used to manage rdisted files across several MPP systems.
 We refer to each MPP as a
 .I cluster,
-with the file /admin/etc/clusters mapping hostnames to cluster names.  
+with the file /etc/clusters mapping hostnames to cluster names.  
 Distfile macros of the form ${attr_xyz} implicitly refer to the local cluster.
 Specific clusters can be targeted by specifying a macro of the
 form ${clustername!attr_xyz}.  These definitions expand to empty lists on
@@ -102,10 +102,10 @@ attribute.
 .LP
 .SH "BUGS"
 When expanding macros, we actually refer to /var/dist/genders/genders.cluster
-instead of the installed version, /admin/etc/genders.  Since the genders file
+instead of the installed version, /etc/genders.  Since the genders file
 is under rdist control, referring directly to the source file eliminates a
 potential bootstrapping problem.  On the other hand, it's ugly to hardcode
-the source path, and we refer to other files, such as /admin/etc/clusters,
+the source path, and we refer to other files, such as /etc/clusters,
 in their installed location.
 .LP
 NFS mounting /var/dist simplifies our lives as long as the switch is up

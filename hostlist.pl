@@ -1,5 +1,5 @@
 #
-# $Id: hostlist.pl,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Id: hostlist.pl,v 1.2 2001-07-14 03:31:22 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/hostlist.pl,v $
 #
 # Copyright (C) 2000 Regents of the University of California
@@ -20,7 +20,7 @@ use strict;
 if (!$Hostlist::included) {
 $Hostlist::included = 1;
 
-require "/admin/lib/gendlib.pl";
+require "/usr/lib/genders/gendlib.pl";
 
 # Construct node list from hostlist file
 #   $fileName (IN)	hostlist filename

@@ -1,4 +1,5 @@
 Changes while living on linux:
+
 	Removed herolib.pl stuff temporarily.  It needs to be merged back in.
 
 	If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh is OK.
@@ -29,3 +30,7 @@ Changes while living on linux:
 	to use GNU install -C.
 
 	Removed jmd stuff (hostlist.pl).
+
+vers0.1 Jim Garlick <garlick@llnl.gov>
+	
+	Added genders.spec, DISCLAIMER

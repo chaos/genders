@@ -1,0 +1,21 @@
+#!/bin/ksh
+#
+# $Id: dist_bootstrap,v 1.1 2001-07-14 03:31:22 garlick Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist_bootstrap,v $
+# 
+# Copyright (C) 2000 Regents of the University of California
+# See the DISCLAIMER file distributed with this package.
+#
+# Author: Jim Garlick
+#
+# Copy /etc/genders and /etc/clusters from /var/dist
+if [ $# -ne 1 ]; then
+	echo Usage: dist_bootstrap clustername
+	exit 1
+fi
+CLUSTER=$1
+cd /var/dist || exit 1
+
+umask 022
+install -m 444 genders/genders.$CLUSTER /etc/genders
+install -m 444 genders/clusters /etc

@@ -1,6 +1,6 @@
 #!/admin/bin/perl
 #
-# $Id: nodeattr,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Id: nodeattr,v 1.2 2001-07-14 03:31:22 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/nodeattr,v $
 #
 # Copyright (C) 2000 Regents of the University of California
@@ -19,8 +19,8 @@ $ENV{BASH_ENV} = "";
 
 use Getopt::Std;
 
-require "/admin/lib/gendlib.pl";
-require "/admin/lib/hostlist.pl";
+require "/usr/lib/genders/gendlib.pl";
+require "/usr/lib/genders/hostlist.pl";
 
 ##
 ## MAIN

@@ -1,5 +1,5 @@
 .\"
-.\" $Id: nodeattr.1,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+.\" $Id: nodeattr.1,v 1.2 2001-07-14 03:31:22 garlick Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/nodeattr.1,v $
 .\"
 .\" Copyright (C) 2000 Regents of the University of California
@@ -63,7 +63,7 @@ only an attribute with the specified value in the genders file will match.
 .LP
 To use nodeattr with dsh to run a command on all fddi nodes:
 .IP
-dsh -w`nodeattr -c fddi` command
+pdsh -w`nodeattr -c fddi` command
 .LP
 To use nodeattr in a ksh script to collect a list of users on login nodes:
 .IP
@@ -74,12 +74,10 @@ To verify whether or not this node is a head node:
 nodeattr head && echo yes
 .LP
 .SH "FILES"
-/admin/etc/genders
+/etc/genders
 .br
-/admin/etc/attributes
+/etc/clusters
 .br
-/admin/etc/clusters
-.br
-/admin/lib/gendlib.pl
+/usr/lib/genders/gendlib.pl
 .SH "SEE ALSO"
 gendlib(1)
