@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.83 2004-01-28 02:01:55 achu Exp $
+ *  $Id: genders.c,v 1.84 2004-02-02 16:51:59 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,6 +43,14 @@
 
 #ifndef MAXHOSTNAMELEN
 #define MAXHOSTNAMELEN            64
+#endif
+
+#ifndef MAXATTRLEN
+#define MAXATTRLEN                64
+#endif
+
+#ifndef MAXVALLEN                 
+#define MAXVALLEN                 64
 #endif
 
 #ifndef MAX
@@ -242,7 +250,6 @@ _find_attrval_in_attrlist(genders_t handle, List attrlist, const char *attr,
                           genders_attrval_t *avptr)
 {
   ListIterator itr = NULL;
-  ListIterator avitr = NULL;
   List attrvals;
   int retval = -1;
   
@@ -254,30 +261,63 @@ _find_attrval_in_attrlist(genders_t handle, List attrlist, const char *attr,
   *avptr = NULL;
   while ((attrvals = list_next(itr))) {
     genders_attrval_t av;
-
-    if (!(avitr = list_iterator_create(attrvals))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
+    
+    av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr);
+    if (av) {
+      *avptr = av;
+      break;
     }
-
-    while ((av = list_next(avitr))) {
-      if (!strcmp(av->attr, attr)) {
-	*avptr = av;
-        retval = 0;
-        goto cleanup;
-      }
-    }
-    list_iterator_destroy(avitr);
-    avitr = NULL;
   }
 
   retval = 0;
  cleanup:
   if (itr)
     list_iterator_destroy(itr);
-  if (avitr)
-    list_iterator_destroy(avitr);
   return retval;  
+}
+
+/* Returns 1 is substitution occurred, 0 if not */
+static int
+_get_val(genders_t handle, genders_node_t n, genders_attrval_t av, 
+	 char *buf, int buflen)
+{
+  int i, index;
+  char *val, *node;
+
+  if (av->val) {
+    if (!strstr(av->val, "%n") && !strstr(av->val, "%%"))
+      return 0;
+  }
+  else 
+    return 0;
+
+  if ((strlen(av->val) - 2 + strlen(n->name)) > buflen) {
+    handle->errnum = GENDERS_ERR_INTERNAL;
+    return -1;
+  }
+  
+  val = av->val;
+  memset(buf, '\0', buflen);
+  while (*val != '\0') {
+    if (*val == '%') {
+      if ((*(val + 1)) == '%') {
+	*buf++ = '%';
+	val++;
+      }
+      else if ((*(val + 1)) == 'n') {
+	node = n->name;
+	while (*node != '\0')
+	  *buf++ = *node++;
+	val++;
+      }
+      else
+	*buf++ = *val;
+    }
+    else 
+      *buf++ = *val;
+
+    val++;
+  }
 }
 
 static void 
@@ -529,6 +569,8 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 {
   char *linebuf, *temp, *attr, *nodenames, *node = NULL;
   int rv, attrcount = 0, retval = -1;
+  int max_n_subst_vallen = 0;
+  int line_maxnodelen = 0;
   List attrvals = NULL;
   List nodelist = NULL;
   List attrvalslist = NULL;
@@ -593,7 +635,36 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	/* parse value out of attribute */
 	if ((val = strchr(attr,'=')))
 	  *val++ = '\0'; 
-	
+
+	if (strlen(attr) > MAXATTRLEN) {
+	  if (line_num > 0) {
+	    fprintf(stderr, "Line %d: %s exceeds maximum attribute length\n", 
+		    attr, line_num);
+	    retval = 1;
+	  }
+	  handle->errnum = GENDERS_ERR_PARSE;
+	  goto cleanup;
+	}
+
+	if (val && strlen(val) > MAXVALLEN) {
+	  if (line_num > 0) {
+	    fprintf(stderr, "Line %d: %s exceeds maximum value length\n", 
+		    val, line_num);
+	    retval = 1;
+	  }
+	  handle->errnum = GENDERS_ERR_PARSE;
+	  goto cleanup;
+	}
+		
+	if (list_find_first(attrvals, _is_attr_in_attrvals, attr) != NULL) {
+	  if (line_num > 0) {
+	    fprintf(stream, "Line %d: duplicate attributed listed\n",
+		    line_num);
+	  }
+	  handle->errnum = GENDERS_ERR_PARSE;
+	  goto cleanup;
+	}
+
 	if (_insert_attrval(handle, attrvals, attr, val) < 0)
 	  goto cleanup;
 	
@@ -605,8 +676,12 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	  attrcount++;
 	  
 	  handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
-	  if (val)
-	    handle->maxvallen = MAX(strlen(val), handle->maxvallen);
+	  if (val) {
+	    if (strstr(val, "%n"))
+	      max_n_subst_vallen = strlen(val);
+	    else
+	      handle->maxvallen = MAX(strlen(val), handle->maxvallen);
+	  }
 	}
 	
 	attr = strtok_r(NULL,",\0",&linebuf);
@@ -671,12 +746,19 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
     if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
       goto cleanup;
 
-    if (!line_num)
+    if (!line_num) {
       handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
+      line_maxnodelen = MAX(strlen(node), line_maxnodelen);
+    }
     
     free(node);
   }
   node = NULL;
+
+  /* %n substituation found on this line, update maxvallen */
+  if (max_n_subst_vallen)
+    handle->maxvallen = MAX(max_n_subst_vallen - 2 + line_maxnodelen,
+			    handle->maxvallen);
 
   /* Append at the very end, so cleanup area cleaner */
   if (_insert_ptr(handle, attrvalslist, attrvals) < 0)
@@ -742,10 +824,6 @@ genders_load_data(genders_t handle, const char *filename)
     *temp = '\0';
   
   handle->maxnodelen = MAX(strlen(handle->nodename), handle->maxnodelen);
-  
-  /* XXX Need to account for potential use of %n option in vallen and attrlen
-   * - add line to handle for "%n flag" or something
-   */
 
   close(fd);
   handle->is_loaded++;
@@ -1053,7 +1131,8 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
   ListIterator itr = NULL;
   genders_node_t n;
   int index = 0;
-  int retval = -1;
+  int rv, retval = -1;
+  char bufval[MAXVALLEN+1];
 
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1078,8 +1157,16 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
 	goto cleanup;
       if (av) {
-	if (!val || (av->val && !strcmp(av->val, val)))
+	if (!val)
 	  save++;
+	else if (av->val) {
+	  if ((rv = _get_val(handle, n, av, bufval, MAXVALLEN + 1)) < 0)
+	    goto cleanup;
+	  if ((rv > 0 && !strcmp(bufval, val)) 
+	      || (av->val && !strcmp(av->val, val)))
+	    save++;
+	}
+	  
       }
     }
   
@@ -1104,7 +1191,8 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
   List attrvals;
   genders_node_t n;
   int index = 0;
-  int retval = -1;
+  int rv, retval = -1;
+  char bufval[MAXVALLEN+1];
 
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1140,7 +1228,10 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
 	goto cleanup;
       
       if (vals && av->val) {
-	if (_put_in_list(handle, av->val, vals, index, len) < 0)
+	if ((rv = _get_val(handle, n, av, bufval, MAXVALLEN + 1)) < 0)
+	  goto cleanup;
+
+	if (_put_in_list(handle, (rv) ? bufval : av->val, vals, index, len) < 0)
 	  goto cleanup;
       }
       index++;
@@ -1204,7 +1295,8 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
 {
   genders_node_t n;
   genders_attrval_t av;
-  int retval = 0;
+  int rv, retval = 0;
+  char bufval[MAXVALLEN+1];
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1227,7 +1319,11 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
 
   if (av) {
     if (val && av->val) {
-      if ((strlen(av->val) + 1) > len) {
+      if ((rv = _get_val(handle, n, av, bufval, MAXVALLEN + 1)) < 0)
+	return -1;
+      
+      if (((rv > 0 && strlen(bufval) + 1) > len) 
+	  || (strlen(av->val) + 1) > len) {
 	handle->errnum = GENDERS_ERR_OVERFLOW;
 	return -1;
       }
@@ -1247,6 +1343,7 @@ genders_testattrval(genders_t handle, const char *node,
   genders_node_t n;
   genders_attrval_t av;
   int rv, retval = 0;
+  char bufval[MAXVALLEN+1];
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1268,7 +1365,15 @@ genders_testattrval(genders_t handle, const char *node,
     return -1;
   
   if (av) {
-    if (!val || (av->val && !strcmp(av->val, val)))
+    if (val) {
+      if ((rv = _get_val(handle, n, av, bufval, MAXVALLEN + 1)) < 0)
+	return -1;
+
+      if ((rv > 0 && !strcmp(bufval, val)) 
+	  || (av->val && !strcmp(av->val, val)))
+	retval = 1;
+    }
+    else
       retval = 1;
   }
   
@@ -1311,7 +1416,8 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   genders_node_t n;
   genders_attrval_t av;
   int rv, retval = -1;
-  
+  char bufval[MAXVALLEN+1];
+
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
 
@@ -1329,7 +1435,11 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
     if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0) 
       goto cleanup;
     if (av) {
-      if (av->val && !strcmp(av->val, val))
+      if ((rv = _get_val(handle, n, av, bufval, MAXVALLEN + 1)) < 0)
+	goto cleanup;
+
+      if ((rv > 0 && !strcmp(bufval, val))
+	  || (av->val && !strcmp(av->val, val)))
         retval = 1;
       goto cleanup;
     }
@@ -1390,6 +1500,11 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 
   if (ret < 0 && handle->errnum == GENDERS_ERR_OVERFLOW) {
     fprintf(stderr, "Line %d: exceeds maximum allowed length\n", line_count);
+    goto cleanup;
+  }
+
+  if (list_count(debugnodeslist) == 0) {
+    fprintf(stderr, "No nodes listed\n");
     goto cleanup;
   }
 

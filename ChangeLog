@@ -1,3 +1,8 @@
+2004-02-01  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Globally added support for %n
+	substitution.
+
 2004-01-30  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Makefile.am: Support hostlist code.
