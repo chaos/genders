@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.20 2003-05-20 00:31:00 achu Exp $
+ *  * $Id: nodeattr.c,v 1.21 2003-05-20 16:02:41 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -12,7 +12,7 @@
 #include <assert.h>
 #include <string.h>
 #include <unistd.h>
-#if HAVE_GETOPT_LONG 
+#if HAVE_GETOPT_H 
 #include <getopt.h>
 #endif
 
