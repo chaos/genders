@@ -1,3 +1,7 @@
+2004-10-26  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Minor fix for possibly non gzipped manpages.
+	
 2004-10-07  Albert Chu  <chu11@llnl.gov>
 
 	Removed genders_index_nodes and genders_index_attrs API functions.
