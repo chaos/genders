@@ -1,11 +1,13 @@
 \."#################################################################
-\."$Id: genders_stats.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: genders_stats.3,v 1.3 2003-05-09 17:32:51 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
 .TH GENDERS_GETNUMNODES 3 "Release 1.1" "LLNL" "LIBGENDERS"
 .SH NAME
-genders_getnumnodes, genders_getnumattrs, genders_getmaxattrs, genders_getmaxnodelen, genders_getmaxattrlen, genders_getmaxvallen \- get information about a genders file 
+genders_getnumnodes, genders_getnumattrs, genders_getmaxattrs,
+genders_getmaxnodelen, genders_getmaxattrlen, genders_getmaxvallen \-
+get information about a genders file
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
@@ -22,37 +24,38 @@ genders_getnumnodes, genders_getnumattrs, genders_getmaxattrs, genders_getmaxnod
 .BI "int genders_getmaxvallen(genders_t handle);"
 .br
 .SH DESCRIPTION
-\fBgenders_getnumnodes()\fR, \fBgenders_getnumattrs()\fR, \fBgenders_getmaxattrs()\fR, \fBgenders_getmaxnodelen()\fR, \fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR get statistics about the genders file associated with \fIhandle\fR.  
-
-\fBgenders_getnumnodes()\fR returns the number of nodes stored in the
-genders file.  
-
-\fBgenders_getnumattrs()\fR returns the number of attributes listed in the
-genders file.
-
-\fBgenders_getmaxattrs()\fR returns the maximum number of attributes listed
-with a node in the genders file.
-
-\fBgenders_getmaxnodelen()\fR returns the maximum length of any node listed in the
-genders file.
-
-\fBgenders_getmaxattrlen()\fR returns the maximum length of any attribute listed in 
-the genders file.
-
-\fBgenders_getmaxvallen()\fR returns the maximum length of any attribute value
-listed in the genders file.
-
-In general, 
 \fBgenders_getnumnodes()\fR, \fBgenders_getnumattrs()\fR,
 \fBgenders_getmaxattrs()\fR, \fBgenders_getmaxnodelen()\fR,
-\fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR
-are used so a programmer can dynamically allocate
-a proper amount of memory to store genders file information in. 
+\fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR get
+statistics about the genders file associated with \fIhandle\fR.
+
+\fBgenders_getnumnodes()\fR returns the number of nodes stored in the
+genders file.
+
+\fBgenders_getnumattrs()\fR returns the number of attributes listed in
+the genders file.
+
+\fBgenders_getmaxattrs()\fR returns the maximum number of attributes
+listed with a node in the genders file.
+
+\fBgenders_getmaxnodelen()\fR returns the maximum length of any node
+listed in the genders file.
+
+\fBgenders_getmaxattrlen()\fR returns the maximum length of any
+attribute listed in the genders file.
+
+\fBgenders_getmaxvallen()\fR returns the maximum length of any
+attribute value listed in the genders file.
+
+In general, \fBgenders_getnumnodes()\fR, \fBgenders_getnumattrs()\fR,
+\fBgenders_getmaxattrs()\fR, \fBgenders_getmaxnodelen()\fR,
+\fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR are
+used so a programmer can dynamically allocate a proper amount of
+memory to store genders file information in.
 .br
 .SH RETURN VALUES
-On success, 0 is returned.  On error, -1 is returned, and an error code
-is returned in \fIhandle\fR.  The error code can be retrieved
-via
+On success, 0 is returned.  On error, -1 is returned, and an error
+code is returned in \fIhandle\fR.  The error code can be retrieved via
 .BR genders_errnum (3)
 , and a description of the error code can be retrieved via 
 .BR genders_strerror (3).  
@@ -61,8 +64,8 @@ Error codes are defined in genders.h.
 .SH ERRORS
 .TP
 .B GENDERS_ERR_NULLHANDLE
-The \fIhandle\fR parameter is NULL.  The genders handle must be created
-with
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
 .BR genders_handle_create (3).
 .TP
 .B GENDERS_ERR_NOTLOADED
@@ -70,11 +73,12 @@ with
 has not been called to load genders data.
 .TP
 .B GENDERS_ERR_MAGIC 
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
-handle or \fIhandle\fR has been destroyed by 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
 .br
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_handle_create(3), genders_load_data(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_errnum(3), genders_strerror(3)

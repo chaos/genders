@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_handle_destroy.3,v 1.3 2003-05-05 22:26:03 achu Exp $
+\."$Id: genders_handle_destroy.3,v 1.4 2003-05-09 17:32:51 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -12,13 +12,12 @@ genders_handle_destroy \- destroys a genders handle
 .BI "int genders_handle_destroy(genders_t handle);"
 .br
 .SH DESCRIPTION
-\fBgenders_handle_destroy()\fR destroys the genders handle pointed to by
-\fIhandle\fR and frees all allocated memory associated with it.
+\fBgenders_handle_destroy()\fR destroys the genders handle pointed to
+by \fIhandle\fR and frees all allocated memory associated with it.
 .br
 .SH RETURN VALUES
-On success, 0 is returned.  On error, -1 is returned, and an error code
-is returned in \fIhandle\fR.  The error code can be retrieved
-via
+On success, 0 is returned.  On error, -1 is returned, and an error
+code is returned in \fIhandle\fR.  The error code can be retrieved via
 .BR genders_errnum (3)
 , and a description of the error code can be retrieved via 
 .BR genders_strerror (3).  
@@ -27,13 +26,13 @@ Error codes are defined in genders.h.
 .SH ERRORS
 .TP
 .B GENDERS_ERR_NULLHANDLE
-The \fIhandle\fR parameter is NULL.  The genders handle must be created
-with
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
 .BR genders_handle_create (3).
 .TP
 .B GENDERS_ERR_MAGIC 
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
-handle or \fIhandle\fR has already been destroyed.
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has already been destroyed.
 .br
 .SH FILES
 /usr/include/genders.h

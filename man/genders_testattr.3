@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_testattr.3,v 1.4 2003-05-09 16:34:01 achu Exp $
+\."$Id: genders_testattr.3,v 1.5 2003-05-09 17:32:51 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -26,21 +26,23 @@ to store the attribute value,
 .BR genders_getmaxvallen (3)
 should be used to determine the minimum buffer size that should be used.
 
-\fBgenders_testattrval()\fR tests if the node pointed to by \fInode\fR contains the attribute
-pointed to by \fIattr\fR and if that attribute is equal to the attribute value pointed to by \fIval\fR.  If \fIval\fR is NULL, only the attribute is tested.
+\fBgenders_testattrval()\fR tests if the node pointed to by \fInode\fR
+contains the attribute pointed to by \fIattr\fR and if that attribute
+is equal to the attribute value pointed to by \fIval\fR.  If \fIval\fR
+is NULL, only the attribute is tested.
 .br
 .SH RETURN VALUES
 For \fBgenders_testattr()\fR, if the node contains the attribute, 1 is
 returned.  0 is returned if the node does not contain the attribute.
 
 For \fBgenders_testattrval()\fR, if the node contains the attribute
-and it is equal to the attribute value, 1 is returned.  0 is returned if
-the node does not contain the attribute, or if the attribute is not
-equal to the attribute value.  
+and it is equal to the attribute value, 1 is returned.  0 is returned
+if the node does not contain the attribute, or if the attribute is not
+equal to the attribute value.
 
-For both \fBgenders_testattr()\fR and
-\fBgenders_testattrval()\fR, -1 is returned on error, and an error
-code is returned in \fIhandle\fR.  The error code can be retrieved via
+For both \fBgenders_testattr()\fR and \fBgenders_testattrval()\fR, -1
+is returned on error, and an error code is returned in \fIhandle\fR.
+The error code can be retrieved via
 .BR genders_errnum (3)
 , and a description of the error code can be retrieved via 
 .BR genders_strerror (3).  
@@ -49,8 +51,8 @@ Error codes are defined in genders.h.
 .SH ERRORS
 .TP
 .B GENDERS_ERR_NULLHANDLE
-The \fIhandle\fR parameter is NULL.  The genders handle must be created
-with
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
 .BR genders_handle_create (3).
 .TP
 .B GENDERS_ERR_NOTLOADED
@@ -58,7 +60,8 @@ with
 has not been called to load genders data.
 .TP
 .B GENDERS_ERR_OVERFLOW
-The buffer pointed to by \fIval\fR is not large enough to store the attribute value.
+The buffer pointed to by \fIval\fR is not large enough to store the
+attribute value.
 .TP
 .B GENDERS_ERR_PARAMETERS
 An incorrect parameter has been passed in.  
@@ -67,11 +70,12 @@ An incorrect parameter has been passed in.
 The node pointed to by \fInode\fR cannot be found in the genders file.  
 .TP
 .B GENDERS_ERR_MAGIC 
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
-handle or \fIhandle\fR has been destroyed by 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
 .br
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_handle_create(3), genders_load_data(3), genders_getmaxvallen(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_getmaxvallen(3), genders_errnum(3), genders_strerror(3)

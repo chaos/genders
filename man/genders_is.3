@@ -1,11 +1,12 @@
 \."#################################################################
-\."$Id: genders_is.3,v 1.2 2003-05-07 21:02:30 achu Exp $
+\."$Id: genders_is.3,v 1.3 2003-05-09 17:32:51 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
 .TH GENDERS_ISNODE 3 "Release 1.1" "LLNL" "LIBGENDERS"
 .SH NAME
-genders_isnode, genders_isattr, genders_isattrval \- check for the existence of nodes and attributes
+genders_isnode, genders_isattr, genders_isattrval \- check for the
+existence of nodes and attributes
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
@@ -29,10 +30,10 @@ in the genders file.
 .br
 .SH RETURN VALUES
 For \fBgenders_isnode()\fR, if \fInode\fR is listed in the genders
-file, 1 is returned.  If it is not listed, 0 is returned. 
+file, 1 is returned.  If it is not listed, 0 is returned.
 
 For \fBgenders_isattr()\fR, if \fIattr\fR is listed in the genders
-file, 1 is returned.  If it is not listed, 0 is returned. 
+file, 1 is returned.  If it is not listed, 0 is returned.
 
 For \fBgenders_isattrval()\fR, if \fIattr\fR=\fIval\fR is listed in
 the genders file, 1 is returned.  If it is not listed, 0 is returned.
@@ -47,8 +48,8 @@ Error codes are defined in genders.h.
 .SH ERRORS
 .TP
 .B GENDERS_ERR_NULLHANDLE
-The \fIhandle\fR parameter is NULL.  The genders handle must be created
-with
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
 .BR genders_handle_create (3).
 .TP
 .B GENDERS_ERR_NOTLOADED
@@ -59,11 +60,12 @@ has not been called to load genders data.
 An incorrect parameter has been passed in.  
 .TP
 .B GENDERS_ERR_MAGIC 
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
-handle or \fIhandle\fR has been destroyed by 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
 .br
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_handle_create(3), genders_load_data(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_errnum(3), genders_strerror(3)
