@@ -1,5 +1,5 @@
 /*
- * $Id: libgenders_test.c,v 1.1 2003-03-13 18:22:22 achu Exp $
+ * $Id: libgenders_test.c,v 1.2 2003-03-13 22:04:38 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/libgenders_test.c,v $
  */
 
@@ -23,6 +23,7 @@ struct test_env {
   int maxvallen;
 };
 
+/* create an array of strings by mallocing a 2D array of chars */ 
 int create_array_of_strings(char ***list, int list_len, int string_len) {
   int i;
 
@@ -42,6 +43,7 @@ int create_array_of_strings(char ***list, int list_len, int string_len) {
   return 0;
 }
 
+/* free a previously allocated array of strings */
 void free_array_of_strings(char **list, int list_len) {
   int i;
   for (i = 0; i < list_len; i++) {
@@ -51,6 +53,7 @@ void free_array_of_strings(char **list, int list_len) {
   return;
 }
 
+/* initialize the test environment */
 int initialize_test_env(struct test_env *test_env) {
   test_env->open_handle = NULL;
   test_env->not_open_handle = NULL;
@@ -63,13 +66,13 @@ int initialize_test_env(struct test_env *test_env) {
     return -1;
   }
 
-  if ((test_env->not_open_handle = genders_handle_create()) == NULL) {
-    printf("genders_handle_create() error\n");
+  if (genders_open(test_env->open_handle, GENDERS_FILE_GOOD) == -1) {
+    printf("genders_open() error\n");
     return -1;
   }
 
-  if (genders_open(test_env->open_handle, GENDERS_FILE_GOOD) == -1) {
-    printf("genders_open() error\n");
+  if ((test_env->not_open_handle = genders_handle_create()) == NULL) {
+    printf("genders_handle_create() error\n");
     return -1;
   }
 
@@ -106,6 +109,7 @@ int initialize_test_env(struct test_env *test_env) {
   return 0;
 }
 
+/* cleanup the test environment */
 void cleanup_test_env(struct test_env *test_env) {
   if (test_env->open_handle != NULL) {
     (void)genders_handle_destroy(test_env->open_handle);
@@ -125,6 +129,7 @@ void cleanup_test_env(struct test_env *test_env) {
   return;
 }
 
+/* run a single test */
 void run_a_parameter_test(struct test_env *test_env,
 			  int index,
 			  int function,
@@ -143,6 +148,7 @@ void run_a_parameter_test(struct test_env *test_env,
   char ***list_create = NULL;
   genders_t handle = NULL;
   
+  /* setup necessary test parameters */
   if (param1 == IS_NOT_NULL_NOT_OPEN) {
     handle = test_env->not_open_handle;
   }
@@ -154,8 +160,7 @@ void run_a_parameter_test(struct test_env *test_env,
       list_create = &list; 
   }
 
-  if (function & GENDERS_CLEAR || 
-      function & GENDERS_DESTROY) {
+  if (function & GENDERS_CLEAR || function & GENDERS_DESTROY) {
     if (param2 == IS_NOT_NULL) {
       /* can be any list for parameter tests */
       list = test_env->nodelist;
@@ -319,9 +324,9 @@ void run_a_parameter_test(struct test_env *test_env,
   }
 } 
 
+/* run all the parameter tests */
 int run_parameter_tests(struct test_env *test_env) {
   int index = 0;
-
   
   printf("libgenders parameter tests                                  \n");
   printf("------------------------------------------------------------\n");
