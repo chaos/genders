@@ -60,6 +60,8 @@ genders-0.2-2
 Tue Apr 23 09:01:03 PDT 2002
 	Updated to Chris's latest RPM rules.
 
+	Removed updatefstab and updateservice scripts.
+
 	Added TUTORIAL.
 
 	Tagged genders-0-2-3chaos.
