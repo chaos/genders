@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.21 2003-05-20 16:02:41 achu Exp $
+ *  * $Id: nodeattr.c,v 1.22 2003-06-26 19:13:33 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -260,10 +260,10 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt)
         exit(1);
     }
     for (i = 0; i < count; i++) {
+#if NODEATTR_TRANSITION
         char *node = nodes[i];
         char *altnode = NULL;
 
-#if NODEATTR_TRANSITION
         /* The -r option just expresses a preference for alternate names, so
          * if the lookup fails, use the primary name.  Making this a hard
          * failure breaks older versions of pdsh that call nodeattr rather
@@ -276,14 +276,19 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt)
                 altnode = NULL;
             }
         } 
-#endif
 
         if (hostlist_push(hl, altnode ? altnode : node) == 0) {
+#else
+        if (hostlist_push(hl, nodes[i]) == 0) {
+#endif
+
             fprintf(stderr, "nodeattr: hostlist_push failed\n");
             exit(1);
         }
+#if NODEATTR_TRANSITION
         if (altnode != NULL)
             free(altnode);
+#endif
     }
     genders_nodelist_destroy(gp, nodes);
 
