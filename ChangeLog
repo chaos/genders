@@ -2,6 +2,8 @@
 
 	* src/nodeattr/nodeattr.c: Removed -r and -C options. 
 
+	* man/nodeattr.1: Remove references to -r and -C options.
+
 	* ChangeLog: Rewritten to conform to GNU standards.
 	
 	* Tagged genders-1-2-1
