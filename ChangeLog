@@ -14,6 +14,11 @@
 
 	* src/libgenders/genders_query.y: Minor code style cleanup.
 
+	* src/libgenders/genders_common.h, src/libgenders/genders.c
+	(genders_handle_destroy, genders_load_data,
+	genders_index_attrvals): Fix corner case involving the indexing of
+	substituted attribute values.
+
 	* src/libgenders/genders.c (genders_index_attrvals): Fix typos in
 	comments.
 	

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.117 2004-09-10 21:24:06 achu Exp $
+ *  $Id: genders.c,v 1.118 2004-09-10 23:26:01 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -286,6 +286,8 @@ genders_handle_destroy(genders_t handle)
   if (handle->attrval_index)
     hash_destroy(handle->attrval_index);
   free(handle->attrval_index_attr);
+  if (handle->attrval_buflist)
+    list_destroy(handle->attrval_buflist);
 
   /* "clean" handle */
   _initialize_handle_info(handle);
@@ -726,6 +728,8 @@ genders_load_data(genders_t handle, const char *filename)
     goto cleanup;
   }
 
+  handle->attrval_buflist = NULL;
+  
   close(fd);
 
   handle->is_loaded++;
@@ -1422,7 +1426,7 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
       retval = 0;
     else
       retval = 1;
-    
+
     handle->errnum = GENDERS_ERR_SUCCESS;
     return retval;
   }
@@ -1599,9 +1603,10 @@ genders_index_attrvals(genders_t handle, const char *attr)
 {
   ListIterator node_itr = NULL;
   List l = NULL;
+  List attrval_buflist = NULL;
   genders_node_t n;
   genders_attrval_t av;
-  char *val;
+  char *val, *valbuf = NULL;
   hash_t attrval_index = NULL;
   char *attrval_index_attr = NULL;
 
@@ -1633,21 +1638,46 @@ genders_index_attrvals(genders_t handle, const char *attr)
     goto cleanup;
   }
 
+  /* Create a List to store buffers for later freeing */
+  if (!(attrval_buflist = list_create(free))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
   while ((n = list_next(node_itr))) {
+    int subst = 0;
     if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
       goto cleanup;
     if (av) {
-      if (av->val)
-        val = av->val;
+      if (av->val) {
+        if ((subst = _get_val(handle, n, av)) < 0)
+          goto cleanup;
+
+        val = (subst) ? handle->valbuf : av->val;
+      }
       else
         val = GENDERS_NOVALUE;
       
+
       if (!(l = hash_find(attrval_index, val))) {
         if (!(l = list_create(NULL))) {
           handle->errnum = GENDERS_ERR_OUTMEM;
           goto cleanup;
         }
         
+        if (subst) {
+          if (!(valbuf = strdup(val))) {
+            handle->errnum = GENDERS_ERR_OUTMEM;
+            goto cleanup;
+          }
+          if (!list_append(attrval_buflist, valbuf)) {
+            handle->errnum = GENDERS_ERR_INTERNAL;
+            goto cleanup;
+          }
+          val = valbuf;
+          valbuf = NULL;
+        }
+
         if (!hash_insert(attrval_index, val, l)) {
           if (errno == ENOMEM)
             handle->errnum = GENDERS_ERR_OUTMEM;
@@ -1675,11 +1705,13 @@ genders_index_attrvals(genders_t handle, const char *attr)
   if (handle->attrval_index) {
     hash_destroy(handle->attrval_index);
     free(handle->attrval_index_attr);
+    list_destroy(handle->attrval_buflist);
     handle->attrval_index = NULL;
     handle->attrval_index_attr = NULL;
   }
   handle->attrval_index = attrval_index;
   handle->attrval_index_attr = attrval_index_attr;
+  handle->attrval_buflist = attrval_buflist;
 
   list_iterator_destroy(node_itr);
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -1694,6 +1726,10 @@ genders_index_attrvals(genders_t handle, const char *attr)
     hash_destroy(attrval_index);
   if (attrval_index_attr)
     free(attrval_index_attr);
+  if (attrval_buflist)
+    list_destroy(attrval_buflist);
+  if (valbuf != NULL)
+    free(valbuf);
 
   return -1;
 }
