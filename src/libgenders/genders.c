@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.79 2004-01-27 00:36:42 achu Exp $
+ *  $Id: genders.c,v 1.80 2004-01-27 01:04:49 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -187,7 +187,7 @@ _find_attrval(genders_t handle, List attrptrs, const char *attr,
       goto finish;
     }
 
-    while ((av = list_next(itr))) {
+    while ((av = list_next(avitr))) {
       if (strcmp(av->attr, attr) == 0) {
 	*avptr = av;
 	retval = 1;
@@ -1072,7 +1072,7 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
       goto cleanup;
     }
 
-    while ((av = list_next(itr))) {
+    while ((av = list_next(avitr))) {
       if (_put_in_list(handle, av->attr, attrs, index, len) < 0)
 	goto cleanup;
       
@@ -1315,8 +1315,6 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
     retval = -1;
     goto finish;
   }
-
-  /* XXX need to create attrvals debug list too */
 
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
     if ((rv = _parse_line(handle, buf, line_count, stream, 
