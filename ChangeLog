@@ -1,3 +1,62 @@
+2004-12-31  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_query_parse.l: Be able to parse '&', '|',
+	and '-' characters in the important cases.
+
+	* src/libgenders/genders_query_parse.l,
+	src/libgenders/genders_query.y: Modify union, intersection, and
+	difference symbols to be '||', '&&', and '--' respectively.
+
+	* src/testsuite/libgenders/testdatabases/genders.query_special_chars:
+	New file.
+	
+	* src/testsuite/libgenders/genders_test_query_tests.c: Update
+	tests appropriately and add special char tests.
+
+	* src/nodeattr/nodeattr.c (main, list_nodes, usage): Add query
+	support to nodeattr.
+	
+	* man/nodeattr.1: Updated for new query feature.
+	
+2004-12-30  Albert Chu  <chu11@llnl.gov>
+
+	* src/testsuite/libgenders/genders_test_query_tests.h,
+	src/testsuite/libgenders/genders_test_query_tests.c,
+	src/testsuite/libgenders/testdatabases/genders.query_1,
+	src/testsuite/libgenders/testdatabases/genders.query_1_comma,
+	src/testsuite/libgenders/testdatabases/genders.query_1_hostrange,
+	src/testsuite/libgenders/testdatabases/genders.query_2,
+	src/testsuite/libgenders/testdatabases/genders.query_2_comma,
+	src/testsuite/libgenders/testdatabases/genders.query_2_hostrange:
+	New files.
+
+	* src/testsuite/libgenders/genders_test.c,
+	src/testsuite/libgenders/genders_test_corner_case.h,
+	src/testsuite/libgenders/genders_test_corner_case_tests.c,
+	src/testsuite/libgenders/genders_test_corner_case.c,
+	src/testsuite/libgenders/genders_test_functionality.h,
+	src/testsuite/libgenders/genders_test_functionality.c: Added
+	genders_query corner case tests, genders_index_attrvals
+	functionality tests, and gendes_query functionality tests.
+
+	* src/libgenders/genders_query.y (genders_query): Fix segfault
+	corner case, errnum return code corner case, and input parameter
+	check errors.
+
+	* src/libgenders/genders.c (genders_index_attrvals): Fix input
+	corner case.
+
+	* src/libgenders/genders_query_parse.l: Be able to parse '%'
+	character.
+
+	* src/libgenders/genders_query.y (genders_set_complement_flag):
+	Fix bug which to allow double-negation.
+
+	* man/genders_testattr.3: Fix cut and paste typo.
+
+	* man/genders_index_attrvals.3: Add GENDERS_ERR_NOTFOUND error
+	number.
+
 2004-12-29  Albert Chu  <chu11@llnl.gov>
 
 	Fix various bugs based on testsuite results

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.10 2004-09-10 17:22:10 achu Exp $
+\."  $Id: nodeattr.1,v 1.11 2005-01-03 17:31:20 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -32,7 +32,7 @@
 nodeattr \- query genders file
 .SH SYNOPSIS
 .B nodeattr
-.I "[-f genders] [-q | -c | -n | -s] attr[=val]
+.I "[-f genders] [-q | -c | -n | -s] query
 .br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
@@ -54,9 +54,15 @@ When invoked with the
 .I "-s"
 arguments,
 .B nodeattr
-reads the genders file and outputs a list of nodes that have the
-specified attribute.  The nodes are listed in hostlist format, comma
+reads the genders file and outputs a list of nodes that match the
+specified query.  The nodes are listed in hostlist format, comma
 separated lists, newline separated lists, or space separated lists.
+Genders queries will query the genders database for a set of nodes
+based on the union, intersection, difference, or complement of genders
+attributes and values.  The set operation union is represented by two
+pipe symbols ('||'), intersection by two ampersand symbols ('&&'),
+difference by two minus symbols ('--'), and complement by a tilde
+('~').  Parentheses may be used to change the order of operations.
 .LP
 When called with a node name (optional) and attribute name,
 .B nodeattr
@@ -95,7 +101,27 @@ only an attribute with the specified value in the genders file will
 match.
 .SH EXAMPLES
 .LP
-To use nodeattr with dsh to run a command on all fddi nodes:
+Retrieve a comma separated list of all login nodes:
+.IP
+nodeattr -c login
+.LP
+Retrieve a comma separated list of nodes with 4 cpus:
+.IP
+nodeattr -c cpus=4
+.LP
+Retrieve a comma separated list of all login and management nodes:
+.IP
+nodeattr -c "login|mgmt"
+.LP
+Retrieve a comma separated list of all login nodes with 4 cpus:
+.IP
+nodeattr -c "login&cpus=4"
+.LP
+Retrieve a comma separated list of all nodes that are not login or management nodes:
+.IP
+nodeattr -c "~(login|mgmt)"
+.LP
+To use nodeattr with pdsh to run a command on all fddi nodes:
 .IP
 pdsh -w`nodeattr -c fddi` command
 .LP

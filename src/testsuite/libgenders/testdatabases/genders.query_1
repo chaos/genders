@@ -1,0 +1,8 @@
+node1 attr1,attr2=val2,attr3,attr4=val4,attr7,attr8=val8
+node2 attr1,attr2=val2,attr3,attr4=val4,attr9,attr10=val10
+node3 attr1,attr2=val2,attr3,attr4=val4,attr7,attr8=val8
+node4 attr1,attr2=val2,attr3,attr4=val4,attr9,attr10=val10
+node5 attr1,attr2=val2,attr5,attr6=val6,attr7,attr8=val8
+node6 attr1,attr2=val2,attr5,attr6=val6,attr9,attr10=val10
+node7 attr1,attr2=val2,attr5,attr6=val6,attr7,attr8=val8
+node8 attr1,attr2=val2,attr5,attr6=val6,attr9,attr10=val10

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_index_attrvals.3,v 1.2 2004-10-07 18:22:31 achu Exp $
+\."  $Id: genders_index_attrvals.3,v 1.3 2005-01-03 17:31:20 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -67,6 +67,10 @@ has not been called to load genders data.
 .TP
 .B GENDERS_ERR_PARAMETERS
 An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_NOTFOUND
+The attribute pointed to by \fIattr\fR cannot be found in the genders
+file.
 .TP
 .B GENDERS_ERR_OUTMEM
 .BR malloc (3)

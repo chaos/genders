@@ -1,4 +1,3 @@
-- I really really really need a test suite of some sort.
 - Allow attributes or attributes=value checking for each line of the genders
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
@@ -15,11 +14,10 @@
     g,h,i               printer=bar
 - Rework to allow multiple hashed attrval mappings?
 - Have genders_getnodes() return nodes in sorted order?
-- Clean things up in general, library state is currently in 
-  a state with multiple hacks placed on top of other hacks.
 - List nodes in genders database with incremental ability 
   mcr[1-50/2] would be mcr1,3,5,7,...
   mcr[1-50/3] would be mcr1,4,7,10,...
   - think about format, do through hostlist.[ch]??
-- Cleanup malloc-buffering since its not necessary for genders.
-  
+- Cleanup malloc-buffering in list/hash since its not necessary for genders.
+- genders_query allow really odd-ball parsing like
+  - "attr-&-|"  

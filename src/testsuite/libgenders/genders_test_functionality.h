@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.h,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_functionality.h,v 1.2 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -63,6 +63,8 @@ int genders_testattrval_functionality(int verbose);
 int genders_isnode_functionality(int verbose);
 int genders_isattr_functionality(int verbose);
 int genders_isattrval_functionality(int verbose);
+int genders_index_attrvals_functionality(int verbose);
+int genders_query_functionality(int verbose);
 int genders_parse_functionality(int verbose);
 int genders_set_errnum_functionality(int verbose);
 

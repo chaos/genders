@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.18 2004-12-22 18:38:42 achu Exp $
+ *  $Id: genders_query.y,v 1.19 2005-01-03 17:31:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -42,8 +42,8 @@ struct genders_treenode {
   int complement;
 };
 
-int genders_query_err; 
-struct genders_treenode *genders_treeroot;
+int genders_query_err = 0; 
+struct genders_treenode *genders_treeroot = NULL;
 
 #define HOSTLIST_BUFLEN 32768
 
@@ -84,7 +84,7 @@ genders_set_complement_flag(void *node)
   assert(node);
 
   t = (struct genders_treenode *)node; 
-  t->complement++;
+  t->complement = !(t->complement); /* doing this instead of ++ allows double negation */
 }
 
 static void
@@ -372,16 +372,16 @@ _calc_query(genders_t handle, struct genders_treenode *t)
     if (!(r = _calc_query(handle, t->right)))
       goto cleanup_calc;
     
-    /* | is Union
-     * & is Intersection
-     * - is Set Difference
+    /* || is Union
+     * && is Intersection
+     * -- is Set Difference
      */
     
-    if (strcmp(t->str, "|") == 0)
+    if (strcmp(t->str, "||") == 0)
       h = _calc_union(handle, l, r);
-    else if (strcmp(t->str, "&") == 0) 
+    else if (strcmp(t->str, "&&") == 0) 
       h = _calc_intersection(handle, l, r);
-    else if (strcmp(t->str, "-") == 0) 
+    else if (strcmp(t->str, "--") == 0) 
       h = _calc_difference(handle, l, r);
     else {
       handle->errnum = GENDERS_ERR_INTERNAL;
@@ -417,7 +417,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!nodes || len <= 0 || !query) {
+  if ((!nodes && len > 0) || len < 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     goto cleanup;
   }
@@ -448,12 +448,15 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   if (genders_treeroot)
     genders_freetree(genders_treeroot);
   free(node);
+  /* reset */
+  genders_treeroot = NULL;
+  genders_query_err = 0;
   return retval;
 }
 %}
 
 %start input
-%token ATTRTOK LPARENTOK RPARENTOK PIPETOK AMPERSANDTOK MINUSTOK TILDETOK
+%token ATTRTOK LPARENTOK RPARENTOK UNIONTOK INTERSECTIONTOK DIFFERENCETOK COMPLEMENTTOK
 
 %union {
   char *attr;
@@ -470,17 +473,17 @@ input: query
        ;
 
 query: term {$$ = $1;}
-       | query PIPETOK term 
+       | query UNIONTOK term 
            {
-             $$ = genders_makenode("|", $1, $3);
+             $$ = genders_makenode("||", $1, $3);
            }
-       | query AMPERSANDTOK term 
+       | query INTERSECTIONTOK term 
            {
-             $$ = genders_makenode("&", $1, $3);
+             $$ = genders_makenode("&&", $1, $3);
            }
-       | query MINUSTOK term 
+       | query DIFFERENCETOK term 
            {
-             $$ = genders_makenode("-", $1, $3);
+             $$ = genders_makenode("--", $1, $3);
            }
        ;
 
@@ -492,7 +495,7 @@ term: ATTRTOK
            {
              $$ = $2;
            }
-       | TILDETOK term
+       | COMPLEMENTTOK term
            {
              genders_set_complement_flag($2);
              $$ = $2;

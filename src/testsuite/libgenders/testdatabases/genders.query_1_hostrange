@@ -1,0 +1,5 @@
+node[1-8]     attr1,attr2=val2
+node[1-4]     attr3,attr4=val4
+node[5-8]     attr5,attr6=val6
+node[1,3,5,7] attr7,attr8=val8
+node[2,4,6,8] attr9,attr10=val10

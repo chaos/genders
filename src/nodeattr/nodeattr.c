@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.27 2004-09-10 17:22:10 achu Exp $
+ *  $Id: nodeattr.c,v 1.28 2005-01-03 17:31:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -149,15 +149,15 @@ main(int argc, char *argv[])
 
     /* Usage 1: list nodes with specified attribute. */
     if (qopt) {
-        char *attr;
+        char *query;
 
         if (vopt || lopt)
             usage();
         if (optind != argc - 1)
             usage();
 
-        attr = argv[optind++];
-        list_nodes(gp, attr, qfmt);
+        query = argv[optind++];
+        list_nodes(gp, query, qfmt);
 
         exit(0);
     }
@@ -197,19 +197,16 @@ main(int argc, char *argv[])
 }
 
 static void 
-list_nodes(genders_t gp, char *attr, fmt_t qfmt)
+list_nodes(genders_t gp, char *query, fmt_t qfmt)
 {
     char **nodes;
     int i, count;
     int len = genders_nodelist_create(gp, &nodes);
     hostlist_t hl;
-    char *val;
     char *str;
 
-    if ((val = strchr(attr, '=')))  /* attr can actually be "attr=val" */
-        *val++ ='\0';
-    if ((count = genders_getnodes(gp, nodes, len, attr, val)) < 0)
-        _gend_error_exit(gp, attr);
+    if ((count = genders_query(gp, nodes, len, query)) < 0)
+        _gend_error_exit(gp, query);
 
     /* Create a hostlist containing the list of nodes returned by the query */
     hl = hostlist_create(NULL);
@@ -288,7 +285,7 @@ static void
 usage(void)
 {
     fprintf(stderr,
-        "Usage: nodeattr [-f genders] [-q|-c|-n|-s] attr[=val]\n"
+        "Usage: nodeattr [-f genders] [-q|-c|-n|-s] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
 #if HAVE_GETOPT_LONG

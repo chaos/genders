@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.127 2004-12-29 22:16:50 achu Exp $
+ *  $Id: genders.c,v 1.128 2005-01-03 17:31:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -48,7 +48,7 @@ static char * errmsg[] = {
   "array or string passed in not large enough to store result",
   "incorrect parameters passed in",
   "null pointer reached in list", 
-  "node not found",
+  "node or attribute not found",
   "out of memory",
   "query syntax error",
   "genders handle magic number incorrect, improper handle passed in",
@@ -814,12 +814,22 @@ genders_index_attrvals(genders_t handle, const char *attr)
   char *valbuf = NULL;
   hash_t attrval_index = NULL;
   char *attrval_index_attr = NULL;
+  int rv;
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
   if (!attr) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
+    goto cleanup;
+  }
+
+  if ((rv = genders_isattr(handle, attr)) < 0)
+    goto cleanup;
+
+  /* check if attr is legit */
+  if (rv == 0) {
+    handle->errnum = GENDERS_ERR_NOTFOUND;
     goto cleanup;
   }
 

@@ -1,6 +1,5 @@
-%{
 /*****************************************************************************\
- *  $Id: genders_query_parse.l,v 1.2 2005-01-03 17:31:20 achu Exp $
+ *  $Id: genders_test_query_tests.h,v 1.1 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -25,29 +24,30 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "genders_query.h"
+#ifndef _GENDERS_TEST_QUERY_TESTS_H
+#define _GENDERS_TEST_QUERY_TESTS_H 1
 
-/* Regex notes:
+#include "genders.h"
+#include "genders_testlib.h"
 
-  - Special chars "-", "|", "&", by themselves must be followed by a
-    alphanumeric character, otherwise we can't tell what is an
-    attribute and what is a set operation.  For example, the query parser
-    may get confused with an attribute "attr1&" in a query such as
-    "attr1&&&attr2".
- */
+#define GENDERS_QUERY_BUFLEN   1024
+#define GENDERS_QUERY_MAXTESTS 2048
+#define GENDERS_QUERY_MAXNODES 100
 
-%}
+typedef struct {
+  struct {
+    char *query;
+    char *nodes[GENDERS_QUERY_MAXNODES];
+    int nodeslen;
+  } tests[GENDERS_QUERY_MAXTESTS];
+} genders_query_tests_t;
 
-%%
-[a-zA-Z0-9][a-zA-Z0-9_\.\=%]*([\-\|&]?[a-zA-Z0-9_\.\=%]+)* yylval.attr = strdup(yytext); return ATTRTOK;
-\(                                                         return LPARENTOK;
-\)                                                         return RPARENTOK;
-\|\|                                                       return UNIONTOK;
-&&                                                         return INTERSECTIONTOK;
---                                                         return DIFFERENCETOK;
-~                                                          return COMPLEMENTTOK;
-[ \t\n]+                                                   /* ignore whitespace */
-%%
+typedef struct {
+  char *filename;
+  genders_query_tests_t *tests;
+} genders_query_functionality_tests_t;
+
+extern char *genders_query_parse_error_tests[];
+extern genders_query_functionality_tests_t *genders_query_functionality_tests[];
+
+#endif /* _GENDERS_TEST_QUERY_TESTS_H */

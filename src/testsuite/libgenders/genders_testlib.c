@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_testlib.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_testlib.c,v 1.2 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -476,8 +476,6 @@ genders_return_value_errnum_list_check(char *funcname,
   int err = 0;
 
   assert(funcname
-	 && (!expected_list || (expected_list && expected_list_len >= 0))
-	 && (!list || (list && list_len >= 0))
 	 && (comp_type == GENDERS_COMPARISON_MATCH 
 	     || comp_type == GENDERS_COMPARISON_CLEAR)
 	 && (!(comp_type == GENDERS_COMPARISON_MATCH) ||
@@ -572,11 +570,7 @@ genders_return_value_errnum_attrval_list_check(char *funcname,
 {
   int err = 0;
 
-  assert(funcname 
-	 && (!expected_attrlist || (expected_attrlist && expected_list_len >= 0))
-	 && (!expected_vallist || (expected_vallist && expected_list_len >= 0))
-	 && (!attrlist || (attrlist && list_len >= 0))
-	 && (!vallist || (vallist && list_len >= 0)));
+  assert(funcname);
   
   err += _genders_val_check(funcname,
 			    num,

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_database.h,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_database.h,v 1.2 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -89,7 +89,7 @@ typedef struct {
   int node_attrvals_len;
   /* attrval_nodes
    * - Lists nodes based on attr or attr=val combinations. 
-   * - Primarily for use with genders_getnodes
+   * - For use with genders_getnodes and genders_query
    */
   struct {
     char *attr;

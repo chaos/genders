@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test.c,v 1.3 2004-12-30 00:21:17 achu Exp $
+ *  $Id: genders_test.c,v 1.4 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -145,6 +145,7 @@ _test_corner_cases(void)
   errtotal += _corner_case(genders_isattr_corner_case, "genders_isattr");
   errtotal += _corner_case(genders_isattrval_corner_case, "genders_isattrval");
   errtotal += _corner_case(genders_index_attrvals_corner_case, "genders_index_attrvals");
+  errtotal += _corner_case(genders_query_corner_case, "genders_query");
   errtotal += _corner_case(genders_parse_corner_case, "genders_parse");
   errtotal += _corner_case(genders_set_errnum_corner_case, "genders_set_errnum");
 
@@ -209,6 +210,8 @@ _test_functionality(void)
   errtotal += _functionality(genders_isnode_functionality, "genders_isnode");
   errtotal += _functionality(genders_isattr_functionality, "genders_isattr");
   errtotal += _functionality(genders_isattrval_functionality, "genders_isattrval");
+  errtotal += _functionality(genders_index_attrvals_functionality, "genders_index_attrvals");
+  errtotal += _functionality(genders_query_functionality, "genders_query");
   errtotal += _functionality(genders_parse_functionality, "genders_parse");
   errtotal += _functionality(genders_set_errnum_functionality, "genders_set_errnum");
 

@@ -1,0 +1,8 @@
+node1 attr1=valA,attr2=valB,attr3=valD,attr4=valH
+node2 attr1=valA,attr2=valB,attr3=valD,attr4=valI
+node3 attr1=valA,attr2=valB,attr3=valE,attr4=valJ
+node4 attr1=valA,attr2=valB,attr3=valE,attr4=valK
+node5 attr1=valA,attr2=valC,attr3=valF,attr4=valL
+node6 attr1=valA,attr2=valC,attr3=valF,attr4=valM
+node7 attr1=valA,attr2=valC,attr3=valG,attr4=valN
+node8 attr1=valA,attr2=valC,attr3=valG,attr4=valO

@@ -1,0 +1,15 @@
+node[1-8] attr1=valA
+node[1-4] attr2=valB
+node[5-8] attr2=valC
+node[1-2] attr3=valD
+node[3-4] attr3=valE
+node[5-6] attr3=valF
+node[7-8] attr3=valG
+node1 attr4=valH
+node2 attr4=valI
+node3 attr4=valJ
+node4 attr4=valK
+node5 attr4=valL
+node6 attr4=valM
+node7 attr4=valN
+node8 attr4=valO

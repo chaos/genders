@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.2 2004-12-30 00:14:35 achu Exp $
+ *  $Id: genders_test_corner_case.c,v 1.3 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1340,6 +1340,55 @@ genders_index_attrvals_corner_case(int verbose)
       genders_handle_cleanup(handle);
       i++;
     }
+
+  return errcount;
+}
+
+int
+genders_query_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_query_corner_case_t *tests = &genders_query_corner_case_tests[0];
+  genders_t gh;
+  char **list;
+  int list_len;
+
+  gh = genders_handle_get(GENDERS_HANDLE_LOADED);
+  if ((list_len = genders_nodelist_create(gh, &list)) < 0)
+    genders_err_exit("genders_nodelist_create: %s", genders_errormsg(gh));
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      int return_value, errnum, len;
+      char **listptr;
+      char *queryptr;
+
+      handle = genders_handle_get(tests[i].param1);
+      listptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : list;
+      len = (tests[i].param3 == GENDERS_LENGTH_POSITIVE_LARGE) ? list_len : tests[i].param3;
+      queryptr = (tests[i].param4 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+      return_value = genders_query(handle, listptr, len, queryptr);
+      errnum = genders_errnum(handle);
+
+      errcount += genders_return_value_errnum_check("genders_query",
+						    tests[i].num,
+						    tests[i].expected_return_value,
+						    tests[i].expected_errnum,
+						    return_value,
+						    errnum,
+						    NULL,
+						    verbose);
+
+      genders_handle_cleanup(handle);
+      i++;
+    }
+
+  if (genders_nodelist_destroy(gh, list) < 0)
+    genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(gh));
+  if (genders_handle_destroy(gh) < 0)
+    genders_err_exit("genders_handle_destroy: %s", genders_errormsg(gh));
 
   return errcount;
 }

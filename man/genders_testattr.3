@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_testattr.3,v 1.9 2003-12-30 21:47:13 achu Exp $
+\."  $Id: genders_testattr.3,v 1.10 2005-01-03 17:31:20 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -87,9 +87,9 @@ attribute value.
 An incorrect parameter has been passed in.  
 .TP
 .B GENDERS_ERR_NOTFOUND
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
-point to a genders handle or \fIhandle\fR has been destroyed by
-.BR genders_handle_destroy (3).
+The node pointed to by \fInode\fR cannot be found in the genders file
+or if \fInode\fR=NULL, the machine genders is running on is not listed
+in the genders database.
 .TP
 .B GENDERS_ERR_MAGIC 
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not

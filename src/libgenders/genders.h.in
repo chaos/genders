@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.28 2004-11-10 22:59:44 achu Exp $
+ *  $Id: genders.h.in,v 1.29 2005-01-03 17:31:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -40,7 +40,7 @@
 #define GENDERS_ERR_OVERFLOW      7 /* array is not big enough for result */
 #define GENDERS_ERR_PARAMETERS    8 /* incorrect parameters passed in */
 #define GENDERS_ERR_NULLPTR       9 /* null pointer in list */
-#define GENDERS_ERR_NOTFOUND     10 /* node not found */
+#define GENDERS_ERR_NOTFOUND     10 /* node or attribute not found */
 #define GENDERS_ERR_OUTMEM       11 /* out of memory */
 #define GENDERS_ERR_SYNTAX       12 /* query syntax error */
 #define GENDERS_ERR_MAGIC        13 /* magic number incorrect */

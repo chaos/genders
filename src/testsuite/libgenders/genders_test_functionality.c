@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.2 2004-12-29 23:57:29 achu Exp $
+ *  $Id: genders_test_functionality.c,v 1.3 2005-01-03 17:31:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -39,6 +39,7 @@
 #include "genders_testlib.h"
 #include "genders_test_functionality.h"
 #include "genders_test_database.h"
+#include "genders_test_query_tests.h"
 
 int
 genders_handle_create_functionality(int verbose)
@@ -455,7 +456,7 @@ _genders_getfunc_functionality(GendersGetFunc func,
 			       int verbose)
 {
   genders_t handle;
-  int return_value, errnum, err = 0;
+  int return_value, errnum, err;
 	
   assert(func && funcname && filename);
 
@@ -1249,7 +1250,6 @@ genders_getnodes_functionality(int verbose)
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
       
-      errcount += err;
       num++;
       i++;
     }
@@ -1487,12 +1487,12 @@ genders_testattr_functionality(int verbose)
 					      errnum,
 					      databases[i]->filename,
 					      verbose);
-      
+      errcount += err;
+
       free(valbuf);
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
       
-      errcount += err;
       num++;
       i++;
     }
@@ -1660,11 +1660,11 @@ genders_isnode_functionality(int verbose)
 					      errnum,
 					      databases[i]->filename,
 					      verbose);
-      
+      errcount += err;
+
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
       
-      errcount += err;
       num++;
       i++;
     }
@@ -1719,11 +1719,11 @@ genders_isattr_functionality(int verbose)
 					      errnum,
 					      databases[i]->filename,
 					      verbose);
+      errcount += err;
       
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
       
-      errcount += err;
       num++;
       i++;
     }
@@ -1815,6 +1815,426 @@ genders_isattrval_functionality(int verbose)
       num++;
       i++;
     }
+
+  return errcount;
+}
+
+int
+genders_index_attrvals_functionality(int verbose)
+{
+  genders_t handle;
+  int errcount = 0;
+  int num = 0;
+  int i = 0;
+  genders_database_t **databases = &genders_functionality_databases[0];
+
+  while (databases[i] != NULL)
+    {
+      int j, return_value, errnum, err;
+
+      /* Testing genders_index_attrvals will involve
+       * A: running genders_index_attrvals()
+       * B: re-running genders_getnodes() tests
+       * C: re-running genders_isattrval() tests
+       */
+
+      if (!(handle = genders_handle_create()))
+	genders_err_exit("genders_handle_create");
+      
+      if (genders_load_data(handle, databases[i]->filename) < 0)
+	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+      
+      for (j = 0; j < databases[i]->data->attrslen; j++)
+	{
+	  err = 0;
+	  return_value = genders_index_attrvals(handle, databases[i]->data->attrs[j]);
+	  errnum = genders_errnum(handle);
+      
+	  err += genders_return_value_errnum_check("genders_index_attrvals",
+						   num, 
+						   0,
+						   GENDERS_ERR_SUCCESS,
+						   return_value,
+						   errnum,
+						   databases[i]->filename,
+						   verbose);
+
+	  /* genders_getnodes() tests */
+	  if (err == 0)
+	    {
+	      int k;
+	      char **nodelist;
+	      int nodelist_len;
+
+	      if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+		genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
+	  
+	      for (k = 0; k < databases[i]->data->attrval_nodes_len; k++)
+		{
+		  return_value = genders_getnodes(handle, 
+						  nodelist,
+						  nodelist_len,
+						  databases[i]->data->attrval_nodes[k].attr,
+						  databases[i]->data->attrval_nodes[k].val);
+		  errnum = genders_errnum(handle);
+		  
+		  err += genders_return_value_errnum_list_check("genders_index_attrvals:genders_getnodes",
+								num,
+								databases[i]->data->attrval_nodes[k].nodeslen,
+								GENDERS_ERR_SUCCESS,
+								databases[i]->data->attrval_nodes[k].nodes,
+								databases[i]->data->attrval_nodes[k].nodeslen,
+								return_value,
+								errnum,
+								nodelist,
+								return_value,
+								GENDERS_COMPARISON_MATCH,
+								databases[i]->filename,
+								verbose);
+		}
+
+	      /* Test invalid attr */
+	      return_value = genders_getnodes(handle,
+					      nodelist,
+					      nodelist_len,
+					      GENDERS_DATABASE_INVALID_ATTR,
+					      NULL);
+	      errnum = genders_errnum(handle);
+	      
+	      err += genders_return_value_errnum_check("genders_index_attrvals:genders_getnodes",
+						       num,
+						       0,
+						       GENDERS_ERR_SUCCESS,
+						       return_value,
+						       errnum,
+						       databases[i]->filename,
+						       verbose);
+
+	      /* Test attr with val, but invalid val */
+	      if (databases[i]->data->attr_with_val)
+		{
+		  return_value = genders_getnodes(handle,
+						  nodelist,
+						  nodelist_len,
+						  databases[i]->data->attr_with_val,
+						  GENDERS_DATABASE_INVALID_VAL);
+		  errnum = genders_errnum(handle);
+		  
+		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_getnodes",
+							   num,
+							   0,
+							   GENDERS_ERR_SUCCESS,
+							   return_value,
+							   errnum,
+							   databases[i]->filename,
+							   verbose);
+		}
+
+	      if (genders_nodelist_destroy(handle, nodelist) < 0)
+		genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
+	    }
+
+	  /* genders_isattrval() tests */
+	  if (err == 0)
+	    {
+	      int k;
+	      for (k = 0; k < databases[i]->data->attrslen; k++)
+		{
+		  if (!databases[i]->data->vals[k])
+		    continue;
+		  
+		  return_value = genders_isattrval(handle, 
+						   databases[i]->data->attrs[k],
+						   databases[i]->data->vals[k]);
+		  errnum = genders_errnum(handle);
+		  
+		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
+							   num,
+							   1,
+							   GENDERS_ERR_SUCCESS,
+							   return_value,
+							   errnum,
+							   databases[i]->filename,
+							   verbose);
+		}
+	      
+	      /* Test attr without val */
+	      if (databases[i]->data->attr_without_val && databases[i]->data->val)
+		{
+		  return_value = genders_isattrval(handle, 
+						   databases[i]->data->attr_without_val,
+						   databases[i]->data->val);
+		  errnum = genders_errnum(handle);
+		  
+		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
+							   num,
+							   0,
+							   GENDERS_ERR_SUCCESS,
+							   return_value,
+							   errnum,
+							   databases[i]->filename,
+							   verbose);
+		}
+      
+	      /* Test attr with val, but invalid val */
+	      if (databases[i]->data->attr_with_val)
+		{
+		  return_value = genders_isattrval(handle, 
+						   databases[i]->data->attr_with_val,
+						   GENDERS_DATABASE_INVALID_VAL);
+		  errnum = genders_errnum(handle);
+		  
+		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
+							   num,
+							   0,
+							   GENDERS_ERR_SUCCESS,
+							   return_value,
+							   errnum,
+							   databases[i]->filename,
+							   verbose);
+		}
+	    }
+	  
+	  errcount += err;
+	}
+      
+      if (genders_handle_destroy(handle) < 0)
+	genders_err_exit("genders_handle_destroy");
+      
+      num++;
+      i++;
+    }
+
+  return errcount;
+}
+
+int
+genders_query_functionality(int verbose)
+{
+  char msgbuf[GENDERS_ERR_BUFLEN];
+  int errcount = 0;
+  int num = 0;
+
+  /* Part A: Parse error queries */
+  {
+    genders_t handle;
+    int nodelist_len, return_value, errnum, err;
+    char **nodelist;
+    int i = 0;
+      
+    if (!(handle = genders_handle_create()))
+      genders_err_exit("genders_handle_create");
+	
+    if (genders_load_data(handle, genders_database_base.filename) < 0)
+      genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+    if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+      genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
+	
+    while (genders_query_parse_error_tests[i] != NULL)
+      {
+	return_value = genders_query(handle,
+				     nodelist,
+				     nodelist_len,
+				     genders_query_parse_error_tests[i]);
+	errnum = genders_errnum(handle);
+	
+	sprintf(msgbuf, "\"%s\"", genders_query_parse_error_tests[i]);
+	err = genders_return_value_errnum_check("genders_query",
+						num,
+						-1,
+						GENDERS_ERR_SYNTAX,
+						return_value,
+						errnum,
+						msgbuf,
+						verbose);
+	errcount += err;
+	num++;
+	i++;
+      }
+
+    if (genders_nodelist_destroy(handle, nodelist) < 0)
+      genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
+    if (genders_handle_destroy(handle) < 0)
+      genders_err_exit("genders_handle_destroy");
+  }
+
+  /* Part B: Simple attr and attr=val queries  */
+  {
+    int i = 0;
+    genders_t handle;
+    genders_database_t **databases = &genders_functionality_databases[0];
+    while (databases[i] != NULL)
+      {
+	int j, nodelist_len, return_value, errnum, err;
+	char **nodelist;
+      
+	if (!(handle = genders_handle_create()))
+	  genders_err_exit("genders_handle_create");
+	
+	if (genders_load_data(handle, databases[i]->filename) < 0)
+	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+	  genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
+	
+	for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
+	  {
+	    char querybuf[GENDERS_QUERY_BUFLEN];
+	    char *queryptr;
+	    
+	    /* Construct simple query */
+	    if (databases[i]->data->attrval_nodes[j].attr)
+	      {
+		memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
+		strcpy(querybuf, databases[i]->data->attrval_nodes[j].attr);
+		if (databases[i]->data->attrval_nodes[j].val)
+		  {
+		    strcat(querybuf, "=");
+		    strcat(querybuf, databases[i]->data->attrval_nodes[j].val);
+		  }
+		queryptr = querybuf;
+	      }
+	    else
+	      queryptr = NULL;
+	    
+	    
+	    return_value = genders_query(handle, 
+					 nodelist,
+					 nodelist_len,
+					 queryptr);
+	    errnum = genders_errnum(handle);
+	    
+	    err = genders_return_value_errnum_list_check("genders_query",
+							 num,
+							 databases[i]->data->attrval_nodes[j].nodeslen,
+							 GENDERS_ERR_SUCCESS,
+							 databases[i]->data->attrval_nodes[j].nodes,
+							 databases[i]->data->attrval_nodes[j].nodeslen,
+							 return_value,
+							 errnum,
+							 nodelist,
+							 return_value,
+							 GENDERS_COMPARISON_MATCH,
+							 databases[i]->filename,
+							 verbose);
+	    
+	    errcount += err;
+	  }
+	
+	/* Test invalid attr */
+	return_value = genders_query(handle, 
+				     nodelist,
+				     nodelist_len,
+				     GENDERS_DATABASE_INVALID_ATTR);
+	errnum = genders_errnum(handle);
+	
+	err = genders_return_value_errnum_check("genders_query",
+						num,
+						0,
+						GENDERS_ERR_SUCCESS,
+						return_value,
+						errnum,
+						databases[i]->filename,
+						verbose);
+	errcount += err;
+
+	/* Test attr with val, but invalid val */
+	if (databases[i]->data->attr_with_val)
+	  {
+	    char querybuf[GENDERS_QUERY_BUFLEN];
+	    
+	    memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
+	    strcpy(querybuf, databases[i]->data->attr_with_val);
+	    strcat(querybuf, "=");
+	    strcat(querybuf, GENDERS_DATABASE_INVALID_VAL);
+
+	    return_value = genders_query(handle,
+					 nodelist,
+					 nodelist_len,
+					 querybuf);
+	    errnum = genders_errnum(handle);
+	  
+	    err = genders_return_value_errnum_check("genders_query",
+						    num,
+						    0,
+						    GENDERS_ERR_SUCCESS,
+						    return_value,
+						    errnum,
+						    databases[i]->filename,
+						    verbose);
+	    errcount += err;
+	  }
+
+	if (genders_nodelist_destroy(handle, nodelist) < 0)
+	  genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
+	if (genders_handle_destroy(handle) < 0)
+	  genders_err_exit("genders_handle_destroy");
+	
+	num++;
+	i++;
+      }
+  }
+
+  /* Part C: Complex queries  */
+  {
+    int i = 0;
+    genders_t handle;
+    genders_query_functionality_tests_t **databases = &genders_query_functionality_tests[0];
+
+    while (databases[i] != NULL)
+      {
+	int j, nodelist_len, return_value, errnum, err;
+	char **nodelist;
+      
+	if (!(handle = genders_handle_create()))
+	  genders_err_exit("genders_handle_create");
+	
+	if (genders_load_data(handle, databases[i]->filename) < 0)
+	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+	  genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
+	
+	j = 0;
+	while (databases[i]->tests->tests[j].query != NULL)
+	  {
+	    return_value = genders_query(handle, 
+					 nodelist,
+					 nodelist_len,
+					 databases[i]->tests->tests[j].query);
+	    errnum = genders_errnum(handle);
+
+	    sprintf(msgbuf, "%s: \"%s\"", 
+		    databases[i]->filename,
+		    databases[i]->tests->tests[j].query);
+	    err = genders_return_value_errnum_list_check("genders_query",
+							 num,
+							 databases[i]->tests->tests[j].nodeslen,
+							 GENDERS_ERR_SUCCESS,
+							 databases[i]->tests->tests[j].nodes,
+							 databases[i]->tests->tests[j].nodeslen,
+							 return_value,
+							 errnum,
+							 nodelist,
+							 return_value,
+							 GENDERS_COMPARISON_MATCH,
+							 msgbuf,
+							 verbose);
+	    
+	    errcount += err;
+	    j++;
+	  }
+
+	if (genders_nodelist_destroy(handle, nodelist) < 0)
+	  genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
+	if (genders_handle_destroy(handle) < 0)
+	  genders_err_exit("genders_handle_destroy");
+	
+	num++;
+	i++;
+      }
+  }
 
   return errcount;
 }
