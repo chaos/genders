@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm,v 1.13 2004-02-02 18:10:18 achu Exp $
+#  $Id: Genders.pm,v 1.14 2004-05-04 16:33:07 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -279,6 +279,32 @@ sub isattrval {
     }
 }
 
+sub index_nodes {
+    my $self = shift;
+
+    if (ref($self)) {
+        $self->{$handlekey}->genders_index_nodes();
+    }
+}
+
+sub index_attrs {
+    my $self = shift;
+
+    if (ref($self)) {
+        $self->{$handlekey}->genders_index_attrs();
+    }
+}
+
+sub index_attrvals {
+    my $self = shift;
+    my $attr = shift;
+
+    if (ref($self)) {
+        $self->{$handlekey}->genders_index_attrvals($attr);
+    }
+}
+
+
 1;
 
 __END__
@@ -310,6 +336,10 @@ Genders - Perl library for querying a genders file
  $obj->isnode([$node])
  $obj->isattr($attr)
  $obj->isattrval($attr, $val)
+
+ $obj->index_nodes()
+ $obj->index_attrs()
+ $obj->index_attrvals($attr)
 
 =head1 DESCRIPTION
 
@@ -381,6 +411,20 @@ if it is not.
 
 Returns 1 if the specified attribute is equal to the specified value
 for some node in the genders file, 0 if it is not.
+
+=item B<$obj-E<gt>index_nodes()>
+
+Internally indexes genders nodes for faster search times.
+
+=item B<$obj-E<gt>index_attrs()>
+
+Internally indexes genders attrs for faster search times.
+
+=item B<$obj-E<gt>index_attrvals($attr)>
+
+Internally indexes genders attribute values for faster search times.
+Subsequent calls with a different attribute will overwrite earlier
+indexes.
 
 =back 
 

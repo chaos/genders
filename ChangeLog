@@ -2,6 +2,8 @@
 
 	* src/Libgenders/Libgenders.xs, src/Libgenders/Libgenders.pm:
 	Added indexing functions.
+
+	* src/Genders/Genders.pm: Added indexing functions.
 	
 2004-05-03  Albert Chu  <chu11@llnl.gov>
 
