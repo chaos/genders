@@ -1929,7 +1929,7 @@ fi;
 echo "$as_me:$LINENO: result: ${withxsprefix=no}" >&5
 echo "${ECHO_T}${withxsprefix=no}" >&6
 if test -z "$XS_PREFIX"; then
-   XS_PREFIX="${prefix}"
+   XS_PREFIX='${prefix}'
 fi
 
 
@@ -1956,7 +1956,7 @@ fi;
 echo "$as_me:$LINENO: result: ${withgenderspm=no}" >&5
 echo "${ECHO_T}${withgenderspm=no}" >&6
 if test -z "$GENDERS_PM_PREFIX"; then
-   GENDERS_PM_PREFIX="${prefix}"
+   GENDERS_PM_PREFIX='${prefix}'
 fi
 
 
