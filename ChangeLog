@@ -2,6 +2,10 @@
 
 	* META: Updated for new release
 
+	* config/Make-rpm.mk: Updated with SuSe fixes.
+
+	* genders.spec.in: Removed execution of bootstrap.
+
 	* tagged genders-1-3-2
 
 2004-02-11  Albert Chu  <chu11@llnl.gov>
