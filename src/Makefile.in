@@ -77,20 +77,25 @@ DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
 GENDERS_DEFAULT_FILE = @GENDERS_DEFAULT_FILE@
+GENDERS_PM_PREFIX = @GENDERS_PM_PREFIX@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
 MAINT = @MAINT@
 OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
+PERL = @PERL@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+XS_PREFIX = @XS_PREFIX@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
 SUBDIRS = \
+	Genders \
+	Libgenders \
 	libgenders \
 	nodeattr 
 

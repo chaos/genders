@@ -1008,6 +1008,9 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-genders-file=file
                           define default genders file
+  --with-xs-prefix=path   define perl xs prefix for install
+  --with-genders-pm-prefix=path
+                          define genders.pm install dir
   --with-gnu-ld           assume the C compiler uses GNU ld default=no
   --with-pic              try to use only PIC/non-PIC objects default=use both
 
@@ -1876,6 +1879,7 @@ fi
 
 
 
+# option for default genders file
 echo "$as_me:$LINENO: checking for --with-genders-file " >&5
 echo $ECHO_N "checking for --with-genders-file ... $ECHO_C" >&6
 
@@ -1899,6 +1903,60 @@ echo "$as_me:$LINENO: result: ${withgendersfile=no}" >&5
 echo "${ECHO_T}${withgendersfile=no}" >&6
 if test -z "$GENDERS_DEFAULT_FILE"; then
    GENDERS_DEFAULT_FILE="\"/etc/genders\""
+fi
+
+
+# Libgenders install location
+echo "$as_me:$LINENO: checking for --with-xs-prefix " >&5
+echo $ECHO_N "checking for --with-xs-prefix ... $ECHO_C" >&6
+
+# Check whether --with-xs-prefix or --without-xs-prefix was given.
+if test "${with_xs_prefix+set}" = set; then
+  withval="$with_xs_prefix"
+   case "$withval" in
+    yes)
+        withxsprefix=yes
+        ;;
+    no)
+        ;;
+    *)
+        withxsprefix=yes
+        XS_PREFIX="\"$withval\""
+        ;;
+    esac
+
+fi;
+echo "$as_me:$LINENO: result: ${withxsprefix=no}" >&5
+echo "${ECHO_T}${withxsprefix=no}" >&6
+if test -z "$XS_PREFIX"; then
+   XS_PREFIX="/usr"
+fi
+
+
+# Genders.pm install location
+echo "$as_me:$LINENO: checking for --with-genders-pm-prefix " >&5
+echo $ECHO_N "checking for --with-genders-pm-prefix ... $ECHO_C" >&6
+
+# Check whether --with-genders-pm-prefix or --without-genders-pm-prefix was given.
+if test "${with_genders_pm_prefix+set}" = set; then
+  withval="$with_genders_pm_prefix"
+   case "$withval" in
+    yes)
+        withgenderspm=yes
+        ;;
+    no)
+        ;;
+    *)
+        withgenderspm=yes
+        GENDERS_PM_PREFIX="\"$withval\""
+        ;;
+    esac
+
+fi;
+echo "$as_me:$LINENO: result: ${withgenderspm=no}" >&5
+echo "${ECHO_T}${withgenderspm=no}" >&6
+if test -z "$GENDERS_PM_PREFIX"; then
+   GENDERS_PM_PREFIX="/usr"
 fi
 
 
@@ -4260,7 +4318,7 @@ test "x$enable_libtool_lock" != xno && enable_libtool_lock=yes
 case $host in
 *-*-irix6*)
   # Find out which ABI we are using.
-  echo '#line 4263 "configure"' > conftest.$ac_ext
+  echo '#line 4321 "configure"' > conftest.$ac_ext
   if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
   (eval $ac_compile) 2>&5
   ac_status=$?
@@ -4796,7 +4854,7 @@ chmod -w .
 save_CFLAGS="$CFLAGS"
 CFLAGS="$CFLAGS -o out/conftest2.$ac_objext"
 compiler_c_o=no
-if { (eval echo configure:4799: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
+if { (eval echo configure:4857: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>out/conftest.err; } && test -s out/conftest2.$ac_objext; then
   # The compiler can only warn and ignore the option if not recognized
   # So say no if there are warnings
   if test -s out/conftest.err; then
@@ -6589,7 +6647,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6592 "configure"
+#line 6650 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -6687,7 +6745,7 @@ else
     lt_dlunknown=0; lt_dlno_uscore=1; lt_dlneed_uscore=2
   lt_status=$lt_dlunknown
   cat > conftest.$ac_ext <<EOF
-#line 6690 "configure"
+#line 6748 "configure"
 #include "confdefs.h"
 
 #if HAVE_DLFCN_H
@@ -7438,6 +7496,45 @@ else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
   SET_MAKE="MAKE=${MAKE-make}"
+fi
+
+# Extract the first word of "perl", so it can be a program name with args.
+set dummy perl; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PERL+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PERL in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PERL="$PERL" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PERL="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  ;;
+esac
+fi
+PERL=$ac_cv_path_PERL
+
+if test -n "$PERL"; then
+  echo "$as_me:$LINENO: result: $PERL" >&5
+echo "${ECHO_T}$PERL" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
 fi
 
 
@@ -8419,7 +8516,7 @@ done
 ##
 # Epilogue.
 ##
-ac_config_files="$ac_config_files Makefile src/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h dist/Makefile man/Makefile man/dist/Makefile man/compat/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h src/Libgenders/Makefile src/Genders/Makefile dist/Makefile man/Makefile man/dist/Makefile man/compat/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -8921,6 +9018,8 @@ do
   "src/libgenders/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/libgenders/Makefile" ;;
   "src/nodeattr/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/nodeattr/Makefile" ;;
   "src/libgenders/genders.h" ) CONFIG_FILES="$CONFIG_FILES src/libgenders/genders.h" ;;
+  "src/Libgenders/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Libgenders/Makefile" ;;
+  "src/Genders/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Genders/Makefile" ;;
   "dist/Makefile" ) CONFIG_FILES="$CONFIG_FILES dist/Makefile" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
   "man/dist/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/dist/Makefile" ;;
@@ -9042,6 +9141,8 @@ s,@MAINTAINER_MODE_TRUE@,$MAINTAINER_MODE_TRUE,;t t
 s,@MAINTAINER_MODE_FALSE@,$MAINTAINER_MODE_FALSE,;t t
 s,@MAINT@,$MAINT,;t t
 s,@GENDERS_DEFAULT_FILE@,$GENDERS_DEFAULT_FILE,;t t
+s,@XS_PREFIX@,$XS_PREFIX,;t t
+s,@GENDERS_PM_PREFIX@,$GENDERS_PM_PREFIX,;t t
 s,@CC@,$CC,;t t
 s,@CFLAGS@,$CFLAGS,;t t
 s,@LDFLAGS@,$LDFLAGS,;t t
@@ -9062,6 +9163,7 @@ s,@RANLIB@,$RANLIB,;t t
 s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
 s,@CPP@,$CPP,;t t
 s,@LIBTOOL@,$LIBTOOL,;t t
+s,@PERL@,$PERL,;t t
 CEOF
 
 _ACEOF

@@ -13,6 +13,15 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
+
+# This is a hack to get autoconf, automake, and ExtUtils::MakeMaker
+# to work together.  
+#
+# Currently, it only supports the common MakeMaker options of
+#
+# make install
+# make pure_install
+# make test
 SHELL = @SHELL@
 
 srcdir = @srcdir@
@@ -88,27 +97,23 @@ PERL = @PERL@
 RANLIB = @RANLIB@
 STRIP = @STRIP@
 VERSION = @VERSION@
+
 XS_PREFIX = @XS_PREFIX@
 am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
-
-man3_MANS = gendlib.3
-subdir = man/compat
+subdir = src/Libgenders
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
-
-NROFF = nroff
-MANS = $(man3_MANS)
-DIST_COMMON = Makefile.am Makefile.in
+DIST_COMMON = README Makefile.am Makefile.in
 all: all-am
 
 .SUFFIXES:
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  man/compat/Makefile
+	  $(AUTOMAKE) --gnu  src/Libgenders/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
@@ -121,49 +126,6 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
-
-man3dir = $(mandir)/man3
-install-man3: $(man3_MANS) $(man_MANS)
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(man3dir)
-	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
-	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
-	for i in $$l2; do \
-	  case "$$i" in \
-	    *.3*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  if test -f $(srcdir)/$$i; then file=$(srcdir)/$$i; \
-	  else file=$$i; fi; \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  case "$$ext" in \
-	    3*) ;; \
-	    *) ext='3' ;; \
-	  esac; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " $(INSTALL_DATA) $$file $(DESTDIR)$(man3dir)/$$inst"; \
-	  $(INSTALL_DATA) $$file $(DESTDIR)$(man3dir)/$$inst; \
-	done
-uninstall-man3:
-	@$(NORMAL_UNINSTALL)
-	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
-	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
-	for i in $$l2; do \
-	  case "$$i" in \
-	    *.3*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " rm -f $(DESTDIR)$(man3dir)/$$inst"; \
-	  rm -f $(DESTDIR)$(man3dir)/$$inst; \
-	done
 tags: TAGS
 TAGS:
 
@@ -195,12 +157,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(MANS)
+all-am: Makefile
 
 installdirs:
-	$(mkinstalldirs) $(DESTDIR)$(man3dir)
-
-install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
 uninstall: uninstall-am
@@ -240,13 +199,13 @@ info: info-am
 
 info-am:
 
-install-data-am: install-man
+install-data-am: install-data-local
 
 install-exec-am:
 
 install-info: install-info-am
 
-install-man: install-man3
+install-man:
 
 installcheck-am:
 
@@ -258,20 +217,46 @@ mostlyclean: mostlyclean-am
 
 mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-uninstall-am: uninstall-info-am uninstall-man
-
-uninstall-man: uninstall-man3
+uninstall-am: uninstall-info-am
 
 .PHONY: all all-am check check-am clean clean-generic clean-libtool \
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am info info-am install install-am install-data \
-	install-data-am install-exec install-exec-am install-info \
-	install-info-am install-man install-man3 install-strip \
+	install-data-am install-data-local install-exec install-exec-am \
+	install-info install-info-am install-man install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-generic \
-	mostlyclean-libtool uninstall uninstall-am uninstall-info-am \
-	uninstall-man uninstall-man3
+	mostlyclean-libtool uninstall uninstall-am uninstall-info-am
 
+
+all: Makefile.xs
+	$(MAKE) -f Makefile.xs
+
+Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
+	cp ../libgenders/genders.c .
+	cp ../libgenders/genders.h .
+	cp ../libgenders/genders_local.h .
+	$(PERL) Makefile.PL PREFIX=$(XS_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
+
+test: Makefile.xs 
+	$(MAKE) -f Makefile.xs test
+
+install: Makefile.xs
+	$(MAKE) -f Makefile.xs install
+
+pure_install: Makefile.xs
+	$(MAKE) -f Makefile.xs pure_install
+
+install-data-local:
+	$(MAKE) -f Makefile.xs pure_install
+
+clean: 
+	$(MAKE) -f Makefile.xs clean
+	rm -f Makefile.xs
+	rm -f Makefile.xs.old
+	rm -f genders.c
+	rm -f genders.h
+	rm -f genders_local.h
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

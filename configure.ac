@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.7 2003-05-13 01:30:20 achu Exp $
+## $Id: configure.ac,v 1.8 2003-05-14 00:08:51 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -18,6 +18,7 @@ AM_INIT_AUTOMAKE([check-news dist-bzip2 gnu])
 AM_CONFIG_HEADER([config/config.h])
 AM_MAINTAINER_MODE
 
+# option for default genders file
 AC_MSG_CHECKING(for --with-genders-file )
 AC_ARG_WITH(genders-file,
     AC_HELP_STRING([--with-genders-file=file], [define default genders file]),
@@ -39,12 +40,57 @@ if test -z "$GENDERS_DEFAULT_FILE"; then
 fi
 AC_SUBST(GENDERS_DEFAULT_FILE)
 
+# Libgenders install location
+AC_MSG_CHECKING(for --with-xs-prefix )
+AC_ARG_WITH(xs-prefix,
+    AC_HELP_STRING([--with-xs-prefix=path], [define perl xs prefix for install]),
+    [ case "$withval" in
+    yes)
+        withxsprefix=yes
+        ;;
+    no)
+        ;;
+    *)
+        withxsprefix=yes
+        XS_PREFIX="\"$withval\""
+        ;;
+    esac ]
+)
+AC_MSG_RESULT(${withxsprefix=no})
+if test -z "$XS_PREFIX"; then
+   XS_PREFIX="/usr"
+fi
+AC_SUBST(XS_PREFIX)
+
+# Genders.pm install location
+AC_MSG_CHECKING(for --with-genders-pm-prefix )
+AC_ARG_WITH(genders-pm-prefix,
+    AC_HELP_STRING([--with-genders-pm-prefix=path], [define genders.pm install dir]),
+    [ case "$withval" in
+    yes)
+        withgenderspm=yes
+        ;;
+    no)
+        ;;
+    *)
+        withgenderspm=yes
+        GENDERS_PM_PREFIX="\"$withval\""
+        ;;
+    esac ]
+)
+AC_MSG_RESULT(${withgenderspm=no})
+if test -z "$GENDERS_PM_PREFIX"; then
+   GENDERS_PM_PREFIX="/usr"
+fi
+AC_SUBST(GENDERS_PM_PREFIX)
+
 ##
 # Checks for programs.
 ##
 AC_PROG_CC
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
+AC_PATH_PROG(PERL, perl)
 
 ##
 # Checks for header files.
@@ -88,6 +134,8 @@ AC_CONFIG_FILES( \
   src/libgenders/Makefile \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \
+  src/Libgenders/Makefile \
+  src/Genders/Makefile \
   dist/Makefile \
   man/Makefile \
   man/dist/Makefile \

@@ -44,11 +44,7 @@ install dist/dist_all $RPM_BUILD_ROOT/usr/bin
 install dist/dist_local $RPM_BUILD_ROOT/usr/bin
 install dist/dist_cmp $RPM_BUILD_ROOT/usr/bin
 install dist/dist_bootstrap $RPM_BUILD_ROOT/usr/bin
-cp src/libgenders/genders.h src/Libgenders	
-cp src/libgenders/genders_local.h src/Libgenders	
-cp src/libgenders/genders.c src/Libgenders	
-cd src/Libgenders; perl Makefile.PL prefix="$RPM_BUILD_ROOT/usr"; make; make pure_install; cd ../..
-DESTDIR="$RPM_BUILD_ROOT" make install 
+DESTDIR="$RPM_BUILD_ROOT" XS_PREFIX="$RPM_BUILD_ROOT/usr" GENDERS_PM_PREFIX="$RPM_BUILD_ROOT/usr" make install 
 
 %files
 %defattr(-,root,root)
