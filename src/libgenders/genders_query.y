@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.10 2004-09-10 17:30:16 achu Exp $
+ *  $Id: genders_query.y,v 1.11 2004-11-04 18:49:51 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -46,7 +46,7 @@ struct genders_treenode *genders_treeroot;
 
 extern int yylex();
 
-struct genders_treenode *
+static struct genders_treenode *
 genders_makenode(char *str, void *left, void *right)
 {
   struct genders_treenode *t; 
@@ -54,17 +54,15 @@ genders_makenode(char *str, void *left, void *right)
   if (genders_query_err)
     return NULL;
 
-  if (!(t = (struct genders_treenode *)malloc(sizeof(struct genders_treenode))))
-    {
-      genders_query_err = GENDERS_ERR_OUTMEM;
-      return NULL;
-    }
+  if (!(t = (struct genders_treenode *)malloc(sizeof(struct genders_treenode)))) {
+    genders_query_err = GENDERS_ERR_OUTMEM;
+    return NULL;
+  }
 
-  if (!(t->str = (char *)strdup(str)))
-    {
-      genders_query_err = GENDERS_ERR_OUTMEM;
-      return NULL;
-    }
+  if (!(t->str = (char *)strdup(str))) {
+    genders_query_err = GENDERS_ERR_OUTMEM;
+    return NULL;
+  }
 
   t->left = left;
   t->right = right;
@@ -72,7 +70,7 @@ genders_makenode(char *str, void *left, void *right)
 } 
 
 /* for debugging */
-void
+static void
 genders_printtree(struct genders_treenode *t)
 {
   if (!t)
@@ -82,7 +80,7 @@ genders_printtree(struct genders_treenode *t)
   genders_printtree(t->right);
 }
 
-void
+static void
 genders_freetree(struct genders_treenode *t)
 {
   if (!t)
@@ -107,7 +105,7 @@ yywrap()
   return 1;
 }
 
-int 
+static int 
 _parse_query(genders_t handle, char *query)
 {
   extern FILE *yyin, *yyout; 
@@ -117,35 +115,31 @@ _parse_query(genders_t handle, char *query)
   genders_treeroot = NULL;
 
   /* yyparse() only works with FILE streams, not file descriptors or
-   * string.  So we gotta do some funky hacking here to make yyparse()
+   * strings.  So we gotta do some funky hacking here to make yyparse()
    * work with our input query.
    */
 
-  if (pipe(fds) < 0)
-    {
-      genders_query_err = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
+  if (pipe(fds) < 0) {
+    genders_query_err = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
 
-  if (write(fds[1], query, strlen(query)) < 0)
-    {
-      genders_query_err = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
+  if (write(fds[1], query, strlen(query)) < 0) {
+    genders_query_err = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
   close(fds[1]);
 
-  if (!(yyin = fdopen(fds[0], "r")))
-    {
-      genders_query_err = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
+  if (!(yyin = fdopen(fds[0], "r"))) {
+    genders_query_err = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
 
   /* disable yacc output to stdout */
-  if (!(yyout = fopen(_PATH_DEVNULL, "r+")))
-    {
-      genders_query_err = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
+  if (!(yyout = fopen(_PATH_DEVNULL, "r+"))) {
+    genders_query_err = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
 
   yyparse();
 
@@ -160,205 +154,180 @@ _parse_query(genders_t handle, char *query)
   fclose(yyin);
   fclose(yyout);
   
-  if (genders_query_err != GENDERS_ERR_SUCCESS)
-    {
-      handle->errnum = genders_query_err;
-      return -1;
-    }
+  if (genders_query_err != GENDERS_ERR_SUCCESS) {
+    handle->errnum = genders_query_err;
+    return -1;
+  }
   return 0;
 }
 
-hostlist_t
+static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
-  if (!t->left && !t->right)
-    {
-      char **nodes = NULL;
-      hostlist_t h = NULL;
-      int i, rv, len, num;
-      char *attr, *val;
-
-      attr = t->str; 
-      if ((val = strchr(attr, '=')))
-        {
-          *val++ = '\0';
-          if ((rv = genders_isattrval(handle, attr, val)) < 0)
-            return NULL;
-        }
-      else
-        {
-          if ((rv = genders_isattr(handle, attr)) < 0)
-            return NULL;
-        }
-
-      if (rv == 0)
-        {
-          handle->errnum = GENDERS_ERR_QUERYINPUT;
-          return NULL;
-        }
-
-      if ((len = genders_nodelist_create(handle, &nodes)) < 0)
+  if (!t->left && !t->right) {
+    char **nodes = NULL;
+    hostlist_t h = NULL;
+    int i, rv, len, num;
+    char *attr, *val;
+    
+    attr = t->str; 
+    if ((val = strchr(attr, '='))) {
+      *val++ = '\0';
+      if ((rv = genders_isattrval(handle, attr, val)) < 0)
         return NULL;
-
-      if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
+    }
+    else {
+      if ((rv = genders_isattr(handle, attr)) < 0)
         return NULL;
+    }
+    
+    if (rv == 0) {
+      handle->errnum = GENDERS_ERR_QUERYINPUT;
+      return NULL;
+    }
 
-      if (!(h = hostlist_create(NULL)))
-        {
-          handle->errnum = GENDERS_ERR_OUTMEM;
-          goto cleanup_attr;
-        }
+    if ((len = genders_nodelist_create(handle, &nodes)) < 0)
+      return NULL;
 
-      for (i = 0; i < num; i++)
-        {
-          if (hostlist_push(h, nodes[i]) == 0)
-            {
-              handle->errnum = GENDERS_ERR_INTERNAL;
-              goto cleanup_attr;
-            }
-        }
+    if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
+      return NULL;
 
-      genders_nodelist_destroy(handle, nodes);
+    if (!(h = hostlist_create(NULL))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup_attr;
+    }
+
+    for (i = 0; i < num; i++) {
+      if (hostlist_push(h, nodes[i]) == 0) {
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup_attr;
+      }
+    }
+
+    genders_nodelist_destroy(handle, nodes);
+    hostlist_sort(h);
+    return h;
+  cleanup_attr:
+    genders_nodelist_destroy(handle, nodes);
+    hostlist_destroy(h);
+    return NULL;
+  }
+  else {
+    hostlist_t h, l, r;
+    hostlist_iterator_t itr = NULL;
+    char buf[HOSTLIST_BUFLEN];
+    int rv;
+    
+    h = l = r = NULL;
+
+    /* Is this possible? Leave just in case */
+    if (!(t->left && t->right)) {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      return NULL;
+    }
+
+    if (!(l = _calc_query(handle, t->left)))
+      goto cleanup_calc;
+    if (!(r = _calc_query(handle, t->right)))
+      goto cleanup_calc;
+
+    if (!(h = hostlist_create(NULL))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup_calc;
+    }
+    
+    /* | is Union
+     * & is Intersection
+     * - is Set Difference
+     */
+    
+    if (strcmp(t->str, "|") == 0) {
+      memset(buf, '\0', HOSTLIST_BUFLEN);
+      if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) {
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup_calc;
+      }
+
+      if (rv > 0)
+        hostlist_push(h, buf);
+
+      memset(buf, '\0', HOSTLIST_BUFLEN);
+      if ((rv = hostlist_ranged_string(r, HOSTLIST_BUFLEN, buf)) < 0) {
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup_calc;
+      }
+          
+      if (rv > 0)
+        hostlist_push(h, buf);
+
       hostlist_sort(h);
+      hostlist_uniq(h);
+      hostlist_destroy(l);
+      hostlist_destroy(r);
       return h;
-    cleanup_attr:
-      genders_nodelist_destroy(handle, nodes);
+    }
+    else if (strcmp(t->str, "&") == 0) {
+      char *node;
+      
+      if (!(itr = hostlist_iterator_create(l))) {
+        handle->errnum = GENDERS_ERR_OUTMEM;
+        goto cleanup_calc;
+      }
+      
+      while ((node = hostlist_next(itr))) {
+        if (hostlist_find(r, node) >= 0) {
+          if (hostlist_push_host(h, node) <= 0) {
+            free(node);
+            handle->errnum = GENDERS_ERR_INTERNAL;
+            goto cleanup_calc;
+          }
+        }
+        free(node);
+      }
+          
+      hostlist_sort(h);
+      hostlist_uniq(h);
+      hostlist_iterator_destroy(itr);
+      hostlist_destroy(l);
+      hostlist_destroy(r);
+      return h;
+    }
+    else if (strcmp(t->str, "-") == 0) {
+      char *node;
+      
+      if (!(itr = hostlist_iterator_create(l))) {
+        handle->errnum = GENDERS_ERR_OUTMEM;
+        goto cleanup_calc;
+      }
+      
+      while ((node = hostlist_next(itr))) {
+        if (hostlist_find(r, node) < 0) {
+          if (hostlist_push_host(h, node) <= 0) {
+            free(node);
+            handle->errnum = GENDERS_ERR_INTERNAL;
+            goto cleanup_calc;
+          }
+        }
+        free(node);
+      }
+          
+      hostlist_sort(h);
+      hostlist_uniq(h);
+      hostlist_iterator_destroy(itr);
+      hostlist_destroy(l);
+      hostlist_destroy(r);
+      return h;
+    }
+    else {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+    cleanup_calc:
+      hostlist_iterator_destroy(itr);
+      hostlist_destroy(l);
+      hostlist_destroy(r);
       hostlist_destroy(h);
       return NULL;
     }
-  else
-    {
-      hostlist_t h, l, r;
-      hostlist_iterator_t itr = NULL;
-      char buf[HOSTLIST_BUFLEN];
-      int rv;
-
-      h = l = r = NULL;
-
-      /* Is this possible? Leave just in case */
-      if (!(t->left && t->right))
-        {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          return NULL;
-        }
-
-      if (!(l = _calc_query(handle, t->left)))
-        goto cleanup_calc;
-      if (!(r = _calc_query(handle, t->right)))
-        goto cleanup_calc;
-
-      if (!(h = hostlist_create(NULL)))
-        {
-          handle->errnum = GENDERS_ERR_OUTMEM;
-          goto cleanup_calc;
-        }
-      
-      /* | is Union
-       * & is Intersection
-       * - is Set Difference
-       */
-
-      if (strcmp(t->str, "|") == 0)
-        {
-          memset(buf, '\0', HOSTLIST_BUFLEN);
-          if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0)
-            {
-              handle->errnum = GENDERS_ERR_INTERNAL;
-              goto cleanup_calc;
-            }
-
-          if (rv > 0)
-            hostlist_push(h, buf);
-
-          memset(buf, '\0', HOSTLIST_BUFLEN);
-          if ((rv = hostlist_ranged_string(r, HOSTLIST_BUFLEN, buf)) < 0)
-            {
-              handle->errnum = GENDERS_ERR_INTERNAL;
-              goto cleanup_calc;
-            }
-          
-          if (rv > 0)
-            hostlist_push(h, buf);
-
-          hostlist_sort(h);
-          hostlist_uniq(h);
-          hostlist_destroy(l);
-          hostlist_destroy(r);
-          return h;
-        }
-      else if (strcmp(t->str, "&") == 0)
-        {
-          char *node;
-
-          if (!(itr = hostlist_iterator_create(l)))
-            {
-              handle->errnum = GENDERS_ERR_OUTMEM;
-              goto cleanup_calc;
-            }
-          
-          while ((node = hostlist_next(itr))) 
-            {
-              if (hostlist_find(r, node) >= 0)
-                {
-                  if (hostlist_push_host(h, node) <= 0)
-                    {
-                      free(node);
-                      handle->errnum = GENDERS_ERR_INTERNAL;
-                      goto cleanup_calc;
-                    }
-                }
-              free(node);
-            }
-          
-          hostlist_sort(h);
-          hostlist_uniq(h);
-          hostlist_iterator_destroy(itr);
-          hostlist_destroy(l);
-          hostlist_destroy(r);
-          return h;
-        }
-      else if (strcmp(t->str, "-") == 0)
-        {
-          char *node;
-
-          if (!(itr = hostlist_iterator_create(l)))
-            {
-              handle->errnum = GENDERS_ERR_OUTMEM;
-              goto cleanup_calc;
-            }
-          
-          while ((node = hostlist_next(itr))) 
-            {
-              if (hostlist_find(r, node) < 0)
-                {
-                  if (hostlist_push_host(h, node) <= 0)
-                    {
-                      free(node);
-                      handle->errnum = GENDERS_ERR_INTERNAL;
-                      goto cleanup_calc;
-                    }
-                }
-              free(node);
-            }
-          
-          hostlist_sort(h);
-          hostlist_uniq(h);
-          hostlist_iterator_destroy(itr);
-          hostlist_destroy(l);
-          hostlist_destroy(r);
-          return h;
-        }
-      else
-        {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-    cleanup_calc:
-          hostlist_iterator_destroy(itr);
-          hostlist_destroy(l);
-          hostlist_destroy(r);
-          hostlist_destroy(h);
-          return NULL;
-        }
-    }
+  }
 }
 
 int
@@ -373,34 +342,30 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (nodes == NULL || len <= 0 || query == NULL)
-    {
-      handle->errnum = GENDERS_ERR_PARAMETERS;
-      goto cleanup;
-    }
+  if (!nodes || len <= 0 || !query) {
+    handle->errnum = GENDERS_ERR_PARAMETERS;
+    goto cleanup;
+  }
 
   if (_parse_query(handle, query) < 0)
     goto cleanup;
-
+  
   if (!(h = _calc_query(handle, genders_treeroot)))
     goto cleanup;
 
-  if (!(itr = hostlist_iterator_create(h)))
-    {
-      handle->errnum = GENDERS_ERR_OUTMEM;
+  if (!(itr = hostlist_iterator_create(h))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  while ((node = hostlist_next(itr))) {
+    if (_put_in_list(handle, node, nodes, index++, len) < 0) {
+      free(node);
       goto cleanup;
     }
-
-  while ((node = hostlist_next(itr)))
-    {
-      if (_put_in_list(handle, node, nodes, index++, len) < 0)
-        {
-          free(node);
-          goto cleanup;
-        }
-      free(node);
-    }
-
+    free(node);
+  }
+  
   /* genders_printtree(genders_treeroot); */
   handle->errnum = GENDERS_ERR_SUCCESS;
   retval = index;

@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.10 2004-10-07 18:22:31 achu Exp $
+## $Id: Makefile.am,v 1.11 2004-11-04 18:49:51 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -89,9 +89,6 @@ EXTRA_DIST = \
         genders_stats.3 \
         genders_errors.3 \
         genders_parse.3 \
-	genders_index.3 \
-	genders_index_attrs.3 \
 	genders_index_attrvals.3 \
-	genders_index_nodes.3 \
 	genders_query.3 \
         libgenders.3
