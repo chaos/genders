@@ -1,5 +1,5 @@
 /*
- * $Id: libgenders_test.c,v 1.2 2003-03-13 22:04:38 achu Exp $
+ * $Id: libgenders_test.c,v 1.3 2003-03-14 22:36:38 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/libgenders_test.c,v $
  */
 
@@ -12,6 +12,7 @@
 struct test_env {
   genders_t open_handle;
   genders_t not_open_handle;
+  genders_t destroyed_handle;
   char **nodelist;
   char **attrlist;
   char **vallist;
@@ -73,6 +74,16 @@ int initialize_test_env(struct test_env *test_env) {
 
   if ((test_env->not_open_handle = genders_handle_create()) == NULL) {
     printf("genders_handle_create() error\n");
+    return -1;
+  }
+
+  if ((test_env->destroyed_handle = genders_handle_create()) == NULL) {
+    printf("genders_handle_create() error\n");
+    return -1;
+  }
+
+  if (genders_handle_destroy(test_env->destroyed_handle) == -1) {
+    printf("genders_handle_destroy() error\n");
     return -1;
   }
 
@@ -154,6 +165,9 @@ void run_a_parameter_test(struct test_env *test_env,
   }
   else if (param1 == IS_NOT_NULL_OPEN) {
     handle = test_env->open_handle;
+  }
+  else if (param1 == IS_NOT_NULL_DESTROYED) {
+    handle = test_env->destroyed_handle;
   }
 
   if (function & GENDERS_CREATE && param2 == IS_NOT_NULL) {
