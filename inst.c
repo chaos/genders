@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: inst.c,v 1.5 2003-01-22 04:19:42 garlick Exp $
+ *  $Id: inst.c,v 1.6 2003-04-01 15:58:22 garlick Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -17,8 +17,6 @@
  *  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
  *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  *  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
- *  details.
- *  
  *  You should have received a copy of the GNU General Public License along
  *  with Genders; if not, write to the Free Software Foundation, Inc.,
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
@@ -55,6 +53,8 @@
 #include <pwd.h>
 #include <grp.h>
 #include <string.h>
+#include <stdlib.h>
+#include <utime.h>
 
 #define _PATH_DIFF	"/usr/bin/diff"
 #define _PATH_CMP	"/usr/bin/cmp"
@@ -68,6 +68,8 @@ inst -s file -d dstdir [-m mode] [-o owner] [-g group] [-c|-C] [-f] [-q]"
 #define WHY_DIFF	"source and destination are identical (diff -b)"
 
 #define NONE (-3)
+
+static void usage(void);
 
 int main(int argc, char *argv[])
 {
@@ -85,7 +87,6 @@ int main(int argc, char *argv[])
     gid_t dst_gid = NONE;
     int opt_c = 0, opt_C = 0, opt_f = 0, opt_q = 0;
     int do_copy, do_chmod, do_chown;
-    char tmpstr[MAXPATHLEN * 3];
     pid_t pid;
     int st, rv;
     char *why;
@@ -287,7 +288,7 @@ int main(int argc, char *argv[])
         times[0].tv_sec = sb_src.st_mtime;
         times[0].tv_usec = sb_src.st_mtime;
         times[1] = times[0];
-        if (utime(dst_file, times) == -1)
+        if (utimes(dst_file, times) == -1)
             perror(dst_file);
     }
 
@@ -301,7 +302,7 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-usage(void)
+static void usage(void)
 {
     fprintf(stderr, "Usage: %s\n", USAGE);
     exit(1);

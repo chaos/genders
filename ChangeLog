@@ -1,3 +1,8 @@
+2003-04-01 Jim Garlick <garlick@llnl.gov>
+	* Change nodeattr to make -r option return primary hostname when
+	  altname lookup fails.
+	* tagged genders-1-1-5
+
 2003-03-31 Albert Chu <chu11@llnl.gov>
         * fixed error with magic numbers in libgenders
 	* added nodeattr C version as nodeattr command to install
@@ -8,7 +13,7 @@
 	  file change
 	* fixed gendlib(3) and nodeattr(1) manpages to reflect changes
 	* tagged genders-1-1-4
-	
+
 2003-03-12 Albert Chu <chu11@llnl.gov>
         * moved unnecessary #includes and #defines from genders.h
 	  into genders.c  

@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.2 2003-03-18 00:18:57 achu Exp $
+ *  * $Id: nodeattr.c,v 1.3 2003-04-01 15:58:22 garlick Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -197,8 +197,19 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
     for (i = 0; i < count; i++) {
         char *node = nodes[i];
 
-        if (ropt)
-            node = _to_altname(gp, nodes[i]);           
+        /* The -r option just expresses a preference for alternate names, so
+         * if the lookup fails, use the primary name.  Making this a hard
+         * failure breaks older versions of pdsh that call nodeattr rather
+         * than making direct use of libgenders.  -jg
+         */
+        if (ropt) {
+            node = _to_altname(gp, nodes[i]);
+            if (strlen(node) == 0) {
+                free(node);
+                node = nodes[i];
+            }
+        } 
+
         if (hostlist_push(hl, node) == 0) {
             fprintf(stderr, "nodeattr: hostlist_push failed\n");
             exit(1);
@@ -339,17 +350,14 @@ static char *_val_create(genders_t gp)
     return val;
 }
 
-/* Convert "altname" to "gendname".  Caller must free result. */
+/* Convert "altname" to "gendname".  Caller must free result.  */
+/* Returns zero length string on lookup failure */
 static char *_to_altname(genders_t gp, char *node)
 {
     char *val = _val_create(gp); /* full of nulls initially */
    
     if (genders_testattr(gp, node, "altname", val, genders_getmaxvallen(gp)) < 0)
         _gend_error_exit(gp, "genders_testattr");
-    if (strlen(val) == 0) {
-        fprintf(stderr, "nodeattr: %s: conversion to alternate hostname failed\n", node);
-        exit(1);
-    }
     return val;
 }
 
