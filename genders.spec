@@ -4,16 +4,16 @@ Release:
 Summary: Static cluster configuration database and tools.
 Copyright: none
 Group: System Environment/Base
-Source: %{name}-%{version}-%{release}.tgz
-BuildRoot: /var/tmp/%{name}-buildroot
+Source0:
 Prereq: rdist pdksh net-tools diffutils perl
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
 Genders is a static cluster configuration database and tools for querying
 and building rdist Distfile macros.
 
 %prep
-%setup  -n %{name}-%{version}-%{release}
+%setup  -q -n %{name}-%{version}
 
 %build
 make all
