@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.21 2003-04-22 17:25:10 achu Exp $
+ * $Id: genders.c,v 1.22 2003-04-22 21:38:52 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -125,6 +125,9 @@ static char * errmsg[] = {
  * Internal Function Declarations        *
  *****************************************/
 
+/* common error checks for genders handle */
+static int genders_handle_err_check(genders_t handle);
+
 /* common error checks for non-loaded genders data */
 static int genders_unloaded_handle_err_check(genders_t handle);
 
@@ -134,8 +137,7 @@ static int genders_loaded_handle_err_check(genders_t handle);
 /* genders_getline
  * - portable version of getline(3) for genders
  * - user is responsible for freeing memory
- * - Returns length of line read on success, -1 on error, return 
- *   code is 0 if reached end of file 
+ * - Returns length of line read on success, -1 on error, 0 for EOF 
  */ 
 static int genders_getline(genders_t handle, int fd, char **buf);
 
@@ -196,7 +198,7 @@ int has_attribute(genders_t handle,
                   struct node_listnode *node_listnode,
                   struct attrval_listnode **attrval_listnode);
 
-int genders_unloaded_handle_err_check(genders_t handle) {
+int genders_handle_err_check(genders_t handle) {
   if (handle == NULL) {
     return -1;
   }
@@ -204,7 +206,16 @@ int genders_unloaded_handle_err_check(genders_t handle) {
   if (handle->magic != GENDERS_MAGIC_NUM) {
     return -1;
   }
+
+  return 0;
+}
+
+int genders_unloaded_handle_err_check(genders_t handle) {
   
+  if (genders_handle_err_check(handle) == -1) {
+    return -1;
+  }
+
   if (handle->loaded_flag == GENDERS_DATA_LOADED) {
     handle->errnum = GENDERS_ERR_ISLOADED;
     return -1;
@@ -214,14 +225,11 @@ int genders_unloaded_handle_err_check(genders_t handle) {
 }
 
 int genders_loaded_handle_err_check(genders_t handle) {
-  if (handle == NULL) {
+  
+  if (genders_handle_err_check(handle) == -1) {
     return -1;
   }
-  
-  if (handle->magic != GENDERS_MAGIC_NUM) {
-    return -1;
-  }
-  
+
   if (handle->loaded_flag == GENDERS_DATA_NOT_LOADED) {
     handle->errnum = GENDERS_ERR_NOTLOADED;
     return -1;
@@ -403,7 +411,10 @@ cleanup:
   return -1;
 }
 
-int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
+int genders_parse_line(genders_t handle, 
+                       char *line, 
+                       int debug_line, 
+                       FILE *stream) {
   char *token = NULL;
   char *temp;
   char *buf;
@@ -429,15 +440,15 @@ int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
     if (token != NULL) {
 
       if (strlen(token) > MAXHOSTNAMELEN) {
-        if (debug > 0) {
-          fprintf(stream, "Line %d: hostname too long\n", debug);
+        if (debug_line > 0) {
+          fprintf(stream, "Line %d: hostname too long\n", debug_line);
           return 1;
         }
         handle->errnum = GENDERS_ERR_PARSE;
         return -1;
       }
 
-      if (debug == 0) {
+      if (debug_line == 0) {
         if (genders_insert_node_listnode(handle,token) == -1) {
           return -1;
         }
@@ -462,9 +473,9 @@ int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
   if (*line != '\0') {
 
     if (strchr(line,' ') != NULL || strchr(line,'\t') != NULL) {
-      if (debug > 0) {
+      if (debug_line > 0) {
         fprintf(stream, "Line %d: white space in attribute list\n", 
-                debug);
+                debug_line);
         return 0;
       }
 
@@ -475,6 +486,7 @@ int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
     token = strtok_r(line,",\n\0",&buf);
     while (token != NULL) {
 
+      /* parse value out of attribute */
       if (strchr(token,'=') == NULL) {
         attribute = token;
         value = NULL;
@@ -484,7 +496,7 @@ int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
         value = strtok_r(NULL,"\0",&attrbuf);
       }
 
-      if (debug == 0) {
+      if (debug_line == 0) {
         if (genders_insert_attrval_listnode(handle, 
                                             attribute,
                                             value) == -1) {
@@ -515,7 +527,7 @@ int genders_parse_line(genders_t handle, char *line, int debug, FILE *stream) {
     }
   }
 
-  if (debug == 0) {
+  if (debug_line == 0) {
     if (attrcount > handle->maxattrs) {
       handle->maxattrs = attrcount;
     }
@@ -589,6 +601,7 @@ int genders_insert_attrval_listnode(genders_t handle,
   }
   attrval_list = node_list->attrvals_tail;
 
+  /* store attribute */
   attrval_list->name = (char *)malloc(strlen(attribute)+1);
   if (attrval_list->name == NULL) {
     handle->errnum = GENDERS_ERR_OUTMEM;
@@ -596,6 +609,7 @@ int genders_insert_attrval_listnode(genders_t handle,
   }
   strcpy(attrval_list->name,attribute);
 
+  /* store value */
   if (value == NULL) {
     attrval_list->val = NULL;
   }
@@ -646,6 +660,7 @@ int genders_insert_attr_listnode(genders_t handle, char *attr) {
   }
   attr_list = handle->attrs_tail;
 
+  /* store attribute */
   attr_list->name = (char *)malloc(strlen(attr) + 1);
   if (attr_list->name == NULL) {
     handle->errnum = GENDERS_ERR_OUTMEM;
@@ -751,6 +766,7 @@ int genders_handle_dump(genders_t handle, FILE *stream) {
       else {
         fprintf(stream,"%s", attrval_list->name);
       }
+
       if (attrval_list->next != NULL) {
         fprintf(stream,",");
       }
@@ -1154,7 +1170,7 @@ int genders_getnodename(genders_t handle, char *node, int len) {
     return -1;
   }
 
-  if (node == NULL || len <= 0 || len > MAXHOSTNAMELEN+1) {
+  if (node == NULL || len <= 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -1463,11 +1479,7 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
   int ret, line_count = 1, retval = 0, fd = -1;
   char *line = NULL;
 
-  if (handle == NULL) {
-    return -1;
-  }
-
-  if (handle->magic != GENDERS_MAGIC_NUM) {
+  if (genders_handle_err_check(handle) == -1) {
     return -1;
   }
 
