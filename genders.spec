@@ -41,6 +41,37 @@ install dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
+gzip genders_attrlist_clear.3 genders_attrlist_create.3 genders_attrlist_destroy.3 genders_close.3 genders_elapsedtime.3 genders_errnum.3 genders_getattr.3 genders_getattr_all.3 genders_getmaxattrlen.3 genders_getmaxattrs.3 genders_getmaxnodenamelen.3 genders_getmaxvallen.3 genders_getnodename.3 genders_getnodes.3 genders_getnumattrs.3 genders_getnumnodes.3 genders_handle_create.3 genders_handle_dump.3 genders_nodelist_clear.3 genders_nodelist_create.3 genders_nodelist_destroy.3 genders_open.3 genders_perror.3 genders_strerror.3 genders_testattr.3 genders_testattrval.3 genders_vallist_clear.3 genders_vallist_create.3 genders_vallist_destroy.3 libgenders.3
+install genders_attrlist_clear.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_attrlist_create.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_attrlist_destroy.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_close.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_elapsedtime.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_errnum.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getattr.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getattr_all.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getmaxattrlen.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_getmaxattrs.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getmaxnodenamelen.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getmaxvallen.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_getnodename.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getnodes.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getnumattrs.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_getnumnodes.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_handle_create.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_handle_dump.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_nodelist_clear.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_nodelist_create.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_nodelist_destroy.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_open.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_perror.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_strerror.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_testattr.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_testattrval.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_vallist_clear.3	$RPM_BUILD_ROOT/usr/man/man3
+install genders_vallist_create.3 $RPM_BUILD_ROOT/usr/man/man3
+install genders_vallist_destroy.3 $RPM_BUILD_ROOT/usr/man/man3
+install libgenders.3 $RPM_BUILD_ROOT/usr/man/man3
 cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include install
 
 %files
@@ -63,6 +94,36 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include i
 /usr/man/man1/inst.1.gz
 /usr/man/man1/nodeattr.1.gz
 /usr/man/man3/gendlib.3.gz
+/usr/man/man3/genders_open.3
+/usr/man/man3/genders_handle_create.3
+/usr/man/man3/genders_close.3
+/usr/man/man3/genders_errnum.3
+/usr/man/man3/genders_strerror.3
+/usr/man/man3/genders_perror.3
+/usr/man/man3/genders_handle_dump.3
+/usr/man/man3/genders_getnumnodes.3
+/usr/man/man3/genders_getnumattrs.3
+/usr/man/man3/genders_getmaxattrs.3
+/usr/man/man3/genders_getmaxnodenamelen.3
+/usr/man/man3/genders_getmaxattrlen.3
+/usr/man/man3/genders_getmaxvallen.3
+/usr/man/man3/genders_nodelist_create.3
+/usr/man/man3/genders_nodelist_clear.3
+/usr/man/man3/genders_nodelist_destroy.3
+/usr/man/man3/genders_attrlist_create.3
+/usr/man/man3/genders_attrlist_clear.3
+/usr/man/man3/genders_attrlist_destroy.3
+/usr/man/man3/genders_vallist_create.3
+/usr/man/man3/genders_vallist_clear.3
+/usr/man/man3/genders_vallist_destroy.3
+/usr/man/man3/genders_getnodename.3
+/usr/man/man3/genders_getnodes.3
+/usr/man/man3/genders_getattr.3
+/usr/man/man3/genders_getattr_all.3
+/usr/man/man3/genders_testattr.3
+/usr/man/man3/genders_testattrval.3
+/usr/man/man3/genders_elapsedtime.3
+/usr/man/man3/libgenders.3
 /usr/lib/libgenders.a
 /usr/lib/libgenders.la
 /usr/lib/libgenders.so
