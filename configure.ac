@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.1 2003-04-18 22:37:12 achu Exp $
+## $Id: configure.ac,v 1.2 2003-04-19 00:16:44 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -9,7 +9,6 @@
 ##
 AC_INIT([genders], [1.0], [chu11@llnl.gov])
 AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_SRCDIR([libgenders/genders.h])
 AC_CANONICAL_SYSTEM
 
 ##
@@ -82,11 +81,10 @@ AC_CHECK_FUNCS( \
 ##
 AC_CONFIG_FILES( \
   Makefile \
-  src\Makefile \
-  src\libgenders\Makefile \
-  src\nodeattr\Makefile \
-  src\dist\Makefile \
-  src\libgenders\genders.h \
+  src/Makefile \
+  src/libgenders/Makefile \
+  src/nodeattr/Makefile \
+  src/libgenders/genders.h \
 )
 AC_OUTPUT
 

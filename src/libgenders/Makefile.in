@@ -36,7 +36,7 @@ oldincludedir = /usr/include
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = ..
+top_builddir = ../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -76,6 +76,7 @@ CC = @CC@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
+GENDERS_DEFAULT_FILE = @GENDERS_DEFAULT_FILE@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
@@ -92,10 +93,10 @@ install_sh = @install_sh@
 include_HEADERS = genders.h
 lib_LTLIBRARIES = libgenders.la
 libgenders_la_SOURCES = genders.c
-subdir = libgenders
+subdir = src/libgenders
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config/config.h
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = genders.h
 LTLIBRARIES = $(lib_LTLIBRARIES)
 
 libgenders_la_LDFLAGS =
@@ -122,7 +123,7 @@ CFLAGS = @CFLAGS@
 DIST_SOURCES = $(libgenders_la_SOURCES)
 HEADERS = $(include_HEADERS)
 
-DIST_COMMON = $(include_HEADERS) Makefile.am Makefile.in
+DIST_COMMON = $(include_HEADERS) Makefile.am Makefile.in genders.h.in
 SOURCES = $(libgenders_la_SOURCES)
 
 all: all-am
@@ -131,9 +132,11 @@ all: all-am
 .SUFFIXES: .c .lo .o .obj
 $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  libgenders/Makefile
+	  $(AUTOMAKE) --gnu  src/libgenders/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
+genders.h: $(top_builddir)/config.status genders.h.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 libLTLIBRARIES_INSTALL = $(INSTALL)
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)
 	@$(NORMAL_INSTALL)
@@ -260,7 +263,7 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-top_distdir = ..
+top_distdir = ../..
 distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
