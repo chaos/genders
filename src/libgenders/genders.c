@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.102 2004-04-27 21:49:30 achu Exp $
+ *  $Id: genders.c,v 1.103 2004-04-27 21:50:02 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1475,8 +1475,6 @@ genders_isnode(genders_t handle, const char *node)
 int 
 genders_isattr(genders_t handle, const char *attr) 
 {
-  List l;
-
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
@@ -1495,7 +1493,6 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   ListIterator itr = NULL;
   genders_node_t n;
   genders_attrval_t av;
-  List l;
   int rv, retval = -1;
 
   if (_loaded_handle_error_check(handle) < 0)
