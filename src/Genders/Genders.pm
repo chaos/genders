@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.5 2003-05-14 22:58:46 achu Exp $
+# $Id: Genders.pm,v 1.6 2003-05-16 00:17:14 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -270,7 +270,7 @@ Genders - Perl library for querying genders file
 
  use Genders;
 
- Genders::GENDERS_DEFAULT_FILE;
+ $Genders::GENDERS_DEFAULT_FILE;
 
  $obj = Genders->new([$filename])
 
@@ -294,9 +294,9 @@ This package provides a perl interface for querying a genders file.
 
 =over 4
 
-=item B<Genders::GENDERS_DEFAULT_FILE>
+=item B<$Genders::GENDERS_DEFAULT_FILE>
 
-Retrieve name of default genders file.
+The default genders file.
 
 =item B<Genders->new([$filename])>
 
