@@ -1,18 +1,23 @@
 /*
- *  * $Id: nodeattr.c,v 1.18 2003-05-16 15:25:48 achu Exp $
+ *  * $Id: nodeattr.c,v 1.19 2003-05-20 00:01:38 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
 
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
-#include <getopt.h>
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
+#if HAVE_GETOPT_LONG 
+#include <getopt.h>
+#endif
 
 #include "genders.h"
 #include "hostlist.h"
-
-#define HAVE_GETOPT_LONG 1
 
 #define NODEATTR_TRANSITION 1
 
@@ -23,11 +28,12 @@
 #endif
 
 #if NODEATTR_TRANSITION
-#define OPTIONS "cnsqvlCrf:"
+#define OPTIONS "cnsqvlCrkf:"
 #else
-#define OPTIONS "cnsqvlf:"
+#define OPTIONS "cnsqvlkf:"
 #endif
 
+#if HAVE_GETOPT_LONG
 static struct option longopts[] = {
     { "querycomma", 0, 0, 'c' },
     { "querynl", 0, 0, 'n' },
@@ -43,6 +49,7 @@ static struct option longopts[] = {
 #endif
     { 0,0,0,0 },
 };
+#endif
 
 typedef enum { FMT_COMMA, FMT_NL, FMT_SPACE, FMT_HOSTLIST } fmt_t;
 
@@ -345,7 +352,7 @@ static void usage(void)
 #if NODEATTR_TRANSITION
         "or     nodeattr [-f genders] -C [node]\n"
 #endif
-        "or     nodeattr [-f genders] --check\n");
+        "or     nodeattr [-f genders] -k\n");
     exit(1);
 }
 
