@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.12 2003-04-23 20:27:42 achu Exp $
+ *  * $Id: nodeattr.c,v 1.13 2003-04-24 18:45:26 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -118,10 +118,10 @@ main(int argc, char *argv[])
     /* parse check */
     if (kopt) {
         if ((errors = genders_parse(gp, filename, NULL)) == -1) {
-	  _gend_error_exit(gp, "genders_parse");
-	}
-	fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
-	exit(errors);
+          _gend_error_exit(gp, "genders_parse");
+        }
+        fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
+        exit(errors);
     }
 
     if (genders_load_data(gp, filename) < 0)
@@ -297,7 +297,7 @@ static void usage(void)
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -C [node]\n"
-	"or     nodeattr [-f genders] --check\n");
+        "or     nodeattr [-f genders] --check\n");
     exit(1);
 }
 
