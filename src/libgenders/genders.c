@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.92 2004-02-04 03:12:24 achu Exp $
+ *  $Id: genders.c,v 1.93 2004-03-09 16:34:37 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -299,7 +299,6 @@ static int
 _get_val(genders_t handle, genders_node_t n, genders_attrval_t av, 
 	 char *buf, int buflen)
 {
-  int i, index;
   char *val, *node;
 
   if (!strstr(av->val, "%n") && !strstr(av->val, "%%"))
@@ -542,7 +541,6 @@ _duplicate_attr_check(genders_t handle, List attrlist, List attrvals)
 {
   ListIterator itr = NULL;
   genders_attrval_t av = NULL;
-  char *attr = NULL;
   int retval = -1;
 
   if (!(itr = list_iterator_create(attrvals))) {
@@ -647,7 +645,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	if (strlen(attr) > MAXATTRLEN) {
 	  if (line_num > 0) {
 	    fprintf(stderr, "Line %d: %s exceeds maximum attribute length\n", 
-		    attr, line_num);
+		    line_num, attr);
 	    retval = 1;
 	  }
 	  handle->errnum = GENDERS_ERR_PARSE;
@@ -657,7 +655,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 	if (val && strlen(val) > MAXVALLEN) {
 	  if (line_num > 0) {
 	    fprintf(stderr, "Line %d: %s exceeds maximum value length\n", 
-		    val, line_num);
+		    line_num, val);
 	    retval = 1;
 	  }
 	  handle->errnum = GENDERS_ERR_PARSE;
@@ -1535,7 +1533,7 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   }
 
   if (list_count(debugnodeslist) == 0) {
-    fprintf(stderr, "No nodes listed\n");
+    fprintf(stderr, "No nodes successfully parsed\n");
     goto cleanup;
   }
 

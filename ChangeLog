@@ -1,3 +1,18 @@
+2004-03-09  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (_get_val, _duplicate_attr_check):
+	Removed unused variables.
+
+	* src/libgenders/genders.c (genders_parse): Output more appropriate
+	message when no listed successfully parsed.
+
+	* src/libgenders/genders.c (_parse_line): Fix output bug when very
+	long attrs or vals found.
+
+	* config/ac_debug.m4: New file.
+
+	* configure.ac: Added --enable-debug option.
+	
 2004-03-05  Albert Chu  <chu11@llnl.gov>
 
 	* man/libgenders.3: Fixed typo found by Py Watson.
