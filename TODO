@@ -21,3 +21,7 @@
 - Cleanup malloc-buffering in list/hash since its not necessary for genders.
 - genders_query allow really odd-ball parsing like
   - "attr-&-|"  
+- For multilib, repackage everything
+  - genders
+  - genders-lib
+  - genders-compat
