@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.42 2003-05-23 15:20:44 achu Exp $
+ * $Id: genders.c,v 1.43 2003-05-23 15:26:16 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -748,9 +748,9 @@ int genders_handle_dump(genders_t handle, FILE *stream) {
 
   node_list = handle->nodes_head;
   while (node_list != NULL) {
-    fprintf(stream,"%s\t", node_list->name);
-
     struct attrval_listnode *attrval_list = node_list->attrvals_head;
+
+    fprintf(stream,"%s\t", node_list->name);
     while (attrval_list != NULL) {
       if (attrval_list->val != NULL)
         fprintf(stream,"%s=%s",attrval_list->name,attrval_list->val);
@@ -1261,7 +1261,7 @@ int genders_isnode(genders_t handle, const char *node) {
 
 int genders_isattr(genders_t handle, const char *attr) {
   int retval = 0;
-  struct attr_listnode *attr_list;
+  struct attr_listnode *attr_node;
 
   if (genders_loaded_handle_err_check(handle) == -1)
     return -1;
@@ -1271,11 +1271,11 @@ int genders_isattr(genders_t handle, const char *attr) {
     return -1;
   }
 
-  attr_list = handle->attrs_head;
-  while (attr_list != NULL && strcmp(attr_list->name,attr) != 0)
-    attr_list = attr_list->next;
+  attr_node = handle->attrs_head;
+  while (attr_node != NULL && strcmp(attr_node->name,attr) != 0)
+    attr_node = attr_node->next;
 
-  if (attr_list != NULL)
+  if (attr_node != NULL)
     retval = 1;
 
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -1283,8 +1283,8 @@ int genders_isattr(genders_t handle, const char *attr) {
 }
 
 int genders_isattrval(genders_t handle, const char *attr, const char *val) {
-  struct node_listnode *node_list;
-  struct attrval_listnode *attrval_list;
+  struct node_listnode *node;
+  struct attrval_listnode *attrval;
 
   if (genders_loaded_handle_err_check(handle) == -1)
     return -1;
@@ -1294,16 +1294,16 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val) {
     return -1;
   }
   
-  node_list = handle->nodes_head;
-  while (node_list != NULL) {
-    if (genders_has_attr(handle, attr, node_list, &attrval_list) == 1) {
-      if (attrval_list->val != NULL && strcmp(attrval_list->val, val) == 0) {
+  node = handle->nodes_head;
+  while (node != NULL) {
+    if (genders_has_attr(handle, attr, node, &attrval) == 1) {
+      if (attrval->val != NULL && strcmp(attrval->val, val) == 0) {
         handle->errnum = GENDERS_ERR_SUCCESS;
         return 1;
       }
     }
    
-    node_list = node_list->next;
+    node = node->next;
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -1333,15 +1333,15 @@ int genders_has_attr(genders_t handle,
                      struct node_listnode *node_listnode,
                      struct attrval_listnode **attrval_listnode) {
 
-  struct attrval_listnode *attrval_list;
+  struct attrval_listnode *attrval;
 
-  attrval_list = node_listnode->attrvals_head;
-  while (attrval_list != NULL && strcmp(attrval_list->name,attr) != 0)
-    attrval_list = attrval_list->next;
+  attrval = node_listnode->attrvals_head;
+  while (attrval != NULL && strcmp(attrval->name,attr) != 0)
+    attrval = attrval->next;
   
-  if (attrval_list != NULL) {
+  if (attrval != NULL) {
     if (attrval_listnode != NULL)
-      *attrval_listnode = attrval_list;
+      *attrval_listnode = attrval;
     return 1;
   }
 
