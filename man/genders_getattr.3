@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_getattr.3,v 1.8 2003-08-18 22:45:50 achu Exp $
+\."$Id: genders_getattr.3,v 1.9 2003-11-03 19:41:25 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -63,7 +63,9 @@ An incorrect parameter has been passed in.
 A null pointer has been found in the list passed in.
 .TP
 .B GENDERS_ERR_NOTFOUND
-The node pointed to by \fInode\fR cannot be found in the genders file.  
+The node pointed to by \fInode\fR cannot be found in the genders file
+or if \fInode\fR=NULL, the machine genders is running on is not listed
+in the genders database.
 .TP
 .B GENDERS_ERR_MAGIC 
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not

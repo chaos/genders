@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_list.3,v 1.8 2003-08-18 22:45:50 achu Exp $
+\."$Id: genders_list.3,v 1.9 2003-11-03 19:41:25 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -68,6 +68,12 @@ and the programmer wishes to re-use the list.
 \fBgenders_nodelist_destroy()\fR, \fBgenders_attrlist_destroy()\fR,
 and \fBgenders_vallist_destroy()\fR destroy the lists pointed to by
 \fInodelist\fR, \fIattrlist\fR, and \fIvallist\fR respectively.
+
+If no attributes or values are listed in the genders database all of
+the attrlist and vallist functions will do nothing.  The pointer
+passed into \fBgenders_attrlist_create()\fR and
+\fBgenders_vallist_create()\fR will not be set.
+
 .br
 .SH RETURN VALUES
 On success, \fBgenders_nodelist_create()\fR,
