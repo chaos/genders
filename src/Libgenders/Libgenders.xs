@@ -8,6 +8,8 @@
 
 MODULE = Libgenders             PACKAGE = Libgenders            
 
+PROTOTYPES: ENABLE
+
 int
 GENDERS_ERR_SUCCESS (sv=&PL_sv_undef)
     SV *sv    
