@@ -9,7 +9,7 @@
                                June 19, 2000
 
   ------------------------------------------------------------------------
-NOTE: This document is part of the "MPP Cluster Tools" software package,
+NOTE: This document is part of the "Genders" software package,
 approved by LLNL for public release.  Please see the DISCLAIMER file
 distributed with the package for restrictions.
   ------------------------------------------------------------------------
@@ -318,7 +318,7 @@ by NQS:
 
      #!/admin/bin/perl
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      require "/admin/lib/gendlib.pl";
@@ -453,7 +453,7 @@ the same permissions they will have at their final installed destination.
 Distfile.misc contains the following:
 
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
 
@@ -629,7 +629,7 @@ be called genders.clustername:
 The Distfile.genders then contains:
 
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      genders: genders/genders.auk -> ${auk!attr_all}
@@ -654,7 +654,7 @@ separate script called dist_passwd is used to propagate these files:
 
      #!/bin/sh
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      PATH=/admin/scripts:$PATH
@@ -670,7 +670,7 @@ passwdhost attribute (the node where the source files reside).  The
 /admin/etc/Distfile.passwd file contains:
 
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      ETCFILES = ( /etc/passwd /etc/shadow /etc/group )
@@ -694,7 +694,7 @@ following script (written for linux) takes care of installing the minimum
 set of files onto the node:
 
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      if [ $# -ne 1 ]; then
@@ -752,7 +752,7 @@ rdist repository.  The source files and this Makefile are kept in
 /usr/local/admin/genders:
 
      #
-     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+     # $Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      PKG=    genders
@@ -806,5 +806,5 @@ Names for other network interfaces on the same node do not appear in the
 genders file.
 
   ------------------------------------------------------------------------
-$Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
+$Id: TUTORIAL,v 1.4 2003-01-22 04:20:41 garlick Exp $
 $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
