@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_query.3,v 1.1 2004-06-09 21:53:00 achu Exp $
+\."  $Id: genders_query.3,v 1.2 2004-06-10 15:31:04 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -29,7 +29,7 @@ genders_query \- query genders database for a set of nodes
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
-.BI "int genders_query(genders_t handle, char *query, char *nodes[], int len););"
+.BI "int genders_query(genders_t handle, char *nodes[], int len, char *query);"
 .br
 .SH DESCRIPTION
 \fBgenders_query()\fR queries the genders database for a set of nodes

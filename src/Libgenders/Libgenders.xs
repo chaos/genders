@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.34 2004-06-10 00:33:04 achu Exp $
+ *  $Id: Libgenders.xs,v 1.35 2004-06-10 15:31:04 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -534,7 +534,7 @@ genders_query(handle, query)
         if ((num = genders_nodelist_create(handle, &nlist)) == -1) 
             goto handle_error;
 
-        if ((ret = genders_query(handle, query, nlist, num)) == -1)
+        if ((ret = genders_query(handle, nlist, num, query)) == -1)
             goto handle_error;
 
         RETVAL = newAV();

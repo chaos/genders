@@ -1,3 +1,12 @@
+2004-06-10  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.h.in, src/libgenders/genders_query.y,
+	src/Libgenders/Libgenders.xs, man/genders_query.3 (genders_query):
+	Re-arranged function parameters to be consistent with rest of
+	genders API.
+
+	* man/libgenders.3: Added genders_query.
+	
 2004-06-09  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.h.in: Add new SYNTAX and QUERYINPUT error

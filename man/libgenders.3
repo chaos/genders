@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: libgenders.3,v 1.17 2004-05-04 01:09:07 achu Exp $
+\."  $Id: libgenders.3,v 1.18 2004-06-10 15:31:04 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -97,6 +97,8 @@ libgenders \- a library of functions to parse and retrieve genders data
 .sp
 .BI "int genders_index_attrvals(genders_t handle, const char *attr);"
 .sp
+.BI "int genders_query(genders_t handle, char *nodes[], int len, char *query);"
+.sp
 .BI "int genders_parse(genders_t handle, const char *filename, FILE *stream);"
 .br
 .SH DESCRIPTION
@@ -175,4 +177,4 @@ genders_vallist_destroy(3), genders_getnodename(3),
 genders_getnodes(3), genders_getattr(3), genders_getattr_all(3),
 genders_testattr(3), genders_testattrval(3), genders_testnode(3),
 genders_index_nodes(3), genders_index_attrs(3), genders_index_attrvals(3),
-genders_parse(3)
+genders_query(3), genders_parse(3)

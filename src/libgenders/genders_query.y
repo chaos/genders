@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.6 2004-06-09 20:43:08 achu Exp $
+ *  $Id: genders_query.y,v 1.7 2004-06-10 15:31:05 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -360,7 +360,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
 }
 
 int
-genders_query(genders_t handle, char *query, char *nodes[], int len)
+genders_query(genders_t handle, char *nodes[], int len, char *query)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
@@ -371,7 +371,7 @@ genders_query(genders_t handle, char *query, char *nodes[], int len)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (query == NULL || nodes == NULL || len <= 0)
+  if (nodes == NULL || len <= 0 || query == NULL)
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       goto cleanup;

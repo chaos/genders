@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.23 2004-06-09 20:29:10 achu Exp $
+ *  $Id: genders.h.in,v 1.24 2004-06-10 15:31:04 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -257,7 +257,7 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  * difference '-'.  Operations are performed left to right.
  * Parentheses can be used to change the order of operations.
  */ 
-int genders_query(genders_t handle, char *query, char *nodes[], int len);
+int genders_query(genders_t handle, char *nodes[], int len, char *query);
 
 /* Parses a genders file, and outputs parse debugging 
  * information to the file stream  
