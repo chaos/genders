@@ -77,3 +77,13 @@ Fri May 24 16:56:05 PDT 2002
 	Added -r option to nodeattr in dist_all.
 
 	Tagged genders-0-2-5chaos.
+
+Fri May 31 08:26:11 PDT 2002
+	Removed -r option from dist2.  The default is now to use
+	"altnames" if available (reliable_hostname on SP, altname= attribute
+	elsewhere).  Added -i option to select canonical names 
+ 	(the names on the LHS of each genders line). 
+
+	Updated dist2 man page.
+
+	Tagged genders-0-2-6chaos.

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: dist2,v 1.3 2001-07-14 05:36:51 garlick Exp $
+# $Id: dist2,v 1.4 2002-05-31 15:56:45 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2,v $
 # 
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -20,7 +20,8 @@
 # - intended to factor common code from "dist_local" and "dist_all"
 #
 # Plus the ones we are used to:
-# - can specify -r to get ethernet names instead of switch names
+# - can specify -i to get canonical hostnames instead of alternates
+#   (reliable_hostname on SP, altname= attribute elsewhere)
 # - package.fileset abstraction for /var/dist repository
 # - genders attributes expanded to attr_xyz definitions, with multi-cluster
 #   support
@@ -65,7 +66,7 @@ if ($< != 0) {
 }
 
 # read arguments from command line
-if (!getopts("o:c:Fvrnlw:g:f:")) { 		
+if (!getopts("o:c:Fvinlw:g:f:")) { 		
 	usage();
 }					
 
@@ -223,7 +224,7 @@ sub getnodes
 	my ($node, @allnodes, @nodes);
 
 	@allnodes = Genders::getnode($attr);
-	if ($main::opt_r) {
+	if (! $main::opt_i) {
 		@allnodes = Genders::to_altnames(@allnodes);
 	}
 	foreach $node (@allnodes) {
@@ -379,7 +380,7 @@ sub cat_file
 
 sub usage
 {
-	print STDERR ("Usage: dist2 [-o rdist_opts] [-c cluster] [-v [-n]] [-r] [-F | -l | -w host,host,host | -g attr] [pkg.[fs]] ...\n");
+	print STDERR ("Usage: dist2 [-o rdist_opts] [-c cluster] [-v [-n]] [-i] [-F | -l | -w host,host,host | -g attr] [pkg.[fs]] ...\n");
 	exit(1);
 }
 
@@ -406,7 +407,7 @@ sub participating_nodes
 	} else {
 		@nodes = Genders::getnode("all");
 	}
-	if ($main::opt_r) {
+	if (! $main::opt_i) {
 		@nodes = Genders::to_altnames(@nodes);
 	}
 	return @nodes;
