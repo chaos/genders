@@ -1,10 +1,11 @@
 2003-03-07 Albert Chu <chu11@llnl.gov>
         * moved unnecessary #includes and #defines from genders.h
 	  into genders.c  
+	* added genders_testnode() to libgenders 
+	* added genders_testnode() manpage  
 	* added genders_errormsg() manpage
 	* added corner case check to genders_list_clear() and
 	  appropriate error code genders.h
-	* added genders_testnode() manpage  
         * tagged genders-1-1-3
 
 2003-03-07 Albert Chu <chu11@llnl.gov>
