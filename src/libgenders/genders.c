@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.67 2003-11-03 20:01:43 achu Exp $
+ * $Id: genders.c,v 1.68 2003-11-03 20:04:55 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -980,12 +980,6 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
 
   if (ret < 0 && handle->errnum == GENDERS_ERR_OVERFLOW) {
     fprintf(stderr, "Line %d: exceeds maximum allowed length\n", line_count);
-    retval = -1;
-  }
-
-  if (handle->numnodes == 0) {
-    handle->errnum = GENDERS_ERR_PARSE;
-    fprintf(stderr, "No nodes specified in genders database\n");
     retval = -1;
   }
 
