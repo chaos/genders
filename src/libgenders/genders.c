@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.27 2003-05-05 16:53:11 achu Exp $
+ * $Id: genders.c,v 1.28 2003-05-06 18:56:21 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1415,7 +1415,7 @@ int genders_testattrval(genders_t handle,
   return 0;
 }
 
-int genders_testnode(genders_t handle, const char *node) {
+int genders_isnode(genders_t handle, const char *node) {
   int retval;
 
   if (genders_loaded_handle_err_check(handle) == -1) {
@@ -1432,8 +1432,9 @@ int genders_testnode(genders_t handle, const char *node) {
   return retval;
 }
 
-int genders_testattribute(genders_t handle, const char *attr) {
-  int retval;
+int genders_isattr(genders_t handle, const char *attr) {
+  int retval = 0;
+  struct attr_listnode *attr_list;
 
   if (genders_loaded_handle_err_check(handle) == -1) {
     return -1;
@@ -1444,16 +1445,22 @@ int genders_testattribute(genders_t handle, const char *attr) {
     return -1;
   }
 
-  retval = genders_has_attribute(handle, attr, NULL);  
+  attr_list = handle->attrs_head;
+  while (attr_list != NULL && strcmp(attr_list->name,attr) != 0) {
+    attr_list = attr_list->next;
+  }
+
+  if (attr_list != NULL) {
+    retval = 1;
+  }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return retval;
 }
 
-int genders_testvalue(genders_t handle, const char *attr, const char *val) {
+int genders_isattrval(genders_t handle, const char *attr, const char *val) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
-  int retval = 0;
 
   if (genders_loaded_handle_err_check(handle) == -1) {
     return -1;
@@ -1529,27 +1536,6 @@ int genders_has_attr(genders_t handle,
   if (attrval_list != NULL) {
     return 1;
   } 
-  return 0;
-}
-
-int genders_has_attribute(genders_t handle, 
-                          const char *attr, 
-                          struct attr_listnode **attr_listnode) {
-  struct attr_listnode *attr_list;
-
-  attr_list = handle->attrs_head;
-  while (attr_list != NULL && strcmp(attr_list->name,attr) != 0) {
-    attr_list = attr_list->next;
-  }
-
-  if (attr_listnode != NULL) {
-    *attr_listnode = attr_list;
-  }
-
-  if (attr_list != NULL) {
-    return 1;
-  }
-
   return 0;
 }
 
