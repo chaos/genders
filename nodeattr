@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #############################################################################
-#  $Id: nodeattr,v 1.5 2003-01-22 04:19:42 garlick Exp $
+#  $Id: nodeattr,v 1.6 2003-03-31 22:26:38 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -84,7 +84,7 @@ if (($opt_c || $opt_n || $opt_s) && $arg_attr) {# -s|-c|-n attr   - list nodes w
 	printf("%s\n", join("\n", Genders::getallattr()));
 
 } elsif ($opt_C) {			# -C           - list "this" cluster
-	($mycluster) = Genders::get_clusters();
+        $mycluster = Genders::getattrval("cluster");
 	printf("%s\n", $mycluster ? $mycluster : "unknown");
 } elsif ($arg_attr) {			# [-v] [node] attr - test node for attr
 	nodeattr($opt_v, $arg_attr, $arg_node);
@@ -132,7 +132,7 @@ sub print_mycluster
 {
 	my ($mycluster);
 
-	($mycluster) = (Genders::get_clusters());
+        $mycluster = Genders::getattrval("cluster");
 	
 	printf("%s\n", $mycluster ? $mycluster : "unknown");
 }

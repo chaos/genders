@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #############################################################################
-#  $Id: dist2,v 1.5 2003-01-22 04:19:42 garlick Exp $
+#  $Id: dist2,v 1.6 2003-03-31 22:26:26 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -95,7 +95,18 @@ if ($main::opt_c) {
 	$main::local_cluster = $main::opt_c;
 	Genders::init(sprintf($main::path_genders, $main::local_cluster));
 } else {
+        # get cluster name
+        if (!Genders::init($main::path_genders_fallback)) {
+	        print STDERR ("Error initializing genders file\n");
+		exit(1);
+	}
+
 	($main::local_cluster) = Genders::get_clusters();
+	if (!$main::local_cluster) {
+                print STDERR ("Error retrieving cluster name\n");
+                exit(1);
+        } 
+
 	Genders::init(sprintf($main::path_genders, $main::local_cluster));
 	if (!Genders::getnode("all")) {
 		Genders::init($main::path_genders_fallback);
