@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: hostlist.pl,v 1.1 2003-04-18 22:37:12 achu Exp $
+#  $Id: hostlist.pl,v 1.2 2003-05-16 15:48:56 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -33,13 +33,13 @@ package Hostlist;
 use strict;
 use Carp;
 
+use Genders;
+
 if (!$Hostlist::included) {
 $Hostlist::included = 1;
 
 # compress will generate a quadrics-style range if this is > 0
 $Hostlist::quadrics_ranges = 0;
-
-require "/usr/lib/genders/gendlib.pl";
 
 # Construct node list from hostlist file
 #   $fileName (IN)	hostlist filename
@@ -70,8 +70,10 @@ sub mk_file
 sub mk_gend
 {
 	my ($attrName) = @_;
+        my $obj;
 
-	return Genders::getnode($attrName);
+        $obj = Genders->new();
+	return $obj->getnodes($attrName);
 }
 
 # Construct node list from command line
