@@ -27,7 +27,7 @@ set of tools distributed with genders
 %setup  -q -n %{name}-%{version}
 
 %build
-./configure --program-prefix=%{?_program_prefix:%{_program_prefix}}
+./configure --prefix=/usr
 make 
 
 %install
