@@ -6,7 +6,7 @@ Copyright: none
 Group: System Environment/Base
 Source: genders-0.1.tgz
 BuildRoot: /var/tmp/%{name}-buildroot
-Prereq: rdist pdksh net-tools diffutils
+Prereq: rdist pdksh net-tools diffutils perl
 
 %description
 Genders is a static cluster configuration database and tools for querying

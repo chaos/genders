@@ -1,5 +1,5 @@
 #
-# $Id: gendlib.pl,v 1.2 2001-07-14 03:31:22 garlick Exp $
+# $Id: gendlib.pl,v 1.3 2001-07-14 03:56:31 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
 # Copyright (C) 2000 Regents of the University of California
@@ -8,8 +8,6 @@
 # Author: Jim Garlick
 #
 package Genders;
-
-require 5.003;
 
 use strict;
 use Sys::Hostname;

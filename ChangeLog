@@ -48,3 +48,5 @@ vers0.1 Jim Garlick <garlick@llnl.gov>
 	/etc/genders and /etc/clusters.
 
 	Makefile only attempts to build inst.
+
+	Remove "require 5.003" lines; instead require perl in spec file.
