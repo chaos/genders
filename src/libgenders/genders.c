@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.59 2003-09-20 18:08:42 achu Exp $
+ * $Id: genders.c,v 1.60 2003-09-22 22:02:59 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1109,7 +1109,7 @@ struct attrval_listnode *_have_attr(genders_t handle,
 
 int genders_parse(genders_t handle, const char *filename, FILE *stream) {
   int line_count = 1;
-  int ret, retval = 0;
+  int ret, rv, retval = 0;
   int fd = -1;
   char buf[GENDERS_READLINE_BUFLEN];
 
@@ -1127,15 +1127,17 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
     goto cleanup;
   }
 
-  while (_readline(handle, fd, &buf[0], GENDERS_READLINE_BUFLEN) != 0) {
-    if ((ret = _parse_line(handle, &buf[0], line_count, stream)) == -1) {
-      if (handle->errnum == GENDERS_ERR_OVERFLOW) 
-        fprintf(stderr, "Line %d: exceeds maximum allowed length\n"); 
+  while ((ret = _readline(handle, fd, &buf[0], GENDERS_READLINE_BUFLEN)) > 0) {
+    if ((rv = _parse_line(handle, &buf[0], line_count, stream)) == -1)
       goto cleanup;
-    }
 
     retval += ret;
     line_count++;
+  }
+
+  if (ret == -1 && handle->errnum == GENDERS_ERR_OVERFLOW) {
+    fprintf(stderr, "Line %d: exceeds maximum allowed length\n");
+    goto cleanup;
   }
 
   close(fd);

@@ -1,3 +1,8 @@
+2003-09-22  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (genders_parse): Fixed logic error with
+	output for length of line exceeding maximum length.
+
 2003-09-20  Albert Chu  <chu11@llnl.gov>
 
 	Enhanced performance of genders database input based on profile
