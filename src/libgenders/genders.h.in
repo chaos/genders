@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.13 2003-12-30 21:47:13 achu Exp $
+ *  $Id: genders.h.in,v 1.14 2004-01-15 19:07:16 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -32,8 +32,8 @@
 /* Genders error codes */
 #define GENDERS_ERR_SUCCESS       0 /* success */
 #define GENDERS_ERR_NULLHANDLE    1 /* genders handle is null */
-#define GENDERS_ERR_OPEN          2 /* could not open file */
-#define GENDERS_ERR_READ          3 /* could not read file */
+#define GENDERS_ERR_OPEN          2 /* error opening file */
+#define GENDERS_ERR_READ          3 /* error reading file */
 #define GENDERS_ERR_PARSE         4 /* parse error on genders file */
 #define GENDERS_ERR_NOTLOADED     5 /* genders data not loaded */
 #define GENDERS_ERR_ISLOADED      6 /* genders data is already loaded */

@@ -1,3 +1,14 @@
+2004-01-15  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (_readline): Fix corner case.
+
+	* src/libgenders/genders.c (_parse_line, genders_parse): Added
+	support for additional corner case checks, duplicate attributes
+	and duplicate nodenames.
+
+	* src/libgenders/genders.c: All list_create and
+	list_iterator_create errors are now OUTMEM errors.
+	
 2004-01-14  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/nodeattr.c, src/libgenders/genders.c: Modify code

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.73 2004-01-14 23:26:05 achu Exp $
+ *  $Id: genders.c,v 1.74 2004-01-15 19:07:16 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -81,8 +81,8 @@ typedef struct genders_attrval *genders_attrval_t;
 static char * errmsg[] = {
   "success",
   "genders handle is null",
-  "open file error",
-  "read file error",
+  "error opening genders file",
+  "error reading genders file",
   "genders file parse error",
   "genders data not loaded",
   "genders data already loaded",
@@ -212,6 +212,7 @@ genders_handle_create(void)
     free(handle);
     return NULL;
   }
+
   if (!(handle->attrs = list_create(free))) {
     list_destroy(handle->nodes);
     free(handle);
@@ -225,8 +226,11 @@ genders_handle_create(void)
 static void 
 _free_list_data(genders_t handle) 
 {
-  list_delete_all(handle->nodes, _is_all, ""); /* pass junk for key */
-  list_delete_all(handle->attrs, _is_all, ""); /* pass junk for key */
+  /* Can't pass NULL for key, so pass junk, _is_all() will ensure
+   * everything is deleted
+   */
+  list_delete_all(handle->nodes, _is_all, ""); 
+  list_delete_all(handle->attrs, _is_all, ""); 
 }
 
 int 
@@ -240,24 +244,23 @@ genders_handle_destroy(genders_t handle)
   list_destroy(handle->attrs);
 
   /* "clean" magic number */
-  handle->magic = ~GENDERS_MAGIC_NUM; /* ~0xdeadbeef == 0xlivebeef :-) */
+  handle->magic = ~GENDERS_MAGIC_NUM;
   free(handle);
   return 0;
 }
 
 static List 
-_insert_node(genders_t handle, char *nodename) 
+_insert_node(genders_t handle, List nodes, char *nodename) 
 {
   genders_node_t n = NULL;
 
-  if (!(n = (genders_node_t)malloc(sizeof(struct genders_node)))) 
-{
+  if (!(n = (genders_node_t)malloc(sizeof(struct genders_node)))) {
     handle->errnum = GENDERS_ERR_OUTMEM;
     return NULL;
   }
 
   if (!(n->attrvals = list_create(_free_genders_attrval))) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+    handle->errnum = GENDERS_ERR_OUTMEM;
     free(n);
     return NULL;
   }
@@ -265,7 +268,7 @@ _insert_node(genders_t handle, char *nodename)
   memset(n->name, '\0', MAXHOSTNAMELEN+1);
   strcpy(n->name, nodename);    /* length previously asserted */
 
-  if (list_append(handle->nodes, n) == NULL) {
+  if (list_append(nodes, n) == NULL) {
     handle->errnum = GENDERS_ERR_INTERNAL;
     _free_genders_node(n);
     return NULL;
@@ -341,9 +344,9 @@ _readline(genders_t handle, int fd, char *buf, int buflen)
     return -1;
   }
   
-  /* XXX assumes buflen >= 2 */
-  if (ret == buflen && buf[buflen-2] != '\n') {
-      handle->errnum = GENDERS_ERR_OVERFLOW;
+  /* buflen - 1 b/c fd_read_line guarantees null termination */
+  if (ret >= (buflen-1)) {
+      handle->errnum = GENDERS_ERR_PARSE;
       return -1;
   }
 
@@ -352,15 +355,19 @@ _readline(genders_t handle, int fd, char *buf, int buflen)
 
 /* parse a genders file line
  * - If line_num == 0, parse and store genders data
- * - If line_num > 0, debug genders file, do not store genders data
+ * - If line_num > 0, debug genders file, do not store genders data, use
+ *   debugnodes list instead of handle nodelist for debugging.
  * - Returns -1 on error, 1 if there was a parse error, 0 if no errors
+ * - No need to cleanup if line_num == 0, will be done in genders_load_data.
  */
 static int 
-_parse_line(genders_t handle, char *line, int line_num, FILE *stream) 
+_parse_line(genders_t handle, char *line, int line_num,
+            FILE *stream, List debugnodes) 
 {
-  char *linebuf, *temp, *attr, *node;
+  char *linebuf, *temp, *attr, *nodename;
   int attrcount = 0;
   List attrvals = NULL;
+  List nodes = NULL;
 
   /* "remove" comments */
   if ((temp = strchr(line, '#'))) 
@@ -383,10 +390,16 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream)
   while(isspace(*line))  
     line++;
 
-  /* get node name */
-  if ((node = strsep(&line, " \t\0")) != NULL) { 
+  /* Create nodes list if we are debugging */
+  if (line_num > 0)
+    nodes = debugnodes;
+  else
+    nodes = handle->nodes;
 
-    if (strlen(node) > MAXHOSTNAMELEN) {
+  /* get node name */
+  if ((nodename = strsep(&line, " \t\0")) != NULL) { 
+
+    if (strlen(nodename) > MAXHOSTNAMELEN) {
       if (line_num > 0) {
         fprintf(stream, "Line %d: hostname too long\n", line_num);
         return 1;
@@ -395,11 +408,20 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream)
       return -1;
     }
       
+    if (list_find_first(nodes, _is_node, nodename) != NULL) {
+      if (line_num > 0) {
+        fprintf(stream, "Line %d: duplicate node name listed\n", line_num);
+        return 1;
+      }
+      handle->errnum = GENDERS_ERR_PARSE;
+      return -1;
+    }
+
+    if (!(attrvals = _insert_node(handle, nodes, nodename)))
+      return -1;
+
     if (line_num == 0) {
-      if (!(attrvals = _insert_node(handle, node)))
-        return -1;
-      
-      handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
+      handle->maxnodelen = MAX(strlen(nodename), handle->maxnodelen);
       handle->numnodes++;
     }
       
@@ -425,9 +447,6 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream)
     return -1;
   }
 
-  if (line_num > 0)
-    return 0;
-
   /* parse attributes */
   attr = strtok_r(line,",\0",&linebuf);
   while (attr != NULL) {
@@ -438,25 +457,37 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream)
     if ((val = strchr(attr,'=')) != NULL)
       *val++ = '\0'; 
 
+    if (list_find_first(attrvals, _is_attr, attr) != NULL) {
+      if (line_num > 0) {
+        fprintf(stream, "Line %d: duplicate attribute listed\n", line_num);
+        return 1;
+      }
+      handle->errnum = GENDERS_ERR_PARSE;
+      return -1;
+    }
+
     if (_insert_attrval(handle, attrvals, attr, val) < 0)
       return -1;
 
-    if ((is_new_attr = _insert_attr(handle, attr)) < 0)
-      return -1;
+    if (line_num == 0) { 
+      if ((is_new_attr = _insert_attr(handle, attr)) < 0)
+        return -1;
       
-    handle->numattrs += is_new_attr;
-    attrcount++;
+      handle->numattrs += is_new_attr;
+      attrcount++;
 
-    handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
-    if (val)
-      handle->maxvallen = MAX(strlen(val), handle->maxvallen);
+      handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
+      if (val)
+        handle->maxvallen = MAX(strlen(val), handle->maxvallen);
+
+    }
 
     attr = strtok_r(NULL,",\0",&linebuf);
   }
 
-  handle->maxattrs = MAX(attrcount, handle->maxattrs);
+  if (line_num == 0)
+    handle->maxattrs = MAX(attrcount, handle->maxattrs);
 
-  handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 }
 
@@ -480,7 +511,7 @@ genders_load_data(genders_t handle, const char *filename)
 
   /* parse line by line */
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if (_parse_line(handle, buf, 0, NULL) < 0)
+    if (_parse_line(handle, buf, 0, NULL, NULL) < 0)
       goto cleanup;
   }
 
@@ -618,14 +649,13 @@ static int
 _list_create(genders_t handle, char ***list, int len, int buflen) 
 {
   if (len > 0) {
+    char **temp;
+    int i,j;
 
     if (list == NULL) {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
-
-    char **temp;
-    int i,j;
 
     if (!(temp = (char **)malloc(sizeof(char *) * len))) { 
       handle->errnum = GENDERS_ERR_OUTMEM;
@@ -680,12 +710,13 @@ static int
 _list_destroy(genders_t handle, char **list, int len) 
 {
   if (len > 0) {
+    int i;
+
     if (list == NULL) {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-    int i;
     for (i = 0; i < len; i++)
       free(list[i]);
     free(list);
@@ -832,7 +863,7 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
   }
 
   if (!(itr = list_iterator_create(handle->nodes))) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+    handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
 
@@ -881,7 +912,7 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
   }
 
   if (!(itr = list_iterator_create(n->attrvals))) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+    handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
 
@@ -922,7 +953,7 @@ genders_getattr_all(genders_t handle, char *attrs[], int len)
   }
 
   if (!(itr = list_iterator_create(handle->attrs))) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+    handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
 
@@ -1053,7 +1084,7 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   }
   
   if (!(itr = list_iterator_create(handle->nodes))) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+    handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
 
@@ -1076,6 +1107,7 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   int retval = 0;
   int rv, ret, fd = -1;
   char buf[GENDERS_READLINE_BUFLEN];
+  List debugnodes = NULL;
 
   if (_handle_error_check(handle) < 0)
     return -1;
@@ -1091,8 +1123,13 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
     return -1;
   }
 
+  if ((debugnodes = list_create(_free_genders_node)) == NULL) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto finish;
+  }
+
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if ((rv = _parse_line(handle, buf, line_count, stream)) < 0) {
+    if ((rv = _parse_line(handle, buf, line_count, stream, debugnodes)) < 0) {
       retval = -1;
       goto finish;
     }
@@ -1106,8 +1143,11 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
     retval = -1;
   }
 
+  handle->errnum = GENDERS_ERR_SUCCESS;
  finish:
   close(fd);
+  if (debugnodes)
+    list_destroy(debugnodes);
   return retval;
 }
 
