@@ -63,4 +63,4 @@ cd src; DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man1/inst.1.gz
 /usr/man/man1/nodeattr.1.gz
 /usr/man/man3/gendlib.3.gz
-/usr/lib/libgenders.la
+/usr/local/lib/libgenders.la
