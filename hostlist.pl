@@ -1,5 +1,5 @@
 #
-# $Id: hostlist.pl,v 1.5 2002-04-25 00:56:56 grondo Exp $
+# $Id: hostlist.pl,v 1.5.2.1 2003-08-01 20:47:59 grondo Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/hostlist.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -125,7 +125,7 @@ sub expand
 
         # matching "[" "]" pair with stuff inside will be considered a quadrics
         # range:
-        if ($list =~ /[^[]+\[.+\]/) {
+        if ($list =~ /[^[]*\[.+\]/) {
 		# quadrics ranges are separated by whitespace in RMS -
 		# try to support that here
   		return map { expand_quadrics_range($_) } split /\s+/, $list;
@@ -152,7 +152,7 @@ sub expand_quadrics_range
         return $list if (!defined $ranges);
 
         return map {"$pfx$_"} 
-	           map { s/(\d+)-(\d+)/$1..$2/; eval } 
+	           map { s/(\d+)-(\d+)/"$1".."$2"/; eval } 
 		       split(/,/, $ranges);
 }
 
@@ -223,7 +223,7 @@ sub comp2
                            ) ? $i{$$_[0]} : ++$i{$$_[0]}
                          ]
               }, ($$_[1])
-        ) for map { [/(.+?)(\d*)$/] } sortn(@_);
+        ) for map { [/(.*?)(\d*)$/] } sortn(@_);
 
     	for my $key (keys %s) {
         	@{$s{$key}} = 
