@@ -1,9 +1,13 @@
 2004-06-09  Albert Chu  <chu11@llnl.gov>
 
+	* src/libgenders/genders.h.in: Add new SYNTAX and QUERYINPUT error
+	codes.
+
 	* src/libgenders/genders_query.y, src/libgenders/genders_parse.l:
-	Support attr=val in queries.
+	Support attr=val in queries.  Update to use new error codes.
 
 	* src/Libgenders/Makefile.am: Fix for genders_query.
+
 	
 2004-06-08  Albert Chu  <chu11@llnl.gov>
 

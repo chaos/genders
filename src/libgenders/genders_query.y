@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.4 2004-06-09 17:06:23 achu Exp $
+ *  $Id: genders_query.y,v 1.5 2004-06-09 20:29:10 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -95,7 +95,7 @@ genders_freetree(struct genders_treenode *t)
 void yyerror(const char *str) 
 {
   if (!genders_query_err)
-    genders_query_err = GENDERS_ERR_PARSE;
+    genders_query_err = GENDERS_ERR_SYNTAX;
 }
   
 int yywrap()
@@ -149,7 +149,7 @@ _parse_query(genders_t handle, char *query)
    * example 
    */
   if (!genders_treeroot && genders_query_err == GENDERS_ERR_SUCCESS)
-    genders_query_err = GENDERS_ERR_PARSE;
+    genders_query_err = GENDERS_ERR_SYNTAX;
 
  cleanup:
   /* no need to close fds[0], fclose is enough */
@@ -189,7 +189,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
 
       if (rv == 0)
         {
-          handle->errnum = GENDERS_ERR_NOTFOUND;
+          handle->errnum = GENDERS_ERR_QUERYINPUT;
           return NULL;
         }
 
