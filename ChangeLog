@@ -1,3 +1,7 @@
+2004-01-27  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Cleaned up code with additional comments.
+	
 2004-01-26  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c: Fixed numerous small bugs.
