@@ -205,7 +205,7 @@ genders_getnodename(handle)
             if (buf != NULL) 
                 free(buf);
                 
-            RETVAL = newSVpv("", 0);
+            XSRETURN_UNDEF;
 
         the_end:
     OUTPUT:
