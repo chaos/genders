@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.14 2004-06-08 16:09:39 achu Exp $
+## $Id: Makefile.am,v 1.15 2004-06-09 20:20:32 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -15,6 +15,14 @@ all: Makefile.xs
 Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	cp $(srcdir)/../libgenders/*.c .
 	cp $(srcdir)/../libgenders/*.h .
+	cp $(srcdir)/../libgenders/*.l .
+	cp $(srcdir)/../libgenders/*.y .
+	if ! test -a genders_parse.c; then \
+		$(LEX) -ogenders_parse.c genders_parse.l; \
+	fi
+	if ! test -a genders_query.c; then \
+		$(YACC) -d -ogenders_query.c genders_query.y; \
+	fi
 	$(PERL) $(srcdir)/Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
 test: Makefile.xs 
@@ -33,9 +41,13 @@ uninstall:
 	$(MAKE) -f Makefile.xs uninstall
 
 clean: 
-	if test -a Makefile.xs; then $(MAKE) -f Makefile.xs clean; fi
+	if test -a Makefile.xs; then \
+		$(MAKE) -f Makefile.xs clean; \
+	fi
 	rm -f *.c
 	rm -f *.h
+	rm -f *.l
+	rm -f *.y
 	rm -f *.o
 	rm -f Makefile.xs
 	rm -f Makefile.xs.old

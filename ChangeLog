@@ -2,6 +2,8 @@
 
 	* src/libgenders/genders_query.y, src/libgenders/genders_parse.l:
 	Support attr=val in queries.
+
+	* src/Libgenders/Makefile.am: Fix for genders_query.
 	
 2004-06-08  Albert Chu  <chu11@llnl.gov>
 
