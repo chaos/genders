@@ -7,4 +7,5 @@
 - Genders "regex" parsing.  i.e.
   genders_getnodes("attr1+attr2,attr3");
 - Genders comparison of two files.  Via nodeattr??  
-  - Via new function in genders?
+  - Via new function in genders?\
+- Somehow make distcheck work with perlxs.
