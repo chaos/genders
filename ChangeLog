@@ -1,6 +1,6 @@
 2003-02-28  Albert Chu <chu11@llnl.gov>
         * added libgenders manpages
-        * tagged 1-1-2
+        * tagged genders-1-1-2
 
 2003-02-19  Albert chu <chu11@llnl.gov>
         * fixed comments on genders.h for libgenders.
