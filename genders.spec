@@ -128,6 +128,8 @@ cp src/libgenders/genders_local.h src/Libgendersllnl
 cp src/libgenders/genders.c src/Libgendersllnl
 cp src/libgendersllnl/gendersllnl.h src/Libgendersllnl	
 cp src/libgendersllnl/gendersllnl.c src/Libgendersllnl	
+cp src/libgendersllnl/hostlist.h src/Libgendersllnl	
+cp src/libgendersllnl/hostlist.c src/Libgendersllnl	
 cd src/Libgendersllnl; perl Makefile.PL prefix="$RPM_BUILD_ROOT/usr"; make; make pure_install; cd ../..
 DESTDIR="$RPM_BUILD_ROOT" make install 
 
