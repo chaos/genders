@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.94 2004-04-14 20:58:41 achu Exp $
+ *  $Id: genders.c,v 1.95 2004-04-15 23:52:44 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1625,4 +1625,19 @@ genders_set_errnum(genders_t handle, int errnum)
     handle->errnum = errnum;
   else
     handle->errnum = GENDERS_ERR_INTERNAL;
+}
+
+int
+hash_dump(genders_t handle)
+{
+  ListIterator itr;
+  genders_node_t n;
+
+  itr = list_iterator_create(handle->nodeslist);
+
+  while ((n = list_next(itr)) != NULL) {
+    char *nodename = n->name;
+    List l = hash_find(handle->node_index, nodename);
+    printf("%s: %d\n", nodename, list_count(l));
+  }
 }
