@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.5 2004-06-09 20:29:10 achu Exp $
+ *  $Id: genders_query.y,v 1.6 2004-06-09 20:43:08 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,6 +43,8 @@ int genders_query_err;
 struct genders_treenode *genders_treeroot;
 
 #define HOSTLIST_BUFLEN 32768
+
+extern int yylex();
 
 struct genders_treenode *
 genders_makenode(char *str, void *left, void *right)
