@@ -1,11 +1,7 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.9 2003-05-19 15:56:38 achu Exp $
+## $Id: Makefile.am,v 1.10 2004-05-19 20:39:52 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = \
-        Genders \
-        Libgenders \
-        libgenders \
-        nodeattr 
+SUBDIRS = libgenders nodeattr Libgenders Genders
