@@ -4,6 +4,7 @@
 #
 
 PROJECT=	genders
+PACKAGE=        genders
 
 CFLAGS = -Wall -g
 
