@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.77 2004-01-23 02:49:47 achu Exp $
+ *  $Id: genders.c,v 1.78 2004-01-26 23:30:18 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -166,7 +166,7 @@ _free_genders_attrvallist(void *x)
 }
 
 static int
-_find_attrval(genders_t handle, List attrptrs, char *attr, 
+_find_attrval(genders_t handle, List attrptrs, const char *attr, 
 	      genders_attrval_t *avptr)
 {
   ListIterator itr;
@@ -656,7 +656,7 @@ genders_load_data(genders_t handle, const char *filename)
 
   /* parse line by line */
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if (_parse_line(handle, buf, 0, NULL, NULL) < 0)
+    if (_parse_line(handle, buf, 0, NULL, NULL, NULL) < 0)
       goto cleanup;
   }
 
@@ -1141,7 +1141,7 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
 {
   genders_node_t n;
   genders_attrval_t av;
-  int retval = 0;
+  int rv, retval = 0;
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1183,7 +1183,7 @@ genders_testattrval(genders_t handle, const char *node,
 {
   genders_node_t n;
   genders_attrval_t av;
-  int retval = 0;
+  int rv, retval = 0;
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1201,7 +1201,7 @@ genders_testattrval(genders_t handle, const char *node,
     return -1;
   }
   
-  if ((rv = _find_attrval(handle, n->attrptrs, (char *)attr), &av) < 0)
+  if ((rv = _find_attrval(handle, n->attrptrs, attr, &av)) < 0)
     return -1;
   
   if (rv == 1) {
@@ -1287,7 +1287,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   int retval = 0;
   int rv, ret, fd = -1;
   char buf[GENDERS_READLINE_BUFLEN];
-  List debugnodes = NULL;
+  List debugnodeslist = NULL;
+  List debugattrvalslist = NULL;
 
   if (_handle_error_check(handle) < 0)
     return -1;
@@ -1303,15 +1304,23 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
     return -1;
   }
 
-  if ((debugnodes = list_create(_free_genders_node)) == NULL) {
+  if ((debugnodeslist = list_create(_free_genders_node)) == NULL) {
     handle->errnum = GENDERS_ERR_OUTMEM;
+    retval = -1;
+    goto finish;
+  }
+
+  if ((debugattrvalslist = list_create(NULL)) == NULL) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    retval = -1;
     goto finish;
   }
 
   /* XXX need to create attrvals debug list too */
 
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if ((rv = _parse_line(handle, buf, line_count, stream, debugnodes)) < 0) {
+    if ((rv = _parse_line(handle, buf, line_count, stream, 
+			  debugnodeslist, debugattrvalslist)) < 0) {
       retval = -1;
       goto finish;
     }
@@ -1323,13 +1332,16 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   if (ret < 0 && handle->errnum == GENDERS_ERR_OVERFLOW) {
     fprintf(stderr, "Line %d: exceeds maximum allowed length\n", line_count);
     retval = -1;
+    goto finish;
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
  finish:
   close(fd);
-  if (debugnodes)
-    list_destroy(debugnodes);
+  if (debugnodeslist)
+    list_destroy(debugnodeslist);
+  if (debugattrvalslist)
+    list_destroy(debugattrvalslist);
   return retval;
 }
 
