@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.22 2003-06-26 19:13:33 achu Exp $
+ *  * $Id: nodeattr.c,v 1.23 2003-07-02 22:39:24 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -9,6 +9,7 @@
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include <unistd.h>
@@ -226,6 +227,10 @@ main(int argc, char *argv[])
         else if (optind != argc)
             usage();
  
+        fprintf(stderr, "Warning: Please use \"nodeattr -v cluster\" to\n");
+        fprintf(stderr, "Warning: determine the cluster name.  The -C  \n");
+        fprintf(stderr, "Warning: option will be removed in the future \n");
+
         test_attr(gp, node, "cluster", 1);
         exit(0);
     }
