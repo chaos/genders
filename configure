@@ -8545,7 +8545,7 @@ done
 ##
 # Epilogue.
 ##
-ac_config_files="$ac_config_files Makefile src/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h src/Libgenders/Makefile src/Genders/Makefile compat/Makefile man/Makefile man/dist/Makefile man/compat/Makefile"
+ac_config_files="$ac_config_files Makefile src/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h src/Libgenders/Makefile src/Genders/Makefile compat/Makefile man/Makefile man/compat/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -9051,7 +9051,6 @@ do
   "src/Genders/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Genders/Makefile" ;;
   "compat/Makefile" ) CONFIG_FILES="$CONFIG_FILES compat/Makefile" ;;
   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
-  "man/dist/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/dist/Makefile" ;;
   "man/compat/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/compat/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "config/config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config/config.h" ;;
