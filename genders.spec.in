@@ -4,6 +4,7 @@ Release: @RELEASE@
 Summary: Static cluster configuration database.
 Copyright: none
 Group: System Environment/Base
+Source: %{name}-%{version}-%{release}.tgz
 Prereq: perl
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
