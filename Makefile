@@ -6,7 +6,7 @@
 PROJECT=	genders
 
 all: inst
-	src/.configure
+	src/configure
 	src/make
 
 install:
