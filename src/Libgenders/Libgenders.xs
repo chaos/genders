@@ -7,359 +7,119 @@
 
 #include "genders.h"
 
-static int
-not_here(char *s)
-{
-    croak("%s not implemented on this architecture", s);
-    return -1;
-}
-
-static double
-constant_GENDERS_ERR_NO(char *name, int len, int arg)
-{
-    if (14 + 1 >= len ) {
-        errno = EINVAL;
-        return 0;
-    }
-    switch (name[14 + 1]) {
-    case 'F':
-        if (strEQ(name + 14, "TFOUND")) {       /* GENDERS_ERR_NO removed */
-#ifdef GENDERS_ERR_NOTFOUND
-            return GENDERS_ERR_NOTFOUND;
-#else
-            goto not_there;
-#endif
-        }
-    case 'L':
-        if (strEQ(name + 14, "TLOADED")) {      /* GENDERS_ERR_NO removed */
-#ifdef GENDERS_ERR_NOTLOADED
-            return GENDERS_ERR_NOTLOADED;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_NU(char *name, int len, int arg)
-{
-    if (14 + 2 >= len ) {
-        errno = EINVAL;
-        return 0;
-    }
-    switch (name[14 + 2]) {
-    case 'H':
-        if (strEQ(name + 14, "LLHANDLE")) {     /* GENDERS_ERR_NU removed */
-#ifdef GENDERS_ERR_NULLHANDLE
-            return GENDERS_ERR_NULLHANDLE;
-#else
-            goto not_there;
-#endif
-        }
-    case 'P':
-        if (strEQ(name + 14, "LLPTR")) {        /* GENDERS_ERR_NU removed */
-#ifdef GENDERS_ERR_NULLPTR
-            return GENDERS_ERR_NULLPTR;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_N(char *name, int len, int arg)
-{
-    switch (name[13 + 0]) {
-    case 'O':
-        return constant_GENDERS_ERR_NO(name, len, arg);
-    case 'U':
-        return constant_GENDERS_ERR_NU(name, len, arg);
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_O(char *name, int len, int arg)
-{
-    switch (name[13 + 0]) {
-    case 'P':
-        if (strEQ(name + 13, "PEN")) {  /* GENDERS_ERR_O removed */
-#ifdef GENDERS_ERR_OPEN
-            return GENDERS_ERR_OPEN;
-#else
-            goto not_there;
-#endif
-        }
-    case 'U':
-        if (strEQ(name + 13, "UTMEM")) {        /* GENDERS_ERR_O removed */
-#ifdef GENDERS_ERR_OUTMEM
-            return GENDERS_ERR_OUTMEM;
-#else
-            goto not_there;
-#endif
-        }
-    case 'V':
-        if (strEQ(name + 13, "VERFLOW")) {      /* GENDERS_ERR_O removed */
-#ifdef GENDERS_ERR_OVERFLOW
-            return GENDERS_ERR_OVERFLOW;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_P(char *name, int len, int arg)
-{
-    if (13 + 2 >= len ) {
-        errno = EINVAL;
-        return 0;
-    }
-    switch (name[13 + 2]) {
-    case 'A':
-        if (strEQ(name + 13, "ARAMETERS")) {    /* GENDERS_ERR_P removed */
-#ifdef GENDERS_ERR_PARAMETERS
-            return GENDERS_ERR_PARAMETERS;
-#else
-            goto not_there;
-#endif
-        }
-    case 'S':
-        if (strEQ(name + 13, "ARSE")) { /* GENDERS_ERR_P removed */
-#ifdef GENDERS_ERR_PARSE
-            return GENDERS_ERR_PARSE;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_IS(char *name, int len, int arg)
-{
-    switch (name[14 + 0]) {
-    case 'F':
-        if (strEQ(name + 14, "FREE")) { /* GENDERS_ERR_IS removed */
-#ifdef GENDERS_ERR_ISFREE
-            return GENDERS_ERR_ISFREE;
-#else
-            goto not_there;
-#endif
-        }
-    case 'L':
-        if (strEQ(name + 14, "LOADED")) {       /* GENDERS_ERR_IS removed */
-#ifdef GENDERS_ERR_ISLOADED
-            return GENDERS_ERR_ISLOADED;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant_GENDERS_ERR_I(char *name, int len, int arg)
-{
-    switch (name[13 + 0]) {
-    case 'N':
-        if (strEQ(name + 13, "NTERNAL")) {      /* GENDERS_ERR_I removed */
-#ifdef GENDERS_ERR_INTERNAL
-            return GENDERS_ERR_INTERNAL;
-#else
-            goto not_there;
-#endif
-        }
-    case 'S':
-        return constant_GENDERS_ERR_IS(name, len, arg);
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-static double
-constant(char *name, int len, int arg)
-{
-    errno = 0;
-    if (0 + 12 >= len ) {
-        errno = EINVAL;
-        return 0;
-    }
-    switch (name[0 + 12]) {
-    case 'E':
-        if (strEQ(name + 0, "GENDERS_ERR_ERRNUMRANGE")) {       /*  removed */
-#ifdef GENDERS_ERR_ERRNUMRANGE
-            return GENDERS_ERR_ERRNUMRANGE;
-#else
-            goto not_there;
-#endif
-        }
-    case 'F':
-        if (strEQ(name + 0, "GENDERS_ERR_FREEMEM")) {   /*  removed */
-#ifdef GENDERS_ERR_FREEMEM
-            return GENDERS_ERR_FREEMEM;
-#else
-            goto not_there;
-#endif
-        }
-    case 'I':
-        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
-            break;
-        return constant_GENDERS_ERR_I(name, len, arg);
-    case 'M':
-        if (strEQ(name + 0, "GENDERS_ERR_MAGIC")) {     /*  removed */
-#ifdef GENDERS_ERR_MAGIC
-            return GENDERS_ERR_MAGIC;
-#else
-            goto not_there;
-#endif
-        }
-    case 'N':
-        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
-            break;
-        return constant_GENDERS_ERR_N(name, len, arg);
-    case 'O':
-        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
-            break;
-        return constant_GENDERS_ERR_O(name, len, arg);
-    case 'P':
-        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
-            break;
-        return constant_GENDERS_ERR_P(name, len, arg);
-    case 'R':
-        if (strEQ(name + 0, "GENDERS_ERR_READ")) {      /*  removed */
-#ifdef GENDERS_ERR_READ
-            return GENDERS_ERR_READ;
-#else
-            goto not_there;
-#endif
-        }
-    case 'S':
-        if (strEQ(name + 0, "GENDERS_ERR_SUCCESS")) {   /*  removed */
-#ifdef GENDERS_ERR_SUCCESS
-            return GENDERS_ERR_SUCCESS;
-#else
-            goto not_there;
-#endif
-        }
-    }
-    errno = EINVAL;
-    return 0;
-
-not_there:
-    errno = ENOENT;
-    return 0;
-}
-
-
 MODULE = Libgenders             PACKAGE = Libgenders            
 
-
-double
-constant(sv,arg)
-    PREINIT:
-        STRLEN          len;
-    INPUT:
-        SV *            sv
-        char *          s = SvPV(sv, len);
-        int             arg
+int
+GENDERS_ERR_SUCCESS ()
     CODE:
-        RETVAL = constant(s,len,arg);
+        RETVAL = GENDERS_ERR_SUCCESS;
     OUTPUT:
-        RETVAL
+        RETVAL    
 
 int
-errnum(str)
-    char *str
+GENDERS_ERR_NULLHANDLE ()
     CODE:
-        if (strcmp(str, "GENDERS_ERR_SUCCESS") == 0)
-            RETVAL = GENDERS_ERR_SUCCESS;
-        else if (strcmp(str, "GENDERS_ERR_NULLHANDLE") == 0)
-            RETVAL = GENDERS_ERR_NULLHANDLE;
-        else if (strcmp(str, "GENDERS_ERR_OPEN") == 0)
-            RETVAL = GENDERS_ERR_OPEN;
-        else if (strcmp(str, "GENDERS_ERR_READ") == 0)
-            RETVAL = GENDERS_ERR_READ;
-        else if (strcmp(str, "GENDERS_ERR_PARSE") == 0)
-            RETVAL = GENDERS_ERR_PARSE;
-        else if (strcmp(str, "GENDERS_ERR_NOTLOADED") == 0)
-            RETVAL = GENDERS_ERR_NOTLOADED;
-        else if (strcmp(str, "GENDERS_ERR_ISLOADED") == 0)
-            RETVAL = GENDERS_ERR_ISLOADED;
-        else if (strcmp(str, "GENDERS_ERR_OVERFLOW") == 0)
-            RETVAL = GENDERS_ERR_OVERFLOW;
-        else if (strcmp(str, "GENDERS_ERR_PARAMETERS") == 0)
-            RETVAL = GENDERS_ERR_PARAMETERS;
-        else if (strcmp(str, "GENDERS_ERR_NULLPTR") == 0)
-            RETVAL = GENDERS_ERR_NULLPTR;
-        else if (strcmp(str, "GENDERS_ERR_NOTFOUND") == 0)
-            RETVAL = GENDERS_ERR_NOTFOUND;
-        else if (strcmp(str, "GENDERS_ERR_OUTMEM") == 0)
-            RETVAL = GENDERS_ERR_OUTMEM;
-        else if (strcmp(str, "GENDERS_ERR_MAGIC") == 0)
-            RETVAL = GENDERS_ERR_MAGIC;
-        else if (strcmp(str, "GENDERS_ERR_INTERNAL") == 0)
-            RETVAL = GENDERS_ERR_INTERNAL;
-        else if (strcmp(str, "GENDERS_ERR_ERRNUMRANGE") == 0)
-            RETVAL = GENDERS_ERR_ERRNUMRANGE;
-        else
-            RETVAL = -1;
+        RETVAL = GENDERS_ERR_NULLHANDLE;
     OUTPUT:
-        RETVAL
+        RETVAL    
 
-
-SV *
-string_constant(str)
-    char *str
+int
+GENDERS_ERR_OPEN ()
     CODE:
-        if (strcmp(str, "DEFAULT_GENDERS_FILE") == 0)
-            RETVAL = newSVpv(DEFAULT_GENDERS_FILE, 0);      
-        else
-            XSRETURN_UNDEF;
+        RETVAL = GENDERS_ERR_OPEN;
     OUTPUT:
-        RETVAL
+        RETVAL    
+
+int
+GENDERS_ERR_READ ()
+    CODE:
+        RETVAL = GENDERS_ERR_READ;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_PARSE ()
+    CODE:
+        RETVAL = GENDERS_ERR_PARSE;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_NOTLOADED ()
+    CODE:
+        RETVAL = GENDERS_ERR_NOTLOADED;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_ISLOADED ()
+    CODE:
+        RETVAL = GENDERS_ERR_ISLOADED;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_OVERFLOW ()
+    CODE:
+        RETVAL = GENDERS_ERR_OVERFLOW;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_PARAMETERS ()
+    CODE:
+        RETVAL = GENDERS_ERR_PARAMETERS;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_NULLPTR ()
+    CODE:
+        RETVAL = GENDERS_ERR_NULLPTR;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_NOTFOUND ()
+    CODE:
+        RETVAL = GENDERS_ERR_NOTFOUND;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_OUTMEM ()
+    CODE:
+        RETVAL = GENDERS_ERR_OUTMEM;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_MAGIC ()
+    CODE:
+        RETVAL = GENDERS_ERR_MAGIC;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_INTERNAL ()
+    CODE:
+        RETVAL = GENDERS_ERR_INTERNAL;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_ERRNUMRANGE ()
+    CODE:
+        RETVAL = GENDERS_ERR_ERRNUMRANGE;
+    OUTPUT:
+        RETVAL    
+
+SV * 
+DEFAULT_GENDERS_FILE ()
+    CODE:
+        RETVAL = newSVpv(DEFAULT_GENDERS_FILE, 0);
+    OUTPUT:
+        RETVAL    
 
 genders_t
 genders_handle_create()
