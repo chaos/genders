@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.29 2003-05-06 23:17:10 achu Exp $
+ * $Id: genders.c,v 1.30 2003-05-07 18:44:23 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -333,6 +333,9 @@ int genders_load_data(genders_t handle, const char *filename) {
   if ((temp = strchr(handle->nodename,'.')) != NULL)
     *temp = '\0';
   
+  if (strlen(handle->nodename) > handle->maxnodelen) 
+    handle->maxnodelen = strlen(handle->nodename);
+
   close(fd);
 
   /* data completely loaded, indicate in handle */
