@@ -31,10 +31,11 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
-/usr/man/man1/
-/usr/man/man3/genders*
-/usr/man/man3/libgenders.3.gz 
-/usr/share/man/man3/
+/usr/share/man/man1/
+/usr/share/man/man3/genders*
+/usr/share/man/man3/libgenders.3*
+/usr/share/man/man3/Genders.3pm*
+/usr/share/man/man3/Libgenders.3pm*
 /usr/include/genders.h
 /usr/lib/libgenders.*
 /usr/bin/
@@ -42,7 +43,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files compat
 %defattr(-,root,root)
-/usr/man/man3/gendlib*
+/usr/share/man/man3/gendlib*
 /usr/lib/genders/
 
 
