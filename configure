@@ -1010,7 +1010,7 @@ Optional Packages:
                           define default genders file
   --with-xs-prefix=path   define perl xs prefix for install
   --with-genders-pm-prefix=path
-                          define genders.pm install dir
+                          define genders.pm prefix dir
   --with-gnu-ld           assume the C compiler uses GNU ld default=no
   --with-pic              try to use only PIC/non-PIC objects default=use both
 
@@ -7685,12 +7685,20 @@ fi
 
 
 
+
+
+
+
 for ac_header in \
   errno.h \
+  fcntl.h \
+  stdio.h \
   stdlib.h \
   string.h \
   unistd.h \
   getopt.h \
+  stat.h \
+  types.h \
 
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`

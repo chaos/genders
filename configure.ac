@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.15 2003-05-20 00:02:00 achu Exp $
+## $Id: configure.ac,v 1.16 2003-05-27 17:32:56 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -65,7 +65,7 @@ AC_SUBST(XS_PREFIX)
 # Genders.pm install location
 AC_MSG_CHECKING(for --with-genders-pm-prefix )
 AC_ARG_WITH(genders-pm-prefix,
-    AC_HELP_STRING([--with-genders-pm-prefix=path], [define genders.pm install dir]),
+    AC_HELP_STRING([--with-genders-pm-prefix=path], [define genders.pm prefix dir]),
     [ case "$withval" in
     yes)
         withgenderspm=yes
@@ -98,10 +98,14 @@ AC_PATH_PROG(PERL, perl)
 AC_HEADER_STDC
 AC_CHECK_HEADERS( \
   errno.h \
+  fcntl.h \
+  stdio.h \
   stdlib.h \
   string.h \
   unistd.h \
   getopt.h \
+  stat.h \
+  types.h \
 )
 
 
