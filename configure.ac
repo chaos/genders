@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.17 2003-05-27 17:45:15 achu Exp $
+## $Id: configure.ac,v 1.18 2003-06-30 21:33:22 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -7,7 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders], [1.0], [chu11@llnl.gov])
+AC_INIT([genders], [1.1], [chu11@llnl.gov])
 AC_CONFIG_AUX_DIR([config])
 AC_CANONICAL_SYSTEM
 
