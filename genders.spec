@@ -43,16 +43,16 @@ install dist/dist_all $RPM_BUILD_ROOT/usr/bin
 install dist/dist_local $RPM_BUILD_ROOT/usr/bin
 install dist/dist_cmp $RPM_BUILD_ROOT/usr/bin
 install dist/dist_bootstrap $RPM_BUILD_ROOT/usr/bin
-cd man/compat/; gzip *; cd ../..
+cd man/compat/; gzip *.3; cd ../..
 install man/compat/gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd man/dist/; gzip *; cd ../..
+cd man/dist/; gzip *.1; cd ../..
 install man/dist/dist2.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/dist_all.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/dist_cmp.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
-cd man/; gzip *; cd ..
+cd man/; gzip *.3; cd ..
 install man/genders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_attrlist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_attrlist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
