@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: hostlist.h,v 1.5 2003-07-01 22:07:41 achu Exp $
+ *  $Id: hostlist.h,v 1.6 2005-01-04 01:37:24 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -160,6 +160,8 @@ int hostlist_push_list(hostlist_t hl1, hostlist_t hl2);
  */
 char * hostlist_pop(hostlist_t hl);
 
+
+char * hostlist_nth(hostlist_t hl, int n);
 
 /* hostlist_shift():
  *
