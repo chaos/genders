@@ -2,6 +2,8 @@
 	* added portability by replacing getline(3) with
 	  internally created getline()
 	* genders_open() renamed genders_load_data()
+	* NOTOPEN and NOTCLOSED errors renamed to 
+	  NOTLOADED and ISLOADED and error messages updated appropriately
 	* added error codes GENDERS_ERR_NULLHANDLE and
 	  GENDERS_ERR_ERRNUMRANGE.  These changes ultimately
 	  modify the possible return values of genders_errnum(),
@@ -11,10 +13,9 @@
 	* removed definition of "altname", "all", and "cluster" 
 	  from genders.h
 	* code was cleaned up in a variety of ways
-	* manpages were respectively fixed to reflect changes
+	* manpages fixed to reflect changes
 	* directory structure of entire genders package cleaned up
-	* split off dist and gendlib.pl into two sub packages
-	
+	* split off dist and gendlib.pl into two RPM sub packages
 		
 2003-04-14 Albert chu <chu11@llnl.gov>
         * fixed string_constant() function in Libgenders(3) to
