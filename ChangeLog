@@ -6,6 +6,11 @@
 	genders API.
 
 	* man/libgenders.3: Added genders_query.
+
+	* src/libgenders/genders_parse.l, src/libgenders/genders_query.y,
+	man/genders_query.3, src/Libgenders/Libgenders.pm,
+	src/Genders/Genders.pm: Modified parse tokens so that union is '|'
+	and intersection is '&'.
 	
 2004-06-09  Albert Chu  <chu11@llnl.gov>
 

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_query.3,v 1.2 2004-06-10 15:31:04 achu Exp $
+\."  $Id: genders_query.3,v 1.3 2004-06-10 17:00:29 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,10 +37,11 @@ based on the union, intersection, or set difference between genders
 attributes and values.  The query for a set of nodes is passed as a
 string through the \fIquery\fR parameter.  The query is made up of
 attributes of attribute=value pairs and set operations between them.
-The set operation union is represented by a plus ('+'), intersection
-by a comma (','), and set difference by a minus ('-').  Set operations
-are performed left to right.  Parentheses may be used to change the
-order of operations.  A list of query examples are listed below.
+The set operation union is represented by a pipe ('|'), intersection
+by an ampersand ('&'), and set difference by a minus ('-').  Set
+operations are performed left to right.  Parentheses may be used to
+change the order of operations.  A list of query examples are listed
+below.
 
 The nodes from the query are stored in the list pointed to
 by \fInodes\fR.  \fIlen\fR indicates the number of nodes that can be
@@ -60,16 +61,16 @@ The following are examples of syntax correct queries that can be
 passed to \fBgenders_query()\fR.
 .LP
 Determine the set of nodes with the mgmt and login attributes:
-        "mgmt+login"
+        "mgmt|login"
 .LP
 Determine the set of nodes that are not login nodes:
         "all-login"
 .LP
 Determine the set of nodes that both login nodes and ntp servers:
-        "login,ntpserv"
+        "login&ntpserv"
 .LP
 Determine the set of nodes that are not mgmt or login nodes:
-        "all-(mgmt+login)"
+        "all-(mgmt|login)"
 .SH RETURN VALUES
 On success, the number of nodes stored in \fInodes\fR is returned.  On
 error, -1 is returned, and an error code is returned in \fIhandle\fR.

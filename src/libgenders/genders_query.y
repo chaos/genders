@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.7 2004-06-10 15:31:05 achu Exp $
+ *  $Id: genders_query.y,v 1.8 2004-06-10 16:59:01 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -251,12 +251,12 @@ _calc_query(genders_t handle, struct genders_treenode *t)
           goto cleanup_calc;
         }
       
-      /* + is Union
-       * , is Intersection
+      /* | is Union
+       * & is Intersection
        * - is Set Difference
        */
 
-      if (strcmp(t->str, "+") == 0)
+      if (strcmp(t->str, "|") == 0)
         {
           memset(buf, '\0', HOSTLIST_BUFLEN);
           if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0)
@@ -284,7 +284,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
           hostlist_destroy(r);
           return h;
         }
-      else if (strcmp(t->str, ",") == 0)
+      else if (strcmp(t->str, "&") == 0)
         {
           char *node;
 
@@ -412,7 +412,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
 %}
 
 %start input
-%token ATTRTOK LPARENTOK RPARENTOK PLUSTOK MINUSTOK COMMATOK
+%token ATTRTOK LPARENTOK RPARENTOK PIPETOK AMPERSANDTOK MINUSTOK
 
 %union {
   char *attr;
@@ -429,17 +429,17 @@ input: query
        ;
 
 query: term {$$ = $1;}
-       | query PLUSTOK term 
+       | query PIPETOK term 
            {
              $$ = genders_makenode("+", $1, $3);
+           }
+       | query AMPERSANDTOK term 
+           {
+             $$ = genders_makenode(",", $1, $3);
            }
        | query MINUSTOK term 
            {
              $$ = genders_makenode("-", $1, $3);
-           }
-       | query COMMATOK term 
-           {
-             $$ = genders_makenode(",", $1, $3);
            }
        ;
 

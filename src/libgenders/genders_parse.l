@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_parse.l,v 1.2 2004-06-09 17:06:23 achu Exp $
+ *  $Id: genders_parse.l,v 1.3 2004-06-10 16:59:01 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -35,8 +35,8 @@
 [a-zA-Z0-9][a-zA-Z0-9_\=\.]*  yylval.attr = strdup(yytext); return ATTRTOK;
 \(                            return LPARENTOK;
 \)                            return RPARENTOK;
-\+                            return PLUSTOK;
+\|                            return PIPETOK;
+&                             return AMPERSANDTOK;
 -                             return MINUSTOK;
-,                             return COMMATOK;
 [ \t\n]+                      /* ignore whitespace */
 %%

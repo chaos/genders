@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.18 2004-06-10 00:33:04 achu Exp $
+#  $Id: Libgenders.pm,v 1.19 2004-06-10 16:59:01 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -259,8 +259,8 @@ with a different attribute will overwrite earlier indexes.
 =item B<$handle-E<gt>genders_query($query)>
 
 Query the genders database based on the union, intersection, or set
-difference between genders attributes and values.  Use plus ('+') for
-union, comma (',') for intersection and minus ('-') for set
+difference between genders attributes and values.  Use plus ('|') for
+union, comma ('&') for intersection and minus ('-') for set
 difference.  Operations are performed from left to right.  Parentheses
 may be used to change the order of operations.  For example, the
 following query would retrieve all nodes other than management or

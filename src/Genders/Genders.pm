@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm,v 1.15 2004-06-10 00:25:34 achu Exp $
+#  $Id: Genders.pm,v 1.16 2004-06-10 16:59:01 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -448,8 +448,8 @@ indexes.
 =item B<$obj-E<gt>query($query)>
 
 Query the genders database based on the union, intersection, or set
-difference between genders attributes and values.  Use plus ('+') for
-union, comma (',') for intersection and minus ('-') for set
+difference between genders attributes and values.  Use plus ('|') for
+union, comma ('&') for intersection and minus ('-') for set
 difference.
 
 =back 
