@@ -22,5 +22,11 @@ herein do not necessarily state or reflect those of the United States
 Government or the University of California, and shall not be used for 
 advertising or product endorsement purposes.
 
+                   NOTIFICATION OF COMMERCIAL USE
+
+Commercialization of this product is prohibited without notifying the 
+Department of Energy (DOE) or Lawrence Livermore National Laboratory (LLNL).
 ----------
 Code Release Number UCRL-CODE-2000-009 "Cluster Support Scripts"
+This release covers the CS2 package for Meiko CS/2 running Linux and
+GENDERS package for IBM SP and Linux cluster support.

@@ -1,8 +1,8 @@
 #
-# $Id: gendlib.pl,v 1.3 2001-07-14 03:56:31 garlick Exp $
+# $Id: gendlib.pl,v 1.4 2001-07-14 05:36:52 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
-# Copyright (C) 2000 Regents of the University of California
+# Copyright (C) 2000-2001 Regents of the University of California
 # See the DISCLAIMER file distributed with this package.
 #
 # Author: Jim Garlick
