@@ -1,3 +1,7 @@
+2003-12-30  Albert Chu  <chu11@llnl.gov>
+
+	Updated all files with appropriate copyright header.
+	
 2003-11-07  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/Makefile.am: Added dependency check.
