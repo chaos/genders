@@ -7690,7 +7690,7 @@ for ac_header in \
   stdlib.h \
   string.h \
   unistd.h \
-  unistd.h \
+  getopt.h \
 
 do
 as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
@@ -7803,6 +7803,7 @@ _ACEOF
 fi
 
 done
+
 
 
 ##
@@ -8429,6 +8430,7 @@ fi
 
 
 
+
 for ac_func in \
   strcmp \
   strlen \
@@ -8437,6 +8439,7 @@ for ac_func in \
   strsep \
   strspn \
   strtok_r \
+  getopt_long \
 
 do
 as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`

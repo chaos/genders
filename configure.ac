@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.14 2003-05-17 00:04:14 achu Exp $
+## $Id: configure.ac,v 1.15 2003-05-20 00:02:00 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -101,8 +101,9 @@ AC_CHECK_HEADERS( \
   stdlib.h \
   string.h \
   unistd.h \
-  unistd.h \
+  getopt.h \
 )
+
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
@@ -123,6 +124,7 @@ AC_CHECK_FUNCS( \
   strsep \
   strspn \
   strtok_r \
+  getopt_long \
 )
 
 ##
