@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.16 2003-04-11 18:42:58 achu Exp $
+ * $Id: genders.c,v 1.17 2003-04-11 19:04:57 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -407,8 +407,7 @@ int genders_insert_attrval_listnode(genders_t handle,
 
   /* create new node at the end of the list */
   if (attrval_list == NULL) {
-    node_list->attrvals_head = 
-               (void *)malloc(sizeof(struct attrval_listnode));
+    node_list->attrvals_head = (void *)malloc(sizeof(struct attrval_listnode));
 
     if (node_list->attrvals_head == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
