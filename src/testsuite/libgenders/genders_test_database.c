@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_database.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_database.c,v 1.2 2004-12-29 23:36:05 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -985,6 +985,80 @@ genders_database_t genders_database_nodes_only_many =
     &genders_database_data_nodes_only_many,
   };
 
+genders_database_data_t genders_database_data_nodes_and_attrs_only = 
+  {
+    "node1",
+    "attr1",
+    NULL,
+    NULL,
+    2,
+    2,
+    2,
+    5,
+    5,
+    0,
+    {"node1", "node2", NULL},
+    2,				
+    {"attr1", "attr2", NULL},
+    2,
+    {NULL},
+    0,
+    {
+      {
+	{"attr1", "attr2", NULL},
+	{"", "", NULL}, 
+	{NULL, NULL, NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "", NULL}, 
+	{NULL, NULL, NULL}, 
+	2,
+      },
+    },
+    2,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+    },
+    3,
+  };
+
+genders_database_t genders_database_nodes_and_attrs_only = 
+  {
+    "testdatabases/genders.nodes_and_attrs_only",
+    &genders_database_data_nodes_and_attrs_only,
+  };
+
+genders_database_t genders_database_nodes_and_attrs_only_comma = 
+  {
+    "testdatabases/genders.nodes_and_attrs_only_comma",
+    &genders_database_data_nodes_and_attrs_only,
+  };
+
+genders_database_t genders_database_nodes_and_attrs_only_hostrange = 
+  {
+    "testdatabases/genders.nodes_and_attrs_only_hostrange",
+    &genders_database_data_nodes_and_attrs_only,
+  };
+
 genders_database_data_t genders_database_data_subst_escape_char = 
   {
     "node1",
@@ -1188,6 +1262,112 @@ genders_database_t genders_database_subst_nodename_hostrange =
     &genders_database_data_subst_nodename,
   };
 
+genders_database_data_t genders_database_data_large_attr = 
+  {
+    "node1",
+    "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+    NULL,
+    NULL,
+    1,
+    1,
+    1,
+    5,
+    78,
+    0,
+    {"node1", NULL},
+    1,				
+    {"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+    1,
+    {NULL, NULL},
+    1,
+    {
+      {
+	{"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	{"", NULL}, 
+	{NULL, NULL}, 
+	1,
+      },
+    },
+    1,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+    },
+    2,
+  };
+
+genders_database_t genders_database_large_attr = 
+  {
+    "testdatabases/genders.large_attr",
+    &genders_database_data_large_attr,
+  };
+
+genders_database_data_t genders_database_data_large_val = 
+  {
+    "node1",
+    NULL,
+    "attr1",
+    "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+    1,
+    1,
+    1,
+    5,
+    5,
+    78,
+    {"node1", NULL},
+    1,				
+    {"attr1", NULL},
+    1,
+    {"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+    1,
+    {
+      {
+	{"attr1", NULL}, 
+	{"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	{"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	1,
+      },
+    },
+    1,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"attr1",
+	"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+	{"node1", NULL},
+	1,
+      },
+    },
+    3,
+  };
+
+genders_database_t genders_database_large_val = 
+  {
+    "testdatabases/genders.large_val",
+    &genders_database_data_large_val,
+  };
+
 genders_database_t *genders_functionality_databases[] = 
   {
     &genders_database_base,
@@ -1229,9 +1409,14 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_test_3,
     &genders_database_nodes_only_one,
     &genders_database_nodes_only_many,
+    &genders_database_nodes_and_attrs_only,
+    &genders_database_nodes_and_attrs_only_comma,
+    &genders_database_nodes_and_attrs_only_hostrange,
     &genders_database_subst_escape_char,
     &genders_database_subst_nodename,
     &genders_database_subst_nodename_comma,
     &genders_database_subst_nodename_hostrange,
+    &genders_database_large_attr,
+    &genders_database_large_val,
     NULL,
   };
