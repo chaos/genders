@@ -2,7 +2,7 @@
 # Makefile Include for RPM Construction
 #   by Chris Dunlap <cdunlap@llnl.gov>
 ##
-# $Id: Make-rpm.mk,v 1.2 2002-04-23 16:03:58 garlick Exp $
+# $Id: Make-rpm.mk,v 1.3 2002-09-13 16:13:06 garlick Exp $
 ##
 # REQUIREMENTS:
 # - requires project to be under CVS version control
@@ -34,10 +34,11 @@
 # - CVS "HEAD" tag can be used to build the most recent version in CVS
 #     w/o requiring it to be tagged within CVS (eg, make rpm tag=HEAD);
 #     this is intended for pre-release testing purposes only
-# - CVS "HEAD" releases will have a "+" appended to the version to denote
-#     an augmented release; the contents of such a release can be resurrected
-#     from CVS by using a CVS date spec "-D" based on the RPM's "Build Date"
-#     (eg, rpm -qp --queryformat="%{BUILDTIME:date}\n" foo-1.2.3-1.i386.rpm)
+# - if RELEASE is not specified in the META file when using a "HEAD" tag,
+#     a "rev" can be specified on the cmdline (eg, make rpm tag=HEAD rev=2);
+#     o/w, the RPM release is set to 1
+# - CVS "HEAD" releases have a release number of the form "YYMMDDHHMM".
+# - CVS "BASE" tag is not supported
 # - RPM will be signed with a PGP/GPG key if one is specified in ~/.rpmmacros
 ##
 # USAGE:
@@ -51,7 +52,7 @@ tar rpm:
 	  echo "ERROR: PROJECT macro def is not defined." 1>&2; exit 1; fi; \
 	if test -z "$$tag"; then \
 	  if ! test -f META; then \
-	    echo "ERROR: Cannot find $$proj metadata in \"`pwd`/META\"." 1>&2; \
+	    echo "ERROR: Cannot find $$proj metadata in \"`pwd`/META\"." 1>&2;\
 	      exit 1; fi; \
 	  name=`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' META`; \
 	  ver=`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' META`; \
@@ -66,7 +67,7 @@ tar rpm:
 	  echo "ERROR: Cannot create \"$$tmp\" dir." 1>&2; exit 1; fi; \
 	test -f CVS/Root && cvs="cvs -d `cat CVS/Root`" || cvs="cvs"; \
 	echo "Fetching $$proj from CVS (tag=$$tag) ..."; \
-	(cd $$tmp; $$cvs -Q export -r $$tag $$proj) || exit 1; \
+	(cd $$tmp; $$cvs -Q export -kv -r $$tag $$proj) || exit 1; \
 	meta=$$tmp/$$proj/META; \
 	if test ! -f "$$meta"; then \
 	  echo "ERROR: Cannot find $$proj metadata in CVS." 1>&2; exit 1; fi; \
@@ -74,11 +75,12 @@ tar rpm:
 	if test "$$proj" != "$$name"; then \
 	  echo "ERROR: PROJECT does not match metadata." 1>&2; exit 1; fi; \
 	ver=`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' $$meta`; \
-	test "$$tag" = "HEAD" -o "$$tag" = "BASE" && ver="$$ver+"; \
 	rel=`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' $$meta`; \
-	if test -z "$$rel"; then \
-	  pkg=$$name-$$ver; rel=1; else pkg=$$name-$$ver-$$rel; fi; \
-	mv "$$tmp/$$proj" "$$tmp/$$pkg" || exit 1; \
+	test "$$tag" = "HEAD" && rel="`date +%y%m%d%H%M`"; \
+	if test -n "$$rel"; then pkg=$$proj-$$ver-$$rel; \
+	  else pkg=$$proj-$$ver; test -n "$$rev" -a "$$tag" = "HEAD" \
+	    && rel="$$rev" || rel="1"; fi; \
+	mv "$$tmp/$$proj" "$$tmp/$$proj-$$ver" || exit 1; \
 	$(MAKE) -s $@-internal mkdir="$$mkdir" tmp="$$tmp" \
 	  proj="$$proj" pkg="$$pkg" ver="$$ver" rel="$$rel" \
 	    && rm -rf $$tmp
@@ -86,7 +88,7 @@ tar rpm:
 tar-internal:
 	@echo "Creating $$pkg.tgz ..."; \
 	rm -f $$pkg.tgz || exit 1; \
-	(cd $$tmp; tar -cf - $$pkg) | gzip -c9 >$$tmp/$$pkg.tgz; \
+	(cd $$tmp; tar -cf - $$proj-$$ver) | gzip -c9 >$$tmp/$$pkg.tgz; \
 	cp -p $$tmp/$$pkg.tgz $$pkg.tgz || exit 1
 
 rpm-internal: tar-internal
@@ -96,20 +98,22 @@ rpm-internal: tar-internal
 	    echo "ERROR: Cannot create \"$$tmp/$$d\" dir." 1>&2; exit 1; fi; \
 	      done; \
 	mv $$tmp/$$pkg.tgz $$tmp/SOURCES/ || exit 1; \
-	test -f $$tmp/$$pkg/$$proj.spec.in \
-	  && spec=$$tmp/$$pkg/$$proj.spec.in \
-	  || spec=$$tmp/$$pkg/$$proj.spec; \
+	test -f $$tmp/$$proj-$$ver/$$proj.spec.in \
+	  && spec=$$tmp/$$proj-$$ver/$$proj.spec.in \
+	  || spec=$$tmp/$$proj-$$ver/$$proj.spec; \
 	if ! test -f $$spec; then \
-	  echo "ERROR: Cannot find $$proj spec file in CVS." 1>&2; exit 1; fi; \
+	  echo "ERROR: Cannot find $$proj spec file in CVS." 1>&2; exit 1; fi;\
 	sed -e "s/^\([ 	]*Name:\).*/\1 $$proj/i" \
 	    -e "s/^\([ 	]*Version:\).*/\1 $$ver/i" \
 	    -e "s/^\([ 	]*Release:\).*/\1 $$rel/i" \
-	    -e "s/^\([ 	]*Source0?:\).*/\1 $$pkg.tgz/i" \
+	    -e "s/^\([ 	]*Source0\?:\).*/\1 $$pkg.tgz/i" \
 	    <$$spec >$$tmp/SPECS/$$proj.spec; \
 	if ! test -s $$tmp/SPECS/$$proj.spec; then \
 	  echo "ERROR: Cannot create $$proj.spec." 1>&2; exit 1; fi; \
-	rpm --showrc | egrep "_(gpg|pgp)_nam" >/dev/null && sign="--sign"; \
+	rpm --showrc | egrep "[[:space:]]_(gpg|pgp)_name[[:space:]]" \
+	  >/dev/null && sign="--sign"; \
 	if ! rpm -ba --define "_tmppath $$tmp/TMP" --define "_topdir $$tmp" \
 	  $$sign --quiet $$tmp/SPECS/$$proj.spec >$$tmp/rpm.log 2>&1; then \
 	    cat $$tmp/rpm.log; exit 1; fi; \
-	cp -p $$tmp/RPMS/*/$$proj-*.rpm $$tmp/SRPMS/$$proj-*.src.rpm . || exit 1
+	cp -p $$tmp/RPMS/*/$$proj-*.rpm $$tmp/SRPMS/$$proj-*.src.rpm . \
+	  || exit 1

@@ -1,89 +1,78 @@
-Changes while living on linux:
-	Removed herolib.pl stuff temporarily.  It needs to be merged back in.
+2002-09-13 garlick
+	* Reformatted changelog
+	* Changed ksh to sh in shell scripts
+	* Updated to latest Make-rpm.mk
+	* Tagged genders-0-2-7chaos.
 
-	If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh is OK.
+2002-05-31 garlick
+	* Removed -r option from dist2.  The default is now to use
+	  "altnames" if available (reliable_hostname on SP, altname= attribute
+	  elsewhere).  Added -i option to select canonical names 
+ 	  (the names on the LHS of each genders line). 
+	* Updated dist2 man page.
+	* Tagged genders-0-2-6chaos.
 
-	Only include sdrlib.pl in gendlib.pl.   Genders::to_altnames and
-	Genders::to_gendnames now provide conversion between genders hostnames 
-	and alternate hostnames.  On the SP, this is accomplished using the
-	sdrlib functions which access the initial_hostname and 
-	reliable_hostname SDR attributes.  On other systems, "altname" 
-	genders attribute holds the alternate hostname (gendlib.pl, dist2).
+2002-05-24 garlick
+	* Added -r option to nodeattr in dist_all.
+	* Tagged genders-0-2-5chaos.
 
-	Added "-c <cluster>" option.  This tells dist2 to use 
-	/admin/etc/genders.<cluster> instead of the default.  Handy for 
-	rdisting to a foreign cluster, e.g. one that is behind a bastion 
-	host that can mount /var/dist (but inside can't mount it) (dist2).
+2002-04-24 garlick
+	* Minor TUTORIAL cleanup.
+	* Remove updatefstab/updateservice from spec file.
+	* Tagged genders-0-2-4chaos?
 
-	Added "-o <options>" option.  List of options are passed
-	through to the real rdist, e.g. "dist2 -o verify" (dist2).
+2002-04-23 garlick
+	* Updated to Chris's latest RPM rules.
+	* Removed updatefstab and updateservice scripts per Robin's request.
+	* Added TUTORIAL.
+	* Tagged genders-0-2-3chaos (sent to Rand at lanl)
 
-	Don't look for /var/dist/VAR_DIST_IS_MOUNTED if "-f Distfile" option
-	specified (dist2).
+2001-07-14 garlick
+	* Updated to Chris's latest RPM rules.
+	* Added updatefstab and updateservice scripts.
+	* tagged genders-0-2-2
 
-	If -n option specified, implicitly set -v (dist2).
+2001-07-14 garlick
+	* RPM target in Makefile
+	* tagged genders-0-2
 
-	GNU fileutils 4.0p include install program with -C option.
-	This is the main reason for having the 'inst' utility, therefore it
-	should now be considered deprecated.  Update your rdist Makefiles
-	to use GNU install -C.
+2001-07-14 garlick
+	* Added genders.spec, DISCLAIMER.
+	* Removed dist_passwd.
+	* tagged genders-0-1
 
-	Removed jmd stuff (hostlist.pl).
-
-genders-0.1
-	Added genders.spec, DISCLAIMER.
-	Removed dist_passwd.
-
-	Path changes:
-	/admin/bin/perl		-> /usr/bin/perl
-	/admin/etc/genders 	-> /etc/genders
-	/admin/etc/clusters	-> /etc/clusters
-	/admin/lib/gendlib.pl 	-> /usr/lib/genders/gendlib.pl
-	/admin/scripts/dist2	-> /usr/bin/dist2
-	/var/dist/bootstrap	-> /usr/bin/dist_bootstrap
-
-	Now that we have an RPM, dist_bootstrap only has to copy out
-	/etc/genders and /etc/clusters.
-
-	Makefile only attempts to build inst.
-
-	Remove "require 5.003" lines; instead require perl in spec file.
-
-genders-0.2
-	RPM target in Makefile
-
-genders-0.2-2
-	Updated to Chris's latest RPM rules.
-
-	Added updatefstab and updateservice scripts.
-
-Tue Apr 23 09:01:03 PDT 2002
-	Updated to Chris's latest RPM rules.
-
-	Removed updatefstab and updateservice scripts per Robin's request.
-
-	Added TUTORIAL.
-
-	Tagged genders-0-2-3chaos (sent to Rand at lanl)
-
-Wed Apr 24 09:33:33 PDT 2002
-	Minor TUTORIAL cleanup.
-
-	Remove updatefstab/updateservice from spec file.
-
-	Tagged genders-0-2-4chaos?
-
-Fri May 24 16:56:05 PDT 2002
-	Added -r option to nodeattr in dist_all.
-
-	Tagged genders-0-2-5chaos.
-
-Fri May 31 08:26:11 PDT 2002
-	Removed -r option from dist2.  The default is now to use
-	"altnames" if available (reliable_hostname on SP, altname= attribute
-	elsewhere).  Added -i option to select canonical names 
- 	(the names on the LHS of each genders line). 
-
-	Updated dist2 man page.
-
-	Tagged genders-0-2-6chaos.
+<date unknown> garlick
+	* Path changes: 
+	  /admin/bin/per	-> /usr/bin/perl
+	  /admin/etc/genders 	-> /etc/genders
+	  /admin/etc/clusters	-> /etc/clusters
+	  /admin/lib/gendlib.pl	-> /usr/lib/genders/gendlib.pl
+	  /admin/scripts/dist2	-> /usr/bin/dist2
+	  /var/dist/bootstrap	-> /usr/bin/dist_bootstrap
+	* Now that we have an RPM, dist_bootstrap only has to copy out
+	  /etc/genders and /etc/clusters.
+	* Makefile only attempts to build inst.
+	* Remove "require 5.003" lines; instead require perl in spec file.
+	* Removed herolib.pl stuff temporarily.  It needs to be merged back in.
+	* If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh 
+	  is OK.
+	* Only include sdrlib.pl in gendlib.pl.  Genders::to_altnames and
+	  Genders::to_gendnames now provide conversion between genders 
+	  hostnames and alternate hostnames.  On the SP, this is accomplished 
+	  using the sdrlib functions which access the initial_hostname and 
+	  reliable_hostname SDR attributes.  On other systems, "altname" 
+	  genders attribute holds the alternate hostname (gendlib.pl, dist2).
+	* Added "-c <cluster>" option.  This tells dist2 to use 
+	  /admin/etc/genders.<cluster> instead of the default.  Handy for 
+	  rdisting to a foreign cluster, e.g. one that is behind a bastion 
+	  host that can mount /var/dist (but inside can't mount it) (dist2).
+	* Added "-o <options>" option.  List of options are passed
+	  through to the real rdist, e.g. "dist2 -o verify" (dist2).
+	* Don't look for /var/dist/VAR_DIST_IS_MOUNTED if "-f Distfile" option
+	  specified (dist2).
+	* If -n option specified, implicitly set -v (dist2).
+	* GNU fileutils 4.0p include install program with -C option.
+	  This is the main reason for having the 'inst' utility, therefore it
+	  should now be considered deprecated.  Update your rdist Makefiles
+	  to use GNU install -C.
+	* Removed jmd stuff (hostlist.pl).
