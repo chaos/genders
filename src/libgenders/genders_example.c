@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.8 2003-05-06 18:56:48 achu Exp $
+ * $Id: genders_example.c,v 1.9 2003-05-15 21:06:29 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -686,6 +686,119 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
 }
 
 
+void test_if_genders_file_has_certain_attrs(genders_t handle) {
+  int ret, num, i;
+  
+  if (numnodes == 0 || numattrs == 0)
+    return;
+
+  if (genders_attrlist_clear(handle, attrs) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  if ((num = genders_getattr(handle, attrs, NULL, attrslen, NULL)) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  printf("Does the genders file have the following attrs?               \n");
+  printf("--------------------------------------------------------------\n");
+
+  for (i = 0; i < num; i++) {
+    printf("Does the genders file have attr \"%s\"? ", attrs[i]);
+    
+    ret = genders_isattr(handle, attrs[i]);
+    if (ret == 1) {
+      printf("Yes\n");
+    }
+    else if (ret == 0) {
+      printf("No\n");
+    }
+    else {
+      printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+      cleanup_and_exit(handle,1);
+    }
+  }
+  
+  printf("Does the genders file have attr \"%s\"? ", "foo");
+    
+  ret = genders_isattr(handle, "foo");
+  if (ret == 1) {
+    printf("Yes\n");
+  }
+  else if (ret == 0) {
+    printf("No\n");
+  }
+  else {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  printf("\n");
+
+  return;
+}
+
+void test_if_genders_file_has_certain_attrvals(genders_t handle) {
+  int ret, num, i;
+  
+  if (numnodes == 0 || numattrs == 0)
+    return;
+
+  if (genders_attrlist_clear(handle, attrs) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  if (genders_vallist_clear(handle, vals) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  if ((num = genders_getattr(handle, attrs, vals, attrslen, NULL)) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  printf("Does the genders file have the following attrvals?            \n");
+  printf("--------------------------------------------------------------\n");
+
+  for (i = 0; i < num; i++) {
+    printf("Does the genders file have \"%s=%s\"? ", attrs[i], vals[i]);
+    
+    ret = genders_isattrval(handle, attrs[i], vals[i]);
+    if (ret == 1) {
+      printf("Yes\n");
+    }
+    else if (ret == 0) {
+      printf("No\n");
+    }
+    else {
+      printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+      cleanup_and_exit(handle,1);
+    }
+
+    printf("Does the genders file have \"%s=%s\"? ", attrs[i], "foo");
+    
+    ret = genders_isattrval(handle, attrs[i], "foo");
+    if (ret == 1) {
+      printf("Yes\n");
+    }
+    else if (ret == 0) {
+      printf("No\n");
+    }
+    else {
+      printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+      cleanup_and_exit(handle,1);
+    }
+  }
+ 
+  printf("\n");
+
+  return;
+}
+
 void example_using_genders_perror_and_errormsg(genders_t handle) {
   /* Intentionally force errors to test and illustate genders_perror */
   printf("Intentional errors to test and illustrate genders error routines()\n");
@@ -772,6 +885,10 @@ mtrace();
   test_if_node_has_attribute_equal_to_a_value(handle);
 
   test_if_genders_file_has_certain_nodes(handle);
+
+  test_if_genders_file_has_certain_attrs(handle);
+
+  test_if_genders_file_has_certain_attrvals(handle);
 
   example_using_genders_perror_and_errormsg(handle);
 
