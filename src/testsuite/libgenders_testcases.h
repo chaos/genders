@@ -1,5 +1,5 @@
 /*
- * $Id: libgenders_testcases.h,v 1.4 2003-05-21 00:43:55 achu Exp $
+ * $Id: libgenders_testcases.h,v 1.5 2003-11-03 19:27:31 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/libgenders_testcases.h,v $
  */
 
@@ -284,8 +284,8 @@ struct {
   {GENDERS_GETNODES,         IS_NOT_NULL_NOT_LOADED, IS_NOT_NULL,      IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_NOTLOADED },
   {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NULL,          IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
+  {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW},
+  {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW},
   {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NULL,          IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETNODES,         IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW  },
   {GENDERS_GETNODES,         IS_NOT_NULL_DESTROYED,  IS_NULL,          IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_MAGIC     },
@@ -321,14 +321,14 @@ struct {
   {GENDERS_GETATTR,          IS_NOT_NULL_NOT_LOADED, IS_NOT_NULL,      IS_POSITIVE_SMALL, BAD_NODENAME,       -1,                     GENDERS_ERR_NOTLOADED },
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_NEGATIVE,       GOOD_NODENAME,      -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_NEGATIVE,       GOOD_NODENAME,      -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           GOOD_NODENAME,      -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           GOOD_NODENAME,      -1,                     GENDERS_ERR_PARAMETERS},
+  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           GOOD_NODENAME,      -1,                     GENDERS_ERR_OVERFLOW},
+  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           GOOD_NODENAME,      -1,                     GENDERS_ERR_OVERFLOW},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_POSITIVE_SMALL, GOOD_NODENAME,      -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_POSITIVE_SMALL, GOOD_NODENAME,      -1,                     GENDERS_ERR_OVERFLOW  },
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_NEGATIVE,       BAD_NODENAME,       -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_NEGATIVE,       BAD_NODENAME,       -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           BAD_NODENAME,       -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           BAD_NODENAME,       -1,                     GENDERS_ERR_PARAMETERS},
+  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           BAD_NODENAME,       -1,                     GENDERS_ERR_NOTFOUND},
+  {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           BAD_NODENAME,       -1,                     GENDERS_ERR_NOTFOUND},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NULL,          IS_POSITIVE_SMALL, BAD_NODENAME,       -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR,          IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_POSITIVE_SMALL, BAD_NODENAME,       -1,                     GENDERS_ERR_NOTFOUND  },
   {GENDERS_GETATTR,          IS_NOT_NULL_DESTROYED,  IS_NULL,          IS_NEGATIVE,       GOOD_NODENAME,      -1,                     GENDERS_ERR_MAGIC     },
@@ -358,8 +358,8 @@ struct {
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_NOT_LOADED, IS_NOT_NULL,      IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_NOTLOADED },
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NULL,          IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
-  {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
+  {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NULL,          IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW},
+  {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_ZERO,           NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW},
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NULL,          IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_PARAMETERS},
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_LOADED,     IS_NOT_NULL,      IS_POSITIVE_SMALL, NO_VALUE,           -1,                     GENDERS_ERR_OVERFLOW  },
   {GENDERS_GETATTR_ALL,      IS_NOT_NULL_DESTROYED,  IS_NULL,          IS_NEGATIVE,       NO_VALUE,           -1,                     GENDERS_ERR_MAGIC     },
