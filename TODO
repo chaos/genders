@@ -1,4 +1,0 @@
-- Allow attributes or attributes=value checking for each line of the genders
-  file that works with nodeattr --check option
-  o i.e. nodeattr --check all
-  o possibly add functionality to genders_parse()  
