@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.60 2003-09-22 22:02:59 achu Exp $
+ * $Id: genders.c,v 1.61 2003-09-23 00:51:25 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1131,7 +1131,7 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
     if ((rv = _parse_line(handle, &buf[0], line_count, stream)) == -1)
       goto cleanup;
 
-    retval += ret;
+    retval += rv;
     line_count++;
   }
 
