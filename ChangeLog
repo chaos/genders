@@ -1,4 +1,10 @@
-2003-02-28  Albert Chu <chu11@llnl.gov>
+2003-03-07 Albert Chu <chu11@llnl.gov>
+        * moved unnecessary #includes and #defines from genders.h
+	  into genders.c  
+	* added genders_errormsg() manpage
+        * tagged genders-1-1-3
+
+2003-03-07 Albert Chu <chu11@llnl.gov>
         * added libgenders manpages
 	* added genders_errormsg() to libgenders
         * tagged genders-1-1-2

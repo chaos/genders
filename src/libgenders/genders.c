@@ -1,9 +1,31 @@
 /*
- * $Id: genders.c,v 1.3 2003-03-07 20:33:05 achu Exp $
+ * $Id: genders.c,v 1.4 2003-03-10 17:52:17 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif                         
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+
 #include "genders.h"
+
+/******************
+ * defines        *
+ ******************/
+
+#define GENDERS_ERR_MIN         GENDERS_ERR_SUCCESS
+#define GENDERS_ERR_MAX         GENDERS_ERR_INTERNAL
+#define DEFAULT_GENDERS_FILE    "/etc/genders"
+
+#define GENDERS_ALTNAME_ATTRIBUTE   "altname"
+
+#ifndef MAXHOSTNAMELEN
+#define MAXHOSTNAMELEN 64
+#endif
 
 /* genders handle
  * errnum - error number returned to user
