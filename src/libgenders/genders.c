@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.99 2004-04-22 22:44:36 achu Exp $
+ *  $Id: genders.c,v 1.100 2004-04-26 23:39:43 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1650,25 +1650,3 @@ genders_set_errnum(genders_t handle, int errnum)
   else
     handle->errnum = GENDERS_ERR_INTERNAL;
 }
-
-/*
- * Various debugging/helper functions which are riddled with
- * corner case bugs.
- */
-
-#ifndef NDEBUG
-int
-genders_node_index_dump(genders_t handle)
-{
-  ListIterator itr;
-  genders_node_t n;
-
-  itr = list_iterator_create(handle->nodeslist);
-
-  while ((n = list_next(itr)) != NULL) {
-    char *nodename = n->name;
-    List l = hash_find(handle->node_index, nodename);
-    printf("%s: %d\n", nodename, list_count(l));
-  }
-}
-#endif
