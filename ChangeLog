@@ -70,3 +70,10 @@ Wed Apr 24 09:33:33 PDT 2002
 	Minor TUTORIAL cleanup.
 
 	Remove updatefstab/updateservice from spec file.
+
+	Tagged genders-0-2-4chaos?
+
+Fri May 24 16:56:05 PDT 2002
+	Added -r option to nodeattr in dist_all.
+
+	Tagged genders-0-2-5chaos.

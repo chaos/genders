@@ -1,6 +1,6 @@
 #!/bin/ksh
 #
-# $Id: dist_all,v 1.3 2001-07-14 05:36:52 garlick Exp $
+# $Id: dist_all,v 1.4 2002-05-24 23:57:23 garlick Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist_all,v $
 # 
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -39,7 +39,7 @@ if [ $NOSWITCH ]; then
 else
 	# big system
 	if [ $NUMNODES -gt 4 ]; then
-		nodeattr -n all | pdsh -b ${WOPT:-'-w-'} \
+		nodeattr -rn all | pdsh -b ${WOPT:-'-w-'} \
 		    -f$FANOUT "$DIST -l "$ARGS"" | sed 's/[^:]*: //'
 
 	# little system
