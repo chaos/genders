@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.87 2004-02-03 18:50:41 achu Exp $
+ *  $Id: genders.c,v 1.88 2004-02-04 00:57:58 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -65,6 +65,7 @@
 struct genders_node {
   char name[MAXHOSTNAMELEN+1];
   List attrlist;
+  int attrcount;
 };
 typedef struct genders_node *genders_node_t;
 
@@ -91,6 +92,7 @@ typedef struct genders_attrval *genders_attrval_t;
  * is_loaded = 1
  * numnodes = 3
  * numattrs = 6 
+ * maxattrs = 4
  * maxnodelen = 9
  * maxattrlen = 5
  * maxvallen = 4
@@ -119,6 +121,7 @@ struct genders {
   int is_loaded;                    /* genders data loaded? */
   int numnodes;                     /* number of nodes in database */
   int numattrs;                     /* number of attrs in database */
+  int maxattrs;                     /* max attrs any one node has */
   int maxnodelen;                   /* max node name length */
   int maxattrlen;                   /* max attr name length */
   int maxvallen;                    /* max value name length */
@@ -338,6 +341,7 @@ _initialize_handle(genders_t handle)
   handle->is_loaded = 0;
   handle->numnodes = 0;
   handle->numattrs = 0;
+  handle->maxattrs = 0;
   handle->maxnodelen = 0;
   handle->maxattrlen = 0;
   handle->maxvallen = 0;
@@ -433,6 +437,7 @@ _insert_node(genders_t handle, List nodelist, char *nodename)
     memset(n, '\0', sizeof(struct genders_node));
 
     strcpy(n->name, nodename);    /* length previously asserted */
+    n->attrcount = 0;
 
     if (!(n->attrlist = list_create(NULL))) {
       handle->errnum = GENDERS_ERR_OUTMEM;
@@ -745,9 +750,12 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
     
       if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
         goto cleanup;
+
+      n->attrcount += list_count(attrvals);
     }
 
     if (!line_num) {
+      handle->maxattrs = MAX(n->attrcount, handle->maxattrs);
       handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
       line_maxnodelen = MAX(strlen(node), line_maxnodelen);
     }
@@ -900,6 +908,16 @@ genders_getnumattrs(genders_t handle)
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return handle->numattrs;
+}
+
+int 
+genders_getmaxattrs(genders_t handle) 
+{
+  if (_loaded_handle_error_check(handle) < 0)
+    return -1;
+
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return handle->maxattrs;
 }
 
 int 

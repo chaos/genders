@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.15 2004-01-23 02:49:47 achu Exp $
+ *  $Id: genders.h.in,v 1.16 2004-02-04 00:57:58 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -94,6 +94,12 @@ int genders_getnumnodes(genders_t handle);
  * Returns: number of attributes on success, -1 on failure 
  */
 int genders_getnumattrs(genders_t handle);
+
+/* Get the max number of attributes read of any one node in the
+ * genders file
+ * Returns: number of attributes on success, -1 on failure 
+ */
+int genders_getmaxattrs(genders_t handle);
 
 /* Get the max node name length of any one node in the genders file
  * Returns: maximum node length on success, -1 on failure 
