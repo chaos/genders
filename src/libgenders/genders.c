@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.105 2004-04-27 23:23:30 achu Exp $
+ *  $Id: genders.c,v 1.106 2004-04-27 23:24:03 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -923,6 +923,9 @@ genders_compute_indexes(genders_t handle)
 
   if (_compute_node_index(handle) < 0)
     return -1;
+
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return 0;
 }
 
 int 
