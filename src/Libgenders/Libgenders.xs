@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.32 2004-05-04 15:42:27 achu Exp $
+ *  $Id: Libgenders.xs,v 1.33 2004-06-10 00:25:34 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -129,6 +129,22 @@ GENDERS_ERR_OUTMEM (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OUTMEM;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_SYNTAX (sv=&PL_sv_undef)
+    SV *sv    
+    CODE:
+        RETVAL = GENDERS_ERR_SYNTAX;
+    OUTPUT:
+        RETVAL    
+
+int
+GENDERS_ERR_QUERY_INPUT (sv=&PL_sv_undef)
+    SV *sv    
+    CODE:
+        RETVAL = GENDERS_ERR_QUERY_INPUT;
     OUTPUT:
         RETVAL    
 
@@ -504,6 +520,43 @@ genders_index_attrvals(handle, attr)
     char *attr
     CODE:
         RETVAL = genders_index_attrvals(handle, attr);
+    OUTPUT:
+        RETVAL    
+
+AV *
+genders_query(handle, query)
+    genders_t handle
+    char *query
+    PREINIT:
+        int num, ret, temp, i;
+        char **nlist = NULL; 
+    CODE:
+        if ((num = genders_nodelist_create(handle, &nlist)) == -1) 
+            goto handle_error;
+
+        if ((ret = genders_query(handle, query, nlist, num)) == -1)
+            goto handle_error;
+
+        RETVAL = newAV();
+        for (i = 0; i < ret; i++)
+            av_push(RETVAL, newSVpv(nlist[i], 0));
+        
+        if (genders_nodelist_destroy(handle, nlist) == -1)
+            goto handle_error;
+
+        goto the_end;
+
+        handle_error:
+
+            temp = genders_errnum(handle);
+
+            (void)genders_nodelist_destroy(handle, nlist);
+
+            genders_set_errnum(handle, temp);
+
+            XSRETURN_UNDEF;
+
+        the_end:
     OUTPUT:
         RETVAL    
 

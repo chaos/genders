@@ -11,6 +11,11 @@
 	* man/Makefile.am: Added indexing manpages and genders_query manpage.
 
 	* man/genders_query.3: New file.
+
+	* src/Libgenders/Libgenders.pm, src/Libgenders/Libgenders.xs:
+	Added genders_query and new error codes.
+
+	* src/Genders/Genders.pm: Added genders_query.	
 	
 2004-06-08  Albert Chu  <chu11@llnl.gov>
 

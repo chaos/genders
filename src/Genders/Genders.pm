@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm,v 1.14 2004-05-04 16:33:07 achu Exp $
+#  $Id: Genders.pm,v 1.15 2004-06-10 00:25:34 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -304,6 +304,23 @@ sub index_attrvals {
     }
 }
 
+sub query {
+    my $self = shift;
+    my $query = shift;
+    my $nodes;
+
+    if (ref($self)) {
+        $nodes = $self->{$handlekey}->genders_query($query);
+        if (!defined($nodes)) {
+            _errormsg($self, "genders_query()");
+            return ();
+        }
+        return @$nodes;
+    }
+    else {
+        return ();
+    }
+}
 
 1;
 
@@ -340,6 +357,8 @@ Genders - Perl library for querying a genders file
  $obj->index_nodes()
  $obj->index_attrs()
  $obj->index_attrvals($attr)
+
+ $obj->query($query)
 
 =head1 DESCRIPTION
 
@@ -425,6 +444,13 @@ Internally indexes genders attrs for faster search times.
 Internally indexes genders attribute values for faster search times.
 Subsequent calls with a different attribute will overwrite earlier
 indexes.
+
+=item B<$obj-E<gt>query($query)>
+
+Query the genders database based on the union, intersection, or set
+difference between genders attributes and values.  Use plus ('+') for
+union, comma (',') for intersection and minus ('-') for set
+difference.
 
 =back 
 

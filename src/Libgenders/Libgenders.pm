@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.16 2004-05-04 15:42:27 achu Exp $
+#  $Id: Libgenders.pm,v 1.17 2004-06-10 00:25:34 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -63,6 +63,8 @@ Libgenders - Perl extension for libgenders
  Libgenders::GENDERS_ERR_PARAMETERS
  Libgenders::GENDERS_ERR_NULLPTR
  Libgenders::GENDERS_ERR_NOTFOUND
+ Libgenders::GENDERS_ERR_SYNTAX
+ Libgenders::GENDERS_ERR_QUERY_INPUT
  Libgenders::GENDERS_ERR_OUTMEM
  Libgenders::GENDERS_ERR_MAGIC
  Libgenders::GENDERS_ERR_INTERNAL
@@ -95,6 +97,8 @@ Libgenders - Perl extension for libgenders
  $handle->genders_index_nodes()
  $handle->genders_index_attrs()
  $handle->genders_index_attrvals($attr)
+
+ $handle->genders_query($query)
  
  $handle->genders_parse([$filename]);
 
@@ -252,6 +256,16 @@ the genders_getnodes and genders_isattrval functions.  Only one
 attribute can be indexed at a time.  Subsequent calls to this function
 with a different attribute will overwrite earlier indexes.
 
+=item B<$handle-E<gt>genders_query($query)>
+
+Query the genders database based on the union, intersection, or set
+difference between genders attributes and values.  Use plus ('+') for
+union, comma (',') for intersection and minus ('-') for set
+difference.  Operations are performed from left to right.  Parentheses
+may be used to change the order of operations.  For example, the
+following query would retrieve all nodes other than management or
+login nodes: "all-(mgmt+login)".
+
 =item B<$handle-E<gt>genders_parse([$filename])>
 
 Parse a genders file and output parse errors to standard error.  If
@@ -278,6 +292,8 @@ can be accessed through the following functions:
  Libgenders::GENDERS_ERR_NULLPTR
  Libgenders::GENDERS_ERR_NOTFOUND
  Libgenders::GENDERS_ERR_OUTMEM
+ Libgenders::GENDERS_ERR_SYNTAX
+ Libgenders::GENDERS_ERR_QUERY_INPUT
  Libgenders::GENDERS_ERR_MAGIC
  Libgenders::GENDERS_ERR_INTERNAL
  Libgenders::GENDERS_ERR_ERRNUMRANGE
