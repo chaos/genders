@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.15 2003-05-14 23:04:17 achu Exp $
+ *  * $Id: nodeattr.c,v 1.16 2003-05-15 21:41:17 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -280,7 +280,6 @@ static void usage(void)
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-r] attr[=val]\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
-        "or     nodeattr [-f genders] -C [node]\n"
         "or     nodeattr [-f genders] --check\n");
     exit(1);
 }
