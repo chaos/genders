@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.17 2004-06-10 00:25:34 achu Exp $
+#  $Id: Libgenders.pm,v 1.18 2004-06-10 00:33:04 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -64,7 +64,7 @@ Libgenders - Perl extension for libgenders
  Libgenders::GENDERS_ERR_NULLPTR
  Libgenders::GENDERS_ERR_NOTFOUND
  Libgenders::GENDERS_ERR_SYNTAX
- Libgenders::GENDERS_ERR_QUERY_INPUT
+ Libgenders::GENDERS_ERR_QUERYINPUT
  Libgenders::GENDERS_ERR_OUTMEM
  Libgenders::GENDERS_ERR_MAGIC
  Libgenders::GENDERS_ERR_INTERNAL
@@ -293,7 +293,7 @@ can be accessed through the following functions:
  Libgenders::GENDERS_ERR_NOTFOUND
  Libgenders::GENDERS_ERR_OUTMEM
  Libgenders::GENDERS_ERR_SYNTAX
- Libgenders::GENDERS_ERR_QUERY_INPUT
+ Libgenders::GENDERS_ERR_QUERYINPUT
  Libgenders::GENDERS_ERR_MAGIC
  Libgenders::GENDERS_ERR_INTERNAL
  Libgenders::GENDERS_ERR_ERRNUMRANGE
