@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.5 2003-05-07 17:36:49 achu Exp $
+ * $Id: genders.h.in,v 1.6 2003-05-07 19:01:59 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -29,7 +29,7 @@
 #define GENDERS_ERR_INTERNAL     13 /* internal system error */
 #define GENDERS_ERR_ERRNUMRANGE  14 /* error number out of range */
 
-#define DEFAULT_GENDERS_FILE     @GENDERS_DEFAULT_FILE@   
+#define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 
 typedef struct genders *genders_t;
 
