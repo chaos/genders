@@ -94,10 +94,10 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 
 SUBDIRS = \
-	Genders \
-	Libgenders \
-	libgenders \
-	nodeattr 
+        Genders \
+        Libgenders \
+        libgenders \
+        nodeattr 
 
 subdir = src
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs

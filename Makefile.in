@@ -94,9 +94,9 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 
 SUBDIRS = \
-	src \
-	compat \
-	man
+        src \
+        compat \
+        man
 
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
