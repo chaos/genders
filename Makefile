@@ -6,16 +6,11 @@
 PROJECT=	genders
 
 all: inst
-	cd src
-	./configure
-	make
-	cd ..
+	cd src;	./configure; make 
 
 install:
 	install -m 555 -o root -g root inst /usr/local/bin
-	cd src
-	make install
-	cd ..
+	cd src; make install
 
 clean:
 	rm -f inst a.out core *.rpm *.tgz *.a *.o
