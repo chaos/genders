@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.24 2003-04-24 18:52:13 achu Exp $
+ * $Id: genders.c,v 1.25 2003-04-30 19:16:10 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1247,6 +1247,10 @@ int genders_getnodes(genders_t handle,
             handle->errnum = GENDERS_ERR_OVERFLOW;
             return -1;
           }
+          if (nodes[nodecount] == NULL) {
+            handle->errnum = GENDERS_ERR_NULLPTR;
+            return -1;
+          }
           strcpy(nodes[nodecount], node_list->name); 
           nodecount++;
         }
@@ -1304,9 +1308,16 @@ int genders_getattr(genders_t handle,
       handle->errnum = GENDERS_ERR_OVERFLOW;
       return -1;
     }    
-
+    if (attrs[attrcount] == NULL) {
+      handle->errnum = GENDERS_ERR_NULLPTR;
+      return -1;
+    }
     strcpy(attrs[attrcount],attrval_list->name);
     if (vals != NULL && attrval_list->val != NULL) {
+      if (vals[attrcount] == NULL) {
+        handle->errnum = GENDERS_ERR_NULLPTR;
+        return -1;
+      }
       strcpy(vals[attrcount],attrval_list->val);
     }
     attrcount++;
@@ -1336,6 +1347,10 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
   while (attr_list != NULL) {
     if (attrcount >= len) {
       handle->errnum = GENDERS_ERR_OVERFLOW;
+      return -1;
+    }
+    if (attrs[attrcount] == NULL) {
+      handle->errnum = GENDERS_ERR_NULLPTR;
       return -1;
     }
     strcpy(attrs[attrcount],attr_list->name);

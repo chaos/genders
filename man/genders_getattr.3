@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_getattr.3,v 1.3 2003-04-30 00:07:14 achu Exp $
+\."$Id: genders_getattr.3,v 1.4 2003-04-30 19:16:10 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -50,6 +50,9 @@ The list pointed to by \fIattrs\fR or \fIvals\fR is not large enough to store al
 .TP
 .B GENDERS_ERR_PARAMETERS
 An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_NULLPTR
+A null pointer has been found in the list passed in.
 .TP
 .B GENDERS_ERR_NOTFOUND
 The node pointed to by \fInode\fR is not found in the genders file.  
