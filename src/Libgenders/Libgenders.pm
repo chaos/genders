@@ -223,7 +223,7 @@ success, -1 on error.
 =head2 Error Codes/Constants
 
 The same error codes and constants listed in /usr/include/genders.h
-can be accessed through the following: 
+can be accessed through the following functions: 
 
  Libgenders::GENDERS_ERR_SUCCESS
  Libgenders::GENDERS_ERR_NULLHANDLE
