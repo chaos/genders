@@ -2,6 +2,9 @@
 
 	* src/Genders/Genders.pm: Remove automatic exports.
 
+	* src/Libgenders/Libgenders.xs (genders_set_errnum): Added this
+	undocumented function.
+
 2003-08-13  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/MANFIEST: Remove pointless files from file list.
