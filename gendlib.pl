@@ -1,5 +1,5 @@
 #
-# $Id: gendlib.pl,v 1.4.4.1 2003-07-17 23:28:39 achu Exp $
+# $Id: gendlib.pl,v 1.4.4.2 2003-07-17 23:45:13 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -103,7 +103,7 @@ sub init
                             }
                         }
 
-                        if ($allflag == 1) {
+                        if ($allflag == 0) {
                             push @{$attrs{$node}}, "all";
                             push @{$nodes{"all"}}, $node;
                             $allnodesallflag = 1;
