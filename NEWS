@@ -5,13 +5,13 @@ and admins.
 Changes in genders-1.3-1
 ===========================
  -- Added fixes for the following corner cases:
-    - duplicate node names
     - duplicate attributes
+    - whitespace between attributes and inline comments
     - trailing whitespace
-    - inline comments
     - no nodes listed
     - no attributes listed
  -- Improved performance of genders database parsing.
+ -- Added hostlist range node name support
  -- Re-ordered error return code priority within many API functions.
     For example, when an array of length 0 is specified,
     GENDERS_ERR_OVERFLOW may be returned instead of GENDERS_ERR_PARAMETERS.
@@ -37,4 +37,4 @@ Changes in genders-1.2-pre1
     as well as compress back to this same form.
  -- started NEWS file.
 
-$Id: NEWS,v 1.10 2004-01-16 17:14:20 achu Exp $
+$Id: NEWS,v 1.11 2004-01-27 01:07:53 achu Exp $
