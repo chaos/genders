@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.9.4.1.2.4 2004-12-14 18:55:14 achu Exp $
+## $Id: Makefile.am,v 1.9.4.1.2.5 2004-12-14 18:59:06 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -20,21 +20,21 @@ Makefile.pm: Makefile.PL
 	if ! test -a Genders.pm; then \
 		cp $(srcdir)/Genders.pm .; \
 	fi
-#	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-#	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITEARCH=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITEARCH
+#	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
+#	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITELIB=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITELIB
 	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm 
 
 install: Makefile.pm
-	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(MAKE) INSTALLSITEARCH=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITEARCH -f Makefile.pm pure_install
+	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
+	$(MAKE) INSTALLSITELIB=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITELIB -f Makefile.pm pure_install
 
 pure_install: Makefile.pm
-	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(MAKE) INSTALLSITEARCH=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITEARCH -f Makefile.pm pure_install
+	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
+	$(MAKE) INSTALLSITELIB=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITELIB -f Makefile.pm pure_install
 
 install-data-local:
-	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(MAKE) INSTALLSITEARCH=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITEARCH -f Makefile.pm pure_install
+	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
+	$(MAKE) INSTALLSITELIB=$(PERL_INSTALL_PREFIX)/$$TEMPINSTALLSITELIB -f Makefile.pm pure_install
 
 clean:
 	if test -a Makefile.pm; then $(MAKE) -f Makefile.pm clean; fi
