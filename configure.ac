@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.2 2003-04-19 00:16:44 achu Exp $
+## $Id: configure.ac,v 1.3 2003-04-22 17:35:00 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -20,7 +20,7 @@ AM_MAINTAINER_MODE
 
 AC_MSG_CHECKING(for --with-genders-file )
 AC_ARG_WITH(genders-file,
-    AC_HELP_STRING([--with-genders-file], [define default genders file]),
+    AC_HELP_STRING([--with-genders-file=file], [define default genders file]),
     [ case "$withval" in
     yes)
         withgendersfile=yes
@@ -29,11 +29,14 @@ AC_ARG_WITH(genders-file,
         ;;
     *)
         withgendersfile=yes
-        GENDERS_DEFAULT_FILE=$withval
+        GENDERS_DEFAULT_FILE="\"$withval\""
         ;;
     esac ]
 )
 AC_MSG_RESULT(${withgendersfile=no})
+if test -z "$GENDERS_DEFAULT_FILE"; then
+   GENDERS_DEFAULT_FILE="\"/etc/genders\""
+fi
 AC_SUBST(GENDERS_DEFAULT_FILE)
 
 ##

@@ -16,6 +16,7 @@
 	* manpages fixed to reflect changes
 	* directory structure of entire genders package cleaned up
 	* split off dist and gendlib.pl into two RPM sub packages
+	* tagged genders-1-1-9
 		
 2003-04-14 Albert chu <chu11@llnl.gov>
         * fixed string_constant() function in Libgenders(3) to
