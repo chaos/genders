@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.1 2003-04-18 22:37:12 achu Exp $
+#  $Id: gendlib.pl,v 1.2 2003-04-23 21:48:17 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -215,17 +215,19 @@ sub getattr
     
     my $node = (@_) ? shift(@_) : $hname;
     
-    my ($attrs, $vals);
+    my ($attrs, $temp);
         
-    ($attrs, $vals) = @(Libgenders::genders_getattr($handle, $node));
-    if (@$attr == 0 &&
+    $temp = Libgenders::genders_getattr($handle, $node);
+    
+    if (@$temp == 0 &&
         Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
 
         $debug && print "Error, genders_getattr()\n";
         return ();
     }
     else {
-        return @$attr;
+        ($attrs) = @$temp;
+        return @$attrs;
     }
 }
 
