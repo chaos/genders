@@ -59,7 +59,7 @@ install man/dist/dist_cmp.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
-cd man/dist/; gzip *.3; cd ../..
+cd man/llnl/; gzip *.3; cd ../..
 install man/llnl/genders_getaltnodes.3 $RPM_BUILD_ROOT/usr/man/man3
 install man/llnl/genders_isaltnode.3 $RPM_BUILD_ROOT/usr/man/man3
 install man/llnl/genders_altnodelist.3 $RPM_BUILD_ROOT/usr/man/man3
