@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.8 2003-05-14 00:08:51 achu Exp $
+## $Id: configure.ac,v 1.9 2003-05-14 22:27:32 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -84,6 +84,28 @@ if test -z "$GENDERS_PM_PREFIX"; then
 fi
 AC_SUBST(GENDERS_PM_PREFIX)
 
+# compat install location
+AC_MSG_CHECKING(for --with-compat-installdir )
+AC_ARG_WITH(compat-installdir,
+    AC_HELP_STRING([--with-compat-installdir=path], [define compat subpackage install dir]),
+    [ case "$withval" in
+    yes)
+        withcompatinstalldir=yes
+        ;;
+    no)
+        ;;
+    *)
+        withcompatinstalldir=yes
+        COMPAT_INSTALLDIR="\"$withval\""
+        ;;
+    esac ]
+)
+AC_MSG_RESULT(${withcompatinstalldir=no})
+if test -z "$COMPAT_INSTALLDIR"; then
+   COMPAT_INSTALLDIR="/usr/lib/genders"
+fi
+AC_SUBST(COMPAT_INSTALLDIR)
+
 ##
 # Checks for programs.
 ##
@@ -136,6 +158,7 @@ AC_CONFIG_FILES( \
   src/libgenders/genders.h \
   src/Libgenders/Makefile \
   src/Genders/Makefile \
+  compat/Makefile \
   dist/Makefile \
   man/Makefile \
   man/dist/Makefile \
