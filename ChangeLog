@@ -1,3 +1,9 @@
+2004-02-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Variety of fixes.
+
+	* tagged genders-1-3-0-pre3
+
 2004-02-01  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c: Globally added support for %n
