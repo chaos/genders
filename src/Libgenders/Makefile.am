@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.7 2003-11-03 17:54:34 achu Exp $
+## $Id: Makefile.am,v 1.8 2003-11-03 17:57:46 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -12,7 +12,7 @@ PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 all: Makefile.xs
 	$(MAKE) -f Makefile.xs
 
-Makefile.xs: Libgenders.xs Libgenders.pm
+Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	cp ../libgenders/genders.c .
 	cp ../libgenders/genders.h .
 	cp ../libgenders/list.c .
