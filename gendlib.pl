@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.6 2003-03-31 19:37:31 achu Exp $
+#  $Id: gendlib.pl,v 1.7 2003-03-31 22:28:47 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -271,66 +271,18 @@ sub get_node_hash
 #	$rv (RETURN)	0 on failure opening attributes, 1 on success
 sub init_clusters
 {
-	if (@_) {
-		$path_clusters = shift(@_);
-	}
-
-	$init_clusters_called = 1;
-	$debug && print("init_clusters called\n");
-
-	my ($cluster, $cl, $blob, $found, $node, @dummies);
-
-	# initialize hostname
-	if (!$init_hname_called) {
-		init_hname();
-	}
-
-	#
-	# Read clusters file.  Set:
-	#   $cluster - name of "this" cluster (null if not on a listed machine)
-	#   @dummies - list of other clusters
-	#
-	$cluster = "";
-	@dummies = ();
-	if (open(CLUST, $path_clusters)) {
-		while (<CLUST>) {
-			chomp;		# delete trailing newline, if any
-			s/\#.*$//;	# strip comments
-			next if (/^\s*$/);    # skip blank lines
-			($cl, $blob) = split; # whitespace betw clust and list
-			$found = "";	# find this hostname in list?
-			foreach $node (split /,/, $blob) {
-				if ($node eq $hname) {
-					$found = $cl;
-				}
-			}
-			if (!$found) {
-				push @dummies, $cl;
-			} else {
-				$cluster = $found;
-			}
-		}
-		close(CLUST);
-
-		# first item is this cluster, or empty string
-		# remaining items are other clusters
-		push (@clusters, $cluster);	
-		foreach $cl (@dummies) {
-			push(@clusters, $cl);
-		}
-		return(1);
-	} else {
-		return(0);
-	}
+        # clusters file now removed, just return 1
+        return(1);
 }
 
 # get a copy of the list of clusters
+#       $rv (RETURN)    "" on failure (from getattrval()), cluster name on success
 sub get_clusters
 {
-	if (!$init_clusters_called) {
-		init_clusters();
+        if (!@init_called) {
+ 	        init();
 	}
-	return @clusters;
+	return (getattrval("cluster"));
 }
 
 
