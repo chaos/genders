@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.19 2003-07-02 17:56:23 achu Exp $
+## $Id: configure.ac,v 1.20 2003-09-11 15:18:51 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -146,6 +146,7 @@ AC_CHECK_FUNCS( \
 # Epilogue.
 ##
 AC_CONFIG_FILES( \
+  genders.spec \
   Makefile \
   src/Makefile \
   src/libgenders/Makefile \
