@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.66 2003-11-03 19:29:27 achu Exp $
+ * $Id: genders.c,v 1.67 2003-11-03 20:01:43 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -302,7 +302,7 @@ static int _readline(genders_t handle, int fd, char *buf, int buflen) {
  */
 static int _parse_line(genders_t handle, char *line, 
                        int line_num, FILE *stream) {
-  char *linebuf, *temp, *line_token = NULL;
+  char *linebuf, *temp, *attr, *node;
   int attrcount = 0;
   List attrvals = NULL;
 
@@ -328,9 +328,9 @@ static int _parse_line(genders_t handle, char *line,
     return 0;
 
   /* get node name */
-  if ((line_token = strsep(&line, " \t\0")) != NULL) { 
+  if ((node = strsep(&line, " \t\0")) != NULL) { 
 
-    if (strlen(line_token) > MAXHOSTNAMELEN) {
+    if (strlen(node) > MAXHOSTNAMELEN) {
       if (line_num > 0) {
         fprintf(stream, "Line %d: hostname too long\n", line_num);
         return 1;
@@ -340,10 +340,10 @@ static int _parse_line(genders_t handle, char *line,
     }
       
     if (line_num == 0) {
-      if (!(attrvals = _insert_node(handle, line_token)))
+      if (!(attrvals = _insert_node(handle, node)))
         return -1;
       
-      handle->maxnodelen = MAX(strlen(line_token), handle->maxnodelen);
+      handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
       handle->numnodes++;
     }
       
@@ -373,21 +373,14 @@ static int _parse_line(genders_t handle, char *line,
     return 0;
 
   /* parse attributes */
-  line_token = strtok_r(line,",\0",&linebuf);
-  while (line_token != NULL) {
-    char *attrbuf = NULL;
-    char *attr = NULL;
+  attr = strtok_r(line,",\0",&linebuf);
+  while (attr != NULL) {
     char *val = NULL;
     int is_new_attr;
 
     /* parse value out of attribute */
-    if (strchr(line_token,'=') == NULL) {
-      attr = line_token;
-      val = NULL;
-    } else {
-      attr = strtok_r(line_token,"=",&attrbuf);
-      val = strtok_r(NULL,"\0",&attrbuf);
-    }
+    if ((val = strchr(attr,'=')) != NULL)
+      *val++ = '\0'; 
 
     if (_insert_attrval(handle, attrvals, attr, val) < 0)
       return -1;
@@ -402,7 +395,7 @@ static int _parse_line(genders_t handle, char *line,
     if (val)
       handle->maxvallen = MAX(strlen(val), handle->maxvallen);
 
-    line_token = strtok_r(NULL,",\0",&linebuf);
+    attr = strtok_r(NULL,",\0",&linebuf);
   }
 
   handle->maxattrs = MAX(attrcount, handle->maxattrs);
