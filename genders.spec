@@ -28,7 +28,6 @@ install gendlib.pl $RPM_BUILD_ROOT/usr/lib/genders
 install hostlist.pl $RPM_BUILD_ROOT/usr/lib/genders
 install -s inst $RPM_BUILD_ROOT/usr/bin
 install dist2 $RPM_BUILD_ROOT/usr/bin
-install nodeattr $RPM_BUILD_ROOT/usr/bin
 install dist_all $RPM_BUILD_ROOT/usr/bin
 install dist_local $RPM_BUILD_ROOT/usr/bin
 install dist_cmp $RPM_BUILD_ROOT/usr/bin
