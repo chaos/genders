@@ -60,8 +60,13 @@ genders-0.2-2
 Tue Apr 23 09:01:03 PDT 2002
 	Updated to Chris's latest RPM rules.
 
-	Removed updatefstab and updateservice scripts.
+	Removed updatefstab and updateservice scripts per Robin's request.
 
 	Added TUTORIAL.
 
-	Tagged genders-0-2-3chaos.
+	Tagged genders-0-2-3chaos (sent to Rand at lanl)
+
+Wed Apr 24 09:33:33 PDT 2002
+	Minor TUTORIAL cleanup.
+
+	Remove updatefstab/updateservice from spec file.

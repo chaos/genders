@@ -12,6 +12,6 @@ install:
 	install -m 555 -o root -g root inst /usr/local/bin
 
 clean:
-	rm -f inst a.out core *.rpm *.tgz
+	rm -f inst a.out core *.rpm *.tgz *.a *.o
 
 include Make-rpm.mk

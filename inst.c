@@ -1,8 +1,8 @@
 /*
- * $Id: inst.c,v 1.2 2001-07-14 05:36:52 garlick Exp $
+ * $Id: inst.c,v 1.3 2002-05-07 12:39:00 garlick Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/inst.c,v $
  *
- * Copyright (C) 2000-2001 Regents of the University of California
+ * Copyright (C) 2000-2002 Regents of the University of California
  * See the DISCLAIMER file distributed with this package.
  *
  * install program with the following features

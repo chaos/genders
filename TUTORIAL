@@ -10,35 +10,35 @@
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "MPP Cluster Tools" software package,
-approved by LLNL for public release. Please see the DISCLAIMER file
+approved by LLNL for public release.  Please see the DISCLAIMER file
 distributed with the package for restrictions.
   ------------------------------------------------------------------------
 
 Introduction
 
 Genders is a simple concept that has been extended to address configuration
-management issues that arise on MPP clusters[1]. The basic concept is that a
+management issues that arise on MPP clusters[1].  The basic concept is that a
 genders file containing a list of node names and their attributes is
-replicated on each node in a cluster. By representing the configuration of
+replicated on each node in a cluster.  By representing the configuration of
 an MPP in this file, scripts and rdist Distfiles that might otherwise
 contain hard-coded node lists, can be generalized to work with different
 configurations of the same cluster, and even with multiple clusters.
 
 The framework has proven to be useful on clusters ranging in size from the
 ASCI Blue-Pacific SST system at 1464 nodes, to collections of two or three
-workstations. The discussion that follows describes how genders is used at
+workstations.  The discussion that follows describes how genders is used at
 Lawrence Livermore National Laboratory and is intended to be read by system
-administrators who need work with an existing genders setup or who need to
+administrators who need to work with an existing genders setup or who need to
 bring up genders from scratch.
 
 Basic Operation
 
 This section describes the formats of the genders and clusters files, and
-the nodeattr command. The genders file, briefly described in the
+the nodeattr command.  The genders file, briefly described in the
 introduction, contains a list of node names, and for each node, a list of
-attributes. The clusters file contains a list of cluster names, and for each
-cluster, a list of node names. Both files typically can be found in
-/admin/etc.
+attributes.  The clusters file contains a list of cluster names, and for each
+cluster, a list of node names.  Both files typically can be found in /etc 
+(on Linux when installed from the genders RPM) or /admin/etc (on other systems).
 
 Genders Format
 
@@ -47,20 +47,16 @@ Each line of the genders file has the following format:
      nodename attr[=value],attr[=value],attr[=value],...
 
 The nodename is the shortened[2] hostname of a node and must be unique in
-the genders file. This is followed by any number of spaces or tabs, and then
+the genders file.  This is followed by any number of spaces or tabs, and then
 the comma-separated list of attributes, each of which can optionally have a
-value. There must be no spaces embedded in the attribute list and there is
-no provision for continuation lines. Commas and equal characters are special
-cannot appear in attribute names or their values. Comments are prefixed with
-the hash chracter (#) and can appear anywhere in the file. The active
-genders file is typically found at /admin/etc/genders.
+value.  There must be no spaces embedded in the attribute list and there is
+no provision for continuation lines.  Commas and equal characters are special
+and cannot appear in attribute names or their values.  Comments are prefixed 
+with the hash chracter (#) and can appear anywhere in the file.  The active
+genders file is typically found at /etc/genders or /admin/etc/genders.
 
 Here is a rather undeveloped genders file from a small 8-node linux cluster:
 
-     #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
-     # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
-     #
      slc0 elanid=8,passwdhost,nqsmgr
      slc1 elanid=9,nqscompute
      slc2 elanid=10,nqscompute
@@ -71,7 +67,7 @@ Here is a rather undeveloped genders file from a small 8-node linux cluster:
      slc7 elanid=15,nqscompute
 
 In addition to the attributes listed in the file, a special attribute called
-all is implicitly defined.
+``all'' is implicitly assigned to every node.
 
 Clusters Format
 
@@ -81,20 +77,16 @@ Each line has the following format:
      clustername node,node,node,...
 
 The cluster name should be unique in the file, and the node names should
-match the ones appearing in genders files. There should be no whatspace
+match the ones appearing in genders files.  There should be no whitespace
 embedded in the node list, and there is no provision for continuation lines.
 Comments are prefixed with the hash chracter (#) and can appear anywhere in
-the file. The active clusters file is typically found at
+the file.  The active clusters file is typically found at /etc/clusters or
 /admin/etc/clusters.
 
 Here is the clusters file that includes the same 8-node linux cluster
-referenced above. The file includes one other small linux cluster and two
+referenced above.  The file includes one other small linux cluster and two
 collections of independent workstations:
 
-     #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
-     # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
-     #
      slc slc0,slc1,slc2,slc3,slc4,slc5,slc6,slc7
      auk auk0,auk1,auk2,auk3,auk4,auk5,auk6,auk7,auk8
      intel deuterium,tritium,spork
@@ -102,9 +94,9 @@ collections of independent workstations:
 
 Nodeattr Usage
 
-A script called nodeattr is used to query data in the genders file. Because
+A script called nodeattr is used to query data in the genders file.  Because
 the genders file is replicated on all nodes in a cluster, this query is a
-local operation, not dependent on the network. Nodeattr is invoked as
+local operation, not dependent on the network.  Nodeattr is invoked as
 follows:
 
      nodeattr [-f genders] [-c | -n | -s] attr
@@ -121,8 +113,8 @@ separated, and -s tries to shorten the list for humans to read (but only
 works if node names use embedded numbers).
 
 If none of the formatting options are specified, nodeattr returns a zero
-value if the local node has the specified attribute, else nonzero. The -v
-option causes any value associated with the attribute to go to stdout. If a
+value if the local node has the specified attribute, else nonzero.  The -v
+option causes any value associated with the attribute to go to stdout.  If a
 node name is specified before the attribute, it is queried instead of the
 local node.
 
@@ -133,15 +125,14 @@ Finally, the -C option prints the name of the local node's cluster (by
 looking the node name up in the clusters file).
 
 Nodeattr and other scripts related to genders can usually be found in
-/admin/scripts.
+/usr/bin (Linux RPM) or /admin/scripts (other systems).
 
 Example: Rc Script
 
-Rc scripts typically need to start different services on different nodes of
-an MPP depending on their function. One could employ genders to accomplish
-the goals of maintaining only one rc script for the MPP, and of avoiding
-modification when nodes are reconfigured (only the genders file would
-change). For example, an rc script might include:
+The nodeattr command can enable a single script to behave differently
+depending on the role or gender of the node it is executing on, simplifying
+configuration management of the MPP.  For example, all nodes in an MPP
+could have the same rc.local file:
 
      #!/bin/sh
      if nodeattr raid; then
@@ -150,16 +141,19 @@ change). For example, an rc script might include:
      if nodeattr login;
              then sshd
      fi
+     ...
 
-If the node has raid in its attribute list, it would execute
-initialize_raid; if it had login in its attribute list, it would start the
-secure shell daemon. This technique is simpler and less prone to failure
+If the node has "raid" in its attribute list, it would execute
+initialize_raid; if it had "login" in its attribute list, it would start the
+secure shell daemon.  This technique is simpler and less prone to failure
 than adding code to test for "clues" to a nodes function, such as the
 existence of a RAID device in /dev or a different set of installed products
-on a login node.
+on a login node.  Further, changing the role of a node does not require
+a laborious audit of scripts; one simply changes the genders file and
+all genders-enabled scripts change their behavior.
 
 Attribute values might be used to store node configuration information such
-as a node's default IP route. For example, the node may have an attribute:
+as a node's default IP route.  For example, the node may have an attribute:
 
      iprouter=big-rtr.llnl.gov
 
@@ -170,16 +164,16 @@ and rc script could extract this value and pass it to the route command:
 Example: Host Lists
 
 Host lists are commonly needed on MPP's to set up parallel jobs or to run
-system administration commands on particular sets of nodes. In the following
+system administration commands on particular sets of nodes.  In the following
 example, nodeattr generates a newline-separated list of nodes with the login
 attribute to pass to the fping parallel ping command:
 
      fping `nodeattr -c login`
 
 Batch system configurations typically need lists of nodes that belong to
-batch queues. These might be generated by assigning nodes belonging to a
+batch queues.  These might be generated by assigning nodes belonging to a
 particular queue an attribute in the genders file and then using nodeattr to
-generate the batch configuration. For example, an NQS manager host might get
+generate the batch configuration.  For example, an NQS manager host might get
 its configuration as follows, assuming the nqsmgr and nqscompute attributes
 are appropriately assigned in the genders file:
 
@@ -238,9 +232,9 @@ Perl Programming with Genders
 
 On systems with large genders files, repeated calls to nodeattr, which reads
 and parses the entire genders file on each invocation, cause unnecessary
-file I/O. In this case, and also when host lists are to be manipulated in
+file I/O.  In this case, and also when host lists are to be manipulated in
 ways beyond the capabilities of the shell, it may be desirable to use the
-Perl API for genders. This interface permits the programmer to have the
+Perl API for genders.  This interface permits the programmer to have the
 genders file read once and the parsed data reused from call to call.
 
 It should be noted that the nodeattr command is just a perl wrapper around
@@ -261,31 +255,31 @@ Genders::init([$path_genders]);
 
      The genders file will be read on the first call; however, the
      default genders file path can be overridden by calling the
-     initialization function manually with a path argument. With no
+     initialization function manually with a path argument.  With no
      argument, the default path of /admin/etc/genders is used.
 
 Simple Queries
 
 Genders::hasattr($attribute, [$node])
 
-     Return 1 if node has attribute, 0 if not. If node is not
+     Return 1 if node has attribute, 0 if not.  If node is not
      specified, use local node.
 
 Genders::getattrval($attribute, [$node])
 
      Return value of attribute held by node, or empty string if no
-     value or node does not have attribute. If node is not specified,
+     value or node does not have attribute.  If node is not specified,
      use local node.
 
 Genders::getnode($attribute)
 
-     Return a list of nodes having the specified attribute. If a value
+     Return a list of nodes having the specified attribute.  If a value
      is also specified ("attr=val"), only nodes with the specified
      attribute and value are returned.
 
 Genders::getattr([$node])
 
-     Return a list of attributes held by node. If node is not
+     Return a list of attributes held by node.  If node is not
      specified, use local node.
 
 More Complex Queries
@@ -298,33 +292,33 @@ Genders::getallattr()
 Genders::getnodehash(\%node)
 
      Get a copy of hash of attributes to node lists for the current
-     cluster (a "hash of lists"). Ensure that keys exist for all
+     cluster (a "hash of lists").  Ensure that keys exist for all
      possible attributes across clusters (though they may point to
      empty lists).
 
 Genders::get_clusters
 
-     Return a copy of the list of clusters (from clusters file). First
+     Return a copy of the list of clusters (from clusters file).  First
      element of list is the local cluster name or a null if unknown.
 
 Genders::gendexp($exp, [$node])
 
      Evaluate expression involving genders attributes and return the
-     result of the evaluation. Any legal perl expresion using numeric
+     result of the evaluation.  Any legal perl expresion using numeric
      constants, genders attributes (which are converted into
      $variables), and the following operators is valid: !, ||, &&, *,
-     +, -, /. If $node is not specified, assume the local host.
+     +, -, /.  If $node is not specified, assume the local host.
 
 Example: nqs_mknmap
 
 The following script uses Genders::getnode("all") to get a list of all nodes
 in the cluster (as previously described, "all" is implicitly defined for
-every node in the genders file). It then adds them to the NMAP database used
+every node in the genders file).  It then adds them to the NMAP database used
 by NQS:
 
      #!/admin/bin/perl
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      require "/admin/lib/gendlib.pl";
@@ -360,69 +354,69 @@ by NQS:
 
 Genders and Rdist
 
-Rdist is a utility designed to install files on remote nodes. It takes as
+Rdist is a utility designed to install files on remote nodes.  It takes as
 input a Distfile which describes how and where files are to be installed.
 Rdist has been enhanced with some wrapper scripts to allow the lists of
-target nodes to come from genders. The wrapper scripts scan the Distfile for
+target nodes to come from genders.  The wrapper scripts scan the Distfile for
 references to specially formatted variables in which an attribute name has
-been embeded. The special formats are:
+been embeded.  The special formats are:
 
      ${attr_xyz}
      ${cluster!attr_xyz}
 
 When the first type of variable is encountered, a variable definition is
 created and set equal to the list of nodes that have the attribute xyz, or
-an empty list if no nodes have the attribute. The second form is identical
-to the first if cluster is the name of the local cluster. If not, the
+an empty list if no nodes have the attribute.  The second form is identical
+to the first if cluster is the name of the local cluster.  If not, the
 definition is an empty list.
 
 The rdist wrapper, dist2 (described below), supports the concept of an rdist
-repository. The repository is a collection of Distfiles and files to be
-rdisted. The repository is typically NFS-mounted on /var/dist, on multiple
-clusters, all nodes. For small clusters, dist2 can be run on one node, and
-by default it will update all nodes in the cluster. For larger clusters like
+repository.  The repository is a collection of Distfiles and files to be
+rdisted.  The repository is typically NFS-mounted on /var/dist, on multiple
+clusters, all nodes.  For small clusters, dist2 can be run on one node, and
+by default it will update all nodes in the cluster.  For larger clusters like
 ASCI Blue-Pacific, dist2 -l is run in parallel on all the target nodes for
-performance reasons. The -l option causes any non-local node targets to be
+performance reasons.  The -l option causes any non-local node targets to be
 removed from the lists.
 
 The repository abstracts collections of files and their Distfile as a
-package. The Distfile for a package will be installed at the top level of
-the repository with the name Distfile.packagename. All files are installed
-in a corresponding subdirectory called packagename. Packages are further
+package.  The Distfile for a package will be installed at the top level of
+the repository with the name Distfile.packagename.  All files are installed
+in a corresponding subdirectory called packagename.  Packages are further
 broken down into filesets, which are groups of Distfile rules tagged with a
-label matching the fileset name. Dist2 accepts the argument
+label matching the fileset name.  Dist2 accepts the argument
 [package[.fileset]] so subsets of files can be distributed if desired.
 
 Dist2 Usage
 
 Dist2 can be invoked with the following options:
 
-     dist2 [-v [-n]] [-w node1,node2,node3,... | -g attr | -l] [package[.fileset]] ...
+     dist2 [-v [-n]] [-w node1,node2,node3,...  | -g attr | -l] [package[.fileset]] ...
      dist_local
      dist_all [-w node1,node2,node3,...] [package[.fileset]] ...
      dist_all -l
 
-The -v option is for debugging Distfiles. If rdist encounters an error in
+The -v option is for debugging Distfiles.  If rdist encounters an error in
 the preprocessed Distfile, it will issue an error with the offending line
-number. The -v option will cause dist2 to dump the preprocessed Distfile to
-stdout. If -n is also specified, the lines will be numbered.
+number.  The -v option will cause dist2 to dump the preprocessed Distfile to
+stdout.  If -n is also specified, the lines will be numbered.
 
 It is possible to limit the nodes being updated to a subset of the nodes
 appering in genders by listing the target nodes after the -w option.
 Similarly, -g can be used to limit nodes to those having the specified
 attribute, or -l targets only the local node.
 
-If no package is specified, dist2 updates all nodes in the cluster. Package
+If no package is specified, dist2 updates all nodes in the cluster.  Package
 names, when specified, limit updates to only the files in the specified
-packages' Distfiles. The set of files can be further limited by appending a
-.fileset to the package name. Fileset names correspond to labels in the
+packages' Distfiles.  The set of files can be further limited by appending a
+.fileset to the package name.  Fileset names correspond to labels in the
 package Distfile.
 
 Two wrapper scripts exist, primarily for backwards compatibility with older
-versions of genders. dist_local just runs dist2 -l. dist_all runs dist2 -l
+versions of genders.  dist_local just runs dist2 -l.  dist_all runs dist2 -l
 on all nodes in parallel (32 at a time) using the pdsh parallel shell
-command. The -w and package[.fileset] options function as described for
-dist2. The -l option just lists the available packages on stdout.
+command.  The -w and package[.fileset] options function as described for
+dist2.  The -l option just lists the available packages on stdout.
 
 Example: Misc Package
 
@@ -433,9 +427,9 @@ Files in the top level of the repository look like this:
      Distfile.admin    Distfile.misc  VAR_DIST_IS_MOUNTED  bootstrap*  misc/
      Distfile.genders  Distfile.nqs   admin/               genders/    nqs/
 
-Of interest to us are the misc subdirectory and the file Distfile.misc. The
+Of interest to us are the misc subdirectory and the file Distfile.misc.  The
 misc subdirectory contains a mixture of source and binary files which are
-referenced in Distfile.misc. They have been installed in /var/dist/misc with
+referenced in Distfile.misc.  They have been installed in /var/dist/misc with
 the same permissions they will have at their final installed destination.
 
      slc0 # ls -F /var/dist/misc
@@ -459,7 +453,7 @@ the same permissions they will have at their final installed destination.
 Distfile.misc contains the following:
 
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
 
@@ -582,43 +576,43 @@ Distfile.misc contains the following:
              special "if [ -x /admin/scripts/updateservices ]; then /admin/scripts/updateservices; else rm /etc/services.add; fi";
 
 This repository is NFS mounted on four clusters: slc, auk, intel, and
-alphadesk. First look at the miscetc: label. The associated rule sends the
+alphadesk.  First look at the miscetc: label.  The associated rule sends the
 files in the ${MISCETC} list to the /etc directory on all nodes, all
-clusters. Put another way, the dist2 will send those files to all nodes in
+clusters.  Put another way, the dist2 will send those files to all nodes in
 the local cluster no matter what cluster it executes on.
 
-Next look at the inittab: rules. There are two versions of inittab going to
-two different sets of nodes in the auk cluster. The first is for nodes with
+Next look at the inittab: rules.  There are two versions of inittab going to
+two different sets of nodes in the auk cluster.  The first is for nodes with
 the cancon attribute (it runs a getty on the can console device) and has the
-regular console tty commented out). The other is for nodes that have a can
+regular console tty commented out).  The other is for nodes that have a can
 device, but do not use it for a console (it runs a getty on the can console
-device, but leaves the other console gettys running). All of these rules
-have variables prefixed with the auk cluster name. On other clusters, the
+device, but leaves the other console gettys running).  All of these rules
+have variables prefixed with the auk cluster name.  On other clusters, the
 rules do nothing because the list of target hosts will be empty.
 
-Now refer to the pam: rules. PAM is to be updated on all clusters.
+Now refer to the pam: rules.  PAM is to be updated on all clusters.
 Configuration data is the same, but the shared library is different for the
-different architectures. Thus on any cluster, /etc/pam.d/rlogin and
-/etc/pam.d/login will be updated from the same source file. In contrast,
+different architectures.  Thus on any cluster, /etc/pam.d/rlogin and
+/etc/pam.d/login will be updated from the same source file.  In contrast,
 /lib/security/pam_krb5.so is installed from a different source file
 depending on the architecture of the cluster (sparc, intel, or alpha).
 
-Finally, see the fstab: and services: rules. These rules are interesting
+Finally, see the fstab: and services: rules.  These rules are interesting
 because they address a common problem with using rdist to update system
-files. The /etc/fstab contains filesystem entries that are local to a node,
-and a set of NFS mounts that are common across a cluster. To avoid having
+files.  The /etc/fstab contains filesystem entries that are local to a node,
+and a set of NFS mounts that are common across a cluster.  To avoid having
 rdist deal with local filesystem entries (dangerous!), only the NFS entries
-are sent out in a file called /etc/fstab.net. The special directive tells
-rdist to run the updatefstab script whenever /etc/fstab.net is updated. This
+are sent out in a file called /etc/fstab.net.  The special directive tells
+rdist to run the updatefstab script whenever /etc/fstab.net is updated.  This
 script reads both local and NFS fstab files, merges them, and writes the
-result on /etc/fstab. Similarly, the services: rule sends out
+result on /etc/fstab.  Similarly, the services: rule sends out
 /etc/services.add and runs updateservices to merge this with /etc/services.
 
 Example: Genders Package
 
 The genders and clusters files are excellent candidates for sending out with
 dist2, but there is a possible race condition since the genders and clusters
-files are used by dist2. You need to be aware that, to get around this,
+files are used by dist2.  You need to be aware that, to get around this,
 dist2 reads the genders file directly from the repository at hard coded
 paths in a package called genders, as shown below:
 
@@ -635,7 +629,7 @@ be called genders.clustername:
 The Distfile.genders then contains:
 
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      genders: genders/genders.auk -> ${auk!attr_all}
@@ -655,12 +649,12 @@ Rdisting Password Files
 One scheme used for rdisting password files on a cluster is to designate one
 node as the master where people are to change their passwords, and then use
 the actual files on this node as the source for updating the rest of the
-cluster. Since the source files are outside of the normal repository, a
+cluster.  Since the source files are outside of the normal repository, a
 separate script called dist_passwd is used to propagate these files:
 
      #!/bin/sh
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      PATH=/admin/scripts:$PATH
@@ -672,11 +666,11 @@ separate script called dist_passwd is used to propagate these files:
      fi
 
 The nodeattr test requires that this script run on the node with the
-passwdhost attribute (the node where the source files reside). The
+passwdhost attribute (the node where the source files reside).  The
 /admin/etc/Distfile.passwd file contains:
 
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      ETCFILES = ( /etc/passwd /etc/shadow /etc/group )
@@ -684,23 +678,23 @@ passwdhost attribute (the node where the source files reside). The
              install -osavetargets /etc;
 
 Note that there is no locking to prevent races when updating the password
-files. On large clusters, it is advisable to implement some locking on the
+files.  On large clusters, it is advisable to implement some locking on the
 password host to prevent multiple dist_passwd's from running simultaneously.
 A further precaution is to have rdist update safe targets like
 /etc/passwd.new on the nodes, and then run a local script to update the live
-files. The script would do local locking and make sanity checks on the
+files.  The script would do local locking and make sanity checks on the
 contents of the file (is there a root entry?)
 
 Bootstrapping Rdist on a New Node
 
 When a new node is brought online that has never been under rdist control,
 it is necessary to run a few manual tasks to make it possible to run the
-first dist_local. Assuming the repository has been mounted on /var/dist, the
+first dist_local.  Assuming the repository has been mounted on /var/dist, the
 following script (written for linux) takes care of installing the minimum
 set of files onto the node:
 
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      if [ $# -ne 1 ]; then
@@ -725,26 +719,26 @@ Bootstrapping Rdist on a New Cluster
 
 To bring up a new cluster, the following tasks must be completed:
 
-  1. If not already done, set up the rdist repository in /var/dist. It
+  1.  If not already done, set up the rdist repository in /var/dist.  It
      should minimally contain an empty file called VAR_DIST_IS_MOUNTED, the
      genders package, and the admin package (containing at least the files
-     needed by the node bootstrap script above). The repository need only be
+     needed by the node bootstrap script above).  The repository need only be
      mounted on one node at first.
-  2. The genders package should contain a clusters file with an entry for
-     the new cluster, and a genders file for the cluster. These should be
-     named clusters and genders.clustername. Refer to the Genders Format and
+  2.  The genders package should contain a clusters file with an entry for
+     the new cluster, and a genders file for the cluster.  These should be
+     named clusters and genders.clustername.  Refer to the Genders Format and
      Clusters Format sections.
-  3. Make sure root's .rhosts file permits root on the node where the
-     repository is mounted to rsh. (Alternatively, on SP's you may want to
-     modify dist2 to force rdist to use the kerberized rsh). Rdist should
+  3.  Make sure root's .rhosts file permits root on the node where the
+     repository is mounted to rsh.  (Alternatively, on SP's you may want to
+     modify dist2 to force rdist to use the kerberized rsh).  Rdist should
      already be installed on all the nodes.
-  4. Run the bootstrap script and dist2 -l on the repository node.
-  5. Run dist2 on the respository node to update the other nodes.
+  4.  Run the bootstrap script and dist2 -l on the repository node.
+  5.  Run dist2 on the respository node to update the other nodes.
 
 Change Control
 
 The files stored in the rdist repository should be installed with the same
-permissions they will have at their final destinations. Because of this
+permissions they will have at their final destinations.  Because of this
 requirement, it is advisable to keep files that will undergo change in a
 separate directory with a Makefile that installs the file in the rdist
 repository with the correct permissions.
@@ -754,11 +748,11 @@ control on these files, especially if multiple sys admins may be modifying
 them as RCS/SCCS introduces locking and accountability.
 
 The following is a Makefile that installs the linux genders files into the
-rdist repository. The source files and this Makefile are kept in
+rdist repository.  The source files and this Makefile are kept in
 /usr/local/admin/genders:
 
      #
-     # $Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+     # $Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
      PKG=    genders
@@ -797,10 +791,10 @@ rdist repository. The source files and this Makefile are kept in
              co -l $@
 
 Note that a program called inst is used to install the files into the rdist
-repository. This program is like a regular install program, except that it
+repository.  This program is like a regular install program, except that it
 can compare source and destination and abort the copy if they are the same.
 The -C option is specifying that diff -b be used to compare text files
-without regard for whitespace. This prevents triggering unnecsesary rdist
+without regard for whitespace.  This prevents triggering unnecsesary rdist
 updates when the sys admin makes the install target when not all files have
 changed.
   ------------------------------------------------------------------------
@@ -812,5 +806,5 @@ Names for other network interfaces on the same node do not appear in the
 genders file.
 
   ------------------------------------------------------------------------
-$Id: TUTORIAL,v 1.2 2002-04-23 16:47:58 garlick Exp $
+$Id: TUTORIAL,v 1.3 2002-05-07 12:39:00 garlick Exp $
 $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
