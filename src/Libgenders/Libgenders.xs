@@ -332,7 +332,7 @@ genders_errormsg(handle)
                 RETVAL
 
 void
-genders_perror(handle, msg)
+genders_perror(handle, msg=NULL)
         genders_t handle
         char *msg
         CODE:
@@ -583,7 +583,7 @@ genders_testattr(handle, attr, node=NULL)
                 RETVAL          
 
 int
-genders_testattrval(handle, attr, val=NULL, node=NULL)
+genders_testattrval(handle, attr, val, node=NULL)
         genders_t handle
         char *node
         char *attr
