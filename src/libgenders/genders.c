@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.75 2004-01-16 01:00:04 achu Exp $
+ *  $Id: genders.c,v 1.76 2004-01-16 01:17:01 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -390,7 +390,6 @@ _parse_line(genders_t handle, char *line, int line_num,
   while(isspace(*line))  
     line++;
 
-  /* Create nodes list if we are debugging */
   if (line_num > 0)
     nodes = debugnodes;
   else
