@@ -1,2 +1,30 @@
+#
+# T_OBJECT by Dean Roehrich, CPAN 
+# http://www.cpan.org/modules/by-authors/id/DMR/
+#
+
 TYPEMAP
 genders_t  T_OBJECT
+char *     T_CHAR_PTR
+
+OUTPUT
+
+T_CHAR_PTR 
+        sv_setpv((SV*)$arg, $var);
+
+T_OBJECT
+        sv_setref_pv( $arg, Nullch, (void*)$var );
+
+
+INPUT
+
+T_CHAR_PTR
+        $var = (SvOK($arg)) ? ($type)SvPV($arg, PL_na) : NULL
+
+T_OBJECT
+        if( SvROK($arg) )
+                $var = ($type)SvIV((SV*)SvRV( $arg ));
+        else{
+                warn( \"${Package}::$func_name() -- $var is not an SV reference\" );
+                XSRETURN_UNDEF;
+        }

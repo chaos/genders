@@ -7,12 +7,6 @@
 
 #include "genders.h"
 
-/*
- * In perl extensions, the calls foo() and foo(undef) are not the
- * same.  This handles the discrepency.
- */ 
-#define isundef(str)  (str != NULL && strlen(str) > 0) ? str : NULL
-
 static int
 not_here(char *s)
 {
@@ -89,7 +83,7 @@ string_constant(str)
                 if (strcmp(str, "DEFAULT_GENDERS_FILE") == 0)
                         RETVAL = newSVpv(DEFAULT_GENDERS_FILE, 0);      
                 else
-                        RETVAL = newSVpv("", 0);
+                        XSRETURN_UNDEF;
         OUTPUT:
                 RETVAL
 
@@ -119,7 +113,7 @@ genders_load_data(handle, filename=NULL)
         genders_t handle
         char *filename
         CODE:
-                RETVAL = genders_load_data(handle, isundef(filename));
+                RETVAL = genders_load_data(handle, filename);
         OUTPUT:
                 RETVAL
 
@@ -158,7 +152,7 @@ genders_perror(handle, msg=NULL)
         genders_t handle
         char *msg
         CODE:
-                genders_perror(handle, isundef(msg));
+                genders_perror(handle, msg);
 
 int
 genders_handle_dump(handle)
@@ -208,9 +202,8 @@ genders_getnodename(handle)
 
                 handle_error:
 
-                if (buf != NULL) {
+                if (buf != NULL) 
                         free(buf);
-                }
                 
                 RETVAL = newSVpv("", 0);
 
@@ -234,8 +227,8 @@ genders_getnodes(handle, attr=NULL, val=NULL)
                 if ((ret = genders_getnodes(handle, 
                                             nodelist, 
                                             num, 
-                                            isundef(attr), 
-                                            isundef(val))) == -1)
+                                            attr, 
+                                            val)) == -1)
                         goto handle_error;
 
                 RETVAL = newAV();
@@ -285,7 +278,7 @@ genders_getattr(handle, node=NULL)
                                            attrlist, 
                                            vallist, 
                                            num, 
-                                           isundef(node))) == -1)
+                                           node)) == -1)
                         goto handle_error;
 
                 attrs = newAV();
@@ -388,7 +381,7 @@ genders_getattrval(handle, attr, node=NULL)
                 memset(buf, '\0', maxvallen+1);
 
                 if ((ret = genders_testattr(handle, 
-                                            isundef(node), 
+                                            node, 
                                             attr, 
                                             buf, 
                                             maxvallen+1)) == -1) {
@@ -422,7 +415,7 @@ genders_testattr(handle, attr, node=NULL)
         char *attr
         CODE:
                 RETVAL = genders_testattrval(handle, 
-                                             isundef(node), 
+                                             node, 
                                              attr, 
                                              NULL);
         OUTPUT:
@@ -436,7 +429,7 @@ genders_testattrval(handle, attr, val, node=NULL)
         char *val
         CODE:
                 RETVAL = genders_testattrval(handle, 
-                                             isundef(node), 
+                                             node, 
                                              attr, 
                                              val);
         OUTPUT:
@@ -447,7 +440,7 @@ genders_isnode(handle, node=NULL)
         genders_t handle
         char *node
         CODE:
-                RETVAL = genders_isnode(handle, isundef(node));
+                RETVAL = genders_isnode(handle, node);
         OUTPUT:
                 RETVAL
 
@@ -475,7 +468,7 @@ genders_parse(handle, filename=NULL)
         genders_t handle
         char *filename
         CODE:
-                RETVAL = genders_parse(handle, isundef(filename), NULL);
+                RETVAL = genders_parse(handle, filename, NULL);
         OUTPUT:
                 RETVAL
 
