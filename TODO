@@ -2,3 +2,5 @@
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
   o possibly add functionality to genders_parse()  
+- Genders "regex" parsing.  i.e.
+  genders_getnodes("attr1+attr2,attr3");
