@@ -1,15 +1,10 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.4 2003-05-14 23:04:49 achu Exp $
+## $Id: Makefile.am,v 1.1 2003-05-14 23:04:49 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-include config/Make-rpm.mk
+gendlibdir = @COMPAT_INSTALLDIR@
 
-SUBDIRS = \
-	src \
-	compat \
-	dist \
-	man
-
+gendlib_SCRIPTS = gendlib.pl hostlist.pl
 

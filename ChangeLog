@@ -6,6 +6,7 @@
 	* moved Libgenders manpage to perl document in Libgenders.pm
 	* Added error code/constants accessor functions in Libgenders
 	* Made Libgenders object-oriented.
+	* Nodeattr no longer has -C option
 	* Added Genders, an OO based replacement for gendlib.pl
 	  - will eventually phase out gendlib.pl 
 	
