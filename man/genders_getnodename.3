@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_getnodename.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: genders_getnodename.3,v 1.3 2003-05-12 20:22:33 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -13,18 +13,20 @@ genders_getnodename \- get the current node name
 .br
 .SH DESCRIPTION
 \fBgenders_getnodename()\fR retrieves the name of the node that the
-function is being called from.  The node name is stored in the buffer pointed
-to be \fInode\fR.  \fIlen\fR should indicate the length of the buffer.   The node returned
-by \fBgenders_getnodename()\fR is the shortened hostname of the node.  
+function is being called from.  The node name returned is the
+shortened hostname of the node and is stored in the buffer pointed to
+be \fInode\fR.  \fIlen\fR should indicate the length of the buffer.
+The node returned by \fBgenders_getnodename()\fR is the shortened
+hostname of the node.
 
-To avoid passing in a buffer that is not large enough to store the node name, 
+To avoid passing in a buffer that is not large enough to store the
+node name,
 .BR genders_getmaxnodelen (3)
 should be used to determine the minimum buffer size that should be used. 
 .br
 .SH RETURN VALUES
-On success, 0 is returned.  On error, -1 is returned, and an error code
-is returned in \fIhandle\fR.  The error code can be retrieved
-via
+On success, 0 is returned.  On error, -1 is returned, and an error
+code is returned in \fIhandle\fR.  The error code can be retrieved via
 .BR genders_errnum (3)
 , and a description of the error code can be retrieved via 
 .BR genders_strerror (3).  
@@ -48,11 +50,12 @@ The buffer pointed to by \fInode\fR is not large enough to store the node name.
 An incorrect parameter has been passed in.  
 .TP
 .B GENDERS_ERR_MAGIC 
-\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
-handle or \fIhandle\fR has been destroyed by 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
 .br
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_handle_create(3), genders_load_data(3), genders_getmaxnodelen(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_getmaxnodelen(3), genders_errnum(3), genders_strerror(3)
