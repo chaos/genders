@@ -36,7 +36,7 @@ oldincludedir = /usr/include
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
-top_builddir = .
+top_builddir = ..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -91,63 +91,74 @@ am__quote = @am__quote@
 install_sh = @install_sh@
 
 SUBDIRS = \
-	src \
 	dist \
-	man
+	compat
 
-subdir = .
-ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
+
+man3_MANS = \
+	genders.3 \
+	genders_attrlist_clear.3 \
+	genders_attrlist_create.3 \
+	genders_attrlist_destroy.3 \
+	genders_errormsg.3 \
+	genders_errnum.3 \
+	genders_getattr.3 \
+	genders_getattr_all.3 \
+	genders_getmaxattrlen.3 \
+	genders_getmaxattrs.3 \
+	genders_getmaxnodelen.3 \
+	genders_getmaxvallen.3 \
+	genders_getnodename.3 \
+	genders_getnodes.3 \
+	genders_getnumattrs.3 \
+	genders_getnumnodes.3 \
+	genders_handle_create.3 \
+	genders_handle_destroy.3 \
+	genders_handle_dump.3 \
+	genders_nodelist_clear.3 \
+	genders_nodelist_create.3 \
+	genders_nodelist_destroy.3 \
+	genders_load_data.3 \
+	genders_perror.3 \
+	genders_strerror.3 \
+	genders_testattr.3 \
+	genders_testattrval.3 \
+	genders_is.3 \
+	genders_isnode.3 \
+	genders_isattr.3 \
+	genders_isattrval.3 \
+	genders_vallist_clear.3 \
+	genders_vallist_create.3 \
+	genders_vallist_destroy.3 \
+	genders_list.3 \
+	genders_stats.3 \
+	genders_errors.3 \
+	genders_parse.3 \
+	libgenders.3
+
+subdir = man
 mkinstalldirs = $(SHELL) $(top_srcdir)/config/mkinstalldirs
 CONFIG_HEADER = $(top_builddir)/config/config.h
 CONFIG_CLEAN_FILES =
 DIST_SOURCES =
 
+NROFF = nroff
+MANS = $(man3_MANS)
+
 RECURSIVE_TARGETS = info-recursive dvi-recursive install-info-recursive \
 	uninstall-info-recursive all-recursive install-data-recursive \
 	install-exec-recursive installdirs-recursive install-recursive \
 	uninstall-recursive check-recursive installcheck-recursive
-DIST_COMMON = README ./config/config.h.in AUTHORS COPYING ChangeLog \
-	INSTALL Makefile.am Makefile.in NEWS TODO aclocal.m4 \
-	config/config.guess config/config.sub config/depcomp \
-	config/install-sh config/ltmain.sh config/missing \
-	config/mkinstalldirs configure configure.ac
+DIST_COMMON = Makefile.am Makefile.in
 DIST_SUBDIRS = $(SUBDIRS)
 all: all-recursive
 
 .SUFFIXES:
-
-am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
- configure.lineno
-$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am $(srcdir)/config/Make-rpm.mk $(top_srcdir)/configure.ac $(ACLOCAL_M4)
+$(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  Makefile
+	  $(AUTOMAKE) --gnu  man/Makefile
 Makefile: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.in  $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status $@ $(am__depfiles_maybe)
-
-$(top_builddir)/config.status: $(srcdir)/configure $(CONFIG_STATUS_DEPENDENCIES)
-	$(SHELL) ./config.status --recheck
-$(srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(srcdir)/configure.ac $(ACLOCAL_M4) $(CONFIGURE_DEPENDENCIES)
-	cd $(srcdir) && $(AUTOCONF)
-
-$(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ configure.ac 
-	cd $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
-
-config/config.h: config/stamp-h1
-	@if test ! -f $@; then \
-	  rm -f config/stamp-h1; \
-	  $(MAKE) config/stamp-h1; \
-	else :; fi
-
-config/stamp-h1: $(srcdir)/./config/config.h.in $(top_builddir)/config.status
-	@rm -f config/stamp-h1
-	cd $(top_builddir) && $(SHELL) ./config.status config/config.h
-
-$(srcdir)/./config/config.h.in: @MAINTAINER_MODE_TRUE@ $(top_srcdir)/configure.ac $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOHEADER)
-	touch $(srcdir)/./config/config.h.in
-
-distclean-hdr:
-	-rm -f config/config.h config/stamp-h1
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 
 mostlyclean-libtool:
 	-rm -f *.lo
@@ -158,6 +169,49 @@ clean-libtool:
 distclean-libtool:
 	-rm -f libtool
 uninstall-info-am:
+
+man3dir = $(mandir)/man3
+install-man3: $(man3_MANS) $(man_MANS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(man3dir)
+	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
+	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
+	for i in $$l2; do \
+	  case "$$i" in \
+	    *.3*) list="$$list $$i" ;; \
+	  esac; \
+	done; \
+	for i in $$list; do \
+	  if test -f $(srcdir)/$$i; then file=$(srcdir)/$$i; \
+	  else file=$$i; fi; \
+	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+	  case "$$ext" in \
+	    3*) ;; \
+	    *) ext='3' ;; \
+	  esac; \
+	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
+	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+	  echo " $(INSTALL_DATA) $$file $(DESTDIR)$(man3dir)/$$inst"; \
+	  $(INSTALL_DATA) $$file $(DESTDIR)$(man3dir)/$$inst; \
+	done
+uninstall-man3:
+	@$(NORMAL_UNINSTALL)
+	@list='$(man3_MANS) $(dist_man3_MANS) $(nodist_man3_MANS)'; \
+	l2='$(man_MANS) $(dist_man_MANS) $(nodist_man_MANS)'; \
+	for i in $$l2; do \
+	  case "$$i" in \
+	    *.3*) list="$$list $$i" ;; \
+	  esac; \
+	done; \
+	for i in $$list; do \
+	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
+	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
+	  inst=`echo $$inst | sed -e 's/^.*\///'`; \
+	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
+	  echo " rm -f $(DESTDIR)$(man3dir)/$$inst"; \
+	  rm -f $(DESTDIR)$(man3dir)/$$inst; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -256,26 +310,10 @@ distclean-tags:
 	-rm -f TAGS ID GTAGS GRTAGS GSYMS GPATH
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 
-top_distdir = .
-distdir = $(PACKAGE)-$(VERSION)
-
-am__remove_distdir = \
-  { test ! -d $(distdir) \
-    || { find $(distdir) -type d ! -perm -200 -exec chmod u+w {} ';' \
-         && rm -fr $(distdir); }; }
-
-GZIP_ENV = --best
-distcleancheck_listfiles = find . -type f -print
+top_distdir = ..
+distdir = $(top_distdir)/$(PACKAGE)-$(VERSION)
 
 distdir: $(DISTFILES)
-	@if sed 15q $(srcdir)/NEWS | fgrep -e "$(VERSION)" >/dev/null; \
-	then :; else \
-	  echo "NEWS not updated; not releasing" 1>&2; \
-	  exit 1; \
-	fi
-	$(am__remove_distdir)
-	mkdir $(distdir)
-	$(mkinstalldirs) $(distdir)/./config $(distdir)/config $(distdir)/src/libgenders
 	@list='$(DISTFILES)'; for file in $$list; do \
 	  if test -f $$file || test -d $$file; then d=.; else d=$(srcdir); fi; \
 	  dir=`echo "$$file" | sed -e 's,/[^/]*$$,,'`; \
@@ -309,68 +347,12 @@ distdir: $(DISTFILES)
 	      || exit 1; \
 	  fi; \
 	done
-	-find $(distdir) -type d ! -perm -777 -exec chmod a+rwx {} \; -o \
-	  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
-	  ! -type d ! -perm -444 -exec $(SHELL) $(install_sh) -c -m a+r {} {} \; \
-	|| chmod -R a+r $(distdir)
-dist-gzip: distdir
-	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
-	$(am__remove_distdir)
-
-dist-bzip2: distdir
-	$(AMTAR) chof - $(distdir) | bzip2 -9 -c >$(distdir).tar.bz2
-	$(am__remove_distdir)
-
-dist dist-all: distdir
-	$(AMTAR) chof - $(distdir) | GZIP=$(GZIP_ENV) gzip -c >$(distdir).tar.gz
-	$(AMTAR) chof - $(distdir) | bzip2 -9 -c >$(distdir).tar.bz2
-	$(am__remove_distdir)
-
-# This target untars the dist file and tries a VPATH configuration.  Then
-# it guarantees that the distribution is self-contained by making another
-# tarfile.
-distcheck: dist
-	$(am__remove_distdir)
-	GZIP=$(GZIP_ENV) gunzip -c $(distdir).tar.gz | $(AMTAR) xf -
-	chmod -R a-w $(distdir); chmod a+w $(distdir)
-	mkdir $(distdir)/=build
-	mkdir $(distdir)/=inst
-	chmod a-w $(distdir)
-	dc_install_base=`$(am__cd) $(distdir)/=inst && pwd` \
-	  && cd $(distdir)/=build \
-	  && ../configure --srcdir=.. --prefix=$$dc_install_base \
-	    $(DISTCHECK_CONFIGURE_FLAGS) \
-	  && $(MAKE) $(AM_MAKEFLAGS) \
-	  && $(MAKE) $(AM_MAKEFLAGS) dvi \
-	  && $(MAKE) $(AM_MAKEFLAGS) check \
-	  && $(MAKE) $(AM_MAKEFLAGS) install \
-	  && $(MAKE) $(AM_MAKEFLAGS) installcheck \
-	  && $(MAKE) $(AM_MAKEFLAGS) uninstall \
-	  && (test `find $$dc_install_base -type f -print | wc -l` -le 1 \
-	      || { echo "ERROR: files left after uninstall:" ; \
-	           find $$dc_install_base -type f -print ; \
-	           exit 1; } >&2 ) \
-	  && $(MAKE) $(AM_MAKEFLAGS) dist-gzip \
-	  && rm -f $(distdir).tar.gz \
-	  && $(MAKE) $(AM_MAKEFLAGS) distcleancheck
-	$(am__remove_distdir)
-	@echo "$(distdir).tar.gz is ready for distribution" | \
-	  sed 'h;s/./=/g;p;x;p;x'
-distcleancheck: distclean
-	if test '$(srcdir)' = . ; then \
-	  echo "ERROR: distcleancheck can only run from a VPATH build" ; \
-	  exit 1 ; \
-	fi
-	test `$(distcleancheck_listfiles) | wc -l` -eq 0 \
-	  || { echo "ERROR: files left after distclean:" ; \
-	       $(distcleancheck_listfiles) ; \
-	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile
+all-am: Makefile $(MANS)
 installdirs: installdirs-recursive
 installdirs-am:
+	$(mkinstalldirs) $(DESTDIR)$(man3dir)
 
 install: install-recursive
 install-exec: install-exec-recursive
@@ -401,8 +383,8 @@ clean: clean-recursive
 clean-am: clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-recursive
-	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-distclean-am: clean-am distclean-generic distclean-hdr distclean-libtool \
+
+distclean-am: clean-am distclean-generic distclean-libtool \
 	distclean-tags
 
 dvi: dvi-recursive
@@ -413,118 +395,47 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-man
 
 install-exec-am:
 
 install-info: install-info-recursive
 
-install-man:
+install-man: install-man3
 
 installcheck-am:
 
 maintainer-clean: maintainer-clean-recursive
-	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf autom4te.cache
+
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
 mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-generic mostlyclean-libtool
 
-uninstall-am: uninstall-info-am
+uninstall-am: uninstall-info-am uninstall-man
 
 uninstall-info: uninstall-info-recursive
 
+uninstall-man: uninstall-man3
+
 .PHONY: $(RECURSIVE_TARGETS) GTAGS all all-am check check-am clean \
-	clean-generic clean-libtool clean-recursive dist dist-all \
-	dist-bzip2 dist-gzip distcheck distclean distclean-generic \
-	distclean-hdr distclean-libtool distclean-recursive \
-	distclean-tags distcleancheck distdir dvi dvi-am dvi-recursive \
-	info info-am info-recursive install install-am install-data \
-	install-data-am install-data-recursive install-exec \
-	install-exec-am install-exec-recursive install-info \
-	install-info-am install-info-recursive install-man \
+	clean-generic clean-libtool clean-recursive distclean \
+	distclean-generic distclean-libtool distclean-recursive \
+	distclean-tags distdir dvi dvi-am dvi-recursive info info-am \
+	info-recursive install install-am install-data install-data-am \
+	install-data-recursive install-exec install-exec-am \
+	install-exec-recursive install-info install-info-am \
+	install-info-recursive install-man install-man3 \
 	install-recursive install-strip installcheck installcheck-am \
 	installdirs installdirs-am installdirs-recursive \
 	maintainer-clean maintainer-clean-generic \
 	maintainer-clean-recursive mostlyclean mostlyclean-generic \
 	mostlyclean-libtool mostlyclean-recursive tags tags-recursive \
 	uninstall uninstall-am uninstall-info-am \
-	uninstall-info-recursive uninstall-recursive
+	uninstall-info-recursive uninstall-man uninstall-man3 \
+	uninstall-recursive
 
-
-tar rpm:
-	@proj=$(PACKAGE); if test -z "$$proj"; then \
-	  echo "ERROR: PACKAGE macro def is not defined." 1>&2; exit 1; fi; \
-	if test -z "$$tag"; then \
-	  if ! test -f META; then \
-	    echo "ERROR: Cannot find $$proj metadata in \"`pwd`/META\"." 1>&2;\
-	      exit 1; fi; \
-	  name=`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' META`; \
-	  ver=`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' META`; \
-	  rel=`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' META`; \
-	  test -z "$$rel" && pkg=$$name-$$ver || pkg=$$name-$$ver-$$rel; \
-	  tag=`echo $$pkg | sed 's/\./-/g'`; fi; \
-	tmp=$${TMPDIR-/tmp}/tmp-$$proj-$$$$; \
-	rm -rf $$tmp || exit 1; \
-	test -n "$(mkinstalldirs)" \
-	  && mkdir="$(mkinstalldirs)" || mkdir="mkdir -p"; \
-	if ! $$mkdir $$tmp >/dev/null; then \
-	  echo "ERROR: Cannot create \"$$tmp\" dir." 1>&2; exit 1; fi; \
-	test -f CVS/Root && cvs="cvs -d `cat CVS/Root`" || cvs="cvs"; \
-	echo "Fetching $$proj from CVS (tag=$$tag) ..."; \
-	(cd $$tmp; $$cvs -Q export -kv -r $$tag $$proj) || exit 1; \
-	meta=$$tmp/$$proj/META; \
-	if test ! -f "$$meta"; then \
-	  echo "ERROR: Cannot find $$proj metadata in CVS." 1>&2; exit 1; fi; \
-	name=`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' $$meta`; \
-	if test "$$proj" != "$$name"; then \
-	  echo "ERROR: PACKAGE does not match metadata." 1>&2; exit 1; fi; \
-	ver=`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' $$meta`; \
-	rel=`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' $$meta`; \
-	test "$$tag" = "HEAD" && rel="`date +%y%m%d%H%M`"; \
-	if test -n "$$rel"; then pkg=$$proj-$$ver-$$rel; \
-	  else pkg=$$proj-$$ver; test -n "$$rev" -a "$$tag" = "HEAD" \
-	    && rel="$$rev" || rel="1"; fi; \
-	mv "$$tmp/$$proj" "$$tmp/$$proj-$$ver" || exit 1; \
-	$(MAKE) -s $@-internal mkdir="$$mkdir" tmp="$$tmp" \
-	  proj="$$proj" pkg="$$pkg" ver="$$ver" rel="$$rel" \
-	    && rm -rf $$tmp
-
-tar-internal:
-	@echo "Creating $$pkg.tgz ..."; \
-	rm -f $$pkg.tgz || exit 1; \
-	(cd $$tmp; tar -cf - $$proj-$$ver) | gzip -c9 >$$tmp/$$pkg.tgz; \
-	cp -p $$tmp/$$pkg.tgz $$pkg.tgz || exit 1
-
-rpm-internal: tar-internal
-	@echo "Creating $$pkg*rpm ..."; \
-	for d in BUILD RPMS SOURCES SPECS SRPMS TMP; do \
-	  if ! $$mkdir $$tmp/$$d >/dev/null; then \
-	    echo "ERROR: Cannot create \"$$tmp/$$d\" dir." 1>&2; exit 1; fi; \
-	      done; \
-	mv $$tmp/$$pkg.tgz $$tmp/SOURCES/ || exit 1; \
-	test -f $$tmp/$$proj-$$ver/$$proj.spec.in \
-	  && spec=$$tmp/$$proj-$$ver/$$proj.spec.in \
-	  || spec=$$tmp/$$proj-$$ver/$$proj.spec; \
-	if ! test -f $$spec; then \
-	  echo "ERROR: Cannot find $$proj spec file in CVS." 1>&2; exit 1; fi;\
-	sed -e "s/^\([ 	]*Name:\).*/\1 $$proj/i" \
-	    -e "s/^\([ 	]*Version:\).*/\1 $$ver/i" \
-	    -e "s/^\([ 	]*Release:\).*/\1 $$rel/i" \
-	    -e "s/^\([ 	]*Source0\?:\).*/\1 $$pkg.tgz/i" \
-	    <$$spec >$$tmp/SPECS/$$proj.spec; \
-	if ! test -s $$tmp/SPECS/$$proj.spec; then \
-	  echo "ERROR: Cannot create $$proj.spec." 1>&2; exit 1; fi; \
-	rpmbuild --showrc | egrep "[[:space:]]_(gpg|pgp)_name[[:space:]]" \
-	  >/dev/null && sign="--sign"; \
-	if ! rpmbuild -ba --define "_tmppath $$tmp/TMP" \
-	  --define "_topdir $$tmp" $$sign --quiet $$tmp/SPECS/$$proj.spec \
-	  >$$tmp/rpm.log 2>&1; then \
-	    cat $$tmp/rpm.log; exit 1; fi; \
-	cp -p $$tmp/RPMS/*/$$proj-*.rpm $$tmp/SRPMS/$$proj-*.src.rpm . \
-	  || exit 1
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

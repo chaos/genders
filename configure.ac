@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.6 2003-05-12 23:52:01 achu Exp $
+## $Id: configure.ac,v 1.7 2003-05-13 01:30:20 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -89,6 +89,9 @@ AC_CONFIG_FILES( \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \
   dist/Makefile \
+  man/Makefile \
+  man/dist/Makefile \
+  man/compat/Makefile \
 )
 AC_OUTPUT
 
