@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: Libgenders.3,v 1.4 2003-04-23 23:26:59 achu Exp $
+\."$Id: Libgenders.3,v 1.5 2003-04-24 17:03:08 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -24,9 +24,10 @@ some functions was changed.
 The reader is cautioned that a perl interface to C code may not behave
 identically to perl code.  For example, the perl function call foo()
 may behave identically to foo(undef) or foo("").  However, C code may
-interpret the function arguments differently.  C code may interpret
-the later two function calls as having passed in an empty string,
-while foo() passed in a NULL pointer.
+interpret the function arguments differently.  For example, some of
+the C code in genders will interpret the later two function calls as
+having passed in an empty string.  However, the function call foo()
+passed in a NULL pointer.
 .LP
 .B Initialization/Destruction
 .LP
