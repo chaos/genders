@@ -12,7 +12,8 @@
 	  attributes being stored in genders file
 	* removed definition of "altname", "all", and "cluster" 
 	  from genders.h
-	* code was cleaned up in a variety of ways
+	* removed genders_close() and genders_elapsedtime()
+	* genders code was cleaned up in a variety of ways
 	* manpages fixed to reflect changes
 	* directory structure of entire genders package cleaned up
 	* split off dist and gendlib.pl into two RPM sub packages
