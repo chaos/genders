@@ -1,19 +1,19 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.5 2003-05-27 17:14:04 achu Exp $
+## $Id: Makefile.am,v 1.6 2003-11-03 17:36:38 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-# We will cheat and use ExtUtils::MakeMaker to install this
-# Perl Module instead of doing some whacked out autoconf
+# Use Perl's ExtUtils::MakeMaker to get autoconf/automake to install
+# into the correct location
 
-GENDERS_PM_PREFIX = @GENDERS_PM_PREFIX@
+PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 
 all: Makefile.pm
 	$(MAKE) -f Makefile.pm
 
 Makefile.pm: Makefile.PL
-	$(PERL) Makefile.PL PREFIX=$(GENDERS_PM_PREFIX) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm
+	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm
 
 install: Makefile.pm
 	$(MAKE) -f Makefile.pm pure_install

@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.11 2003-05-27 18:39:39 achu Exp $
+ * $Id: genders.h.in,v 1.12 2003-11-03 17:36:39 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -8,15 +8,11 @@
 
 #include <stdio.h>
 
-/******************
- * defines        *
- ******************/
-
-/* genders error codes */
+/* Genders error codes */
 #define GENDERS_ERR_SUCCESS       0 /* success */
 #define GENDERS_ERR_NULLHANDLE    1 /* genders handle is null */
-#define GENDERS_ERR_OPEN          2 /* could not open file (errno valid) */
-#define GENDERS_ERR_READ          3 /* could not read file (errno valid) */
+#define GENDERS_ERR_OPEN          2 /* could not open file */
+#define GENDERS_ERR_READ          3 /* could not read file */
 #define GENDERS_ERR_PARSE         4 /* parse error on genders file */
 #define GENDERS_ERR_NOTLOADED     5 /* genders data not loaded */
 #define GENDERS_ERR_ISLOADED      6 /* genders data is already loaded */
@@ -32,10 +28,6 @@
 #define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 
 typedef struct genders *genders_t;
-
-/******************
- * API            *
- ******************/
 
 /* Creates & Initializes a genders handle 
  * Returns: NULL on memory allocation error
@@ -71,13 +63,7 @@ char *genders_errormsg(genders_t handle);
  * error that occurred  
  */
 void genders_perror(genders_t handle, const char *msg);
-
-/* Dumps the genders file stored in the handle to a file stream
- * If stream is NULL, dumps to stdout
- * Returns: 0 on success, -1 on failure 
- */
-int genders_handle_dump(genders_t handle, FILE *stream);
-
+ 
 /* Get the number of nodes read from the genders file
  * Returns: number of nodes on success, -1 on failure 
  */
@@ -167,22 +153,16 @@ int genders_getnodename(genders_t handle, char *node, int len);
  * Nodes are returned in genders file order
  * Returns: number of matches on success, -1 on failure
  */
-int genders_getnodes(genders_t handle, 
-                     char *nodes[], 
-                     int len, 
-                     const char *attr, 
-                     const char *val);
+int genders_getnodes(genders_t handle, char *nodes[], int len, 
+                     const char *attr, const char *val);
 
 /* Gets list of attributes for the specified node  
  * If node is NULL, gets all attributes for the current node  
  * If vals array is non-NULL, stores any attribute values in it
  * Returns: number of matches on success, -1 on failure
  */
-int genders_getattr(genders_t handle, 
-                    char *attrs[], 
-                    char *vals[], 
-                    int len, 
-                    const char *node);
+int genders_getattr(genders_t handle, char *attrs[], char *vals[], 
+                    int len, const char *node);
 
 /* Gets all attributes stored in the genders file
  * Returns: number of attributes on success, -1 on failure
@@ -194,21 +174,16 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len);
  * If val is non-NULL, stores the attribute value in it
  * Returns: 1=true, 0=false, -1=failure
  */
-int genders_testattr(genders_t handle,
-                     const char *node,
-                     const char *attr,
-                     char *val,
-                     int len);
+int genders_testattr(genders_t handle, const char *node,
+                     const char *attr, char *val, int len);
 
 /* Tests whether node has an attribute=value pair
  * If node is NULL, tests the current node
  * If val is NULL, only the attribute is tested
  * Returns: 1=true, 0=false, -1=failure
  */
-int genders_testattrval(genders_t handle, 
-                        const char *node, 
-                        const char *attr, 
-                        const char *val);
+int genders_testattrval(genders_t handle, const char *node, 
+                        const char *attr, const char *val);
 
 /* Tests whether the node exists in the genders file
  * If node is NULL, tests the current node

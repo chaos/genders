@@ -1,3 +1,28 @@
+2003-11-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/list.h, src/libgenders/list.c,
+	src/libgenders/fd.h, src/libgenders/fd.c: New files.
+
+	* src/libgenders/genders.c: Re-written to use file descriptor and
+	list library code.
+
+	* src/libgenders/genders.c (genders_load_data): Added corner case
+	fix for genders databases with no nodes listed.
+
+	* src/libgenders/Makefile.am: Incorporated new fd and list code.
+
+	* src/nodeattr/nodeattr.c: Removed all code surrounded by "#if 0"
+	and "#endif".
+
+	* configure.ac: Replaced --with-xs-prefix and
+	--with-genders-pm-prefix options with --with-perl-install-prefix
+	option.
+
+	* src/Libgenders/Makefile.am, src/Genders/Makefile.am: Modified
+	for above change in configure.ac.
+
+	* src/libgenders/genders_example.c: Cleaned up code.
+	
 2003-09-26  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_insert_attrval_listnode): Fix bug

@@ -5,7 +5,7 @@ Summary: Static cluster configuration database.
 Copyright: none
 Group: System Environment/Base
 Source0:
-Prereq: rdist pdksh net-tools diffutils perl
+Prereq: perl
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
@@ -22,7 +22,7 @@ genders API that is compatible with earlier releases of genders
 
 %build
 ./bootstrap
-./configure --prefix=/usr --with-xs-prefix="$RPM_BUILD_ROOT/usr" --with-genders-pm-prefix="$RPM_BUILD_ROOT/usr"
+./configure --prefix=/usr --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
 make 
 
 %install

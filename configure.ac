@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.21 2003-09-11 15:55:47 achu Exp $
+## $Id: configure.ac,v 1.22 2003-11-03 17:36:38 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -42,49 +42,28 @@ if test -z "$GENDERS_DEFAULT_FILE"; then
 fi
 AC_SUBST(GENDERS_DEFAULT_FILE)
 
-# Libgenders install location
-AC_MSG_CHECKING(for --with-xs-prefix )
-AC_ARG_WITH(xs-prefix,
-    AC_HELP_STRING([--with-xs-prefix=path], [define perl xs prefix dir]),
+# Perl Install Prefix
+# - Used almost exclusively so perl install works with rpm builds
+AC_MSG_CHECKING(for --with-perl-install-prefix )
+AC_ARG_WITH(perl-install-prefix,
+    AC_HELP_STRING([--with-perl-install-prefix=path], [define perl modules install prefix]),
     [ case "$withval" in
     yes)
-        withxsprefix=yes
+        withperllinstallprefix=yes
         ;;
     no)
         ;;
     *)
-        withxsprefix=yes
-        XS_PREFIX="$withval"
+        withperllinstallprefix=yes
+        PERL_INSTALL_PREFIX="$withval"
         ;;
     esac ]
 )
-AC_MSG_RESULT(${withxsprefix=no})
-if test -z "$XS_PREFIX"; then
-   XS_PREFIX='${prefix}'
+AC_MSG_RESULT(${withperllinstallprefix=no})
+if test -z "$PERL_INSTALL_PREFIX"; then
+   PERL_INSTALL_PREFIX='${prefix}'
 fi
-AC_SUBST(XS_PREFIX)
-
-# Genders.pm install location
-AC_MSG_CHECKING(for --with-genders-pm-prefix )
-AC_ARG_WITH(genders-pm-prefix,
-    AC_HELP_STRING([--with-genders-pm-prefix=path], [define genders.pm prefix dir]),
-    [ case "$withval" in
-    yes)
-        withgenderspm=yes
-        ;;
-    no)
-        ;;
-    *)
-        withgenderspm=yes
-        GENDERS_PM_PREFIX="$withval"
-        ;;
-    esac ]
-)
-AC_MSG_RESULT(${withgenderspm=no})
-if test -z "$GENDERS_PM_PREFIX"; then
-   GENDERS_PM_PREFIX='${prefix}'
-fi
-AC_SUBST(GENDERS_PM_PREFIX)
+AC_SUBST(PERL_INSTALL_PREFIX)
 
 ##
 # Checks for programs.

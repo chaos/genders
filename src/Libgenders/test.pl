@@ -29,12 +29,6 @@ if ($ret == -1) {
     exit(1);
 }
 
-#$ret = $handle->genders_handle_dump();
-#if ($ret == -1) {
-#    print "Error, genders_handle_dump()\n";
-#    exit(1);
-#}
-
 $nodename = $handle->genders_getnodename();
 if (!defined($nodename)) {
     print "Error, genders_getnodename()\n";
