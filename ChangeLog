@@ -4,13 +4,12 @@
 	
 2004-10-26  Albert Chu  <chu11@llnl.gov>
 
-	* genders.spec.in: Minor fix for possibly non gzipped manpages.
+	* genders.spec.in: Minor fix for possibly non gzipped
+	manpages. Updated for portable builds.
 
 	* Makefile.am: Additional extra dist.
 
 	* config/Make-rpm.mk: Updated Make-rpm.mk script for portable builds.
-
-	* genders.spec.in: Updated for portable builds.
 	
 2004-10-07  Albert Chu  <chu11@llnl.gov>
 
