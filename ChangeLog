@@ -1,3 +1,7 @@
+2004-02-11  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/Makefile.am: Compile with _REENTRANT.
+	
 2004-02-09  Mark Grondona <mgrondona@llnl.gov>
 
 	* compat/hostlist.pl (expand): Properly handle multiple quadrics
