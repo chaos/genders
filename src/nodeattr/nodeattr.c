@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.19 2003-05-20 00:01:38 achu Exp $
+ *  * $Id: nodeattr.c,v 1.20 2003-05-20 00:31:00 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -369,7 +369,7 @@ static int _gend_error_exit(genders_t gp, char *msg)
 
 static void *_safe_malloc(size_t size)
 {
-    void *obj = malloc(size);
+    void *obj = (void *)malloc(size);
 
     if (obj == NULL) {
         fprintf(stderr, "nodeattr: out of memory\n");
