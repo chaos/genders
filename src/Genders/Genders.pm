@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.4 2003-05-14 22:24:06 achu Exp $
+# $Id: Genders.pm,v 1.5 2003-05-14 22:58:46 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -12,13 +12,11 @@ our $VERSION = "2.0";
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(_errormsg);
-our @EXPORT_OK = qw(_errormsg);
-our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg) ] );
+our @EXPORT = qw(_errormsg GENDERS_DEFAULT_FILE);
+our @EXPORT_OK = qw(_errormsg GENDERS_DEFAULT_FILE);
+our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg GENDERS_DEFAULT_FILE) ] );
 
-sub GENDERS_DEFAULT_FILE {
-    return Libgenders->GENDERS_DEFAULT_FILE;
-}
+our $GENDERS_DEFAULT_FILE = Libgenders->GENDERS_DEFAULT_FILE;
 
 sub _errormsg {
     my $self = shift;
