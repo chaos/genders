@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.2 2003-04-22 17:24:53 achu Exp $
+ * $Id: genders.h.in,v 1.3 2003-05-02 23:25:31 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -220,6 +220,16 @@ int genders_testattrval(genders_t handle,
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_testnode(genders_t handle, const char *node);
+
+/* Tests whether the attribute exists in the genders file
+ * Returns: 1=true , 0=false, -1=failure.
+ */
+int genders_testattribute(genders_t handle, const char *attr);
+
+/* Tests whether an attribute=value exists in the genders file 
+ * Returns: 1=true , 0=false, -1=failure.
+ */
+int genders_testvalue(genders_t handle, const char *attr, const char *val);
 
 /* Parses a genders file, and outputs parse debugging 
  * information to the file stream.  

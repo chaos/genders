@@ -1,6 +1,7 @@
-2003-04-29 Albert Chu <ch11@llnl.gov>
+XXXX-XX-XX Albert Chu <ch11@llnl.gov>
         * added several null pointer corner case tests
 	* fixed several issues in manpages
+	* added libgendersllnl and support functions to libgenders
 	
 2003-04-24 Albert Chu <chu11@llnl.gov>
 	* added portability by replacing getline(3) with
