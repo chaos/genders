@@ -8,3 +8,5 @@
     the need for the root install from package source into /var/dist.
 - enable hostlist formatted genders attributes??
   o i.e. mdev[0-24]	cluster=mdev,all
+- enable support of global attributes
+  o i.e. GLOBAL_ATTRIBUTES     all,cluster=mdev 
