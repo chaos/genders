@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.28 2005-01-03 17:31:20 achu Exp $
+ *  $Id: nodeattr.c,v 1.29 2005-01-25 17:21:56 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -137,10 +137,12 @@ main(int argc, char *argv[])
 
     /* parse check */
     if (kopt) {
-        if ((errors = genders_parse(gp, filename, NULL)) == -1) {
-          _gend_error_exit(gp, "genders_parse");
+        errors = genders_parse(gp, filename, NULL);
+        if (errors == -1 && genders_errnum(gp) != GENDERS_ERR_PARSE) {
+            _gend_error_exit(gp, "genders_parse");
         }
-        fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
+        if (errors >= 0)
+            fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
         exit(errors);
     }
 
@@ -306,6 +308,13 @@ _gend_error_exit(genders_t gp, char *msg)
 {
     fprintf(stderr, "nodeattr: %s: %s\n", 
         msg, genders_strerror(genders_errnum(gp)));
+    if (genders_errnum(gp) == GENDERS_ERR_PARSE) {
+#if HAVE_GETOPT_LONG
+        fprintf(stderr, "nodeattr: use --parse-check to debug errors\n");
+#else
+        fprintf(stderr, "nodeattr: use -k to debug errors\n");
+#endif
+    }
     exit(1);
 }
 

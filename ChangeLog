@@ -1,3 +1,11 @@
+2005-01-25  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/nodeattr.c (_gend_error_exit): Output info on
+	--parse-check option on parse errors.
+
+	* src/nodeattr/nodeattr.c (main): Fix logic errors when calling
+	genders_parse().
+	
 2005-01-18  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/hash.h, src/libgenders/hash.c: Updated libraries.
