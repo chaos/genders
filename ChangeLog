@@ -3,7 +3,8 @@
 	* src/libgenders/hostlist.h, src/libgenders/hostlist.c: Updated to
 	latest copies.
 
-	* src/libgenders/hash.h, src/libgenders/hash.c: New files.
+	* src/libgenders/hash.h, src/libgenders/hash.c,
+	src/libgenders/thread.h, src/libgenders/thread.c: New files.
 
 	* man/libgenders.3: Fixed several english issues.
 
