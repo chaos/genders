@@ -20,6 +20,8 @@
 	* src/libgenders/genders.c (genders_parse): Fixed one remaining
 	typo for maximum length handling code.
 
+	* man/genders_getnodes.3: Fixed typo, cosnt -> const.
+
 2003-09-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_parse): Fixed logic error with
