@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.12 2004-04-27 00:04:17 achu Exp $
+## $Id: Makefile.am,v 1.13 2004-05-19 18:13:31 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -29,6 +29,9 @@ pure_install: Makefile.xs
 install-data-local:
 	$(MAKE) -f Makefile.xs pure_install
 
+uninstall:
+	$(MAKE) -f Makefile.xs uninstall
+
 clean: 
 	if test -a Makefile.xs; then $(MAKE) -f Makefile.xs clean; fi
 	rm -f *.c
@@ -36,3 +39,5 @@ clean:
 	rm -f *.o
 	rm -f Makefile.xs
 	rm -f Makefile.xs.old
+
+EXTRA_DIST = Libgenders.pm Libgenders.xs Makefile.PL typemap
