@@ -20,7 +20,7 @@ genders API that is compatible with earlier releases of genders
 %package llnl
 Summary: genders tools and site specific library
 Group: System Environment/Base
-%description dist
+%description llnl
 set of tools distributed with genders and a llnl site specific library 
 
 %prep
