@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.54 2003-06-28 01:35:12 achu Exp $
+ * $Id: genders.c,v 1.55 2003-06-30 15:59:56 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -118,7 +118,7 @@ static int  _save_in_list(genders_t, char *, char **, int, int);
 
 static struct node_listnode *   _have_node(genders_t, const char *);
 static struct attrval_listnode *_have_attr(genders_t, const char *, 
-                                          struct node_listnode *);
+                                           struct node_listnode *);
 
 int _handle_error_check(genders_t handle) {
 
