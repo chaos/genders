@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.41 2003-05-22 00:20:24 achu Exp $
+ * $Id: genders.c,v 1.42 2003-05-23 15:20:44 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -739,7 +739,6 @@ void genders_perror(genders_t handle, const char *msg) {
 
 int genders_handle_dump(genders_t handle, FILE *stream) {
   struct node_listnode *node_list;
-  struct attrval_listnode *attrval_list;
 
   if (genders_loaded_handle_err_check(handle) == -1)
     return -1;
@@ -751,7 +750,7 @@ int genders_handle_dump(genders_t handle, FILE *stream) {
   while (node_list != NULL) {
     fprintf(stream,"%s\t", node_list->name);
 
-    attrval_list = node_list->attrvals_head;
+    struct attrval_listnode *attrval_list = node_list->attrvals_head;
     while (attrval_list != NULL) {
       if (attrval_list->val != NULL)
         fprintf(stream,"%s=%s",attrval_list->name,attrval_list->val);
@@ -1297,15 +1296,13 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val) {
   
   node_list = handle->nodes_head;
   while (node_list != NULL) {
-    attrval_list = node_list->attrvals_head;
-    
     if (genders_has_attr(handle, attr, node_list, &attrval_list) == 1) {
       if (attrval_list->val != NULL && strcmp(attrval_list->val, val) == 0) {
         handle->errnum = GENDERS_ERR_SUCCESS;
         return 1;
       }
     }
-    
+   
     node_list = node_list->next;
   }
 
