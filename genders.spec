@@ -41,7 +41,7 @@ install dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd src/libgenders/man; gzip genders_attrlist_clear.3 genders_attrlist_create.3 genders_attrlist_destroy.3 genders_close.3 genders_elapsedtime.3 genders_errnum.3 genders_errormsg.3 genders_getattr.3 genders_getattr_all.3 genders_getmaxattrlen.3 genders_getmaxattrs.3 genders_getmaxnodenamelen.3 genders_getmaxvallen.3 genders_getnodename.3 genders_getnodes.3 genders_getnumattrs.3 genders_getnumnodes.3 genders_handle_create.3 genders_handle_dump.3 genders_nodelist_clear.3 genders_nodelist_create.3 genders_nodelist_destroy.3 genders_open.3 genders_perror.3 genders_strerror.3 genders_testattr.3 genders_testattrval.3 genders_testnode.3 genders_vallist_clear.3 genders_vallist_create.3 genders_vallist_destroy.3 libgenders.3; cd ../../..
+cd src/libgenders/man; gzip genders_attrlist_clear.3 genders_attrlist_create.3 genders_attrlist_destroy.3 genders_close.3 genders_elapsedtime.3 genders_errnum.3 genders_errormsg.3 genders_getattr.3 genders_getattr_all.3 genders_getmaxattrlen.3 genders_getmaxattrs.3 genders_getmaxnodelen.3 genders_getmaxvallen.3 genders_getnodename.3 genders_getnodes.3 genders_getnumattrs.3 genders_getnumnodes.3 genders_handle_create.3 genders_handle_destroy.3 genders_handle_dump.3 genders_nodelist_clear.3 genders_nodelist_create.3 genders_nodelist_destroy.3 genders_open.3 genders_perror.3 genders_strerror.3 genders_testattr.3 genders_testattrval.3 genders_testnode.3 genders_vallist_clear.3 genders_vallist_create.3 genders_vallist_destroy.3 genders_attrlist.3 genders_nodelist.3 genders_vallist.3 genders_list.3 genders_stats.3 genders_errors.3 libgenders.3; cd ../../..
 install src/libgenders/man/genders_attrlist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_attrlist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_attrlist_destroy.3.gz $RPM_BUILD_ROOT/usr/man/man3
@@ -53,13 +53,14 @@ install src/libgenders/man/genders_getattr.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getattr_all.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getmaxattrlen.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getmaxattrs.3.gz $RPM_BUILD_ROOT/usr/man/man3
-install src/libgenders/man/genders_getmaxnodenamelen.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_getmaxnodelen.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getmaxvallen.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getnodename.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getnodes.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getnumattrs.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_getnumnodes.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_handle_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_handle_destroy.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_handle_dump.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_nodelist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_nodelist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
@@ -73,6 +74,12 @@ install src/libgenders/man/genders_testnode.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_vallist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_vallist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_vallist_destroy.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_attrlist.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_nodelist.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_vallist.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_list.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_stats.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install src/libgenders/man/genders_errors.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include install
 
@@ -98,6 +105,7 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include i
 /usr/man/man3/gendlib.3.gz
 /usr/man/man3/genders_open.3.gz
 /usr/man/man3/genders_handle_create.3.gz
+/usr/man/man3/genders_handle_destroy.3.gz
 /usr/man/man3/genders_close.3.gz
 /usr/man/man3/genders_errnum.3.gz
 /usr/man/man3/genders_errormsg.3.gz
@@ -107,7 +115,7 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include i
 /usr/man/man3/genders_getnumnodes.3.gz
 /usr/man/man3/genders_getnumattrs.3.gz
 /usr/man/man3/genders_getmaxattrs.3.gz
-/usr/man/man3/genders_getmaxnodenamelen.3.gz
+/usr/man/man3/genders_getmaxnodelen.3.gz
 /usr/man/man3/genders_getmaxattrlen.3.gz
 /usr/man/man3/genders_getmaxvallen.3.gz
 /usr/man/man3/genders_nodelist_create.3.gz
@@ -127,6 +135,12 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include i
 /usr/man/man3/genders_testattrval.3.gz
 /usr/man/man3/genders_testnode.3.gz
 /usr/man/man3/genders_elapsedtime.3.gz
+/usr/man/man3/genders_attrlist.3.gz
+/usr/man/man3/genders_nodelist.3.gz
+/usr/man/man3/genders_vallist.3.gz
+/usr/man/man3/genders_list.3.gz
+/usr/man/man3/genders_stats.3.gz
+/usr/man/man3/genders_errors.3.gz
 /usr/man/man3/libgenders.3.gz
 /usr/lib/libgenders.a
 /usr/lib/libgenders.la
