@@ -1,3 +1,7 @@
+2004-01-30  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/Makefile.am: Support hostlist code.
+	
 2004-01-27  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c: Cleaned up code significantly.
