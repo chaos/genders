@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.63 2003-09-23 20:18:25 achu Exp $
+ * $Id: genders.c,v 1.64 2003-09-27 01:50:38 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -319,9 +319,11 @@ int _insert_attrval_listnode(genders_t handle, char *attr, char *val) {
   }
 
   /* store value? */
-  if (val != NULL && ((avptr->val = strdup(val)) == NULL)) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    return -1;
+  if (val != NULL) {
+    if ((avptr->val = strdup(val)) == NULL) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      return -1;
+    }
   }
   else 
     avptr->val = NULL; 
