@@ -59,6 +59,26 @@ install man/dist/dist_cmp.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install man/dist/nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
+cd man/dist/; gzip *.3; cd ../..
+install man/llnl/genders_getaltnodes.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_isaltnode.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_altnodelist.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_altnodelist_create.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_get_cluster.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_getaltnodes_preserve.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_isnode_or_altnode.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_altnodelist_clear.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_altnodelist_destroy.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_to_gendname.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_to_altname.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_to_gendname_preserve.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_to_altname_preserve.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_to.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_string_to_gendnames.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_string_to_altnames.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_string_to_gendnames_preserve.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_string_to_altnames_preserve.3 $RPM_BUILD_ROOT/usr/man/man3
+install man/llnl/genders_string.3 $RPM_BUILD_ROOT/usr/man/man3
 cd man/; gzip *.3; cd ..
 install man/genders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_attrlist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
@@ -103,6 +123,12 @@ cp src/libgenders/genders.h src/Libgenders
 cp src/libgenders/genders_local.h src/Libgenders	
 cp src/libgenders/genders.c src/Libgenders	
 cd src/Libgenders; perl Makefile.PL prefix="$RPM_BUILD_ROOT/usr"; make; make pure_install; cd ../..
+cp src/libgenders/genders.h src/Libgendersllnl
+cp src/libgenders/genders_local.h src/Libgendersllnl
+cp src/libgenders/genders.c src/Libgendersllnl
+cp src/libgendersllnl/gendersllnl.h src/Libgendersllnl	
+cp src/libgendersllnl/gendersllnl.c src/Libgendersllnl	
+cd src/Libgendersllnl; perl Makefile.PL prefix="$RPM_BUILD_ROOT/usr"; make; make pure_install; cd ../..
 DESTDIR="$RPM_BUILD_ROOT" make install 
 
 %files
@@ -147,7 +173,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man3/genders_errors.3.gz 
 /usr/man/man3/genders_parse.3.gz 
 /usr/man/man3/libgenders.3.gz 
-/usr/share/man/man3/
+/usr/share/man/man3/Libgenders.3pm.gz
 /usr/include/genders.h
 /usr/lib/libgenders.*
 /usr/lib/perl5/
