@@ -8,6 +8,9 @@
 
 	* src/Libgenders/Makefile.am: Fix for genders_query.
 
+	* man/Makefile.am: Added indexing manpages and genders_query manpage.
+
+	* man/genders_query.3: New file.
 	
 2004-06-08  Albert Chu  <chu11@llnl.gov>
 

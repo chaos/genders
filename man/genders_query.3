@@ -1,7 +1,7 @@
 \."############################################################################
-\."  $Id: genders_getnodes.3,v 1.10 2004-06-09 21:52:13 achu Exp $
+\."  $Id: genders_query.3,v 1.1 2004-06-09 21:53:00 achu Exp $
 \."############################################################################
-\."  Copyright (C) 2001-2002 The Regents of the University of California.
+\."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
 \."  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
 \."  UCRL-CODE-2003-004.
@@ -23,39 +23,60 @@
 \."  with Genders; if not, write to the Free Software Foundation, Inc.,
 \."  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \."############################################################################
-.TH GENDERS_GETNODES 3 "August 2003" "LLNL" "LIBGENDERS"
+.TH GENDERS_QUERY 3 "June 2004" "LLNL" "LIBGENDERS"
 .SH NAME
-genders_getnodes \- get nodes from the genders file
+genders_query \- query genders database for a set of nodes
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
-.BI "int genders_getnodes(genders_t handle, char *nodes[], int len, const char *attr, const char *val);"
+.BI "int genders_query(genders_t handle, char *query, char *nodes[], int len););"
 .br
 .SH DESCRIPTION
-\fBgenders_getnodes()\fR gets the names of nodes in the genders file
-that have the attribute specified by \fIattr\fR and the value
-specified by \fIval\fR.  The nodes are stored in the list pointed to
+\fBgenders_query()\fR queries the genders database for a set of nodes
+based on the union, intersection, or set difference between genders
+attributes and values.  The query for a set of nodes is passed as a
+string through the \fIquery\fR parameter.  The query is made up of
+attributes of attribute=value pairs and set operations between them.
+The set operation union is represented by a plus ('+'), intersection
+by a comma (','), and set difference by a minus ('-').  Set operations
+are performed left to right.  Parentheses may be used to change the
+order of operations.  A list of query examples are listed below.
+
+The nodes from the query are stored in the list pointed to
 by \fInodes\fR.  \fIlen\fR indicates the number of nodes that can be
-stored in the list.  If \fIattr\fR is NULL, \fBgenders_getnodes()\fR
-returns all the nodes listed in the genders file.  If \fIval\fR is
-NULL, attribute values are ignored.
+stored in the list.
 
 To avoid passing in a list that is not large enough to store all the
 nodes,
 .BR genders_getnumnodes (3)
 should be used to determine the minimum number of elements \fInodes\fR
 should be able to store.
-.BR genders_nodelist_create (3) 
+.BR genders_nodelist_create (3)
 could be used to create a list that is guaranteed to be large enough
 to store all of the nodes.
 .br
+.SH EXAMPLES
+The following are examples of syntax correct queries that can be
+passed to \fBgenders_query()\fR.
+.LP
+Determine the set of nodes with the mgmt and login attributes:
+        "mgmt+login"
+.LP
+Determine the set of nodes that are not login nodes:
+        "all-login"
+.LP
+Determine the set of nodes that both login nodes and ntp servers:
+        "login,ntpserv"
+.LP
+Determine the set of nodes that are not mgmt or login nodes:
+        "all-(mgmt+login)"
 .SH RETURN VALUES
 On success, the number of nodes stored in \fInodes\fR is returned.  On
 error, -1 is returned, and an error code is returned in \fIhandle\fR.
 The error code can be retrieved via
 .BR genders_errnum (3)
-, and a description of the error code can be retrieved via 
-.BR genders_strerror (3).  
+, and a description of the error code can be retrieved via
+.BR genders_strerror (3).
 Error codes are defined in genders.h.
 .br
 .SH ERRORS
@@ -76,6 +97,17 @@ the nodes.
 .B GENDERS_ERR_PARAMETERS
 An incorrect parameter has been passed in.  
 .TP
+.B GENDERS_ERR_SYNTAX
+There is a syntax error in the query.
+.TP
+.B GENDERS_ERR_QUERY_INPUT
+In invalid genders attribute or attribute=value pair was listed in the
+query.
+.TP
+.B GENDERS_ERR_OUTMEM
+.BR malloc (3)
+has failed internally, system is out of memory.
+.TP
 .B GENDERS_ERR_NULLPTR
 A null pointer has been found in the list passed in.
 .TP
@@ -83,6 +115,9 @@ A null pointer has been found in the list passed in.
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
 point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
+.TP
+.B GENDERS_ERR_INTERNAL
+An internal system error has occurred.  
 .br
 .SH FILES
 /usr/include/genders.h
