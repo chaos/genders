@@ -1,3 +1,13 @@
+2004-04-20  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (_parse_line): Made parse error output
+	string more informative.
+
+2004-04-16  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Complete initial integration of node
+	index hash table.
+	
 2004-04-14  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/hostlist.h, src/libgenders/hostlist.c: Updated to
