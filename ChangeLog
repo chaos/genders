@@ -4,7 +4,7 @@
 
 	* Localize all symbols that shouldn't be global.
 
-	* Cleanup node indexing code.
+	* Reworked and cleaned up node indexing code.
 
 2004-04-26  Albert Chu  <chu11@llnl.gov>
 
