@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.7 2003-04-24 18:54:30 achu Exp $
+ * $Id: genders_example.c,v 1.8 2003-05-06 18:56:48 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -653,7 +653,7 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
   for (i = 0; i < numnodes ; i++) {
     printf("Does the genders file have node \"%s\"? ", nodes[i]);
     
-    ret = genders_testnode(handle, nodes[i]);
+    ret = genders_isnode(handle, nodes[i]);
     if (ret == 1) {
       printf("Yes\n");
     }
@@ -668,7 +668,7 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
   
   printf("Does the genders file have node \"%s\"? ", "foo");
     
-  ret = genders_testnode(handle, "foo");
+  ret = genders_isnode(handle, "foo");
   if (ret == 1) {
     printf("Yes\n");
   }
