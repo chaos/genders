@@ -9,128 +9,128 @@
 MODULE = Libgenders             PACKAGE = Libgenders            
 
 int
-GENDERS_ERR_SUCCESS (handle)
-    genders_t handle    
+GENDERS_ERR_SUCCESS (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_SUCCESS;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NULLHANDLE (handle)
-    genders_t handle    
+GENDERS_ERR_NULLHANDLE (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NULLHANDLE;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OPEN (handle)
-    genders_t handle    
+GENDERS_ERR_OPEN (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OPEN;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_READ (handle)
-    genders_t handle    
+GENDERS_ERR_READ (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_READ;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_PARSE (handle)
-    genders_t handle    
+GENDERS_ERR_PARSE (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_PARSE;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NOTLOADED (handle)
-    genders_t handle    
+GENDERS_ERR_NOTLOADED (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NOTLOADED;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_ISLOADED (handle)
-    genders_t handle    
+GENDERS_ERR_ISLOADED (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_ISLOADED;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OVERFLOW (handle)
-    genders_t handle    
+GENDERS_ERR_OVERFLOW (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OVERFLOW;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_PARAMETERS (handle)
-    genders_t handle    
+GENDERS_ERR_PARAMETERS (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_PARAMETERS;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NULLPTR (handle)
-    genders_t handle    
+GENDERS_ERR_NULLPTR (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NULLPTR;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NOTFOUND (handle)
-    genders_t handle    
+GENDERS_ERR_NOTFOUND (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NOTFOUND;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OUTMEM (handle)
-    genders_t handle    
+GENDERS_ERR_OUTMEM (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OUTMEM;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_MAGIC (handle)
-    genders_t handle    
+GENDERS_ERR_MAGIC (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_MAGIC;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_INTERNAL (handle)
-    genders_t handle    
+GENDERS_ERR_INTERNAL (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_INTERNAL;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_ERRNUMRANGE (handle)
-    genders_t handle    
+GENDERS_ERR_ERRNUMRANGE (sv)
+    SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_ERRNUMRANGE;
     OUTPUT:
         RETVAL    
 
 SV * 
-GENDERS_DEFAULT_FILE (handle)
-    genders_t handle    
+GENDERS_DEFAULT_FILE (sv)
+    SV *sv    
     CODE:
         RETVAL = newSVpv(GENDERS_DEFAULT_FILE, 0);
     OUTPUT:

@@ -29,6 +29,23 @@ Libgenders - Perl extension for libgenders
 
  use Libgenders;
 
+ Libgenders->GENDERS_ERR_SUCCESS
+ Libgenders->GENDERS_ERR_NULLHANDLE
+ Libgenders->GENDERS_ERR_OPEN
+ Libgenders->GENDERS_ERR_READ
+ Libgenders->GENDERS_ERR_PARSE
+ Libgenders->GENDERS_ERR_NOTLOADED
+ Libgenders->GENDERS_ERR_ISLOADED
+ Libgenders->GENDERS_ERR_OVERFLOW
+ Libgenders->GENDERS_ERR_PARAMETERS
+ Libgenders->GENDERS_ERR_NULLPTR
+ Libgenders->GENDERS_ERR_NOTFOUND
+ Libgenders->GENDERS_ERR_OUTMEM
+ Libgenders->GENDERS_ERR_MAGIC
+ Libgenders->GENDERS_ERR_INTERNAL
+ Libgenders->GENDERS_ERR_ERRNUMRANGE
+ Libgenders->GENDERS_DEFAULT_FILE
+
  $handle = Libgenders->genders_handle_create();
  $handle->genders_load_data([$filename]);
 
@@ -223,6 +240,25 @@ success, -1 on error.
 
 The same error codes and constants listed in /usr/include/genders.h
 can be accessed through the following: 
+
+ Libgenders->GENDERS_ERR_SUCCESS
+ Libgenders->GENDERS_ERR_NULLHANDLE
+ Libgenders->GENDERS_ERR_OPEN
+ Libgenders->GENDERS_ERR_READ
+ Libgenders->GENDERS_ERR_PARSE
+ Libgenders->GENDERS_ERR_NOTLOADED
+ Libgenders->GENDERS_ERR_ISLOADED
+ Libgenders->GENDERS_ERR_OVERFLOW
+ Libgenders->GENDERS_ERR_PARAMETERS
+ Libgenders->GENDERS_ERR_NULLPTR
+ Libgenders->GENDERS_ERR_NOTFOUND
+ Libgenders->GENDERS_ERR_OUTMEM
+ Libgenders->GENDERS_ERR_MAGIC
+ Libgenders->GENDERS_ERR_INTERNAL
+ Libgenders->GENDERS_ERR_ERRNUMRANGE
+ Libgenders->GENDERS_DEFAULT_FILE
+
+ or
 
  $handle->GENDERS_ERR_SUCCESS
  $handle->GENDERS_ERR_NULLHANDLE
