@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: dist2,v 1.4.2.1 2003-07-16 23:45:30 achu Exp $
+# $Id: dist2,v 1.4.2.2 2003-07-17 19:38:34 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2,v $
 # 
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -87,8 +87,6 @@ if ($main::opt_c) {
                 exit(1);
         }
 
-
-	($main::local_cluster) = Genders::get_clusters();
 	Genders::init(sprintf($main::path_genders, $main::local_cluster));
 	if (!Genders::getnode("all")) {
 		Genders::init($main::path_genders_fallback);
