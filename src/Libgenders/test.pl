@@ -23,7 +23,13 @@ if (!defined $handle) {
     exit(1);
 }
 
-$ret = Libgenders::genders_load_data($handle);
+#$ret = Libgenders::genders_load_data($handle);
+#if ($ret == -1) {
+#    print "Error, genders_load_data()\n";
+#    exit(1);
+#}
+
+$ret = Libgenders::genders_load_data($handle, undef);
 if ($ret == -1) {
     print "Error, genders_load_data()\n";
     exit(1);
@@ -94,6 +100,12 @@ $ret = Libgenders::genders_testattr($handle, "mgmt");
 print "mgmt - ",$ret,"\n";
 $ret = Libgenders::genders_testattr($handle, "foo");
 print "foo - ",$ret,"\n";
+$ret = Libgenders::genders_testattr($handle, "resmgr", undef);
+print "resmgr2 - ",$ret,"\n";
+$ret = Libgenders::genders_testattr($handle, "mgmt", undef);
+print "mgmt2 - ",$ret,"\n";
+$ret = Libgenders::genders_testattr($handle, "foo", undef);
+print "foo2 - ",$ret,"\n";
 $ret = Libgenders::genders_testattrval($handle, "resmgr", "both");
 print "resmgr=both - ",$ret,"\n";
 $ret = Libgenders::genders_testattrval($handle, "resmgr", "bar");
@@ -110,6 +122,8 @@ print "\n";
 
 $ret = Libgenders::genders_isnode($handle);
 print "local - ",$ret,"\n";
+$ret = Libgenders::genders_isnode($handle, undef);
+print "local2 - ",$ret,"\n";
 $ret = Libgenders::genders_isnode($handle, "mdevi");
 print "mdevi - ",$ret,"\n";
 $ret = Libgenders::genders_isnode($handle, "foo");
