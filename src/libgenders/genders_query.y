@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.8 2004-06-10 16:59:01 achu Exp $
+ *  $Id: genders_query.y,v 1.9 2004-06-10 18:35:45 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -431,11 +431,11 @@ input: query
 query: term {$$ = $1;}
        | query PIPETOK term 
            {
-             $$ = genders_makenode("+", $1, $3);
+             $$ = genders_makenode("|", $1, $3);
            }
        | query AMPERSANDTOK term 
            {
-             $$ = genders_makenode(",", $1, $3);
+             $$ = genders_makenode("&", $1, $3);
            }
        | query MINUSTOK term 
            {
