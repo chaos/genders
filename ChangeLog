@@ -1,3 +1,7 @@
+2004-10-28  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Additional port fixes.
+	
 2004-10-26  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in: Minor fix for possibly non gzipped manpages.
