@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.15 2004-12-14 21:51:40 achu Exp $
+## $Id: Makefile.am,v 1.16 2004-12-20 16:38:04 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -9,6 +9,7 @@
 
 # DESTDIR is usually set during make install time, not configure or
 # make time, so this is our work around
+PERL_INSTALL_DESTDIR = @PERL_INSTALL_DESTDIR@
 PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 
 all: Makefile.pm
@@ -23,7 +24,7 @@ Makefile.pm: Makefile.PL
 		cp $(srcdir)/Genders.pm .; \
 	fi
 	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX)$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITELIB=$(PERL_INSTALL_PREFIX)$$TEMPINSTALLSITELIB
+	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITELIB=$(PERL_INSTALL_DESTDIR)$$TEMPINSTALLSITELIB
 
 install: Makefile.pm
 	$(MAKE) -f Makefile.pm pure_install
