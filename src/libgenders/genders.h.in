@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.4 2003-05-06 18:56:21 achu Exp $
+ * $Id: genders.h.in,v 1.5 2003-05-07 17:36:49 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -25,11 +25,9 @@
 #define GENDERS_ERR_NULLPTR       9 /* null pointer in list */
 #define GENDERS_ERR_NOTFOUND     10 /* node not found */
 #define GENDERS_ERR_OUTMEM       11 /* out of memory */
-#define GENDERS_ERR_FREEMEM      12 /* memory has not been freed */
-#define GENDERS_ERR_ISFREE       13 /* memory is already free */
-#define GENDERS_ERR_MAGIC        14 /* magic number incorrect */
-#define GENDERS_ERR_INTERNAL     15 /* internal system error */
-#define GENDERS_ERR_ERRNUMRANGE  16 /* error number out of range */
+#define GENDERS_ERR_MAGIC        12 /* magic number incorrect */
+#define GENDERS_ERR_INTERNAL     13 /* internal system error */
+#define GENDERS_ERR_ERRNUMRANGE  14 /* error number out of range */
 
 #define DEFAULT_GENDERS_FILE     @GENDERS_DEFAULT_FILE@   
 
