@@ -1,7 +1,7 @@
 2004-01-14  Albert Chu  <chu11@llnl.gov>
 
-	* src/nodeattr/nodeattr.c: Modify code style to fit GNU coding
-	standards more closely
+	* src/nodeattr/nodeattr.c, src/libgenders/genders.c: Modify code
+	style to fit GNU coding standards more closely.
 
 2003-12-31  Albert Chu  <chu11@llnl.gov>
 
