@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.19 2004-06-08 16:30:14 achu Exp $
+## $Id: Makefile.am,v 1.20 2004-06-09 17:06:23 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -34,10 +34,10 @@ libgenders_la_SOURCES = genders.c genders_common.c genders_parse.c genders_query
 	                fd.c list.c hash.c thread.c hostlist.c
 libgenders_la_LDFLAGS = -version-info $(current):$(rev):$(age) $(OTHER_FLAGS)
 
-genders_parse.c: genders_query.c
+genders_parse.c: genders_query.c genders_parse.l
 	$(LEX) -ogenders_parse.c genders_parse.l
 
-genders_query.c: 
+genders_query.c: genders_query.y
 	$(YACC) -d -o genders_query.c genders_query.y
 
 CLEANFILES = genders_parse.c genders_query.c genders_query.h

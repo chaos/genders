@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.3 2004-06-08 23:50:14 achu Exp $
+ *  $Id: genders_query.y,v 1.4 2004-06-09 17:06:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -164,37 +164,6 @@ _parse_query(genders_t handle, char *query)
   return 0;
 }
 
-int
-_check_attrs(genders_t handle, struct genders_treenode *t)
-{
-  if (!t->left && !t->right)
-    {
-      int rv;
-      if ((rv = genders_isattr(handle, t->str)) < 0)
-        return -1;
-      if (rv == 0)
-        {
-          handle->errnum = GENDERS_ERR_NOTFOUND;
-          return -1;
-        }
-    }
-  else
-    {
-      /* Is this possible? Leave just in case */
-      if (!(t->left && t->right))
-        {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          return -1;
-        }
-
-      if (_check_attrs(handle, t->left) < 0)
-        return -1;
-      if (_check_attrs(handle, t->right) < 0)
-        return -1;
-    }
-  return 0;
-}
-
 hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
@@ -202,12 +171,32 @@ _calc_query(genders_t handle, struct genders_treenode *t)
     {
       char **nodes = NULL;
       hostlist_t h = NULL;
-      int i, len, num;
+      int i, rv, len, num;
+      char *attr, *val;
+
+      attr = t->str; 
+      if ((val = strchr(attr, '=')))
+        {
+          *val++ = '\0';
+          if ((rv = genders_isattrval(handle, attr, val)) < 0)
+            return NULL;
+        }
+      else
+        {
+          if ((rv = genders_isattr(handle, attr)) < 0)
+            return NULL;
+        }
+
+      if (rv == 0)
+        {
+          handle->errnum = GENDERS_ERR_NOTFOUND;
+          return NULL;
+        }
 
       if ((len = genders_nodelist_create(handle, &nodes)) < 0)
         return NULL;
 
-      if ((num = genders_getnodes(handle, nodes, len, t->str, NULL)) < 0)
+      if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
         return NULL;
 
       if (!(h = hostlist_create(NULL)))
@@ -387,9 +376,6 @@ genders_query(genders_t handle, char *query, char *nodes[], int len)
     }
 
   if (_parse_query(handle, query) < 0)
-    goto cleanup;
-
-  if (_check_attrs(handle, genders_treeroot) < 0)
     goto cleanup;
 
   if (!(h = _calc_query(handle, genders_treeroot)))

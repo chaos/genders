@@ -1,3 +1,8 @@
+2004-06-09  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_query.y, src/libgenders/genders_parse.l:
+	Support attr=val in queries.
+	
 2004-06-08  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/Makefile.am, src/libgenders/genders_query.y,
