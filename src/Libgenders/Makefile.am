@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.15 2004-06-09 20:20:32 achu Exp $
+## $Id: Makefile.am,v 1.16 2004-06-11 18:10:41 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -23,7 +23,20 @@ Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	if ! test -a genders_query.c; then \
 		$(YACC) -d -ogenders_query.c genders_query.y; \
 	fi
-	$(PERL) $(srcdir)/Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
+# Hacks to make distcheck work
+	if ! test -a Makefile.PL; then \
+		cp $(srcdir)/Makefile.PL .; \
+	fi
+	if ! test -a typemap; then \
+		cp $(srcdir)/typemap .; \
+	fi
+	if ! test -a Libgenders.pm; then \
+		cp $(srcdir)/Libgenders.pm .; \
+	fi
+	if ! test -a Libgenders.xs; then \
+		cp $(srcdir)/Libgenders.xs .; \
+	fi
+	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
 test: Makefile.xs 
 	$(MAKE) -f Makefile.xs test

@@ -1,3 +1,8 @@
+2004-06-11  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/Makefile.am, src/Libgenders/Makefile.am,
+	src/Genders/Makefile.am: Added distcheck fixes and workarounds.
+	
 2004-06-10  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.h.in, src/libgenders/genders_query.y,
