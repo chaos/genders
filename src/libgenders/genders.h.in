@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.17 2004-04-27 22:24:33 achu Exp $
+ *  $Id: genders.h.in,v 1.18 2004-04-28 00:20:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,15 +37,14 @@
 #define GENDERS_ERR_PARSE         4 /* parse error on genders file */
 #define GENDERS_ERR_NOTLOADED     5 /* genders data not loaded */
 #define GENDERS_ERR_ISLOADED      6 /* genders data is already loaded */
-#define GENDERS_ERR_ISINDEXED     7 /* genders data is already indexed */
-#define GENDERS_ERR_OVERFLOW      8 /* array is not big enough for result */
-#define GENDERS_ERR_PARAMETERS    9 /* incorrect parameters passed in */
-#define GENDERS_ERR_NULLPTR      10 /* null pointer in list */
-#define GENDERS_ERR_NOTFOUND     11 /* node not found */
-#define GENDERS_ERR_OUTMEM       12 /* out of memory */
-#define GENDERS_ERR_MAGIC        13 /* magic number incorrect */
-#define GENDERS_ERR_INTERNAL     14 /* internal system error */
-#define GENDERS_ERR_ERRNUMRANGE  15 /* error number out of range */
+#define GENDERS_ERR_OVERFLOW      7 /* array is not big enough for result */
+#define GENDERS_ERR_PARAMETERS    8 /* incorrect parameters passed in */
+#define GENDERS_ERR_NULLPTR       9 /* null pointer in list */
+#define GENDERS_ERR_NOTFOUND     10 /* node not found */
+#define GENDERS_ERR_OUTMEM       11 /* out of memory */
+#define GENDERS_ERR_MAGIC        12 /* magic number incorrect */
+#define GENDERS_ERR_INTERNAL     13 /* internal system error */
+#define GENDERS_ERR_ERRNUMRANGE  14 /* error number out of range */
 
 #define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 
@@ -66,12 +65,6 @@ int genders_handle_destroy(genders_t handle);
  * Returns: 0 on success, -1 on failure  
  */
 int genders_load_data(genders_t handle, const char *filename);
-
-/* Internally compute indexes to access genders data more
- * quickly.
- * Returns: 0 on success, -1 on failure
- */
-int genders_compute_indexes(genders_t handle);
 
 /* Returns an error code associated with a handle 
  */
