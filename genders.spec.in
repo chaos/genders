@@ -6,7 +6,7 @@ Copyright: none
 Group: System Environment/Base
 Source: %{name}-%{version}-%{release}.tgz
 Prereq: perl
-BuildRoot: %{_tmppath}/%{name}-%{version}-${release}
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
 Genders is a static cluster configuration database.  
