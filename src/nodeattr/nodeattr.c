@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.16 2003-05-15 21:41:17 achu Exp $
+ *  * $Id: nodeattr.c,v 1.17 2003-05-15 23:58:51 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -27,7 +27,6 @@ static struct option longopts[] = {
     { "queryspace", 0, 0, 'n' },
     { "query", 0, 0, 'q' },
     { "value", 0, 0, 'v' },
-    { "cluster", 0, 0, 'C' },
     { "listattr", 0, 0, 'l' },
     { "altnames", 0, 0, 'r' },
     { "filename", 1, 0, 'f' },
