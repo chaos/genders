@@ -41,7 +41,7 @@ install dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd src; make DESTDIR="$RPM_BUILD_ROOT" exec_prefix=/usr install
+cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include install
 
 %files
 %defattr(-,root,root)
