@@ -1,3 +1,8 @@
+2003-04-XX Albert chu <chu11@llnl.gov>
+        * fixed string_constant() function in Libgenders(3) to
+	  use SV * instead of char *
+	* added string_constant() function to Libgenders(3) manpage
+
 2003-04-09 Albert chu <chu11@llnl.gov>
 	* created Libgenders(3), perl extension that allows genders
 	  C API to be called via perl code.
