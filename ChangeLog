@@ -2,7 +2,8 @@
 
 	* tagged pre_genders_1_4_code_cleanup
 
-	* Major code cleanup.
+	* Major libgenders code cleanup including new files and various
+	new functions.
 	
 2004-12-18  Albert Chu  <chu11@llnl.gov>
 

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.3 2004-12-22 00:01:13 achu Exp $
+ *  $Id: genders_common.c,v 1.4 2004-12-22 18:10:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -114,30 +114,6 @@ _free_attrvallist(void *x)
   __list_destroy(attrvals);
 }
 
-void 
-_initialize_handle_info(genders_t handle)
-{
-  assert(handle);
-
-  handle->magic = GENDERS_MAGIC_NUM;
-  handle->is_loaded = 0;
-  handle->numnodes = 0;
-  handle->numattrs = 0;
-  handle->maxattrs = 0;
-  handle->maxnodelen = 0;
-  handle->maxattrlen = 0;
-  handle->maxvallen = 0;
-  memset(handle->nodename,'\0',MAXHOSTNAMELEN+1);
-  handle->valbuf = NULL;
-  handle->node_index = NULL;
-  handle->attr_index = NULL;
-  handle->attrval_index = NULL;
-  handle->attrval_index_attr = NULL;
-  /* Don't initialize the nodeslist, attrvalslist, or attrslist, they
-   * should not be re-initialized on a load_data error.
-   */
-}
-
 int 
 _handle_error_check(genders_t handle) 
 {
@@ -201,15 +177,16 @@ _put_in_array(genders_t handle, char *str, char **list, int index, int len)
  */
 int
 _get_valptr(genders_t handle, 
-	    genders_node_t n, 
-	    genders_attrval_t av, 
-	    char **val,
-	    int *subst_occurred)
+            genders_node_t n, 
+            genders_attrval_t av, 
+            char **val,
+            int *subst_occurred)
 {
   char *valptr, *nodenameptr, *valbufptr;
 
   assert(handle && handle->magic == GENDERS_MAGIC_NUM);
   assert(n && av && val);
+  assert(!(!av->val && av->val_contains_subst));
 
   if (!(av->val_contains_subst)) {
     if (subst_occurred)
@@ -259,10 +236,10 @@ _get_valptr(genders_t handle,
  */
 int
 _find_attrval(genders_t handle, 
-	      genders_node_t n, 
-	      const char *attr, 
-	      const char *val,
-	      genders_attrval_t *avptr)
+              genders_node_t n, 
+              const char *attr, 
+              const char *val,
+              genders_attrval_t *avptr)
 {
   ListIterator itr = NULL;
   List attrvals;
@@ -278,18 +255,18 @@ _find_attrval(genders_t handle,
     
     if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) {
       if (!val) {
-	*avptr = av;
-	break;
+        *avptr = av;
+        break;
       }
       else if (av->val) {
-	char *valptr;
+        char *valptr;
 
-	if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
-	  goto cleanup;
-	if (!strcmp(valptr, val)) {
-	  *avptr = av;
-	  break;
-	}
+        if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+          goto cleanup;
+        if (!strcmp(valptr, val)) {
+          *avptr = av;
+          break;
+        }
       }
     }
   }

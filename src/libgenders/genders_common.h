@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.h,v 1.6 2004-12-22 01:44:13 achu Exp $
+ *  $Id: genders_common.h,v 1.7 2004-12-22 18:10:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -62,7 +62,7 @@ typedef struct genders_node *genders_node_t;
 struct genders_attrval {
   char *attr;
   char *val;
-  int val_contains_subst;	/* to limit constant calls to strstr() */
+  int val_contains_subst;       /* to limit constant calls to strstr() */
 };
 typedef struct genders_attrval *genders_attrval_t;
 
@@ -148,14 +148,14 @@ struct genders {
           if (!((dest) = list_create((delF)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __list_append(list, item) \
         do { \
           if (!list_append((list), (item))) { \
             handle->errnum = GENDERS_ERR_INTERNAL; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __list_destroy(__list) \
         if ((__list)) list_destroy((__list))
@@ -164,7 +164,7 @@ struct genders {
           if (!((dest) = list_iterator_create((list)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __list_iterator_destroy(__itr) \
         if ((__itr)) list_iterator_destroy((__itr))
@@ -174,7 +174,7 @@ struct genders {
           if (!((dest) = hash_create((size),(key_f),(cmp_f), (del_f)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __hash_insert(hash, key, data) \
         do { \
@@ -194,17 +194,16 @@ struct genders {
           if (!((dest) = hostlist_create((str)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __hostlist_destroy(__hostlist) \
         if ((__hostlist)) hostlist_destroy((__hostlist))
-
 #define __hostlist_iterator_create(dest, hl) \
         do { \
           if (!((dest) = hostlist_iterator_create((hl)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 #define __hostlist_iterator_destroy(__hostlist) \
         if ((__hostlist)) hostlist_iterator_destroy((__hostlist))
@@ -214,15 +213,16 @@ struct genders {
           if (!((dest) = (cast)malloc((size)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
           memset((dest), '\0', (size)); \
         } while (0)
+
 #define __xstrdup(dest, src) \
         do { \
           if (!((dest) = strdup((src)))) { \
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
-	  } \
+          } \
         } while (0)
 
 /* List API Helper Functions */
@@ -235,22 +235,23 @@ void _free_genders_node(void *x);
 void _free_genders_attrval(void *x); 
 void _free_attrvallist(void *x);
 
-void _initialize_handle_info(genders_t handle);
+/* Common functions */
+
 int _handle_error_check(genders_t handle);
 int _unloaded_handle_error_check(genders_t handle);
 int _loaded_handle_error_check(genders_t handle);
 int _put_in_array(genders_t handle, char *str, char **list, int index, int len);
 
 int _get_valptr(genders_t handle, 
-		genders_node_t n, 
-		genders_attrval_t av, 
-		char **val,
-		int *subst_occurred);
+                genders_node_t n, 
+                genders_attrval_t av, 
+                char **val,
+                int *subst_occurred);
 
 int _find_attrval(genders_t handle, 
-		  genders_node_t n, 
-		  const char *attr, 
-		  const char *val,
-		  genders_attrval_t *avptr);
+                  genders_node_t n, 
+                  const char *attr, 
+                  const char *val,
+                  genders_attrval_t *avptr);
 
-#endif
+#endif /* _GENDERS_COMMON_H */

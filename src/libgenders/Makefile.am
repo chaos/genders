@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.22 2004-12-22 00:01:13 achu Exp $
+## $Id: Makefile.am,v 1.23 2004-12-22 18:10:13 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -27,7 +27,8 @@ endif
 
 BUILT_SOURCES         = genders_query_parse.c genders_query.c
 include_HEADERS       = genders.h
-noinst_HEADERS        = genders_common.h fd.h hash.h hostlist.h list.h thread.h
+noinst_HEADERS        = genders_common.h genders_parsing.h fd.h hash.h \
+                        hostlist.h list.h thread.h
 lib_LTLIBRARIES       = libgenders.la
 libgenders_la_CFLAGS  = -D_REENTRANT
 libgenders_la_SOURCES = genders.c genders_common.c genders_parsing.c \
