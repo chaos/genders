@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.10 2003-05-15 23:52:52 achu Exp $
+ * $Id: genders_example.c,v 1.11 2003-05-20 00:26:01 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <sys/param.h>
 #include "genders.h"
-#include <mcheck.h>
 #include <string.h>
 
 int numnodes = 0;
@@ -827,7 +826,7 @@ void example_using_genders_perror_and_errormsg(genders_t handle) {
 int main(int argc, char **argv) {
   genders_t handle;
   char *filename;
-mtrace();
+
   if (argc != 2) {
     usage();
   }
