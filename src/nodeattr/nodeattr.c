@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.11 2003-04-23 20:25:10 achu Exp $
+ *  * $Id: nodeattr.c,v 1.12 2003-04-23 20:27:42 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -27,10 +27,10 @@ static struct option longopts[] = {
     { "queryspace", 0, 0, 'n' },
     { "query", 0, 0, 'q' },
     { "value", 0, 0, 'v' },
+    { "cluster", 0, 0, 'C' },
     { "listattr", 0, 0, 'l' },
     { "altnames", 0, 0, 'r' },
     { "filename", 1, 0, 'f' },
-    { "cluster", 0, 0, 'C' },
     { "check", 0, 0, 'k'},
     { 0,0,0,0 },
 };
@@ -87,14 +87,14 @@ main(int argc, char *argv[])
         case 'l':   /* --listattr */
             lopt = 1;
             break;
+        case 'C':   /* --cluster */
+            Copt = 1;
+            break;
         case 'r':   /* --altnames */
             ropt = 1;
             break;
         case 'f':   /* --filename */
             filename = optarg;
-            break;
-        case 'C':   /* --cluster */
-            Copt = 1;
             break;
         case 'k':   /* --check */ 
             kopt = 1;
@@ -180,7 +180,7 @@ main(int argc, char *argv[])
             node = argv[optind++];
         else if (optind != argc)
             usage();
-      
+
         test_attr(gp, node, "cluster", 1);
         exit(0);
     }
