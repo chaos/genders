@@ -46,6 +46,8 @@
 
 	* src/libgenders/genders_parsing.c (_insert_attr, _parse_line):
 	Fix numattrs counting bug.
+
+	* Makefile.am: Fix destdir for distcheck.
 	
 2004-12-22  Albert Chu  <chu11@llnl.gov>
 
