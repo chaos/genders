@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.88 2004-02-04 00:57:58 achu Exp $
+ *  $Id: genders.c,v 1.89 2004-02-04 01:35:19 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -332,6 +332,8 @@ _get_val(genders_t handle, genders_node_t n, genders_attrval_t av,
 
     val++;
   }
+
+  return 1;
 }
 
 static void 
