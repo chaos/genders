@@ -1,6 +1,9 @@
 2004-04-26  Albert Chu  <chu11@llnl.gov>
 
 	* Fixed build issues with Libgenders.
+
+	* Removed MAXHOSTNAMELEN buffer and replaced with pointer and
+	malloced buffer.
 	
 2004-04-22  Albert Chu  <chu11@llnl.gov>
 

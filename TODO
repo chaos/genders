@@ -1,6 +1,3 @@
-- Re-work code to reduce memory footprint
-  - Decrease Hash multiplier?
-  - Remove MAXHOSTNAMELEN buffers?
 - Only export genders symbols.
 - Have libgenders have lib dependency of pthread.
   - Or do not compile with pthreads?

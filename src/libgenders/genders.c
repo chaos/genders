@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.100 2004-04-26 23:39:43 achu Exp $
+ *  $Id: genders.c,v 1.101 2004-04-27 01:04:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,7 +43,7 @@
 
 #define GENDERS_READLINE_BUFLEN   65536
 
-#define GENDERS_HASH_MULTIPLIER   2
+#define GENDERS_HASH_MULTIPLIER   1
 
 #ifndef MAXHOSTNAMELEN
 #define MAXHOSTNAMELEN            64
@@ -59,7 +59,7 @@
  * handle.
  */
 struct genders_node {
-  char name[MAXHOSTNAMELEN+1];
+  char *name;
   List attrlist;
   int attrcount;
 };
@@ -202,6 +202,7 @@ _free_genders_node(void *x)
 {
   genders_node_t n = (genders_node_t)x;
   list_destroy(n->attrlist);
+  free(n->name);
   free(n);
 }
 
@@ -460,7 +461,10 @@ _insert_node(genders_t handle, List nodelist, char *nodename)
     }
     memset(n, '\0', sizeof(struct genders_node));
 
-    strcpy(n->name, nodename);    /* length previously asserted */
+    if (!(n->name = strdup(nodename))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup;
+    }
     n->attrcount = 0;
 
     if (!(n->attrlist = list_create(NULL))) {
@@ -842,10 +846,7 @@ genders_load_data(genders_t handle, const char *filename)
   
   handle->maxnodelen = MAX(strlen(handle->nodename), handle->maxnodelen);
 
-  /* Create hash node_index for quick searches, make hash larger than
-   * numnodes to decrease the probability of hash collisions.
-   */
-
+  /* Create hash node_index for quick searches. */
   if (!(handle->node_index = hash_create(handle->numnodes * GENDERS_HASH_MULTIPLIER,
 					 (hash_key_f)hash_key_string,
 					 (hash_cmp_f)strcmp,
@@ -1650,3 +1651,27 @@ genders_set_errnum(genders_t handle, int errnum)
   else
     handle->errnum = GENDERS_ERR_INTERNAL;
 }
+
+/*
+ * Various debugging/helper functions which are riddled with
+ * corner case bugs.
+ */
+
+#ifndef NDEBUG
+int
+genders_node_index_dump(genders_t handle)
+{
+  ListIterator itr;
+  genders_node_t n;
+  
+  itr = list_iterator_create(handle->nodeslist);
+  
+  while ((n = list_next(itr)) != NULL) {
+    char *nodename = n->name;
+    List l = hash_find(handle->node_index, nodename);
+		    printf("%s: %d\n", nodename, list_count(l));
+  }
+
+  return 0;
+}
+#endif
