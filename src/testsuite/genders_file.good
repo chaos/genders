@@ -1,15 +1,15 @@
 #
-# $Id: genders_file.good,v 1.1 2003-03-13 00:22:29 achu Exp $
+# $Id: genders_file.good,v 1.2 2003-04-01 21:54:43 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/genders_file.good,v $
 #
-test0  param1,param2=val2,param3=val3-0,param4-0
-test1  param1,param2=val2,param3=val3-1,param4-1
-test2  param1,param2=val2,param3=val3-2,param4-2
-test3  param1,param2=val2,param3=val3-3,param4-3
-test4  param1,param2=val2,param3=val3-4,param4-4
-test5  param1,param2=val2,param3=val3-5,param4-5
-test6  param1,param2=val2,param3=val3-6,param4-6
-test7  param1,param2=val2,param3=val3-7,param4-7
-test8  param1,param2=val2,param3=val3-8,param4-8
-test9  param1,param2=val2,param3=val3-9,param4-9
+test0  param1,param2=val2,param3=val3-0,param4-0,cluster=test,all
+test1  param1,param2=val2,param3=val3-1,param4-1,cluster=test,all
+test2  param1,param2=val2,param3=val3-2,param4-2,cluster=test,all
+test3  param1,param2=val2,param3=val3-3,param4-3,cluster=test,all
+test4  param1,param2=val2,param3=val3-4,param4-4,cluster=test,all
+test5  param1,param2=val2,param3=val3-5,param4-5,cluster=test,all
+test6  param1,param2=val2,param3=val3-6,param4-6,cluster=test,all
+test7  param1,param2=val2,param3=val3-7,param4-7,cluster=test,all
+test8  param1,param2=val2,param3=val3-8,param4-8,cluster=test,all
+test9  param1,param2=val2,param3=val3-9,param4-9,cluster=test,all
 
