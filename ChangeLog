@@ -18,8 +18,8 @@
 	* man/genders_load_data.3, man/genders_parse.3: Added information
 	regarding new GENDERS_ERR_OVERFLOW error that can be returned.
 
-	* src/libgenders/genders.c (insert_attr_listnode): Minor code
-	cleanup fix.
+	* src/libgenders/genders.c (_insert_attr_listnode,
+	genders_getnodes): Minor code cleanup fix.
 	
 2003-09-19  Albert Chu  <chu11@llnl.gov>
 

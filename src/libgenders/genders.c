@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.58 2003-09-20 17:36:09 achu Exp $
+ * $Id: genders.c,v 1.59 2003-09-20 18:08:42 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -838,9 +838,8 @@ int genders_getnodes(genders_t handle,
                          (avptr->val != NULL && strcmp(avptr->val, val) == 0));
     }
   
-    if (save)
-      if (_save_in_list(handle, nptr->name, nodes, count++, len) == -1)
-        return -1;
+    if (save && _save_in_list(handle, nptr->name, nodes, count++, len) == -1)
+      return -1;
 
     nptr = nptr->next;
   }
