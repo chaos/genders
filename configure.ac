@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.30 2004-12-29 22:27:16 achu Exp $
+## $Id: configure.ac,v 1.31 2005-01-10 16:45:35 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -19,6 +19,32 @@ AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE($PROJECT, $VERSION)
 AM_CONFIG_HEADER([config/config.h])
 AM_MAINTAINER_MODE
+
+# Update this information before a public release only!
+
+# libgenders versioning
+#
+# If library source code has changed at all increment rev
+# (current:rev:age) = (current:rev+1:age)
+#
+# If any interfaces have been added,removed, or changed increment current
+#  and set rev = 0;
+#
+# If any interfaces have been added increment age
+#
+# If any interfaces have been removed, set age = 0
+#
+LIBGENDERS_CURRENT=0
+LIBGENDERS_REVISION=0
+LIBGENDERS_AGE=0
+LIBGENDERS_VERSION_INFO=$LIBGENDERS_CURRENT:$LIBGENDERS_REVISION:$LIBGENDERS_AGE
+AC_SUBST([LIBGENDERS_VERSION_INFO])
+
+# Libgenders and Genders versioning
+PERLGENDERS_MAJOR=0
+PERLGENDERS_MINOR=01
+PERLGENDERS_VERSION=$PERLGENDERS_MAJOR.$PERLGENDERS_MINOR
+AC_SUBST([PERLGENDERS_VERSION])
 
 # option for default genders file
 AC_MSG_CHECKING(for --with-genders-file )
@@ -67,6 +93,7 @@ else
 fi
 AC_SUBST(PERL_INSTALL_DESTDIR)
 AC_SUBST(PERL_INSTALL_PREFIX)
+
 ##
 # Checks for programs.
 ##
@@ -137,6 +164,8 @@ AC_CONFIG_FILES( \
   compat/Makefile \
   man/Makefile \
   man/compat/Makefile \
+  src/Libgenders/Libgenders.pm \
+  src/Genders/Genders.pm \
 )
 AC_OUTPUT
 

@@ -1,3 +1,21 @@
+2004-01-08  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/Makefile.am, src/Genders/Makefile.am: Cleanup.
+
+	* genders.spec.in: Fix a Perl Extensions packaging problem for
+	multilib systems.
+
+	* src/libgenders/Makefile.am, configure.ac: Move versioning info
+	into configure.ac.
+
+	* configure.ac: Added Perl versioning.
+
+	* src/Libgenders/Libgenders.pm: Renamed to Libgenders.pm.in and
+	added versioning.
+
+	* src/Genders/Genders.pm: Renamed to Genders.pm.in and added
+	versioning.
+	
 2004-12-31  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query_parse.l: Be able to parse '&', '|',

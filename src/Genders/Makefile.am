@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.16 2004-12-20 16:38:04 achu Exp $
+## $Id: Makefile.am,v 1.17 2005-01-10 16:45:35 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -12,10 +12,13 @@
 PERL_INSTALL_DESTDIR = @PERL_INSTALL_DESTDIR@
 PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 
-all: Makefile.pm
-	$(MAKE) -f Makefile.pm
+MAKEMAKERFLAGS = INSTALLDIRS=site SITEPREFIX=$(PERL_INSTALL_PREFIX) \
+                 MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
-Makefile.pm: Makefile.PL
+all: Makefile.xs
+	$(MAKE) -f Makefile.xs
+
+Makefile.xs: Makefile.PL
 # Hacks to make distcheck work
 	if ! test -a Makefile.PL; then \
 		cp $(srcdir)/Makefile.PL .; \
@@ -24,23 +27,23 @@ Makefile.pm: Makefile.PL
 		cp $(srcdir)/Genders.pm .; \
 	fi
 	TEMPINSTALLSITELIB=`perl -e 'use Config; print $$Config{installsitearch}'`; \
-	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITELIB=$(PERL_INSTALL_DESTDIR)$$TEMPINSTALLSITELIB
+	$(PERL) Makefile.PL $(MAKEMAKERFLAGS) INSTALLSITELIB=$(PERL_INSTALL_DESTDIR)$$TEMPINSTALLSITELIB
 
-install: Makefile.pm
-	$(MAKE) -f Makefile.pm pure_install
+install: Makefile.xs
+	$(MAKE) -f Makefile.xs pure_install
 
-pure_install: Makefile.pm
-	$(MAKE) -f Makefile.pm pure_install
+pure_install: Makefile.xs
+	$(MAKE) -f Makefile.xs pure_install
 
 install-data-local:
-	$(MAKE) -f Makefile.pm pure_install
+	$(MAKE) -f Makefile.xs pure_install
 
 uninstall:
-	$(MAKE) -f Makefile.pm uninstall
+	$(MAKE) -f Makefile.xs uninstall
 
 clean:
-	if test -a Makefile.pm; then $(MAKE) -f Makefile.pm clean; fi
-	rm -f Makefile.pm
-	rm -f Makefile.pm.old
+	if test -a Makefile.xs; then $(MAKE) -f Makefile.xs clean; fi
+	rm -f Makefile.xs
+	rm -f Makefile.xs.old
 
 EXTRA_DIST = Genders.pm Makefile.PL

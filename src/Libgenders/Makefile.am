@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.19 2004-12-22 00:01:13 achu Exp $
+## $Id: Makefile.am,v 1.20 2005-01-10 16:45:35 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -10,6 +10,9 @@
 # DESTDIR is usually set during make install time, not configure or
 # make time, so this is our work around
 PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
+
+MAKEMAKERFLAGS = INSTALLDIRS=site SITEPREFIX=$(PERL_INSTALL_PREFIX) \
+                 MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
 all: Makefile.xs
 	$(MAKE) -f Makefile.xs
@@ -38,7 +41,7 @@ Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	if ! test -a Libgenders.xs; then \
 		cp $(srcdir)/Libgenders.xs .; \
 	fi
-	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
+	$(PERL) Makefile.PL $(MAKEMAKERFLAGS)
 
 test: Makefile.xs 
 	$(MAKE) -f Makefile.xs test

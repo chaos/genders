@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.20 2004-10-07 18:22:31 achu Exp $
+#  $Id: Libgenders.pm.in,v 1.1 2005-01-10 16:45:35 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -36,7 +36,7 @@ require DynaLoader;
 
 our @ISA = qw(Exporter DynaLoader);
 
-our $VERSION = '0.01';
+our $VERSION = '@PERLGENDERS_VERSION@';
 
 bootstrap Libgenders $VERSION;
 

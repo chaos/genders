@@ -1,24 +1,8 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.23 2004-12-22 18:10:13 achu Exp $
+## $Id: Makefile.am,v 1.24 2005-01-10 16:45:35 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
-
-# Update this information before a public release only!
-# 
-# If library source code has changed at all increment rev
-# (current:rev:age) = (current:rev+1:age)
-#
-# If any interfaces have been added,removed, or changed increment current
-#  and set rev = 0;
-#
-# If any interfaces have been added increment age
-#
-# If any interfaces have been removed, set age = 0
-#
-current = 0
-rev     = 0
-age     = 0
 
 if WITH_GNU_LD
 VERSION_SCRIPT = $(srcdir)/genders.map
@@ -34,7 +18,7 @@ libgenders_la_CFLAGS  = -D_REENTRANT
 libgenders_la_SOURCES = genders.c genders_common.c genders_parsing.c \
                         genders_query_parse.c genders_query.c \
 	                fd.c list.c hash.c thread.c hostlist.c
-libgenders_la_LDFLAGS = -version-info $(current):$(rev):$(age) $(OTHER_FLAGS)
+libgenders_la_LDFLAGS = -version-info @LIBGENDERS_VERSION_INFO@ $(OTHER_FLAGS)
 
 genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l
 	$(LEX) -ogenders_query_parse.c $(srcdir)/genders_query_parse.l

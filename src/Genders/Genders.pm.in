@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm,v 1.17 2004-10-07 18:22:31 achu Exp $
+#  $Id: Genders.pm.in,v 1.1 2005-01-10 16:45:35 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -29,7 +29,7 @@ package Genders;
 use strict;
 use Libgenders;
 
-our $VERSION = "0.01";
+our $VERSION = "@PERLGENDERS_VERSION@";
 
 require Exporter;
 our @ISA = qw(Exporter);
