@@ -1,0 +1,21 @@
+'libgenders' test suite
+-------------------------------------
+
+I. INTRODUCTION
+
+This test suite is a simple test suite used to check for corner
+cases in the libgenders library. 
+
+II. HOW TO RUN THE TESTSUITE
+
+Step 1)
+
+Compile the test suite with 'make'.  
+
+Step 2)
+
+Run the test suite with 'libgenders_test'.
+ 
+III.  Future Development
+
+Functionality tests have not yet been implemented.
