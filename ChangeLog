@@ -1,3 +1,8 @@
+2003-09-19  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (_parse_line): Added code to remove
+	trailing white space on each line of the genders database.
+
 2003-09-11  Albert Chu  <chu11@llnl.gov>
 
 	Modified build files

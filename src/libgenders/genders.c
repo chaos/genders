@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.55 2003-06-30 15:59:56 achu Exp $
+ * $Id: genders.c,v 1.56 2003-09-19 21:51:48 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -423,11 +423,21 @@ int _insert_attr_listnode(genders_t handle, char *attr) {
 int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
   char *linebuf, *temp;
   char *line_token = NULL;
-  int ret, attrcount = 0;
+  int ret, len, attrcount = 0;
 
   /* "remove" comments */
   if ((temp = strchr(line, '#')) != NULL) 
     *temp = '\0';
+
+  /* "remove" trailing white space */
+  len = strlen(line);
+  temp = line + len;
+  for (--temp; temp > line; temp--) {
+    if (isspace(*temp))
+      *temp = '\0';
+    else
+      break;
+  }
 
   /* move forward to node name */
   while(isspace(*line))  
@@ -437,7 +447,7 @@ int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
     return 0;
 
   /* get node name */
-  if ((line_token = strsep(&line, " \t\n\0")) != NULL) { 
+  if ((line_token = strsep(&line, " \t\0")) != NULL) { 
 
     if (strlen(line_token) > MAXHOSTNAMELEN) {
       if (line_num > 0) {
@@ -479,7 +489,7 @@ int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
     return 0;
 
   /* parse attributes */
-  line_token = strtok_r(line,",\n\0",&linebuf);
+  line_token = strtok_r(line,",\0",&linebuf);
   while (line_token != NULL) {
     char *attrbuf = NULL;
     char *attr = NULL;
@@ -511,7 +521,7 @@ int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
       
     attrcount++;
 
-    line_token = strtok_r(NULL,",\n\0",&linebuf);
+    line_token = strtok_r(NULL,",\0",&linebuf);
   }
 
   if (attrcount > handle->maxattrs)
