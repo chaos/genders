@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.116 2004-09-10 17:21:02 achu Exp $
+ *  $Id: genders.c,v 1.117 2004-09-10 21:24:06 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1624,7 +1624,7 @@ genders_index_attrvals(genders_t handle, const char *attr)
     goto cleanup;
   }
 
-  /* Max possible hash size if number of nodes, so pick upper boundar */
+  /* Max possible hash size is number of nodes, so pick upper boundary */
   if (!(attrval_index = hash_create(handle->numnodes,
                                     (hash_key_f)hash_key_string,
                                     (hash_cmp_f)strcmp,
