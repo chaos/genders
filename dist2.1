@@ -1,5 +1,5 @@
 .\"
-.\" $Id: dist2.1,v 1.4 2002-05-31 15:56:45 garlick Exp $
+.\" $Id: dist2.1,v 1.5 2003-04-08 20:50:26 achu Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2.1,v $
 .\"
 .\" Copyright (C) 2000-2001 Regents of the University of California
@@ -112,8 +112,7 @@ When expanding macros, we actually refer to /var/dist/genders/genders.cluster
 instead of the installed version, /etc/genders.  Since the genders file
 is under rdist control, referring directly to the source file eliminates a
 potential bootstrapping problem.  On the other hand, it's ugly to hardcode
-the source path, and we refer to other files, such as /etc/clusters,
-in their installed location.
+the source path, and we refer to other files in their installed location.
 .LP
 NFS mounting /var/dist simplifies our lives as long as the switch is up
 and the NFS servers are fast.  When one of these assumptions fails to be true,
