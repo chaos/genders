@@ -221,18 +221,18 @@ SV *
 genders_getnodename(handle) 
     genders_t handle
     PREINIT:
-        int maxnodelen;
+        int len;
         char *buf = NULL;
     CODE:
-        if ((maxnodelen = genders_getmaxnodelen(handle)) == -1) 
+        if ((len = genders_getmaxnodelen(handle)) == -1) 
             goto handle_error;
 
-        if ((buf = (char *)malloc(maxnodelen+1)) == NULL) 
+        if ((buf = (char *)malloc(len+1)) == NULL) 
             goto handle_error;
 
-        memset(buf, '\0', maxnodelen+1);
+        memset(buf, '\0', len+1);
 
-        if (genders_getnodename(handle, buf, maxnodelen + 1) == -1) 
+        if (genders_getnodename(handle, buf, len+1) == -1) 
             goto handle_error;
 
         RETVAL = newSVpv(buf, 0);
@@ -255,23 +255,19 @@ genders_getnodes(handle, attr=NULL, val=NULL)
     char *val
     PREINIT:
         int num, ret, temp, i;
-        char **nodelist = NULL; 
+        char **nlist = NULL; 
     CODE:
-        if ((num = genders_nodelist_create(handle, &nodelist)) == -1) 
+        if ((num = genders_nodelist_create(handle, &nlist)) == -1) 
             goto handle_error;
 
-        if ((ret = genders_getnodes(handle, 
-                                    nodelist, 
-                                    num, 
-                                    attr, 
-                                    val)) == -1)
+        if ((ret = genders_getnodes(handle, nlist, num, attr, val)) == -1)
             goto handle_error;
 
         RETVAL = newAV();
         for (i = 0; i < ret; i++)
-            av_push(RETVAL, newSVpv(nodelist[i], 0));
+            av_push(RETVAL, newSVpv(nlist[i], 0));
         
-        if (genders_nodelist_destroy(handle, nodelist) == -1)
+        if (genders_nodelist_destroy(handle, nlist) == -1)
             goto handle_error;
 
         goto the_end;
@@ -280,7 +276,7 @@ genders_getnodes(handle, attr=NULL, val=NULL)
 
             temp = genders_errnum(handle);
 
-            (void)genders_nodelist_destroy(handle, nodelist);
+            (void)genders_nodelist_destroy(handle, nlist);
 
             genders_set_errnum(handle, temp);
 
@@ -296,40 +292,36 @@ genders_getattr(handle, node=NULL)
     char *node
     PREINIT:
         int num, ret, temp, i;
-        char **attrlist = NULL; 
-        char **vallist = NULL; 
+        char **alist = NULL; 
+        char **vlist = NULL; 
         AV *attrs;
         AV *vals;
     CODE:
-        if ((num = genders_attrlist_create(handle, &attrlist)) == -1) 
+        if ((num = genders_attrlist_create(handle, &alist)) == -1) 
             goto handle_error;
 
-        if ((num = genders_vallist_create(handle, &vallist)) == -1) 
+        if ((num = genders_vallist_create(handle, &vlist)) == -1) 
             goto handle_error;
 
-        if ((ret = genders_getattr(handle, 
-                                   attrlist, 
-                                   vallist, 
-                                   num, 
-                                   node)) == -1)
+        if ((ret = genders_getattr(handle, alist, vlist, num, node)) == -1)
             goto handle_error;
 
         attrs = newAV();
         for (i = 0; i < ret; i++)
-            av_push(attrs, newSVpv(attrlist[i], 0));
+            av_push(attrs, newSVpv(alist[i], 0));
 
         vals = newAV();
         for (i = 0; i < ret; i++)
-            av_push(vals, newSVpv(vallist[i], 0));
+            av_push(vals, newSVpv(vlist[i], 0));
         
         RETVAL = newAV();
         av_push(RETVAL, newRV_noinc((SV *)attrs));
         av_push(RETVAL, newRV_noinc((SV *)vals));
     
-        if (genders_attrlist_destroy(handle, attrlist) == -1)
+        if (genders_attrlist_destroy(handle, alist) == -1)
             goto handle_error;
 
-        if (genders_vallist_destroy(handle, vallist) == -1)
+        if (genders_vallist_destroy(handle, vlist) == -1)
             goto handle_error;
 
         goto the_end;
@@ -338,8 +330,8 @@ genders_getattr(handle, node=NULL)
 
             temp = genders_errnum(handle);
 
-            (void)genders_attrlist_destroy(handle, attrlist);
-            (void)genders_vallist_destroy(handle, vallist);
+            (void)genders_attrlist_destroy(handle, alist);
+            (void)genders_vallist_destroy(handle, vlist);
 
             genders_set_errnum(handle, temp);
            
@@ -354,19 +346,19 @@ genders_getattr_all(handle)
     genders_t handle
     PREINIT:
         int num, ret, temp, i;
-        char **attrlist = NULL; 
+        char **alist = NULL; 
     CODE:
-        if ((num = genders_attrlist_create(handle, &attrlist)) == -1) 
+        if ((num = genders_attrlist_create(handle, &alist)) == -1) 
             goto handle_error;
 
-        if ((ret = genders_getattr_all(handle, attrlist, num)) == -1)
+        if ((ret = genders_getattr_all(handle, alist, num)) == -1)
             goto handle_error;
 
         RETVAL = newAV();
         for (i = 0; i < ret; i++)
-            av_push(RETVAL, newSVpv(attrlist[i], 0));
+            av_push(RETVAL, newSVpv(alist[i], 0));
         
-        if (genders_attrlist_destroy(handle, attrlist) == -1)
+        if (genders_attrlist_destroy(handle, alist) == -1)
             goto handle_error;
 
         goto the_end;
@@ -375,7 +367,7 @@ genders_getattr_all(handle)
 
             temp = genders_errnum(handle);
         
-            (void)genders_attrlist_destroy(handle, attrlist);
+            (void)genders_attrlist_destroy(handle, alist);
 
             genders_set_errnum(handle, temp);
 
@@ -391,23 +383,19 @@ genders_getattrval(handle, attr, node=NULL)
     char *attr
     char *node
     PREINIT:
-        int ret, maxvallen;
+        int ret, len;
         char *buf = NULL;
     CODE:
 
-        if ((maxvallen = genders_getmaxvallen(handle)) == -1) 
+        if ((len = genders_getmaxvallen(handle)) == -1) 
             goto handle_error;
 
-        if ((buf = (char *)malloc(maxvallen+1)) == NULL) 
+        if ((buf = (char *)malloc(len+1)) == NULL) 
             goto handle_error;
 
-        memset(buf, '\0', maxvallen+1);
+        memset(buf, '\0', len+1);
 
-        if ((ret = genders_testattr(handle, 
-                                    node, 
-                                    attr, 
-                                    buf, 
-                                    maxvallen+1)) == -1)
+        if ((ret = genders_testattr(handle, node, attr, buf, len+1)) == -1)
             goto handle_error;
 
         if (ret == 1 && strlen(buf) > 0) 
