@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.1 2003-02-10 22:15:25 achu Exp $
+## $Id: configure.ac,v 1.2 2003-02-11 02:20:54 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -7,9 +7,9 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders], [0.0], [chu11@llnl.gov])
+AC_INIT([genders], [1.0], [chu11@llnl.gov])
 AC_CONFIG_AUX_DIR([config])
-AC_CONFIG_SRCDIR([config])
+AC_CONFIG_SRCDIR([libgenders/genders.h])
 AC_CANONICAL_SYSTEM
 
 ##
