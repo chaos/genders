@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.h,v 1.1 2004-06-07 20:14:37 achu Exp $
+ *  $Id: genders_common.h,v 1.2 2004-06-08 23:50:14 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -139,25 +139,6 @@ struct genders {
   hash_t attr_index;                /* Index table for quicker search times */
   hash_t attrval_index;             /* Index table for quicker search times */
   char *attrval_index_attr;         /* Current indexed attr in attrval_index */ 
-};
-
-/* Error messages */
-static char * errmsg[] = {
-  "success",
-  "genders handle is null",
-  "error opening genders file",
-  "error reading genders file",
-  "genders file parse error",
-  "genders data not loaded",
-  "genders data already loaded",
-  "array or string passed in not large enough to store result",
-  "incorrect parameters passed in",
-  "null pointer reached in list", 
-  "node not found",
-  "out of memory",
-  "genders handle magic number incorrect, improper handle passed in",
-  "unknown internal error"
-  "error number out of range",
 };
 
 int _handle_error_check(genders_t handle);

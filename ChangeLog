@@ -1,3 +1,9 @@
+2004-06-08  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/Makefile.am, src/libgenders/genders_query.y,
+	src/libgenders/genders_common.h, src/libgenders/genders.c: Various
+	code/make cleanup.
+	
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/Makefile.am, src/Libgenders/Makefile.am,
