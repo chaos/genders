@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.2 2003-02-11 02:20:54 achu Exp $
+## $Id: configure.ac,v 1.3 2003-02-11 17:31:25 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -35,6 +35,8 @@ AC_CHECK_HEADERS( \
   stdlib.h \
   string.h \
   unistd.h \
+  time.h \
+  unistd.h \
 )
 
 ##
@@ -49,7 +51,13 @@ AC_TYPE_UID_T
 ##
 AC_FUNC_MALLOC
 AC_CHECK_FUNCS( \
+  strcmp \
+  strlen \
+  strcpy \
   strchr \
+  strsep \
+  strspn \
+  strtok_r \
 )
 
 ##
