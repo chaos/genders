@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.5 2004-12-22 18:38:42 achu Exp $
+ *  $Id: genders_parsing.c,v 1.6 2004-12-29 22:07:53 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -146,7 +146,7 @@ _insert_attr(genders_t handle, char *attr)
 
   __xstrdup(attr_new, attr);
   __list_append(handle->attrslist, attr_new);
-  return 0;
+  return 1;
  cleanup:
   free(attr_new);
   return -1;
@@ -207,6 +207,32 @@ _duplicate_line_attr_check(genders_t handle,
 }
 
 static int
+_nodename_shortened_check(genders_t handle,
+			  char *nodename,
+			  int line_num,
+			  FILE *stream)
+{
+  int retval = -1;
+
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(nodename);
+  assert(!line_num || (line_num && stream));
+
+  if (strchr(nodename, '.')) {
+    if (line_num > 0) {
+      fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
+      retval = 1;
+    }
+    handle->errnum = GENDERS_ERR_PARSE;
+    goto cleanup;
+  }
+
+  retval = 0;
+ cleanup:
+  return retval;
+}
+
+static int
 _nodename_check(genders_t handle, 
                 char *nodename, 
                 int line_num,
@@ -227,14 +253,11 @@ _nodename_check(genders_t handle,
     goto cleanup;
   }
     
-  if (strchr(nodename, '.')) {
-    if (line_num > 0) {
-      fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
-      retval = 1;
-    }
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
+  if ((retval = _nodename_shortened_check(handle,
+					  nodename,
+					  line_num,
+					  stream)) != 0)
+      goto cleanup;
 
   retval = 0;
  cleanup:
@@ -285,7 +308,7 @@ _duplicate_node_attr_check(genders_t handle,
  */
 int 
 _parse_line(genders_t handle, List nodeslist, List attrvalslist, 
-            char *line, int line_num, FILE *stream)
+            char *line, int line_num, FILE *stream, int *parsed_nodes)
 {
   char *linebuf, *temp, *attr, *nodenames, *node = NULL;
   int retval = -1;
@@ -299,6 +322,7 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
   assert(handle && handle->magic == GENDERS_MAGIC_NUM);
   assert(nodeslist && attrvalslist && line);
   assert((!line_num) || (line_num > 0 && stream));
+  assert(parsed_nodes);
 
   /* "remove" comments */
   if ((temp = strchr(line, '#'))) 
@@ -324,6 +348,9 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
   /* get node name(s) */
   if (!(nodenames = strsep(&line, " \t\0")))
     return 0;
+
+  /* Something resembly a node was found */
+  *parsed_nodes = 1;
 
   /* if strsep() sets line == NULL, line has no attributes */
   if (line) {
@@ -355,13 +382,13 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
           goto cleanup;
         
         if (!line_num) { 
-          if (_insert_attr(handle, attr) < 0)
+          if ((retval = _insert_attr(handle, attr)) < 0)
             goto cleanup;
           
-          handle->numattrs++;
+          handle->numattrs += retval;
           handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
           if (val) {
-            if (strstr(val, "%n"))
+            if (strstr(val, "%n") && !strstr(val, "%%n"))
               max_n_subst_vallen = strlen(val);
             else
               handle->maxvallen = MAX(strlen(val), handle->maxvallen);
@@ -373,12 +400,19 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
     }
   }
 
+  if ((retval = _nodename_shortened_check(handle, 
+					  nodenames, 
+					  line_num, 
+					  stream)) != 0)
+    goto cleanup;
+
   __hostlist_create(hl, nodenames);
   __hostlist_iterator_create(hlitr, hl);
+
   while ((node = hostlist_next(hlitr))) {
     if ((retval = _nodename_check(handle, node, line_num, stream)) != 0)
       goto cleanup;
-    
+
     if (!(n =_insert_node(handle, nodeslist, node)))
       goto cleanup;
     
@@ -508,6 +542,7 @@ _open_and_parse(genders_t handle,
   int errcount = 0;
   int ret, rv, fd = -1;
   int retval = -1;
+  int parsed_nodes = 0;
   char buf[GENDERS_READLINE_BUFLEN];
 
   assert(handle && handle->magic == GENDERS_MAGIC_NUM);
@@ -524,8 +559,8 @@ _open_and_parse(genders_t handle,
 
   /* parse line by line */
   while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if ((rv = _parse_line(handle, nodeslist, attrvalslist, buf,
-			  (debug) ? line_count : 0, stream)) < 0)
+    if ((rv = _parse_line(handle, nodeslist, attrvalslist, buf, 
+			  (debug) ? line_count : 0, stream, &parsed_nodes)) < 0)
       goto cleanup;
 
     if (debug) {
@@ -535,8 +570,25 @@ _open_and_parse(genders_t handle,
     }
   }
   if (ret < 0) {
-    if (debug && handle->errnum == GENDERS_ERR_OVERFLOW)
-      fprintf(stream, "Line %d: exceeds maximum allowed length\n", line_count);
+    if (debug && handle->errnum == GENDERS_ERR_OVERFLOW) {
+	fprintf(stream, "Line %d: exceeds maximum allowed length\n", line_count);
+	retval = ++errcount;
+	handle->errnum = GENDERS_ERR_PARSE;    
+    }
+    goto cleanup;
+  }
+
+  if (list_count(nodeslist) == 0) {
+    if (debug) {
+      fprintf(stream, "No nodes successfully parsed\n");
+      /* Only increase the parse error count if the file is truly empty.
+       * Don't increase is numerous parse errors were found.
+       */
+      if (!parsed_nodes)
+	errcount++;
+      retval = errcount;
+    }
+    handle->errnum = GENDERS_ERR_PARSE;
     goto cleanup;
   }
 

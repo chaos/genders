@@ -1,3 +1,45 @@
+2004-12-29  Albert Chu  <chu11@llnl.gov>
+
+	Fix various bugs
+
+	* src/libgenders/genders.c (_initialize_handle,
+	genders_load_data): Fix attrval_buflist initialization corner case
+	that can cause segfaults.
+
+	* src/libgenders/genders.c (genders_load_data): Fix a second segfault
+	corner case.
+
+	* src/libgenders/genders.c (genders_load_data),
+	src/libgenders/genders_parsing.c (_open_and_parse): Move no parsed
+	node check from genders_load_data to _open_and_parse.
+
+	* src/libgenders/genders_parsing.c (_nodename_shortened_check): New function.
+
+	* src/libgenders/genders_parsing.c (_nodename_check): Use new
+	_nodename_shortened_check function.
+	
+	* src/libgenders/genders_parsing.c (_open_and_parse, _parse_line):
+	Fix parse error count corner case.
+
+	* src/libgenders/genders.c (genders_getnodename,
+	genders_testattr): Fix returned errnum inconsistency compared to
+	other genders functions.
+
+	* src/libgenders/genders.c (genders_set_errnum): Allow user to set
+	errnum to anything.
+
+	* src/libgenders/genders_parsing.c (_open_and_parse): Fix return
+	value bug.
+
+	* src/libgenders/genders_parsing.c (_parse_line): Fix parse error
+	corner case.  Fix maxvallen calculation corner case.
+
+	* src/libgenders/genders.c (genders_testattr): Fix val return bug
+	when no value exists.
+
+	* src/libgenders/genders_parsing.c (_insert_attr, _parse_line):
+	Fix numattrs counting bug.
+	
 2004-12-22  Albert Chu  <chu11@llnl.gov>
 
 	* tagged pre_genders_1_4_code_cleanup

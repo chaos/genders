@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.125 2004-12-22 18:38:42 achu Exp $
+ *  $Id: genders.c,v 1.126 2004-12-29 22:07:51 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -93,6 +93,7 @@ genders_handle_create(void)
   handle->nodeslist = NULL;
   handle->attrvalslist = NULL;
   handle->attrslist = NULL;
+  handle->attrval_buflist = NULL;
 
   __list_create(handle->nodeslist, _free_genders_node);
   __list_create(handle->attrvalslist, _free_attrvallist);
@@ -158,12 +159,6 @@ genders_load_data(genders_t handle, const char *filename)
 
   handle->numnodes = list_count(handle->nodeslist);
 
-  /* umm, where are the nodes? */
-  if (!handle->numnodes) {
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
-
   if (gethostname(handle->nodename, MAXHOSTNAMELEN+1) < 0) {
     handle->errnum = GENDERS_ERR_INTERNAL;
     goto cleanup;
@@ -185,24 +180,24 @@ genders_load_data(genders_t handle, const char *filename)
   if (_index_attrs(handle) < 0)
     goto cleanup;
 
-  handle->attrval_buflist = NULL;
-  
   handle->is_loaded++;
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 
 cleanup:
-  free(handle->valbuf);
-
-  /* Can't pass NULL for key, so pass junk, _is_all() will ensure
-   * everything is deleted
-   */
-  list_delete_all(handle->nodeslist, _is_all, ""); 
-  list_delete_all(handle->attrvalslist, _is_all, ""); 
-  list_delete_all(handle->attrslist, _is_all, ""); 
-  __hash_destroy(handle->node_index);
-  __hash_destroy(handle->attr_index);
-  _initialize_handle_info(handle);
+  if (handle && handle->magic == GENDERS_ERR_MAGIC) {
+    free(handle->valbuf);
+    
+    /* Can't pass NULL for key, so pass junk, _is_all() will ensure
+     * everything is deleted
+     */
+    list_delete_all(handle->nodeslist, _is_all, ""); 
+    list_delete_all(handle->attrvalslist, _is_all, ""); 
+    list_delete_all(handle->attrslist, _is_all, ""); 
+    __hash_destroy(handle->node_index);
+    __hash_destroy(handle->attr_index);
+    _initialize_handle_info(handle);
+  }
   return -1;
 }
 
@@ -470,7 +465,7 @@ genders_getnodename(genders_t handle, char *node, int len)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!node || len <= 0) {
+  if (!node || len < 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -660,7 +655,7 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr || (val && len <= 0)) {
+  if (!attr || (val && len < 0)) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -677,15 +672,19 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
     return -1;
 
   if (av) {
-    if (val && av->val) {
-      char *valptr;
-      if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
-        return -1;
-      if (strlen(valptr + 1) > len) {
-        handle->errnum = GENDERS_ERR_OVERFLOW;
-        return -1;
+    if (val) {
+      if (av->val) {
+	char *valptr;
+	if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+	  return -1;
+	if (strlen(valptr + 1) > len) {
+	  handle->errnum = GENDERS_ERR_OVERFLOW;
+	  return -1;
+	}
+	strcpy(val, valptr);
       }
-      strcpy(val, valptr);
+      else
+	memset(val, '\0', len);
     }
   }
   
@@ -907,18 +906,6 @@ genders_index_attrvals(genders_t handle, const char *attr)
   return -1;
 }
 
-void 
-genders_set_errnum(genders_t handle, int errnum) 
-{
-  if (_handle_error_check(handle) < 0)
-    return;
-
-  if (errnum >= GENDERS_ERR_SUCCESS && errnum <= GENDERS_ERR_ERRNUMRANGE)
-    handle->errnum = errnum;
-  else
-    handle->errnum = GENDERS_ERR_INTERNAL;
-}
-
 int 
 genders_parse(genders_t handle, const char *filename, FILE *stream) 
 {
@@ -940,15 +927,19 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 				  1, stream)) < 0)
     goto cleanup;
 
-  if (list_count(debugnodeslist) == 0) {
-    fprintf(stream, "No nodes successfully parsed\n");
-    goto cleanup;
-  }
-
   retval = errcount;
   handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
   __list_destroy(debugnodeslist);
   __list_destroy(debugattrvalslist);
   return retval;
+}
+
+void 
+genders_set_errnum(genders_t handle, int errnum) 
+{
+  if (_handle_error_check(handle) < 0)
+    return;
+
+  handle->errnum = errnum;
 }
