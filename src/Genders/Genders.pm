@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.9 2003-07-01 00:28:34 achu Exp $
+# $Id: Genders.pm,v 1.10 2003-08-15 23:05:14 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -12,7 +12,6 @@ our $VERSION = "2.0";
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(&_errormsg $GENDERS_DEFAULT_FILE $debugkey $handlekey);
 our @EXPORT_OK = qw(&_errormsg $GENDERS_DEFAULT_FILE $debugkey $handlekey);
 our %EXPORT_TAGS = ( 'all' => [ qw(&_errormsg 
                                    $GENDERS_DEFAULT_FILE 
