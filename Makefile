@@ -4,9 +4,7 @@
 # See the DISCLAIMER file distributed with this package.
 #
 
-PACKAGE=	genders
-VERSION=	0.2
-RELEASE=	2
+PROJECT=	genders
 
 all: inst
 

@@ -56,3 +56,10 @@ genders-0.2-2
 	Updated to Chris's latest RPM rules.
 
 	Added updatefstab and updateservice scripts.
+
+Tue Apr 23 09:01:03 PDT 2002
+	Updated to Chris's latest RPM rules.
+
+	Added TUTORIAL.
+
+	Tagged genders-0-2-3chaos.

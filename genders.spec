@@ -46,7 +46,8 @@ install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
 
 %files
 %defattr(-,root,root)
-%doc README ChangeLog DISCLAIMER genders.sample clusters.sample Distfile.sample
+%doc README TUTORIAL ChangeLog DISCLAIMER 
+%doc genders.sample clusters.sample Distfile.sample
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
 /usr/bin/inst
