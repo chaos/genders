@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.8 2004-06-11 18:23:31 achu Exp $
+## $Id: Makefile.am,v 1.9 2004-10-27 01:42:53 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -13,4 +13,4 @@ SUBDIRS = \
         compat \
         man
 
-EXTRA_DIST = META
+EXTRA_DIST = META DISCLAIMER TUTORIAL genders.sample
