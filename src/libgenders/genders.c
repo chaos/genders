@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.114 2004-06-09 20:29:10 achu Exp $
+ *  $Id: genders.c,v 1.115 2004-06-10 17:36:01 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -57,7 +57,7 @@ static char * errmsg[] = {
   "query syntax error",
   "invalid attribute or value found in query", 
   "genders handle magic number incorrect, improper handle passed in",
-  "unknown internal error"
+  "unknown internal error",
   "error number out of range",
 };
 
