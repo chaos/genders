@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.86 2004-02-03 00:34:29 achu Exp $
+ *  $Id: genders.c,v 1.87 2004-02-03 18:50:41 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1334,7 +1334,7 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
 	handle->errnum = GENDERS_ERR_OVERFLOW;
 	return -1;
       }
-      strcpy(val, av->val);
+      strcpy(val, (rv) ? bufval : av->val);
     }
     retval = 1;
   }

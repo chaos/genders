@@ -1,3 +1,8 @@
+2004-02-03  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (genders_testattr): Fix bug where
+	incorrect attribute copied into buffer.
+	
 2004-02-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c: Variety of fixes.
