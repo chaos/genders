@@ -31,20 +31,19 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
-/usr/share/man/man1/
+%{_mandir}/man1
 /usr/share/man/man3/genders*
 /usr/share/man/man3/libgenders.3* 
 /usr/share/man/man3/Genders.3pm*
 /usr/share/man/man3/Libgenders.3pm*
-/usr/include/genders.h
-/usr/include/genders.h
-/usr/bin/
+%{_includedir}/*
+%{_bindir}/*
 %{_libdir}/libgenders.*
-%{_libdir}/perl5/
+%{_libdir}/perl5/*
 
 %files compat
 %defattr(-,root,root)
 /usr/share/man/man3/gendlib*
-%{_libdir}/genders/
+%{_libdir}/genders/*
 
 
