@@ -10,11 +10,6 @@ dist_local	dist2 wrapper to rdist repository to local host
 
 dist_cmp	filter to compress output of dist2 - see dist_cmp(1)
 
-gendlib.pl	perl library of functions that operate on /etc/genders, 
-		/etc/clusters - see gendlib(3)
-
-hostlist.pl	perl library for manipulating lists of hostnames
-
 inst		similar to gnu fileutils install -C
 
 nodeattr	query genders attributes - see nodeattr(1)
@@ -26,3 +21,5 @@ libgenders      C API to operate on /etc/genders
 genders.h       header file for C API in libgenders
 
 Libgenders.pm   Perl extensions interface to C API
+
+Genders.pm      Cleaner Perl interface to C API   
