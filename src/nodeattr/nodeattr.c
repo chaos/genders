@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.1 2003-02-10 22:15:26 achu Exp $
+ *  * $Id: nodeattr.c,v 1.2 2003-03-18 00:18:57 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -226,7 +226,7 @@ static int test_attr(genders_t gp, char *node, char *attr, int vopt)
    
     if (vopt || wantval)
         val = _val_create(gp); /* full of nulls initially */
-    if ((res = genders_testattr(gp, node, attr, val)) < 0)
+    if ((res = genders_testattr(gp, node, attr, val, genders_getmaxvallen(gp))) < 0)
         _gend_error_exit(gp, "genders_testattr");
     if (vopt) {
         if (strlen(val) > 0)
@@ -344,7 +344,7 @@ static char *_to_altname(genders_t gp, char *node)
 {
     char *val = _val_create(gp); /* full of nulls initially */
    
-    if (genders_testattr(gp, node, "altname", val) < 0)
+    if (genders_testattr(gp, node, "altname", val, genders_getmaxvallen(gp)) < 0)
         _gend_error_exit(gp, "genders_testattr");
     if (strlen(val) == 0) {
         fprintf(stderr, "nodeattr: %s: conversion to alternate hostname failed\n", node);
