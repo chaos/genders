@@ -53,6 +53,16 @@ foreach $_ (@$nodes) {
 }
 print "\n";
 
+$nodes = $handle->genders_getnodes("qla");
+if (!defined($nodes)) {
+    print "Error, genders_getnodes()\n";
+    exit(1);
+}
+foreach $_ (@$nodes) {
+    print "node: ",$_,"\n";
+}
+print "\n";
+
 $temp = $handle->genders_getattr();
 if (!defined($temp)) {
     print "Error, genders_getattr()\n";
@@ -95,12 +105,16 @@ $ret = $handle->genders_testattr("mgmt");
 print "mgmt - ",$ret,"\n";
 $ret = $handle->genders_testattr("foo");
 print "foo - ",$ret,"\n";
+$ret = $handle->genders_testattr("compute");
+print "compute - ",$ret,"\n";
 $ret = $handle->genders_testattr("resmgr", undef);
 print "resmgr2 - ",$ret,"\n";
 $ret = $handle->genders_testattr("mgmt", undef);
 print "mgmt2 - ",$ret,"\n";
 $ret = $handle->genders_testattr("foo", undef);
 print "foo2 - ",$ret,"\n";
+$ret = $handle->genders_testattr("compute", undef);
+print "compute2 - ",$ret,"\n";
 $ret = $handle->genders_testattrval("resmgr", "both");
 print "resmgr=both - ",$ret,"\n";
 $ret = $handle->genders_testattrval("resmgr", "bar");
@@ -113,6 +127,10 @@ $ret = $handle->genders_testattrval("foo", "both");
 print "foo=both - ",$ret,"\n";
 $ret = $handle->genders_testattrval("foo", "bar");
 print "foo=bar - ",$ret,"\n";
+$ret = $handle->genders_testattrval("cpu", "2");
+print "cpu=2 - ",$ret,"\n";
+$ret = $handle->genders_testattrval("cpu", "bar");
+print "cpu=bar - ",$ret,"\n";
 print "\n";
 
 $ret = $handle->genders_isnode();
@@ -133,8 +151,10 @@ $ret = $handle->genders_isattrval("resmgr", "both");
 print "resmgr=both - ",$ret,"\n";
 $ret = $handle->genders_isattrval("resmgr", "foo");
 print "resmgr=foo - ",$ret,"\n";
-$ret = $handle->genders_isattrval("foo", "bar");
-print "foo=bar - ",$ret,"\n";
+$ret = $handle->genders_isattrval("cpu", "2");
+print "cpu=2 - ",$ret,"\n";
+$ret = $handle->genders_isattrval("cpu", "bar");
+print "cpu=bar - ",$ret,"\n";
 
 $ret = $handle->genders_parse();
 print "errors - ", $ret, "\n"; 
