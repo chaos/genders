@@ -24,4 +24,6 @@
 - For multilib, repackage everything
   - genders
   - genders-lib
+  - genders-perl
+    - must be based on current perl install
   - genders-compat
