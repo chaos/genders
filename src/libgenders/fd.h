@@ -1,5 +1,5 @@
-/*****************************************************************************
- *  $Id: fd.h,v 1.2 2003-12-30 21:47:13 achu Exp $
+/*****************************************************************************\
+ *  $Id: fd.h,v 1.3 2004-01-15 20:09:15 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -22,14 +22,14 @@
  *  You should have received a copy of the GNU General Public License along
  *  with ConMan; if not, write to the Free Software Foundation, Inc.,
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
- *****************************************************************************/
+\*****************************************************************************/
 
 
-#ifndef FD_H
-#define FD_H
+#ifndef _FD_H
+#define _FD_H
 
 
-#if HAVE_CONFIG_H
+#ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif /* HAVE_CONFIG_H */
 
@@ -37,85 +37,81 @@
 #include <unistd.h>
 
 
-int fd_set_close_on_exec (int fd);
+void fd_set_close_on_exec(int fd);
 /*
- *  Sets the file descriptor [fd] to be closed on exec().
- *  Returns 0 on success, or -1 on error.
+ *  Sets the file descriptor (fd) to be closed on exec().
  */
 
-int fd_set_nonblocking (int fd);
+void fd_set_nonblocking(int fd);
 /*
- *  Sets the file descriptor [fd] for non-blocking I/O.
- *  Returns 0 on success, or -1 on error.
+ *  Sets the file descriptor (fd) for non-blocking I/O.
  */
 
-int fd_get_read_lock (int fd);
+int fd_get_read_lock(int fd);
 /*
- *  Obtains a read lock on the file specified by [fd].
+ *  Obtain a read lock on the file specified by (fd).
  *  Returns 0 on success, or -1 if prevented from obtaining the lock.
  */
 
-int fd_get_readw_lock (int fd);
+int fd_get_readw_lock(int fd);
 /*
- *  Obtains a read lock on the file specified by [fd],
+ *  Obtain a read lock on the file specified by (fd),
  *    blocking until one becomes available.
  *  Returns 0 on success, or -1 on error.
  */
 
-int fd_get_write_lock (int fd);
+int fd_get_write_lock(int fd);
 /*
- *  Obtains a write lock on the file specified by [fd].
+ *  Obtain a write lock on the file specified by (fd).
  *  Returns 0 on success, or -1 if prevented from obtaining the lock.
  */
 
-int fd_get_writew_lock (int fd);
+int fd_get_writew_lock(int fd);
 /*
- *  Obtains a write lock on the file specified by [fd],
+ *  Obtain a write lock on the file specified by (fd),
  *    blocking until one becomes available.
  *  Returns 0 on success, or -1 on error.
  */
 
-int fd_release_lock (int fd);
+int fd_release_lock(int fd);
 /*
- *  Releases a lock held on the file specified by [fd].
+ *  Release a lock held on the file specified by (fd).
  *  Returns 0 on success, or -1 on error.
  */
 
-pid_t fd_is_read_lock_blocked (int fd);
+pid_t fd_is_read_lock_blocked(int fd);
 /*
- *  Checks to see if a lock exists on [fd] that would block a request for a
- *    read-lock (ie, if a write-lock is already being held on the file).
- *  Returns the pid of the process holding the lock, 0 if no lock exists,
- *    or -1 on error.
+ *  If a lock exists the would block a request for a read-lock
+ *    (ie, if a write-lock is already being held on the file),
+ *    returns the pid of the process holding the lock; o/w, returns 0.
  */
 
-pid_t fd_is_write_lock_blocked (int fd);
+pid_t fd_is_write_lock_blocked(int fd);
 /*
- *  Checks to see if a lock exists on [fd] that would block a request for a
- *    write-lock (ie, if any lock is already being held on the file).
- *  Returns the pid of the process holding the lock, 0 if no lock exists,
- *    or -1 on error.
+ *  If a lock exists the would block a request for a write-lock
+ *    (ie, if any lock is already being held on the file),
+ *    returns the pid of a process holding the lock; o/w, returns 0.
  */
 
-ssize_t fd_read_n (int fd, void *buf, size_t n);
+ssize_t fd_read_n(int fd, void *buf, size_t n);
 /*
- *  Reads up to [n] bytes from [fd] into [buf].
+ *  Reads up to (n) bytes from (fd) into (buf).
  *  Returns the number of bytes read, 0 on EOF, or -1 on error.
  */
 
-ssize_t fd_write_n (int fd, void *buf, size_t n);
+ssize_t fd_write_n(int fd, void *buf, size_t n);
 /*
- *  Writes [n] bytes from [buf] to [fd].
+ *  Writes (n) bytes from (buf) to (fd).
  *  Returns the number of bytes written, or -1 on error.
  */
 
-ssize_t fd_read_line (int fd, void *buf, size_t maxlen);
+ssize_t fd_read_line(int fd, void *buf, size_t maxlen);
 /*
- *  Reads at most [maxlen-1] bytes up to a newline from [fd] into [buf].
- *  The [buf] is guaranteed to be NUL-terminated and will contain the
- *    newline if it is encountered within [maxlen-1] bytes.
+ *  Reads at most (maxlen-1) bytes up to a newline from (fd) into (buf).
+ *  The (buf) is guaranteed to be NUL-terminated and will contain the
+ *    newline if it is encountered within (maxlen-1) bytes.
  *  Returns the number of bytes read, 0 on EOF, or -1 on error.
  */
 
 
-#endif /* !FD_H */
+#endif /* !_FD_H */
