@@ -1,3 +1,16 @@
+2003-09-11  Albert Chu  <chu11@llnl.gov>
+
+	Modified build files
+
+	* configure.ac: Added output of genders.spec.
+
+	* genders.spec: Removed file.
+
+	* genders.spec.in: New file, which replaces genders.spec.
+
+	* Removed all Makefile.in files and config files that will be
+	generatd by bootstrap from the repository.
+
 2003-08-18  Albert Chu  <chu11@llnl.gov>
 
 	* man/: Replaced "Release 1.2" with "August 2003" in all manpages,
