@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.43 2003-05-23 15:26:16 achu Exp $
+ * $Id: genders.c,v 1.44 2003-05-23 17:32:11 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -434,7 +434,7 @@ int genders_parse_line(genders_t handle,
                        char *line, 
                        int debug_line, 
                        FILE *stream) {
-  char *attribute = NULL, *value = NULL;
+  char *attr = NULL, *val = NULL;
   char *linebuf, *attrbuf;
   char *line_token = NULL;
   char *temp;
@@ -501,27 +501,25 @@ int genders_parse_line(genders_t handle,
 
       /* parse value out of attribute */
       if (strchr(line_token,'=') == NULL) {
-        attribute = line_token;
-        value = NULL;
+        attr = line_token;
+        val = NULL;
       }
       else {
-        attribute = strtok_r(line_token,"=",&attrbuf);
-        value = strtok_r(NULL,"\0",&attrbuf);
+        attr = strtok_r(line_token,"=",&attrbuf);
+        val = strtok_r(NULL,"\0",&attrbuf);
       }
 
       if (debug_line == 0) {
-        if (genders_insert_attrval_listnode(handle, 
-                                            attribute,
-                                            value) == -1)
+        if (genders_insert_attrval_listnode(handle, attr, val) == -1)
           return -1;
         
-        if (strlen(attribute) > handle->maxattrlen)
-          handle->maxattrlen = strlen(attribute);
+        if (strlen(attr) > handle->maxattrlen)
+          handle->maxattrlen = strlen(attr);
       
-        if ((value != NULL) && (strlen(value) > handle->maxvallen))
-          handle->maxvallen = strlen(value);
+        if ((val != NULL) && (strlen(val) > handle->maxvallen))
+          handle->maxvallen = strlen(val);
 
-        if ((ret = genders_insert_attr_listnode(handle, attribute)) == -1)
+        if ((ret = genders_insert_attr_listnode(handle, attr)) == -1)
           return -1;
       
         handle->numattrs += ret;
@@ -811,7 +809,6 @@ int genders_getmaxattrlen(genders_t handle) {
 
   if (genders_loaded_handle_err_check(handle) == -1)
     return -1;
-
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return handle->maxattrlen;
