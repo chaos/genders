@@ -1,3 +1,17 @@
+2004-09-10  Albert Chu  <chu11@llnl.gov>
+
+	* man/nodeattr.1: Re-word description of -k option.
+
+	* src/nodeattr/nodeattr.c: Change --check option to --parse-check.
+
+	* src/nodeattr/nodeattr.c (usage): Output long option for -k if
+	long options are available.
+
+	* src/nodeattr/nodeattr.c (list_nodes): Added hostlist_sort() call
+	to ensure nodes are sorted in order before output.
+
+	* src/libgenders/genders.c (_parse_line): Fixed english typo.
+	
 2004-06-11  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/Makefile.am, src/Libgenders/Makefile.am,
