@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.16 2003-04-11 18:42:58 achu Exp $
+ * $Id: genders.h,v 1.17 2003-04-17 18:36:41 grondo Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -7,6 +7,8 @@
 #define _GENDERS_H
 
 #include <stdio.h>
+
+
 
 /******************
  * defines        *
@@ -29,6 +31,9 @@
 #define GENDERS_ERR_MAGIC      13 /* magic number incorrect */
 #define GENDERS_ERR_INTERNAL   14 /* internal system error */
 
+/*
+ * review: autoconfiscate these values:
+ */
 #define DEFAULT_GENDERS_FILE        "/etc/genders"
 
 #define GENDERS_ALTNAME_ATTRIBUTE   "altname"
@@ -179,10 +184,10 @@ int genders_getnodename(genders_t handle, char *node, int len);
  * Returns: number of matches on success, -1 on failure.
  */
 int genders_getnodes(genders_t handle, 
-		     char *nodes[], 
-		     int len, 
-		     char *attr, 
-		     char *val);
+                     char *nodes[], 
+                     int len, 
+                     char *attr, 
+                     char *val);
 
 /* Gets list of attributes for the specified node.  
  * If node is NULL, gets all attributes for the current node.  
@@ -190,10 +195,10 @@ int genders_getnodes(genders_t handle,
  * Returns: number of matches on success, -1 on failure.
  */
 int genders_getattr(genders_t handle, 
-		    char *attrs[], 
-		    char *vals[], 
-		    int len, 
-		    char *node);
+                    char *attrs[], 
+                    char *vals[], 
+                    int len, 
+                    char *node);
 
 /* Gets all attributes stored in the genders file
  * Returns: number of attributes on success, -1 on failure
@@ -206,19 +211,19 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len);
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_testattr(genders_t handle, 
-		     char *node, 
-		     char *attr, 
-		     char *val, 
-		     int len);
+                     char *node, 
+                     char *attr, 
+                     char *val, 
+                     int len);
 
 /* Tests whether node has attr and attr equals val.
  * If node is NULL, tests the current node.
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_testattrval(genders_t handle, 
-			char *node, 
-			char *attr, 
-			char *val);
+                        char *node, 
+                        char *attr, 
+                        char *val);
 
 /* Tests whether the node exists in th genders file
  * If node is NULL, tests the current node.
