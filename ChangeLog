@@ -1,3 +1,7 @@
+2004-04-26  Albert Chu  <chu11@llnl.gov>
+
+	* Fixed build issues with Libgenders.
+	
 2004-04-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_load_data): Fixed corner case.
