@@ -1,5 +1,5 @@
 .\"
-.\" $Id: nodeattr.1,v 1.5 2003-08-05 16:30:07 achu Exp $
+.\" $Id: nodeattr.1,v 1.6 2003-08-05 17:08:08 achu Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/man/nodeattr.1,v $
 .\"
 .\" Copyright (C) 2000-2001 Regents of the University of California
@@ -13,7 +13,7 @@
 nodeattr \- query genders file
 .SH SYNOPSIS
 .B nodeattr
-.I "[-f genders] [-q | -c | -n | -s] [-r] attr[=val]
+.I "[-f genders] [-q | -c | -n | -s] attr[=val]
 .br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
@@ -38,9 +38,6 @@ arguments,
 reads the genders file and outputs a list of nodes that have the
 specified attribute.  The nodes are listed in hostlist format, comma
 separated lists, newline separated lists, or space separated lists.
-When called with the
-.I "-r"
-option, nodes are listed with their alternate names.
 .LP
 When called with a node name (optional) and attribute name,
 .B nodeattr
@@ -97,6 +94,5 @@ nodeattr -v cluster
 .SH "FILES"
 /etc/genders
 .br
-/usr/lib/genders/gendlib.pl
 .SH "SEE ALSO"
-gendlib(3), libgenders(3)
+libgenders(3)

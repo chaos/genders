@@ -1,3 +1,7 @@
+2003-08-04 Albert Chu <chu11@llnl.gov>
+        * removed -r and -C options from nodeattr
+	* tagged genders-1-2-1
+
 2003-07-15 Albert Chu <chu11@llnl.gov>
 	* re-tagged to genders-1-2-0-pre0
 
