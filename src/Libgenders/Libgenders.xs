@@ -227,7 +227,7 @@ genders_getnodename(handle)
 
         memset(buf, '\0', maxnodelen+1);
 
-        if (genders_getnodename(handle, buf, maxnodelen) == -1) 
+        if (genders_getnodename(handle, buf, maxnodelen + 1) == -1) 
             goto handle_error;
 
         RETVAL = newSVpv(buf, 0);
