@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.7 2003-03-31 22:28:47 achu Exp $
+#  $Id: gendlib.pl,v 1.8 2003-03-31 22:43:35 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -279,7 +279,7 @@ sub init_clusters
 #       $rv (RETURN)    "" on failure (from getattrval()), cluster name on success
 sub get_clusters
 {
-        if (!@init_called) {
+        if (!$init_called) {
  	        init();
 	}
 	return (getattrval("cluster"));
