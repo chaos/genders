@@ -1,0 +1,114 @@
+\."############################################################################
+\."  $Id: genders_index.3,v 1.1 2004-05-04 01:35:48 achu Exp $
+\."############################################################################
+\."  Copyright (C) 2001-2003 The Regents of the University of California.
+\."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
+\."  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
+\."  UCRL-CODE-2003-004.
+\."  
+\."  This file is part of Genders, a cluster configuration database.
+\."  For details, see <http://www.llnl.gov/linux/genders/>.
+\."  
+\."  Genders is free software; you can redistribute it and/or modify it under
+\."  the terms of the GNU General Public License as published by the Free
+\."  Software Foundation; either version 2 of the License, or (at your option)
+\."  any later version.
+\."  
+\."  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
+\."  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+\."  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+\."  details.
+\."  
+\."  You should have received a copy of the GNU General Public License along
+\."  with Genders; if not, write to the Free Software Foundation, Inc.,
+\."  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+\."############################################################################
+.TH GENDERS_INDEX_NODES 3 "August 2003" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_index_nodes, genders_index_attrs, genders_index_attrvals \-
+internally index nodes, attributes, or attribute values in genders
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_index_nodes(genders_t handle);"
+.sp
+.BI "int genders_index_attrs(genders_t handle);"
+.sp
+.BI "int genders_index_attrvals(genders_t handle, const char *attr);"
+.sp
+.br
+.SH DESCRIPTION
+\fBgenders_index_nodes()\fR, \fBgenders_index_attrs()\fR, and
+\fBgenders_index_attrvals()\fR internally add indexing to a particular
+genders handle so that genders searches can be done more quickly.  For
+those familiar with SQL, these functions are similar to creating
+database indexes.
+
+\fBgenders_index_nodes()\fR internally adds indexing for genders node
+searches.  This function can help decrease search times in the
+.BR genders_getattr (3),
+.BR genders_testattr (3),
+.BR genders_testattrval (3),
+and 
+.BR genders_isnode (3)
+functions.
+
+\fBgenders_index_attrs()\fR internally adds indexing for genders
+attribute searches.  This function can help decrease search times
+in the
+.BR genders_getnodes (3)
+and
+.BR genders_isattr (3)
+functions.
+
+\fBgenders_index_attrvals()\fR internally adds indexing for
+the value for a specific genders attribute.  This function can
+help decrease search times in the
+.BR genders_getnodes (3)
+and
+.BR genders_isattrval (3)
+functions.  Only one attribute can be indexed at a time through
+this function.  Subsequent calls to this function with a different
+attribute will overwrite earlier indexes.  
+.br
+.SH RETURN VALUES
+On success, 0 is returned.  On error, -1 is returned, and an error
+code is returned in \fIhandle\fR.  The error code can be retrieved via
+.BR genders_errnum (3)
+, and a description of the error code can be retrieved via 
+.BR genders_strerror (3).  
+Error codes are defined in genders.h.
+.br
+.SH ERRORS
+.TP
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
+.BR genders_handle_create (3).
+.TP
+.B GENDERS_ERR_NOTLOADED
+.BR genders_load_data (3)
+has not been called to load genders data.
+.TP
+.B GENDERS_ERR_PARAMETERS
+An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_OUTMEM
+.BR malloc (3)
+has failed internally, system is out of memory.
+.TP
+.B GENDERS_ERR_MAGIC 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
+.BR genders_handle_destroy (3).
+.TP
+.B GENDERS_ERR_INTERNAL
+An internal system error has occurred.  
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_getnodes(3), genders_getattr(3), genders_testattr(3),
+genders_testattrval(3), genders_isnode(3), genders_isattr(3),
+genders_isattrval(3), genders_errnum(3), genders_strerror(3)

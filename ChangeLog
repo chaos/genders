@@ -1,6 +1,8 @@
 2004-05-03  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_getnodes): Fixed segfaulting corner case.
+
+	* Added indexing manpages.
 	
 2004-04-28  Albert Chu  <chu11@llnl.gov>
 
