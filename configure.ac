@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.16 2003-05-27 17:32:56 achu Exp $
+## $Id: configure.ac,v 1.17 2003-05-27 17:45:15 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -43,7 +43,7 @@ AC_SUBST(GENDERS_DEFAULT_FILE)
 # Libgenders install location
 AC_MSG_CHECKING(for --with-xs-prefix )
 AC_ARG_WITH(xs-prefix,
-    AC_HELP_STRING([--with-xs-prefix=path], [define perl xs prefix for install]),
+    AC_HELP_STRING([--with-xs-prefix=path], [define perl xs prefix dir]),
     [ case "$withval" in
     yes)
         withxsprefix=yes
@@ -107,7 +107,6 @@ AC_CHECK_HEADERS( \
   stat.h \
   types.h \
 )
-
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
