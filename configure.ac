@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.9 2003-05-14 22:27:32 achu Exp $
+## $Id: configure.ac,v 1.10 2003-05-14 23:31:20 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -159,7 +159,6 @@ AC_CONFIG_FILES( \
   src/Libgenders/Makefile \
   src/Genders/Makefile \
   compat/Makefile \
-  dist/Makefile \
   man/Makefile \
   man/dist/Makefile \
   man/compat/Makefile \

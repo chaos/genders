@@ -97,7 +97,6 @@ install_sh = @install_sh@
 SUBDIRS = \
 	src \
 	compat \
-	dist \
 	man
 
 subdir = .
