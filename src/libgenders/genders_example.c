@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.4 2003-03-11 17:01:15 achu Exp $
+ * $Id: genders_example.c,v 1.5 2003-03-18 00:19:41 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -433,7 +433,7 @@ void test_if_node_has_attribute(genders_t handle) {
   for (i = 0; i < num_attributes; i++) {
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
 
-    ret = genders_testattr(handle, nodes[0], attrs[i], NULL);
+    ret = genders_testattr(handle, nodes[0], attrs[i], NULL, 0);
     if (ret == 1) {
       printf("Yes\n");
     }
@@ -447,7 +447,7 @@ void test_if_node_has_attribute(genders_t handle) {
   }
 
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
-  ret = genders_testattr(handle, nodes[0], "foobar", NULL);
+  ret = genders_testattr(handle, nodes[0], "foobar", NULL, 0);
   if (ret == 1) {
     printf("Yes\n");
   }
@@ -501,7 +501,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
 
     memset(buffer, '\0', maxvallen + 1);
-    ret = genders_testattr(handle, nodes[0], attrs[i], buffer);
+    ret = genders_testattr(handle, nodes[0], attrs[i], buffer, maxvallen+1);
     if (ret == 1) {
       if (strlen(buffer) > 0) {
 	printf("Yes, and it has value \"%s\"\n", buffer);
@@ -522,7 +522,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
 
   memset(buffer, '\0', maxvallen + 1);
-  ret = genders_testattr(handle, nodes[0], "foobar", buffer);
+  ret = genders_testattr(handle, nodes[0], "foobar", buffer, maxvallen+1);
   if (ret == 1) {
     if (strlen(buffer) > 0) {
       printf("Yes, and it has value \"%s\"\n", buffer);
