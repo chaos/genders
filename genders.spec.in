@@ -22,7 +22,7 @@ genders API that is compatible with earlier releases of genders
 
 %build
 ./bootstrap
-./configure --prefix=/usr --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
 make 
 
 %install
