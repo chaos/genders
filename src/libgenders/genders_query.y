@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.15 2004-11-11 00:04:21 achu Exp $
+ *  $Id: genders_query.y,v 1.16 2004-11-13 19:58:09 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -354,7 +354,6 @@ _calc_complement(genders_t handle, hostlist_t h)
  
   genders_nodelist_destroy(handle, nodes);
   hostlist_uniq(ch);
-  hostlist_destroy(h);
   return ch;
  cleanup:
   genders_nodelist_destroy(handle, nodes);
@@ -405,12 +404,8 @@ _calc_query(genders_t handle, struct genders_treenode *t)
   if (t->complement) {
     hostlist_t temp;
     temp = _calc_complement(handle, h);
-    if (!temp) {
-      hostlist_destroy(h);
-      h = NULL;
-    }
-    else
-      h = temp;
+    hostlist_destroy(h);
+    h = temp;
   }
   return h;
 }

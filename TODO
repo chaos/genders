@@ -5,7 +5,8 @@
   o possibly add functionality to genders_parse()  
 - Genders comparison of two files.  Via nodeattr??  
   - Via new function in genders?\
-- Somehow make distcheck work with perlxs.
+- Somehow make distcheck work with perlxs.  Or is this even possible b/c
+  uninstall is not supported by perlxs, sigh :-(
 - Allow attribute values to be overwritten instead of causing errors
   by some flag option of some sort.
   o i.e. 
@@ -14,3 +15,5 @@
     g,h,i               printer=bar
 - Rework to allow multiple hashed attrval mappings?
 - Have genders_getnodes() return nodes in sorted order?
+- Clean things up in general, library state is currently in 
+  a state with multiple hacks placed on top of other hacks.

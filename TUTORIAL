@@ -122,14 +122,13 @@ Nodeattr can usually be found in /usr/bin (Linux RPM) or /admin/scripts
 
 Programming with Genders
 
-Three different APIs have been developed that allow programmers to
-programmatically parse the genders file.  "libgenders" is a C API which
-can be linked by including genders.h and linking the library libgenders.
-"Libgenders" is a Perl extensions interface directly to the C API (with
-minor changes for the inherent differences between C and Perl). "Genders"
-is another Perl API, but offers a more traditional Perl API than
-"Libgenders."  The reader can learn more about these libraries by reading
-the manpages libgenders(3), Libgenders(3), and Genders(3).
+Three different APIs have been developed that allow programmers to parse 
+and query the genders file.  "libgenders" is a C API which can be linked
+by including genders.h and linking the library libgenders. "Libgenders" 
+is a Perl module developed with Perl extensions.  "Genders" is another
+Perl modules, but offers a more traditional Perl API than "Libgenders."
+The reader can learn more about these libraries by reading the manpages
+libgenders(3), Libgenders(3), and Genders(3).
 
 Example: Rc Script
 
@@ -239,7 +238,7 @@ in the cluster.  It then adds them to the NMAP database used by NQS:
 
      #!/usr/bin/perl
      #
-     # $Id: TUTORIAL,v 1.8 2004-04-14 20:58:41 achu Exp $
+     # $Id: TUTORIAL,v 1.9 2004-11-13 19:58:09 achu Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
 
@@ -284,5 +283,5 @@ Names for other network interfaces on the same node do not appear in the
 genders file.
 
   ------------------------------------------------------------------------
-$Id: TUTORIAL,v 1.8 2004-04-14 20:58:41 achu Exp $
+$Id: TUTORIAL,v 1.9 2004-11-13 19:58:09 achu Exp $
 $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
