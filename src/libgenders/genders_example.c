@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.11 2003-05-20 00:26:01 achu Exp $
+ * $Id: genders_example.c,v 1.12 2003-05-30 16:07:08 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -43,18 +43,6 @@ void cleanup_and_exit(genders_t handle, int status) {
   }
   
   exit(status);
-}
-
-void dump_genders_file(genders_t handle) {
-
-  printf("Dumping contents of the gender file\n");
-  printf("-----------------------------------\n");
-
-  if (genders_handle_dump(handle, NULL) == -1) {
-    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-    cleanup_and_exit(handle,1);
-  }
-  printf("\n");
 }
 
 void get_this_node_name(genders_t handle) {
@@ -858,8 +846,6 @@ int main(int argc, char **argv) {
     printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
     cleanup_and_exit(handle,1);
   }
-
-  dump_genders_file(handle);
 
   get_this_node_name(handle);
   
