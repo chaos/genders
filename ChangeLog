@@ -1,3 +1,25 @@
+2003-09-23  Albert Chu  <chu11@llnl.gov>
+
+	Enhanced performance of genders database input based on profile
+	analysis.
+
+	* src/libgenders/genders.c: 
+	Modified internal structures to use static buffer sizes, rather
+	than constant call to malloc.
+	Added definitions for GENDERS_MAXATTRLEN and GENDERS_MAXVALLEN.
+
+	* src/libgenders/genders.c (_parse_line): Added checks to ensure
+	attribute and value lenghts are within bounds.
+
+	* src/libgenders/genders.c (_free_handle_lists,
+	_insert_attrval_listnode, _insert_attr_listnode, genders_getnodes,
+	genders_getattr, genders_testattr, genders_testattrval,
+	genders_isattrval): Modified appropriately to handle to structure
+	format.
+
+	* src/libgenders/genders.c (genders_parse): Fixed one remaining
+	typo for maximum length handling code.
+
 2003-09-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_parse): Fixed logic error with
