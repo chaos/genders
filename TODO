@@ -1,5 +1,4 @@
 - I really really really need a test suite of some sort.
-- Only export genders symbols.
 - Allow attributes or attributes=value checking for each line of the genders
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
@@ -7,3 +6,9 @@
 - Genders comparison of two files.  Via nodeattr??  
   - Via new function in genders?\
 - Somehow make distcheck work with perlxs.
+- Allow attribute values to be overwritten instead of causing errors
+  by some flag option of some sort.
+  o i.e. 
+    #! overwrite-flag
+    a,b,c,d,e,f,g,h,i   all,attr=val,printer=foo
+    g,h,i               printer=bar
