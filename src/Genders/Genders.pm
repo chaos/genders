@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.2 2003-05-12 23:24:06 achu Exp $
+# $Id: Genders.pm,v 1.3 2003-05-14 20:04:32 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -272,17 +272,17 @@ Genders - Perl library for querying genders file
 
  $obj->debug($num)
 
- $obj->genders_getnodes([$attr, [$val]])
- $obj->genders_getattr([$node])
- $obj->genders_getattr_all()
- $obj->genders_getattrval($attr, [$node])
+ $obj->getnodes([$attr, [$val]])
+ $obj->getattr([$node])
+ $obj->getattr_all()
+ $obj->getattrval($attr, [$node])
 
- $obj->genders_testattr($attr, [$node])
- $obj->genders_testattrval($attr, $val, [$node])
+ $obj->testattr($attr, [$node])
+ $obj->testattrval($attr, $val, [$node])
 
- $obj->genders_isnode([$node])
- $obj->genders_isattr($attr)
- $obj->genders_isattrval($attr, $val)
+ $obj->isnode([$node])
+ $obj->isattr($attr)
+ $obj->isattrval($attr, $val)
 
 =head1 DESCRIPTION
 
@@ -302,50 +302,50 @@ Set the debug level in the genders object.  By default, the debug
 level is 0 and all debugging is turned off.  To turn it on, set the
 level to 1.
 
-=item B<$obj-E<gt>genders_getnodes([$attr, [$val]])>
+=item B<$obj-E<gt>getnodes([$attr, [$val]])>
 
 Returns a list of nodes with the specified attribute and value.  If a
 value is not specified only the attribute is considered.  If the
 attribute is not specified, all nodes listed in the genders file are
 returned.
 
-=item B<$obj-E<gt>genders_getattr([$node])>
+=item B<$obj-E<gt>getattr([$node])>
 
 Returns a list of attributes for the specified node.  If the node
 is not specified, the local node's attributes returned.
 
-=item B<$obj-E<gt>genders_getattr_all()>
+=item B<$obj-E<gt>getattr_all()>
 
 Returns a list of all attributes listed in the genders file.
 
-=item B<$obj-E<gt>genders_getattrval($attr, [$node])>
+=item B<$obj-E<gt>getattrval($attr, [$node])>
 
 Returns the value of the specified attribute for the specified node.
 If the node is not specified, the local node's attribute value is
 returned.
 
-=item B<$obj-E<gt>genders_testattr($attr, [$node])>
+=item B<$obj-E<gt>testattr($attr, [$node])>
 
 Returns 1 if the specified node has the specified attribute, 0 if it
 does not.  If the node is not specified, the local node is checked.
 
-=item B<$obj-E<gt>genders_testattrval($attr, $val, [$node])>
+=item B<$obj-E<gt>testattrval($attr, $val, [$node])>
 
 Returns 1 if the specified node has the specified attribute and value,
 0 if it does not.  If the node is not specified, the local node is
 checked.
 
-=item B<$obj-E<gt>genders_isnode([$node])>
+=item B<$obj-E<gt>isnode([$node])>
 
 Returns 1 if the specified node is listed in the genders file, 0 if it
 is not.  If the node is not specified, the local node is checked.
 
-=item B<$obj-E<gt>genders_isattr($attr)>
+=item B<$obj-E<gt>isattr($attr)>
 
 Returns 1 if the specified attribute is listed in the genders file, 0
 if it is not.
 
-=item B<$obj-E<gt>genders_isattrval($attr, $val)>
+=item B<$obj-E<gt>isattrval($attr, $val)>
 
 Returns 1 if the specified attribute is equal to the specified value
 for some node in the genders file, 0 if it is not.
