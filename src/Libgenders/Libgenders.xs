@@ -487,13 +487,7 @@ genders_getattr(handle, node=NULL)
                 if (vallist != NULL) {
                         (void)genders_vallist_destroy(handle, vallist);
                 }
-                attrs = newAV();
-                vals = newAV();
-                
                 RETVAL = newAV();
-
-                av_push(RETVAL, newRV_noinc((SV *)attrs));      
-                av_push(RETVAL, newRV_noinc((SV *)vals));
 
                 the_end:
         OUTPUT:

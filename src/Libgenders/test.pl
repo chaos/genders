@@ -60,7 +60,7 @@ foreach $_ (@$nodes) {
 print "\n";
 
 $temp = &Libgenders::genders_getattr($handle);
-if (&Libgenders::genders_errnum($handle) != 0) {
+if (@$temp == 0 && &Libgenders::genders_errnum($handle) != 0) {
     print "Error, genders_getattr()\n";
     exit(1);
 }
