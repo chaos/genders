@@ -15,5 +15,6 @@
     g,h,i               printer=bar
 - Rework to allow multiple hashed attrval mappings?
 - Have genders_getnodes() return nodes in sorted order?
+- Fix calls to _calc_query, b/c can return NULL for empty
 - Clean things up in general, library state is currently in 
   a state with multiple hacks placed on top of other hacks.
