@@ -91,16 +91,16 @@ Libgenders - Perl extension for libgenders
 
 =head1 DESCRIPTION
 
-This package provides a OO perl interface to the genders C API (see
+This package provides an OO perl interface to the genders C API (see
 libgenders(3)).  The perl interface is simliar to the genders C API,
 with some necessary changes due to the inherent differences between C
 and perl.  Some of the functions from the C API cannot be accessed via
 this perl interface, some new functions were created, the behavior of
-some functions was modified, and the parameters passed into the some
-functions was changed.  Please read the instructions below so to 
+some functions was modified, and the parameters passed into some
+functions has been changed.  Please read the instructions below so to 
 understand how to use the Libgenders package.
 
-=head2 Initialization/Destruction
+=head2 Initialization
 
 =over 4
 
@@ -165,7 +165,8 @@ Returns the number of attributes listed in the genders file.  Returns
 
 =item B<$handle-E<gt>genders_getnodename()>
 
-Returns the hostname of the current node.  Returns undef on error.
+Returns the shortened hostname of the current node.  Returns undef on
+error.
 
 =back
 
