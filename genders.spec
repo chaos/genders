@@ -80,15 +80,14 @@ install src/libgenders/man/genders_errors.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_parse.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/Libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd src; make DESTDIR="$RPM_BUILD_ROOT" bindir=/usr/bin libdir=/usr/lib includedir=/usr/include install
-ls src/libgenders
 cp src/libgenders/genders.h src/libgenders/Libgenders	
 cp src/libgenders/genders.c src/libgenders/Libgenders	
-cd src/libgenders/Libgenders; perl Makefile.PL; make
+cd src/libgenders/Libgenders; perl Makefile.PL; make; cd ../../..
 install src/libgenders/Libgenders/blib/arch/auto/Libgenders/Libgenders.so $RPM_BUILD_ROOT/usr/lib/genders/auto/Libgenders
 install src/libgenders/Libgenders/blib/arch/auto/Libgenders/Libgenders.bs $RPM_BUILD_ROOT/usr/lib/genders/auto/Libgenders
 install src/libgenders/Libgenders/blib/lib/Libgenders.pm $RPM_BUILD_ROOT/usr/lib/genders
 install src/libgenders/Libgenders/blib/lib/auto/Libgenders/autosplit.ix $RPM_BUILD_ROOT/usr/lib/genders/auto/Libgenders
+cd src; make DESTDIR="$RPM_BUILD_ROOT" bindir=/usr/bin libdir=/usr/lib includedir=/usr/include install 
 
 %files
 %defattr(-,root,root)
