@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.9 2003-05-15 21:06:29 achu Exp $
+ * $Id: genders_example.c,v 1.10 2003-05-15 23:52:52 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -183,7 +183,7 @@ void get_attributes_for_all_nodes(genders_t handle) {
     if (ret > 0) {
       printf("Attributes for node \"%s\": ", nodes[i]);
       for (j = 0; j < ret - 1; j++) {
-	printf("%s, ", attrs[j]);
+        printf("%s, ", attrs[j]);
       }
       printf("%s\n", attrs[ret-1]);
     }
@@ -235,18 +235,18 @@ void get_attributes_and_values_for_all_nodes(genders_t handle) {
     if (ret > 0) {
       printf("Attributes and values for node \"%s\": ", nodes[i]);
       for (j = 0; j < ret - 1; j++) {
-	if (strlen(vals[j]) > 0) {
-	  printf("%s=%s, ", attrs[j], vals[j]);
-	}
-	else {
-	  printf("%s, ", attrs[j]);
-	}
+        if (strlen(vals[j]) > 0) {
+          printf("%s=%s, ", attrs[j], vals[j]);
+        }
+        else {
+          printf("%s, ", attrs[j]);
+        }
       }
       if (strlen(vals[ret - 1]) > 0) {
-	printf("%s=%s\n", attrs[ret-1], vals[ret-1]);
+        printf("%s=%s\n", attrs[ret-1], vals[ret-1]);
       }
       else {
-	printf("%s\n", attrs[ret-1]);
+        printf("%s\n", attrs[ret-1]);
       }
     }
 
@@ -320,7 +320,7 @@ void get_all_nodes_with_a_certain_attribute(genders_t handle) {
     if (ret > 0) {
       printf("Nodes with attribute \"%s\": ", attrs[i]);
       for (j = 0; j < ret - 1; j++) {
-	  printf("%s, ", nodes[j]);
+          printf("%s, ", nodes[j]);
       }
       printf("%s\n", nodes[ret-1]);
     }
@@ -375,21 +375,21 @@ void get_all_nodes_with_a_certain_attribute_and_value(genders_t handle) {
     if (strlen(vals[i]) > 0) {
 
       if (genders_nodelist_clear(handle, nodes) == -1) {
-	printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-	cleanup_and_exit(handle,1);
+        printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+        cleanup_and_exit(handle,1);
       }
 
       if ((ret = genders_getnodes(handle, nodes, nodeslen, attrs[i], vals[i])) == -1) {
-	printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-	cleanup_and_exit(handle,1);
+        printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+        cleanup_and_exit(handle,1);
       }    
     
       if (ret > 0) {
-	printf("Nodes with attribute \"%s\"=\"%s\": ", attrs[i], vals[i]);
-	for (j = 0; j < ret - 1; j++) {
-	  printf("%s, ", nodes[j]);
-	}
-	printf("%s\n", nodes[ret-1]);
+        printf("Nodes with attribute \"%s\"=\"%s\": ", attrs[i], vals[i]);
+        for (j = 0; j < ret - 1; j++) {
+          printf("%s, ", nodes[j]);
+        }
+        printf("%s\n", nodes[ret-1]);
       }
     }
   }
@@ -504,10 +504,10 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
     ret = genders_testattr(handle, nodes[0], attrs[i], buffer, maxvallen+1);
     if (ret == 1) {
       if (strlen(buffer) > 0) {
-	printf("Yes, and it has value \"%s\"\n", buffer);
+        printf("Yes, and it has value \"%s\"\n", buffer);
       }
       else {
-	printf("Yes, but it has no value\n");
+        printf("Yes, but it has no value\n");
       }
     }
     else if (ret == 0) {
@@ -587,27 +587,27 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
 
       ret = genders_testattrval(handle, nodes[0], attrs[i], vals[i]);
       if (ret == 1) {
-	printf("Yes\n");
+        printf("Yes\n");
       }
       else if (ret == 0) {
-	printf("No\n");
+        printf("No\n");
       }
       else {
-	printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-	cleanup_and_exit(handle,1);
+        printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+        cleanup_and_exit(handle,1);
       }
 
       printf("Does node \"%s\" have attribute \"%s\"=\"%s\"?: ", nodes[0], attrs[i], "foo");
       ret = genders_testattrval(handle, nodes[0], attrs[i], "foo");
       if (ret == 1) {
-	printf("Yes\n");
+        printf("Yes\n");
       }
       else if (ret == 0) {
-	printf("No\n");
+        printf("No\n");
       }
       else {
-	printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-	cleanup_and_exit(handle,1);
+        printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+        cleanup_and_exit(handle,1);
       }
     }
   }
@@ -915,6 +915,3 @@ mtrace();
   exit(0);
 }
 
-/*
- * vi:tabstop=4 shiftwidth=4 expandtab
- */
