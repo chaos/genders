@@ -230,7 +230,7 @@ Makefile.pm: Makefile.PL
 	$(PERL) Makefile.PL PREFIX=$(GENDERS_PM_PREFIX) MAKEFILE=Makefile.pm FIRST_MAKEFILE=\Makefile.pm
 
 install: Makefile.pm
-	$(MAKE) -f Makefile.pm install
+	$(MAKE) -f Makefile.pm pure_install
 
 pure_install: Makefile.pm
 	$(MAKE) -f Makefile.pm pure_install

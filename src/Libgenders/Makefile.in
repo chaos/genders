@@ -242,7 +242,7 @@ test: Makefile.xs
 	$(MAKE) -f Makefile.xs test
 
 install: Makefile.xs
-	$(MAKE) -f Makefile.xs install
+	$(MAKE) -f Makefile.xs pure_install
 
 pure_install: Makefile.xs
 	$(MAKE) -f Makefile.xs pure_install

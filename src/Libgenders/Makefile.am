@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.1 2003-05-14 00:08:52 achu Exp $
+## $Id: Makefile.am,v 1.2 2003-05-14 00:49:43 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -28,7 +28,7 @@ test: Makefile.xs
 	$(MAKE) -f Makefile.xs test
 
 install: Makefile.xs
-	$(MAKE) -f Makefile.xs install
+	$(MAKE) -f Makefile.xs pure_install
 
 pure_install: Makefile.xs
 	$(MAKE) -f Makefile.xs pure_install
