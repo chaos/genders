@@ -17,6 +17,9 @@ ok(1); # If we made it this far, we're ok.
 # its man page ( perldoc Test ) for help writing this test script.
 
 print Libgenders->GENDERS_DEFAULT_FILE,"\n";
+print Libgenders::GENDERS_DEFAULT_FILE,"\n";
+print Libgenders->GENDERS_ERR_MAGIC,"\n";
+print Libgenders::GENDERS_ERR_NOTFOUND,"\n";
 
 $handle = Libgenders->genders_handle_create();
 if (!defined($handle)) {

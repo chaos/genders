@@ -9,7 +9,7 @@
 MODULE = Libgenders             PACKAGE = Libgenders            
 
 int
-GENDERS_ERR_SUCCESS (sv)
+GENDERS_ERR_SUCCESS (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_SUCCESS;
@@ -17,7 +17,7 @@ GENDERS_ERR_SUCCESS (sv)
         RETVAL    
 
 int
-GENDERS_ERR_NULLHANDLE (sv)
+GENDERS_ERR_NULLHANDLE (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NULLHANDLE;
@@ -25,7 +25,7 @@ GENDERS_ERR_NULLHANDLE (sv)
         RETVAL    
 
 int
-GENDERS_ERR_OPEN (sv)
+GENDERS_ERR_OPEN (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OPEN;
@@ -33,7 +33,7 @@ GENDERS_ERR_OPEN (sv)
         RETVAL    
 
 int
-GENDERS_ERR_READ (sv)
+GENDERS_ERR_READ (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_READ;
@@ -41,7 +41,7 @@ GENDERS_ERR_READ (sv)
         RETVAL    
 
 int
-GENDERS_ERR_PARSE (sv)
+GENDERS_ERR_PARSE (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_PARSE;
@@ -49,7 +49,7 @@ GENDERS_ERR_PARSE (sv)
         RETVAL    
 
 int
-GENDERS_ERR_NOTLOADED (sv)
+GENDERS_ERR_NOTLOADED (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NOTLOADED;
@@ -57,7 +57,7 @@ GENDERS_ERR_NOTLOADED (sv)
         RETVAL    
 
 int
-GENDERS_ERR_ISLOADED (sv)
+GENDERS_ERR_ISLOADED (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_ISLOADED;
@@ -65,7 +65,7 @@ GENDERS_ERR_ISLOADED (sv)
         RETVAL    
 
 int
-GENDERS_ERR_OVERFLOW (sv)
+GENDERS_ERR_OVERFLOW (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OVERFLOW;
@@ -73,7 +73,7 @@ GENDERS_ERR_OVERFLOW (sv)
         RETVAL    
 
 int
-GENDERS_ERR_PARAMETERS (sv)
+GENDERS_ERR_PARAMETERS (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_PARAMETERS;
@@ -81,7 +81,7 @@ GENDERS_ERR_PARAMETERS (sv)
         RETVAL    
 
 int
-GENDERS_ERR_NULLPTR (sv)
+GENDERS_ERR_NULLPTR (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NULLPTR;
@@ -89,7 +89,7 @@ GENDERS_ERR_NULLPTR (sv)
         RETVAL    
 
 int
-GENDERS_ERR_NOTFOUND (sv)
+GENDERS_ERR_NOTFOUND (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_NOTFOUND;
@@ -97,7 +97,7 @@ GENDERS_ERR_NOTFOUND (sv)
         RETVAL    
 
 int
-GENDERS_ERR_OUTMEM (sv)
+GENDERS_ERR_OUTMEM (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_OUTMEM;
@@ -105,7 +105,7 @@ GENDERS_ERR_OUTMEM (sv)
         RETVAL    
 
 int
-GENDERS_ERR_MAGIC (sv)
+GENDERS_ERR_MAGIC (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_MAGIC;
@@ -113,7 +113,7 @@ GENDERS_ERR_MAGIC (sv)
         RETVAL    
 
 int
-GENDERS_ERR_INTERNAL (sv)
+GENDERS_ERR_INTERNAL (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_INTERNAL;
@@ -121,7 +121,7 @@ GENDERS_ERR_INTERNAL (sv)
         RETVAL    
 
 int
-GENDERS_ERR_ERRNUMRANGE (sv)
+GENDERS_ERR_ERRNUMRANGE (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_ERRNUMRANGE;
@@ -129,7 +129,7 @@ GENDERS_ERR_ERRNUMRANGE (sv)
         RETVAL    
 
 SV * 
-GENDERS_DEFAULT_FILE (sv)
+GENDERS_DEFAULT_FILE (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = newSVpv(GENDERS_DEFAULT_FILE, 0);
