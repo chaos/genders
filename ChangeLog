@@ -1,8 +1,19 @@
+2004-06-07  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_common.h, src/libgenders/genders_common.c: New files.
+
+	* src/libgenders/genders.c: Split off number of declarations and
+	functions into genders_common files.
+
+	* src/libgenders/Makefile.am: Updated to include new files.
+	
 2004-05-19  Albert Chu  <chu11@llnl.gov>
 
-	* Makefile.am, compat/Makefile.am, src/Libgenders/Makefile.am,
-	src/Genders/Makefile.am, man/Makefile.am, man/compat/Makefile.am:
-	Fix dist files.
+	* Makefile.am, compat/Makefile.am, src/libgenders/Makefile.am,
+	src/Libgenders/Makefile.am, src/Genders/Makefile.am,
+	man/Makefile.am, man/compat/Makefile.am: Fix dist files.
+
+	* src/nodeattr/Makefile.am, src/libgenders/Makefile.am: Makefile cleanup.
 	
 2004-05-04  Albert Chu  <chu11@llnl.gov>
 
