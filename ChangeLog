@@ -1,4 +1,10 @@
-2004-01-08  Albert Chu  <chu11@llnl.gov>
+2005-01-10  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/hostlist.h, src/libgenders/hostlist.c,
+	src/nodeattr/hostlist.h, src/nodeattr/hostlist.c: Updated
+	libraries.
+	
+2005-01-08  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Makefile.am, src/Genders/Makefile.am: Cleanup.
 
