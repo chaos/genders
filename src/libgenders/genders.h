@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.2 2003-02-11 22:07:05 achu Exp $
+ * $Id: genders.h,v 1.3 2003-02-19 21:51:18 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -74,7 +74,7 @@ int genders_errnum(genders_t handle);
 
 /* Translates a genders error code to a text message.  
  * Returns: pointer to NULL-terminated statically allocated string.
- * Returns -1 if errnum out of range.
+ * Returns NULL if errnum out of range.
  */
 char *genders_strerror(int errnum);
 
