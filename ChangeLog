@@ -1,3 +1,11 @@
+2005-01-18  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/hash.h, src/libgenders/hash.c: Updated libraries.
+
+	* src/libgenders/hash.c (hash_node_alloc, hash_node_free),
+	src/libgenders/list.c (list_alloc_aux, list_free_aux): Modify to
+	remove buffering so no mem-leaks occur in libgenders.
+	
 2005-01-10  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/hostlist.h, src/libgenders/hostlist.c,
