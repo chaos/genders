@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.h,v 1.5 2004-12-22 00:01:13 achu Exp $
+ *  $Id: genders_common.h,v 1.6 2004-12-22 01:44:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -175,6 +175,16 @@ struct genders {
             handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
 	  } \
+        } while (0)
+#define __hash_insert(hash, key, data) \
+        do { \
+          if (!hash_insert((hash), (key), (data))) { \
+            if (errno == ENOMEM) \
+              handle->errnum = GENDERS_ERR_OUTMEM; \
+            else \
+              handle->errnum = GENDERS_ERR_INTERNAL; \
+            goto cleanup; \
+          } \
         } while (0)
 #define __hash_destroy(__hash) \
         if ((__hash)) hash_destroy((__hash))
