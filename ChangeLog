@@ -1,9 +1,14 @@
 2003-03-12 Albert Chu <chu11@llnl.gov>
         * moved unnecessary #includes and #defines from genders.h
 	  into genders.c  
+	* added magic numbers to genders.c
+	* added val length to genders_testattr()
 	* added genders_testnode() to libgenders 
-	* added genders_testnode() manpage  
-	* added genders_errormsg() manpage
+	* added genders_testnode() man pages  
+	* added genders_errormsg() man pages
+	* added genders_handle_destroy() man page
+	* renamed genders_getmaxnodenamelen manpage to genders_getmaxnodelen
+	* updated all manpages to be highly detailed and thorough
 	* added new corner case check to genders_list_clear() and
 	  appropriate error code genders.h
 	* fixed variety of corner case issues based on results from
