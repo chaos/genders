@@ -1,6 +1,7 @@
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/Makefile.am: Minor fixes to fix distcheck.
+	* src/libgenders/Makefile.am, src/Libgenders/Makefile.am,
+	src/Genders/Makefile.am: Minor fixes to fix distcheck.
 	
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
