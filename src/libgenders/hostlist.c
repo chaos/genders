@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: hostlist.c,v 1.1 2004-01-27 18:17:19 achu Exp $
+ *  $Id: hostlist.c,v 1.2 2004-04-14 20:58:41 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -759,7 +759,7 @@ static int hostrange_width_combine(hostrange_t h0, hostrange_t h1)
 static int hostrange_empty(hostrange_t hr)
 {
     assert(hr != NULL);
-    return hr->hi < hr->lo;
+    return ((hr->hi < hr->lo) || (hr->hi == (unsigned long) -1));
 }
 
 /* return the string representation of the last host in hostrange hr
@@ -2171,7 +2171,7 @@ static void _iterator_advance(hostlist_iterator_t i)
     assert(i->magic == HOSTLIST_MAGIC);
     if (i->idx > i->hl->nranges - 1)
         return;
-    if (++(i->depth) > i->hr->hi - i->hr->lo) {
+    if (++(i->depth) > (i->hr->hi - i->hr->lo)) {
         i->depth = 0;
         i->hr = i->hl->hr[++i->idx];
     }
@@ -2255,12 +2255,10 @@ int hostlist_remove(hostlist_iterator_t i)
     if (new) {
         hostlist_insert_range(i->hl, new, i->idx + 1);
         hostrange_destroy(new);
-        i->hr = i->hl->hr[i->idx];
+        i->hr = i->hl->hr[++i->idx];
         i->depth = -1;
     } else if (hostrange_empty(i->hr)) {
         hostlist_delete_range(i->hl, i->idx);
-        i->hr = i->hl->hr[i->idx];
-        i->depth = -1;
     } else
         i->depth--;
 

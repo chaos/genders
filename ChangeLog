@@ -1,3 +1,18 @@
+2004-04-14  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/hostlist.h, src/libgenders/hostlist.c: Updated to
+	latest copies.
+
+	* src/libgenders/hash.h, src/libgenders/hash.c: New files.
+
+	* man/libgenders.3: Fixed several english issues.
+
+	* TUTORIAL: Fixed major mistakes and added more information.
+
+	* src/libgenders/genders.c: Removed maximum attribute and value
+	length limits.  Began structure implementation for node index hash
+	table.
+	
 2004-03-09  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_get_val, _duplicate_attr_check):

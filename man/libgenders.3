@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: libgenders.3,v 1.14 2004-03-05 16:25:46 achu Exp $
+\."  $Id: libgenders.3,v 1.15 2004-04-14 20:58:41 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -113,7 +113,7 @@ followed by any number of spaces or tabs, and then the comma-separated
 list of attributes, each of which can optionally have a value.  The
 substituation string "%n" can be used in an attribute value to
 represent the nodename.  Nodenames can be listed on multiple lines, so
-a node's attribute can be specified on multiple lines.  However, no
+a node's attributes can be specified on multiple lines.  However, no
 single node may have duplicate attributes.
 
 There must be no spaces embedded in the attribute list and there is no
@@ -144,9 +144,11 @@ or by the range foo[1,9].
 
 Some examples of range usage follow:
 
-foo01,foo02,...,foo05:    foo[01-05]
-foo3,foo7,foo9,foo11:     foo[3,7,9-11]
-fooi,fooj,foo0,foo1,foo2: fooi,fooj,foo[0-2]
+foo01,foo02,foo03,foo04,foo05:    foo[01-05]
+
+foo3,foo7,foo9,foo11:             foo[3,7,9-11]
+
+fooi,fooj,foo0,foo1,foo2:         fooi,fooj,foo[0-2]
 
 .SH FILES
 /usr/include/genders.h

@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.23 2004-03-09 16:34:37 achu Exp $
+## $Id: configure.ac,v 1.24 2004-04-14 20:58:41 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -87,6 +87,7 @@ AC_CHECK_HEADERS( \
   getopt.h \
   stat.h \
   types.h \
+  pthread.h \
 )
 
 ##
@@ -110,6 +111,12 @@ AC_CHECK_FUNCS( \
   strtok_r \
   getopt_long \
 )
+
+ACX_PTHREAD
+AC_DEFINE(WITH_PTHREADS, 1, [Define if you have pthreads])
+LDFLAGS="$LDFLAGS $PTHREAD_CFLAGS"
+CPPFLAGS="$CPPFLAGS $PTHREAD_CFLAGS"
+LIBS="$PTHREAD_LIBS $LIBS"
 
 # Do this last, you could add compile options which can make
 # function checks fail

@@ -8,7 +8,7 @@
 
                                June 19, 2000
 
-                     (Revised by Albert Chu - May 2003) 
+                (Revised by Albert Chu - May 2003, April 2004) 
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "Genders" software package,
@@ -28,41 +28,62 @@ configurations of the same cluster, and even with multiple clusters.
 
 The framework has proven to be useful on clusters ranging in size from the
 ASCI Blue-Pacific SST system at 1464 nodes, to collections of two or three
-workstations.  
+workstations.
 
 Basic Operation
 
 This section describes the formats of the genders file and the nodeattr 
 command.  The genders file, briefly described in the introduction, contains
-a list of node names, and for each node, a list of attributes.  The genders
-file is typically found in /etc (on Linux when installed from the genders
-RPM) or /admin/etc (on other systems).
+a list of node names and attributes.  The genders file is typically found
+in /etc (on Linux when installed from the genders RPM) or /admin/etc (on
+other systems).
 
 Genders Format
 
-Each line of the genders file has the following format:
+Each line of the genders file may have one of the following formats.  See
+the section "Host Ranges" below for most information on host ranges.
 
-     nodename attr[=value],attr[=value],attr[=value],...
+     nodename                attr[=value],attr[=value],...
+     nodename1,nodename2,... attr[=value],attr[=value],...
+     nodenames[A-B]          attr[=value],attr[=value],...
 
-The nodename is the shortened[2] hostname of a node and must be unique in
-the genders file.  This is followed by any number of spaces or tabs, and then
-the comma-separated list of attributes, each of which can optionally have a
-value.  There must be no spaces embedded in the attribute list and there is
+The nodename(s) is the shortened[2] hostname of a node.  This is followed by
+any number of spaces or tabs, and then the comma-separated list of attributes,
+each of which can optionally have a value.  The substitution string "%n" can
+be used in an attribute value to represent the nodename.  Nodenames can be
+listed on multiple lines, so a node's attributes can be specified on multiple
+lines.  However, no single node may have duplicate attributes.
+
+There must be no spaces embedded in the attribute list and there is
 no provision for continuation lines.  Commas and equal characters are special
 and cannot appear in attribute names or their values.  Comments are prefixed 
 with the hash chracter (#) and can appear anywhere in the file.  The active
 genders file is typically found at /etc/genders or /admin/etc/genders.
 
-Here is a rather undeveloped genders file from a small 8-node linux cluster:
+Here is an example genders file from a small 16-node linux cluster:
 
-     slc0 elanid=8,passwdhost,nqsmgr
-     slc1 elanid=9,nqscompute
-     slc2 elanid=10,nqscompute
-     slc3 elanid=11,nqscompute
-     slc4 elanid=12,nqscompute
-     slc5 elanid=13,nqscompute
-     slc6 elanid=14,nqscompute
-     slc7 elanid=15,nqscompute
+     # slc cluster genders file
+     slci,slcj,slc[0-15]  eth2=e%n,cluster=slc,all
+     slci                 passwdhost
+     slci,slcj            management
+     slc[1-15]            compute
+
+Host Ranges
+
+As  noted  in  section  above,  the genders database accepts ranges of
+nodenames in the general form: prefix[n-m,l-k,...], where n < m and l <
+k, etc., as an alternative to explicit lists of nodenames.
+ 
+This  range  syntax  is  meant only as a convenience on clusters with a
+prefixNN naming convention and specification of ranges  should  not  be
+considered  necessary -- the list foo1,foo9 could be specified as such,
+or by the range foo[1,9].
+ 
+Some examples of range usage follow:
+ 
+foo01,foo02,foo03,foo04,foo05:    foo[01-05]
+foo3,foo7,foo9,foo11:             foo[3,7,9-11]
+fooi,fooj,foo0,foo1,foo2:         fooi,fooj,foo[0-2]
 
 Nodeattr Usage
 
@@ -74,13 +95,13 @@ follows:
      nodeattr [-f genders] [-q | -c | -n | -s] [-r] attr[=val]
      nodeattr [-f genders] [-v] [node] attr[=val]
      nodeattr [-f genders] -l [node]
-     nodeattr [-f genders] --check
+     nodeattr [-f genders] -k
 
 The -f option specifies a genders file path other than the default.
 
 The -q, -c, -n, or -s options followed by an attribute name cause a list of
 nodes having the specified attribute to be printed on stdout, formatted
-according to the option specified: -q is hostrange, -c is comma-separated, 
+according to the option specified: -q is host range, -c is comma-separated, 
 -n is newline separated, and -s is space separated.  
 
 If none of the formatting options are specified, nodeattr returns a zero
@@ -90,11 +111,25 @@ node name is specified before the attribute, it is queried instead of the
 local node.
 
 The -l option is used to generate a list of attributes for a particular
-node.  If the node is not specified, a unique attributes appearing in the
-genders file.
+node.  If no node is listed, all attributes appearing in the genders file
+will be listed.
+
+The -k option checks the genders file for proper formatting.  Information
+about improper formatting will be output to standard error.
 
 Nodeattr can usually be found in /usr/bin (Linux RPM) or /admin/scripts 
 (other systems).
+
+Programming with Genders
+
+Three different APIs have been developed that allow programmers to
+programmatically parse the genders file.  "libgenders" is a C API which
+can be linked by including genders.h and linking the library libgenders.
+"Libgenders" is a Perl extensions interface directly to the C API (with
+minor changes for the inherent differences between C and Perl). "Genders"
+is another Perl API, but offers a more traditional Perl API than
+"Libgenders."  The reader can learn more about these libraries by reading
+the manpages libgenders(3), Libgenders(3), and Genders(3).
 
 Example: Rc Script
 
@@ -197,17 +232,6 @@ are appropriately assigned in the genders file:
      fi
      exit 0
 
-Programming with Genders
-
-Three different APIs have been developed that allow programmers to
-programmatically parse the genders file.  "libgenders" is a C API which
-can be linked by including genders.h and linking the library libgenders.
-"Libgenders" is a Perl extensions interface directly to the C API (with
-minor changes for the inherent differences between C and Perl). "Genders"
-is another Perl API, but offers a more traditional Perl API than
-"Libgenders."  The reader can learn more about these libraries by reading
-the manpages libgenders(3), Libgenders(3), and Genders(3).
-
 Example: nqs_mknmap
 
 The following script uses the Genders library to get a list of all nodes
@@ -215,7 +239,7 @@ in the cluster.  It then adds them to the NMAP database used by NQS:
 
      #!/usr/bin/perl
      #
-     # $Id: TUTORIAL,v 1.7 2003-05-14 23:48:36 achu Exp $
+     # $Id: TUTORIAL,v 1.8 2004-04-14 20:58:41 achu Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
 
@@ -260,5 +284,5 @@ Names for other network interfaces on the same node do not appear in the
 genders file.
 
   ------------------------------------------------------------------------
-$Id: TUTORIAL,v 1.7 2003-05-14 23:48:36 achu Exp $
+$Id: TUTORIAL,v 1.8 2004-04-14 20:58:41 achu Exp $
 $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
