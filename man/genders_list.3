@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_list.3,v 1.3 2003-05-05 22:26:03 achu Exp $
+\."$Id: genders_list.3,v 1.4 2003-05-08 16:06:47 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -50,8 +50,6 @@ and
 and the programmer wishes to re-use the list.  
 
 \fBgenders_nodelist_destroy()\fR, \fBgenders_attrlist_destroy()\fR, and \fBgenders_vallist_destroy()\fR destroy the lists pointed to by \fInodelist\fR, \fIattrlist\fR, and \fIvallist\fR respectively.  In addition, all memory assocated with the list is freed.  
-Before the genders file associated with \fIhandle\fR can be closed, all 
-lists must be destroyed by their respective destroy functions.
 .br
 .SH RETURN VALUES
 On success, \fBgenders_nodelist_create()\fR,
