@@ -41,6 +41,7 @@ install dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
+cd src; make install DEST=$RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root)
@@ -62,3 +63,4 @@ install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
 /usr/man/man1/inst.1.gz
 /usr/man/man1/nodeattr.1.gz
 /usr/man/man3/gendlib.3.gz
+/usr/lib/libgenders.la
