@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.26 2004-01-14 23:01:34 achu Exp $
+ *  $Id: nodeattr.c,v 1.27 2004-09-10 17:22:10 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -57,7 +57,7 @@ static struct option longopts[] = {
     { "value", 0, 0, 'v' },
     { "listattr", 0, 0, 'l' },
     { "filename", 1, 0, 'f' },
-    { "check", 0, 0, 'k'},
+    { "parse-check", 0, 0, 'k'},
     { 0,0,0,0 },
 };
 #endif
@@ -225,6 +225,7 @@ list_nodes(genders_t gp, char *attr, fmt_t qfmt)
     }
     genders_nodelist_destroy(gp, nodes);
 
+    hostlist_sort(hl);
     str = _rangestr(hl, qfmt);
     if (strlen(str) > 0)
         printf("%s\n", str);
@@ -290,7 +291,12 @@ usage(void)
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] attr[=val]\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
-        "or     nodeattr [-f genders] -k\n");
+#if HAVE_GETOPT_LONG
+        "or     nodeattr [-f genders] --parse-check\n"    
+#else
+        "or     nodeattr [-f genders] -k\n"
+#endif
+            );
     exit(1);
 }
 

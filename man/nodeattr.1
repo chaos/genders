@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.9 2003-12-30 21:47:13 achu Exp $
+\."  $Id: nodeattr.1,v 1.10 2004-09-10 17:22:10 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -74,8 +74,9 @@ all attributes in the genders file are listed.
 .LP
 The
 .I "-k"
-option checks the genders file for proper formatting.  Information
-about improper formatting will be output to standard error.
+option checks the genders file for parse errors and proper formatting.
+If errors are found, information about the error will be output to
+standard error.
 .LP
 .B Nodeattr 
 will always check the default genders file, but a different genders
