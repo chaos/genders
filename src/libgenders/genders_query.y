@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.1 2004-06-07 22:11:30 achu Exp $
+ *  $Id: genders_query.y,v 1.2 2004-06-08 01:19:05 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -238,7 +238,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
     {
       hostlist_t h, l, r;
       char buf[HOSTLIST_BUFLEN];
-      int i, rv, len, num;
+      int rv;
 
       h = l = r = NULL;
 

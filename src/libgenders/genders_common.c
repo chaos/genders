@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.1 2004-06-07 20:14:37 achu Exp $
+ *  $Id: genders_common.c,v 1.2 2004-06-08 01:19:05 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -23,6 +23,10 @@
  *  with Genders; if not, write to the Free Software Foundation, Inc.,
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "genders.h"
 #include "genders_common.h"
@@ -73,12 +77,12 @@ _put_in_list(genders_t handle, char *str, char **list, int index, int len)
     handle->errnum = GENDERS_ERR_OVERFLOW;
     return -1;
   }
-                                                                                      
+
   if (!list[index]) {
     handle->errnum = GENDERS_ERR_NULLPTR;
     return -1;
   }
-                                                                                      
+
   strcpy(list[index], str);
   return 0;
 }

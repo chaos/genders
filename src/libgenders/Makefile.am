@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.16 2004-06-07 22:11:30 achu Exp $
+## $Id: Makefile.am,v 1.17 2004-06-08 01:19:05 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -40,3 +40,5 @@ genders_parse.c:
 
 genders_query.c: genders_parse.c
 	$(YACC) -d -o genders_query.c genders_query.y
+
+CLEANFILES += genders_parse.c genders_query.c genders_query.h
