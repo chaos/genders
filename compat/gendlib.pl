@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.7 2003-05-09 23:03:40 achu Exp $
+#  $Id: gendlib.pl,v 1.8 2003-05-09 23:07:54 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -29,7 +29,7 @@ package Genders;
 
 use strict;
 use vars qw($included $debug $havePSSP $handle);
-use vars qw($init_called $init_hname_called $hname);
+use vars qw($init_hname_called $hname);
 use vars qw($altAttr $clusterAttr);
 
 use Libgenders;
@@ -96,9 +96,7 @@ sub init
         }
     }
     
-    $init_called = 1;
     $debug && print("init called\n");
-    
     return 1;
 }
 
@@ -125,9 +123,9 @@ sub init_hname
 #       $found (RETURN) 0 if not found, 1 if found
 sub hasattr
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return 0;
         }
     }
@@ -157,9 +155,9 @@ sub hasattr
 #       $value (RETURN) value or null if (no value or node does not have attr)
 sub getattrval
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return "";
         }
     }
@@ -187,9 +185,9 @@ sub getattrval
 #       @attrs (RETURN) list of attributes
 sub getattr
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return ();
         }
     }
@@ -214,9 +212,9 @@ sub getattr
 #       @attrs (RETURN) list of attributes
 sub getallattr
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return ();
         }
     }
@@ -238,9 +236,9 @@ sub getallattr
 #       @nodes (RETURN) list of nodes
 sub getnode
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return ();
         }
     }
@@ -285,9 +283,9 @@ sub get_node_hash
     
     my (%nodes, $attrs, $attr, $attrnodes);
     
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             %{$nodes} = ();
             return;
         }
@@ -333,9 +331,9 @@ sub init_clusters
 #   cluster name will be returned, not just the cluster name.   
 sub get_clusters
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return "";
         }
     }
@@ -362,9 +360,9 @@ sub get_clusters
 #       $rv (RETURN)    result of expression evaluation
 sub gendexp
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return 0;
         }
     }
@@ -414,9 +412,9 @@ sub gendexp
 # NOTE: names in the input that cannot be converted are preserved in the output
 sub to_altnames
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return ();
         }
     }
@@ -449,9 +447,9 @@ sub to_altnames
 # NOTE: names in the input that cannot be converted are preserved in the output
 sub to_gendnames
 {
-    if (!$init_called) {
+    if (!defined $handle) {
         init();
-        if (!$init_called) {
+        if (!defined $handle) {
             return ();
         }
     }
