@@ -9,7 +9,14 @@ Prereq: perl
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
 
 %description
-Genders is a static cluster configuration database.  
+Genders is a static cluster configuration database used for cluster
+configuration management.  It is used by a variety of tools and
+scripts for management of large clusters.  The genders database is
+typically replicated on every node of the cluster. It describes the
+layout and configuration of the cluster so that tools and scripts can
+sense the variations of cluster nodes. By abstracting this information
+into a plain text file, it becomes possible to change the
+configuration of a cluster by modifying only one file.
 
 %package compat
 Summary: compatability library 
@@ -21,7 +28,7 @@ genders API that is compatible with earlier releases of genders
 %setup  -q -n %{name}-%{version}-%{release}
 
 %build
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --prefix=/usr --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
 make 
 
 %install
@@ -31,19 +38,19 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
-/usr/share/man/man1/
-/usr/share/man/man3/genders*
-/usr/share/man/man3/libgenders.3*
-/usr/share/man/man3/Genders.3pm*
-/usr/share/man/man3/Libgenders.3pm*
-/usr/include/genders.h
-/usr/bin/
+%{_mandir}/man1/*
+%{_mandir}/man3/genders*
+%{_mandir}/man3/libgenders.3*
+%{_mandir}/man3/Genders.3pm*
+%{_mandir}/man3/Libgenders.3pm*
+%{_includedir}/genders.h
+%{_bindir}/*
 %{_libdir}/libgenders.*
 %{_libdir}/perl5/
 
 %files compat
 %defattr(-,root,root)
-/usr/share/man/man3/gendlib*
-%{_libdir}/genders/
+%{_mandir}/man3/gendlib*
+%{_libdir}/genders/*
 
 

@@ -1,14 +1,21 @@
-2004-10-26  Albert Chu  <chu11@llnl.gov>
+2004-11-13  Albert Chu  <chu11@llnl.gov>
+
+	* README, TUTORIAL, genders.spec.in: Backport updated
+	documentation and port fixes from higher branch.
 
 	* META: Updated for new release
 
-	* config/Make-rpm.mk: Updated with SuSe fixes.
+	* tagged genders-1-3-3
+	
+2004-10-26  Albert Chu  <chu11@llnl.gov>
 
-	* genders.spec.in: Removed execution of bootstrap.
-
-	* Makefile.am, compat/Makefile.am, src/Genders/Makefile.am,
+        * config/Make-rpm.mk, genders.spec.in, Makefile.am,
+	compat/Makefile.am, src/Genders/Makefile.am,
 	src/Libgenders/Makefile.am, src/libgenders/Makefile.am,
-	man/Makefile.am, man/compat/Makefile.am: distcheck fixes.
+	man/Makefile.am, man/compat/Makefile.am: Backport port and dist
+	fixes from higher branch to enable builds on other systems.
+	
+	* META: Updated for new release
 
 	* tagged genders-1-3-2
 
