@@ -33,6 +33,8 @@ install dist_all $RPM_BUILD_ROOT/usr/bin
 install dist_local $RPM_BUILD_ROOT/usr/bin
 install dist_cmp $RPM_BUILD_ROOT/usr/bin
 install dist_bootstrap $RPM_BUILD_ROOT/usr/bin
+install updatefstab $RPM_BUILD_ROOT/usr/bin
+install updateservices $RPM_BUILD_ROOT/usr/bin
 gzip dist2.1 dist_all.1 dist_cmp.1 dist_local.1 inst.1 nodeattr.1 gendlib.3
 install dist2.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install dist_all.1.gz $RPM_BUILD_ROOT/usr/man/man1
@@ -54,6 +56,8 @@ install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
 /usr/bin/dist_local
 /usr/bin/dist_cmp
 /usr/bin/dist_bootstrap
+/usr/bin/updatefstab
+/usr/bin/updateservices
 /usr/man/man1/dist2.1.gz
 /usr/man/man1/dist_all.1.gz
 /usr/man/man1/dist_cmp.1.gz
