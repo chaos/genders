@@ -1,5 +1,5 @@
 /*
- * $Id: libgenders_test.c,v 1.4 2003-03-18 00:19:12 achu Exp $
+ * $Id: libgenders_test.c,v 1.5 2003-05-21 00:43:55 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/libgenders_test.c,v $
  */
 
@@ -10,8 +10,8 @@
 #include "libgenders_testcases.h"
 
 struct test_env {
-  genders_t open_handle;
-  genders_t not_open_handle;
+  genders_t loaded_handle;
+  genders_t not_loaded_handle;
   genders_t destroyed_handle;
   char **nodelist;
   char **attrlist;
@@ -56,23 +56,23 @@ void free_array_of_strings(char **list, int list_len) {
 
 /* initialize the test environment */
 int initialize_test_env(struct test_env *test_env) {
-  test_env->open_handle = NULL;
-  test_env->not_open_handle = NULL;
+  test_env->loaded_handle = NULL;
+  test_env->not_loaded_handle = NULL;
   test_env->nodelist = NULL;
   test_env->attrlist = NULL;
   test_env->vallist = NULL;
 
-  if ((test_env->open_handle = genders_handle_create()) == NULL) {
+  if ((test_env->loaded_handle = genders_handle_create()) == NULL) {
     printf("genders_handle_create() error\n");
     return -1;
   }
 
-  if (genders_open(test_env->open_handle, GENDERS_FILE_GOOD) == -1) {
-    printf("genders_open() error\n");
+  if (genders_load_data(test_env->loaded_handle, GENDERS_FILE_GOOD) == -1) {
+    printf("genders_load_data() error\n");
     return -1;
   }
 
-  if ((test_env->not_open_handle = genders_handle_create()) == NULL) {
+  if ((test_env->not_loaded_handle = genders_handle_create()) == NULL) {
     printf("genders_handle_create() error\n");
     return -1;
   }
@@ -94,9 +94,7 @@ int initialize_test_env(struct test_env *test_env) {
   test_env->maxattrlen = GENDERS_FILE_GOOD_MAXATTRLEN;
   test_env->maxvallen = GENDERS_FILE_GOOD_MAXVALLEN;
 
-  /* create lists manually, so we don't encounter errant "NOTFREE" or
-   * "ISFREE" errors during testing
-   */
+  /* create lists manually */
 
   if (create_array_of_strings(&test_env->nodelist, 
 			      test_env->nodelist_len, 
@@ -122,11 +120,11 @@ int initialize_test_env(struct test_env *test_env) {
 
 /* cleanup the test environment */
 void cleanup_test_env(struct test_env *test_env) {
-  if (test_env->open_handle != NULL) {
-    (void)genders_handle_destroy(test_env->open_handle);
+  if (test_env->loaded_handle != NULL) {
+    (void)genders_handle_destroy(test_env->loaded_handle);
   }
-  if (test_env->not_open_handle != NULL) {
-    (void)genders_handle_destroy(test_env->not_open_handle);
+  if (test_env->not_loaded_handle != NULL) {
+    (void)genders_handle_destroy(test_env->not_loaded_handle);
   }
   if (test_env->nodelist != NULL) {
     free_array_of_strings(test_env->nodelist, test_env->nodelist_len);
@@ -151,7 +149,6 @@ void run_a_parameter_test(struct test_env *test_env,
 			  int return_value,
 			  int return_errnum) {
   int int_result;
-  char *char_result;
   char *nodename = NULL;
   char *str1 = NULL;
   char *str2 = NULL;
@@ -161,19 +158,26 @@ void run_a_parameter_test(struct test_env *test_env,
   char buffer[1000];
   
   /* setup necessary test parameters */
-  if (param1 == IS_NOT_NULL_NOT_OPEN) {
-    handle = test_env->not_open_handle;
+  if (param1 == IS_NOT_NULL_NOT_LOADED) {
+    handle = test_env->not_loaded_handle;
   }
-  else if (param1 == IS_NOT_NULL_OPEN) {
-    handle = test_env->open_handle;
+  else if (param1 == IS_NOT_NULL_LOADED) {
+    handle = test_env->loaded_handle;
   }
   else if (param1 == IS_NOT_NULL_DESTROYED) {
     handle = test_env->destroyed_handle;
   }
 
-  if (function & GENDERS_CREATE && param2 == IS_NOT_NULL) {
+  if ((function == GENDERS_LOAD_DATA || function == GENDERS_PARSE) &&
+      param2 == IS_NOT_NULL_GOOD)
+    str1 = GENDERS_GOOD_FILENAME;
+
+  if ((function == GENDERS_LOAD_DATA || function == GENDERS_PARSE) &&
+      param2 == IS_NOT_NULL_BAD)
+    str1 = GENDERS_BAD_FILENAME;
+
+  if (function & GENDERS_CREATE && param2 == IS_NOT_NULL)
       list_create = &list; 
-  }
 
   if (function & GENDERS_CLEAR || function & GENDERS_DESTROY) {
     if (param2 == IS_NOT_NULL) {
@@ -197,143 +201,103 @@ void run_a_parameter_test(struct test_env *test_env,
   }
 
   if ((function == GENDERS_TESTATTR || function == GENDERS_TESTATTRVAL) && 
-      param3 == IS_NOT_NULL) {
-    str1 = "param2";
-  }
+      param3 == IS_NOT_NULL)
+    str1 = "param3";
 
   if (function == GENDERS_TESTATTRVAL && param4 == IS_NOT_NULL) {
     /* grab a string from a list */
     str2 = test_env->nodelist[1];
   }
 
-  if (function == GENDERS_GETATTR && param4 == GOOD_NODENAME) {
+  if (function == GENDERS_GETATTR && param4 == GOOD_NODENAME)
     nodename = GENDERS_GOOD_NODENAME;
-  } 
-  else if (function == GENDERS_GETATTR && param4 == BAD_NODENAME) {
+  else if (function == GENDERS_GETATTR && param4 == BAD_NODENAME)
     nodename = GENDERS_BAD_NODENAME;
-  }
 
   if ((function == GENDERS_TESTATTR || function == GENDERS_TESTATTRVAL) && 
-      param2 == GOOD_NODENAME) {
+      param2 == GOOD_NODENAME)
     nodename = GENDERS_GOOD_NODENAME;
-  }
   else if ((function == GENDERS_TESTATTR || function == GENDERS_TESTATTRVAL) && 
-      param2 == BAD_NODENAME) {
+      param2 == BAD_NODENAME)
     nodename = GENDERS_BAD_NODENAME;
-  } 
 
-  if (function == GENDERS_HANDLE_DESTROY) {
+  if ((function == GENDERS_ISATTR || function == GENDERS_ISATTRVAL) &&
+      param3 == IS_NOT_NULL)
+    str1 = "attr";
+
+  if (function == GENDERS_ISATTRVAL && param4 == IS_NOT_NULL)
+    str2 = "val";
+
+  if (function == GENDERS_HANDLE_DESTROY)
     int_result = genders_handle_destroy(handle);
-  }
-  else if (function == GENDERS_OPEN) {
-  }
-  else if (function == GENDERS_CLOSE) {
-    int_result = genders_close(handle);
-  }
-  else if (function == GENDERS_ERRNUM) {
+  else if (function == GENDERS_LOAD_DATA)
+    int_result = genders_load_data(handle, str1);  
+  else if (function == GENDERS_ERRNUM)
     int_result = genders_errnum(handle);
-  }
-  else if (function == GENDERS_STRERROR) {
-    char_result = genders_strerror(param1);
-  }
-  else if (function == GENDERS_ERRORMSG) {
-    char_result = genders_errormsg(handle);
-  }
-  else if (function == GENDERS_GETNUMNODES) {
+  else if (function == GENDERS_GETNUMNODES)
     int_result = genders_getnumnodes(handle);
-  }
-  else if (function == GENDERS_GETNUMATTRS) {
+  else if (function == GENDERS_GETNUMATTRS)
     int_result = genders_getnumattrs(handle);
-  }
-  else if (function == GENDERS_GETMAXATTRS) {
+  else if (function == GENDERS_GETMAXATTRS) 
     int_result = genders_getmaxattrs(handle);
-  }
-  else if (function == GENDERS_GETMAXNODELEN) {
+  else if (function == GENDERS_GETMAXNODELEN)
     int_result = genders_getmaxnodelen(handle);
-  }
-  else if (function == GENDERS_GETMAXATTRLEN) {
+  else if (function == GENDERS_GETMAXATTRLEN)
     int_result = genders_getmaxattrlen(handle);
-  }
-  else if (function == GENDERS_GETMAXVALLEN) {
+  else if (function == GENDERS_GETMAXVALLEN)
     int_result = genders_getmaxvallen(handle);
-  }
-  else if (function == GENDERS_NODELIST_CREATE) {
+  else if (function == GENDERS_NODELIST_CREATE)
     int_result = genders_nodelist_create(handle, list_create);
-  }
-  else if (function == GENDERS_NODELIST_CLEAR) {
+  else if (function == GENDERS_NODELIST_CLEAR)
     int_result = genders_nodelist_clear(handle, list);
-  }
-  else if (function == GENDERS_NODELIST_DESTROY) {
+  else if (function == GENDERS_NODELIST_DESTROY)
     int_result = genders_nodelist_destroy(handle, list);
-  }
-  else if (function == GENDERS_ATTRLIST_CREATE) {
+  else if (function == GENDERS_ATTRLIST_CREATE)
     int_result = genders_attrlist_create(handle, list_create);
-  }
-  else if (function == GENDERS_ATTRLIST_CLEAR) {
+  else if (function == GENDERS_ATTRLIST_CLEAR)
     int_result = genders_attrlist_clear(handle, list);
-  }
-  else if (function == GENDERS_ATTRLIST_DESTROY) {
+  else if (function == GENDERS_ATTRLIST_DESTROY)
     int_result = genders_attrlist_destroy(handle, list);
-  }
-  else if (function == GENDERS_VALLIST_CREATE) {
+  else if (function == GENDERS_VALLIST_CREATE)
     int_result = genders_vallist_create(handle, list_create);
-  }
-  else if (function == GENDERS_VALLIST_CLEAR) {
+  else if (function == GENDERS_VALLIST_CLEAR)
     int_result = genders_vallist_clear(handle, list);
-  }
-  else if (function == GENDERS_VALLIST_DESTROY) {
+  else if (function == GENDERS_VALLIST_DESTROY)
     int_result = genders_vallist_destroy(handle, list);
-  }
-  else if (function == GENDERS_GETNODENAME) {
+  else if (function == GENDERS_GETNODENAME)
     int_result = genders_getnodename(handle, str1, param3);
-  }
-  else if (function == GENDERS_GETNODES) {
+  else if (function == GENDERS_GETNODES)
     int_result = genders_getnodes(handle, list, param3, NULL, NULL);
-  }
-  else if (function == GENDERS_GETATTR) {
+  else if (function == GENDERS_GETATTR)
     int_result = genders_getattr(handle, list, NULL, param3, nodename);
-  }
-  else if (function == GENDERS_GETATTR_ALL) {
+  else if (function == GENDERS_GETATTR_ALL)
     int_result = genders_getattr_all(handle, list, param3);
-  }
-  else if (function == GENDERS_TESTATTR) {
+  else if (function == GENDERS_TESTATTR)
     int_result = genders_testattr(handle, nodename, str1, buffer, param4);
-  }
-  else if (function == GENDERS_TESTATTRVAL) {
+  else if (function == GENDERS_TESTATTRVAL)
     int_result = genders_testattrval(handle, nodename, str1, str2);
-  }
-  else if (function == GENDERS_TESTNODE) {
-    int_result = genders_testnode(handle, NULL);
-  }
-  else if (function == GENDERS_ELAPSEDTIME) {
-    int_result = genders_elapsedtime(handle);
-  }
+  else if (function == GENDERS_ISNODE)
+    int_result = genders_isnode(handle, NULL);
+  else if (function == GENDERS_ISATTR)
+    int_result = genders_isattr(handle, str1);
+  else if (function == GENDERS_ISATTRVAL)
+    int_result = genders_isattrval(handle, str1, str2);
+  else if (function == GENDERS_PARSE)
+    int_result = genders_parse(handle, str1, NULL);
   else {
     printf("Error: Incorrect function\n");
     return;
   }
   
   if (function & GENDERS_INT_RESULT) {
-    if (int_result == return_value && 
-	(return_errnum == NO_ERRNUM || return_errnum == genders_errnum(handle))) {
-      printf("Test %d: %s: PASS\n", index, function_names[function & GENDERS_FUNCTION_MASK]);
+    if (int_result == return_value && return_errnum == genders_errnum(handle)) {
+      printf("Test %d: %s: PASS\n", index, 
+             function_names[function & GENDERS_FUNCTION_MASK]);
     }
     else {
       printf("Test %d: %s: ***FAIL***, return_value = %d, return_errnum = %d\n", 
 	     index, function_names[function & GENDERS_FUNCTION_MASK], 
 	     int_result, genders_errnum(handle));
-    }
-  }
-  else {
-    if (((char_result == NULL && return_value == IS_NULL) || 
-	 (char_result != NULL && return_value == IS_NOT_NULL)) &&
-	(return_errnum == NO_ERRNUM || return_errnum == genders_errnum(handle))) {
-      printf("Test %d: %s: PASS\n", index, function_names[function & GENDERS_FUNCTION_MASK]);
-    } 
-    else {
-      printf("Test %d: %s: ***FAIL***, return_value = %p, return_errnum = %d\n", 
-	     index, function_names[function & GENDERS_FUNCTION_MASK], 
-	     char_result, genders_errnum(handle));
     }
   }
 } 
