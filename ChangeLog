@@ -1,3 +1,8 @@
+2003-12-31  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/Makefile.am, src/Genders/Genders.pm: Began
+	consistent library versioning.
+	
 2003-12-30  Albert Chu  <chu11@llnl.gov>
 
 	Updated all files with appropriate copyright header.
