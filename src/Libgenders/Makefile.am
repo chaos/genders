@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.10 2004-01-16 17:31:31 achu Exp $
+## $Id: Makefile.am,v 1.11 2004-01-31 02:22:53 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -19,6 +19,8 @@ Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	cp ../libgenders/list.h .
 	cp ../libgenders/fd.h .
 	cp ../libgenders/fd.c .
+	cp ../libgenders/hostlist.c .
+	cp ../libgenders/hostlist.h .
 	$(PERL) Makefile.PL PREFIX=$(PERL_INSTALL_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
 test: Makefile.xs 
@@ -38,8 +40,6 @@ clean:
 	rm -f genders.*
 	rm -f list.*
 	rm -f fd.*  
+	rm -f hostlist.*
 	rm -f Makefile.xs
 	rm -f Makefile.xs.old
-	rm -f genders.c
-	rm -f genders.h
-
