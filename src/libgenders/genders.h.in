@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.19 2004-04-28 21:31:54 achu Exp $
+ *  $Id: genders.h.in,v 1.20 2004-04-28 23:35:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -237,6 +237,17 @@ int genders_index_nodes(genders_t handle);
  * Returns: 0 on success, -1 on failure
  */            
 int genders_index_attrs(genders_t handle);
+
+/* Internally index values for specified attribute for faster
+ * search times on genders_getnodes and genders_isattrval.  If the
+ * index was previously generated with the same attribute, the
+ * function will do nothing and return 0.  Only one attribute can be
+ * indexed at a time.  Subsequent calls to this function with different
+ * attributes will overwrite earlier indexes.  A failure will not
+ * destroy an earlier index.
+ * Returns: 0 on success, -1 on failure
+ */            
+int genders_index_attrvals(genders_t handle, const char *attr);
         
 /* Parses a genders file, and outputs parse debugging 
  * information to the file stream  

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.109 2004-04-28 21:43:35 achu Exp $
+ *  $Id: genders.c,v 1.110 2004-04-28 23:35:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -42,6 +42,9 @@
 #define GENDERS_MAGIC_NUM         0xdeadbeef
 
 #define GENDERS_READLINE_BUFLEN   65536
+
+/* Impossible to have a genders value with spaces */
+#define GENDERS_NOVALUE           "  NOVAL  "   
 
 #ifndef MAXHOSTNAMELEN
 #define MAXHOSTNAMELEN            64
@@ -142,6 +145,8 @@ struct genders {
   char *valbuf;                     /* Buffer for value substitution */
   hash_t node_index;                /* Index table for quicker node access */
   hash_t attr_index;                /* Index table for quicker search times */
+  hash_t attrval_index;             /* Index table for quicker search times */
+  char *attrval_index_attr;         /* Current indexed attr in attrval_index */ 
 };
 
 /* Error messages */
@@ -378,6 +383,8 @@ genders_handle_create(void)
   handle->valbuf = NULL;
   handle->node_index = NULL;
   handle->attr_index = NULL;
+  handle->attrval_index = NULL;
+  handle->attrval_index_attr = NULL;
 
   if (!(handle->nodeslist = list_create(_free_genders_node)))
     goto cleanup;
@@ -421,6 +428,9 @@ genders_handle_destroy(genders_t handle)
     hash_destroy(handle->node_index);
   if (handle->attr_index)
     hash_destroy(handle->attr_index);
+  if (handle->attrval_index)
+    hash_destroy(handle->attrval_index);
+  free(handle->attrval_index_attr);
 
   /* "clean" handle */
   _initialize_handle_info(handle);
@@ -432,6 +442,8 @@ genders_handle_destroy(genders_t handle)
   handle->valbuf = NULL;
   handle->node_index = NULL;
   handle->attr_index = NULL;
+  handle->attrval_index = NULL;
+  handle->attrval_index_attr = NULL;
   free(handle);
   return 0;
 }
@@ -1194,7 +1206,28 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
     goto cleanup;
   }
 
-  if (handle->attr_index && attr) {
+  if (handle->attrval_index 
+      && !strcmp(handle->attrval_index_attr, attr)
+      && val) {
+    List l;
+
+    if (!(l = hash_find(handle->attrval_index, val))) {
+      /* No attributes with this value */
+      handle->errnum = GENDERS_ERR_SUCCESS;
+      return 0;
+    }
+
+    if (!(itr = list_iterator_create(l))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup;
+    }
+
+    while ((n = list_next(itr))) {
+      if (_put_in_list(handle, n->name, nodes, index++, len) < 0)
+        goto cleanup;
+    }
+  }
+  else if (handle->attr_index && attr) {
     List l;
 
     if (!(l = hash_find(handle->attr_index, attr))) {
@@ -1542,28 +1575,43 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
     goto cleanup;
   }
   
-  if (!(itr = list_iterator_create(handle->nodeslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
+  if (handle->attrval_index 
+      && !strcmp(handle->attrval_index_attr, attr)) {
+    List l;
+ 
+    if (!(l = hash_find(handle->attrval_index, val)))
+      retval = 0;
+    else
+      retval = 1;
+    
+    handle->errnum = GENDERS_ERR_SUCCESS;
+    return retval;
   }
-  
-  while ((n = list_next(itr))) {
-    if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0) 
+  else {
+    if (!(itr = list_iterator_create(handle->nodeslist))) {
+      handle->errnum = GENDERS_ERR_OUTMEM;
       goto cleanup;
-    if (av) {
-      if (av->val) { 
-        if ((rv = _get_val(handle, n, av)) < 0)
-          goto cleanup;
-        
-        if ((rv > 0 && !strcmp(handle->valbuf, val)) 
-            || !strcmp(av->val, val)) {
-          retval = 1;
-          goto cleanup;
+    }
+  
+    while ((n = list_next(itr))) {
+      if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0) 
+        goto cleanup;
+      if (av) {
+        if (av->val) { 
+          if ((rv = _get_val(handle, n, av)) < 0)
+            goto cleanup;
+          
+          if ((rv > 0 && !strcmp(handle->valbuf, val)) 
+              || !strcmp(av->val, val)) {
+            retval = 1;
+            handle->errnum = GENDERS_ERR_SUCCESS;
+            goto cleanup;
+          }
         }
       }
     }
   }
-  
+
   retval = 0;
   handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
@@ -1655,13 +1703,13 @@ genders_index_attrs(genders_t handle)
     return -1;
   }
 
+  if (!(node_itr = list_iterator_create(handle->nodeslist))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
   while ((attr = list_next(attr_itr))) {
     if (!(l = list_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
-    if (!(node_itr = list_iterator_create(handle->nodeslist))) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       goto cleanup;
     }
@@ -1676,6 +1724,7 @@ genders_index_attrs(genders_t handle)
         }
       }
     }
+    list_iterator_reset(node_itr);
 
     if (!hash_insert(handle->attr_index, attr, l)) {
       if (errno == ENOMEM)
@@ -1685,10 +1734,9 @@ genders_index_attrs(genders_t handle)
       goto cleanup;
     }
     l = NULL;
-    list_iterator_destroy(node_itr);
-    node_itr = NULL;
   }
 
+  list_iterator_destroy(node_itr);
   list_iterator_destroy(attr_itr);
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
@@ -1704,6 +1752,110 @@ genders_index_attrs(genders_t handle)
     hash_destroy(handle->attr_index);
     handle->attr_index = NULL;
   }
+  return -1;
+}
+
+int
+genders_index_attrvals(genders_t handle, const char *attr)
+{
+  ListIterator node_itr = NULL;
+  List l = NULL;
+  genders_node_t n;
+  genders_attrval_t av;
+  char *val;
+  hash_t attrval_index = NULL;
+  char *attrval_index_attr = NULL;
+
+  if (_loaded_handle_error_check(handle) < 0)
+    return -1;
+
+  if (!attr) {
+    handle->errnum = GENDERS_ERR_PARAMETERS;
+    goto cleanup;
+  }
+
+  if (handle->attrval_index && !strcmp(handle->attrval_index_attr, attr)) {
+    /* index already created */
+    handle->errnum = GENDERS_ERR_SUCCESS;
+    return 0;
+  }
+
+  if (!(node_itr = list_iterator_create(handle->nodeslist))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  /* Max possible hash size if number of nodes, so pick upper boundar */
+  if (!(attrval_index = hash_create(handle->numnodes,
+                                    (hash_key_f)hash_key_string,
+                                    (hash_cmp_f)strcmp,
+                                    (hash_del_f)list_destroy))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  while ((n = list_next(node_itr))) {
+    if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
+      goto cleanup;
+    if (av) {
+      if (av->val)
+        val = av->val;
+      else
+        val = GENDERS_NOVALUE;
+      
+      if (!(l = hash_find(attrval_index, val))) {
+        if (!(l = list_create(NULL))) {
+          handle->errnum = GENDERS_ERR_OUTMEM;
+          goto cleanup;
+        }
+        
+        if (!hash_insert(attrval_index, val, l)) {
+          if (errno == ENOMEM)
+            handle->errnum = GENDERS_ERR_OUTMEM;
+          else
+            handle->errnum = GENDERS_ERR_INTERNAL;
+          goto cleanup;
+        }
+      }
+      
+      if (!list_append(l, n)) {
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup;
+      }
+    
+      l = NULL;
+    }
+  }
+
+  if (!(attrval_index_attr = strdup(attr))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  /* Delete/free previous index */
+  if (handle->attrval_index) {
+    hash_destroy(handle->attrval_index);
+    free(handle->attrval_index_attr);
+    handle->attrval_index = NULL;
+    handle->attrval_index_attr = NULL;
+  }
+  handle->attrval_index = attrval_index;
+  handle->attrval_index_attr = attrval_index_attr;
+
+  list_iterator_destroy(node_itr);
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return 0;
+
+ cleanup:
+  if (node_itr)
+    list_iterator_destroy(node_itr);
+  if (l)
+    list_destroy(l);
+  if (attrval_index)
+    hash_destroy(attrval_index);
+  if (attrval_index_attr)
+    free(attrval_index_attr);
+
   return -1;
 }
 
