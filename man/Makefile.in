@@ -94,10 +94,7 @@ am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
-SUBDIRS = \
-	dist \
-	compat
-
+SUBDIRS = compat
 
 man3_MANS = \
 	genders.3 \
