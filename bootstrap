@@ -1,14 +1,16 @@
 #!/bin/sh
 ##
-# $Id: bootstrap,v 1.5 2003-04-18 22:37:12 achu Exp $
+# $Id: bootstrap,v 1.6 2003-07-02 17:47:19 achu Exp $
 ##
 
-PATH=/bin:/usr/bin:/usr/local/bin
-
-set -x
-aclocal -I config || exit 1
-libtoolize --copy || exit 1
-autoheader || exit 1
-automake --add-missing --copy --gnu || exit 1
-autoconf --warnings=all || exit 1
-exit 0
+echo "running aclocal ... "
+aclocal -I config
+echo "running libtoolize ... "
+libtoolize --automake --copy 
+echo "running autoheader ... "
+autoheader
+echo "running automake ... "
+automake --copy --add-missing 
+echo "running autoconf ... "
+autoconf
+echo "now run ./configure to configure pdsh for your environment."
