@@ -17,11 +17,17 @@ Group: System Environment/Base
 %description compat
 genders API that is compatible with earlier releases of genders
 
+%package dist
+Summary: genders tools
+Group: System Environment/Base
+%description dist
+set of tools distributed with genders
+
 %package llnl
-Summary: genders tools and site specific library
+Summary: genders LLNL site specific library
 Group: System Environment/Base
 %description llnl
-set of tools distributed with genders and a llnl site specific library 
+An LLNL site specific library 
 
 %prep
 %setup  -q -n %{name}-%{version}
@@ -35,6 +41,7 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/usr/bin
 mkdir -p $RPM_BUILD_ROOT/usr/man/man1
 mkdir -p $RPM_BUILD_ROOT/usr/man/man3
+mkdir -p $RPM_BUILD_ROOT/usr/share/man/man3
 install -d $RPM_BUILD_ROOT/usr/lib/genders
 install compat/gendlib.pl $RPM_BUILD_ROOT/usr/lib/genders
 install compat/hostlist.pl $RPM_BUILD_ROOT/usr/lib/genders
@@ -80,7 +87,10 @@ install man/genders_perror.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_strerror.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_testattr.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_testattrval.3.gz $RPM_BUILD_ROOT/usr/man/man3
-install man/genders_testnode.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install man/genders_is.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install man/genders_isnode.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install man/genders_isattr.3.gz $RPM_BUILD_ROOT/usr/man/man3
+install man/genders_isattrval.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_vallist_clear.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_vallist_create.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_vallist_destroy.3.gz $RPM_BUILD_ROOT/usr/man/man3
@@ -89,7 +99,6 @@ install man/genders_stats.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_errors.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/genders_parse.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
-install man/Libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 cp src/libgenders/genders.h src/Libgenders	
 cp src/libgenders/genders_local.h src/Libgenders	
 cp src/libgenders/genders.c src/Libgenders	
@@ -126,7 +135,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man3/genders_strerror.3.gz 
 /usr/man/man3/genders_testattr.3.gz 
 /usr/man/man3/genders_testattrval.3.gz 
-/usr/man/man3/genders_testnode.3.gz 
+/usr/man/man3/genders_is.3.gz 
+/usr/man/man3/genders_isnode.3.gz 
+/usr/man/man3/genders_isattr.3.gz 
+/usr/man/man3/genders_isattrval.3.gz 
 /usr/man/man3/genders_vallist_clear.3.gz 
 /usr/man/man3/genders_vallist_create.3.gz 
 /usr/man/man3/genders_vallist_destroy.3.gz 
@@ -136,6 +148,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man3/genders_parse.3.gz 
 /usr/man/man3/libgenders.3.gz 
 /usr/man/man3/Libgenders.3.gz 
+/usr/share/man/man3/Libgenders.3pm
 /usr/include/genders.h
 /usr/lib/libgenders.*
 /usr/lib/perl5/
@@ -147,10 +160,8 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
 
-%files llnl
+%files dist
 %defattr(-,root,root)
-/usr/include/gendersllnl.h
-/usr/lib/libgendersllnl.*
 /usr/man/man1/dist2.1.gz
 /usr/man/man1/dist_all.1.gz
 /usr/man/man1/dist_cmp.1.gz
@@ -158,4 +169,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man1/inst.1.gz
 /usr/man/man1/nodeattr.1.gz
 /usr/bin/*
+
+%files llnl
+%defattr(-,root,root)
+/usr/include/gendersllnl.h
+/usr/lib/libgendersllnl.*
 
