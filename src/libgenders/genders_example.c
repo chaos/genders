@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.13 2003-11-03 17:36:39 achu Exp $
+ * $Id: genders_example.c,v 1.14 2003-11-03 19:29:14 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -9,22 +9,31 @@
 #include "genders.h"
 #include <string.h>
 
+/* Before you run this code, you may want to add your machine's
+ * node name into the genders database you run this code on.
+ * Otherwise, some functions will fail with "node not found", because
+ * it is looking for the current node.
+ */
+
 char **nodes = NULL;
 char **attrs = NULL;
 char **vals = NULL;
 int nodeslen = 0;
 int attrslen = 0;
 int valslen = 0;
+int maxnodelen = 0;
+int maxattrlen = 0;
+int maxvallen = 0;
 
-#define output_error_and_return                                           \ 
+#define output_error_and_return(func)                                     \
   do {                                                                    \
-    printf("Error %s(): %s\n\n", __FUNCTION__, genders_errormsg(handle)); \
+    printf("Error %s(): %s\n\n", func, genders_errormsg(handle));         \
     return;                                                               \
   } while (0)
 
-#define output_error_and_exit
+#define output_error_and_exit(func)                                       \
   do {                                                                    \
-    printf("Error %s(): %s\n\n", __FUNCTION__, genders_errormsg(handle)); \
+    printf("Error %s(): %s\n\n", func, genders_errormsg(handle));         \
     exit(1);                                                              \
   } while (0)
 
@@ -42,7 +51,7 @@ void get_this_node_name(genders_t handle) {
   printf("----------------\n");
 
   if ((genders_getnodename(handle, nodename, MAXHOSTNAMELEN+1)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodename");
 
   printf("This Node's Name Is: %s\n\n", nodename);
 }
@@ -51,30 +60,27 @@ void get_gender_file_information(genders_t handle) {
   int numnodes = 0;
   int numattrs = 0;
   int maxattrs = 0;
-  int maxnodelen = 0;
-  int maxattrlen = 0;
-  int maxvallen = 0;
 
   printf("Genders File Information\n");
   printf("------------------------\n");
 
   if ((numnodes = genders_getnumnodes(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnumnodes");
 
   if ((numattrs = genders_getnumattrs(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnumattrs");
 
   if ((maxattrs = genders_getmaxattrs(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getmaxattrs");
 
   if ((maxnodelen = genders_getmaxnodelen(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getmaxnodelen");
 
   if ((maxattrlen = genders_getmaxattrlen(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getmaxattrlen");
 
   if ((maxvallen = genders_getmaxvallen(handle)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getmaxvallen");
 
   printf("Max number of nodes: %d\n", numnodes);
   printf("Max number of attributes: %d\n", numattrs);
@@ -92,10 +98,10 @@ void get_nodes_in_gender_file(genders_t handle) {
   printf("-------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
     
   if (numnodes > 0) {
     for (i = 0; i < numnodes-1; i++)
@@ -112,17 +118,17 @@ void get_attributes_for_all_nodes(genders_t handle) {
   printf("---------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
 
   for (i = 0; i < numnodes; i++) {
     if (genders_attrlist_clear(handle, attrs) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_attrlist_clear");
 
     if ((numattrs = genders_getattr(handle, attrs, NULL, attrslen, nodes[i])) < 0)
-      output_error_and_return;
+      output_error_and_return("gendres_getattr");
 
     if (numattrs > 0) {
       printf("Attributes for node \"%s\": ", nodes[i]);
@@ -141,21 +147,21 @@ void get_attributes_and_values_for_all_nodes(genders_t handle) {
   printf("-------------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_nodelist_clear");
 
   if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_getnodes");
 
   for (i = 0; i < numnodes; i++) {
 
     if (genders_attrlist_clear(handle, attrs) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_attrlist_clear");
 
     if (genders_vallist_clear(handle, vals) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_vallist_clear");
 
     if ((numattrs = genders_getattr(handle, attrs, vals, attrslen, nodes[i])) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_getattr");
 
     if (numattrs > 0) {
       printf("Attributes and values for node \"%s\": ", nodes[i]);
@@ -182,10 +188,10 @@ void get_all_attributes(genders_t handle) {
   printf("-----------------------------------------\n");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if ((numattrs = genders_getattr_all(handle, attrs, attrslen)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr_all");
 
   if (numattrs > 0) {
     for (i = 0; i < numattrs - 1; i++)
@@ -202,19 +208,19 @@ void get_all_nodes_with_a_certain_attribute(genders_t handle) {
   printf("------------------------------\n");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if ((numattrs = genders_getattr_all(handle, attrs, attrslen)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr_all");
 
   for (i = 0; i < numattrs; i++) {
     int numnodes;
 
     if (genders_nodelist_clear(handle, nodes) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_nodelist_clear");
 
     if ((numnodes = genders_getnodes(handle, nodes, nodeslen, attrs[i], NULL)) < 0)
-      output_error_and_return;
+      output_error_and_return("genders_getnodes");
 
     if (numnodes > 0) {
       printf("Nodes with attribute \"%s\": ", attrs[i]);
@@ -233,31 +239,31 @@ void get_all_nodes_with_a_certain_attribute_and_value(genders_t handle) {
   printf("----------------------------------------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0) 
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
 
   if (numnodes == 0)
     return;
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if (genders_vallist_clear(handle, vals) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_vallist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, vals, attrslen, nodes[0])) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs; i++) {
 
     if (strlen(vals[i]) > 0) {
       if (genders_nodelist_clear(handle, nodes) < 0)
-	output_error_and_return;
+	output_error_and_return("genders_nodelist_clear");
 
       if ((numnodes = genders_getnodes(handle, nodes, nodeslen, attrs[i], vals[i])) < 0)
-	output_error_and_return;
+	output_error_and_return("genders_getnodes");
     
       if (numnodes > 0) {
         printf("Nodes with attribute \"%s\"=\"%s\": ", attrs[i], vals[i]);
@@ -277,16 +283,16 @@ void test_if_node_has_attribute(genders_t handle) {
   printf("--------------------------------------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, NULL, attrslen, nodes[0])) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs; i++) {
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
@@ -297,7 +303,7 @@ void test_if_node_has_attribute(genders_t handle) {
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_testattr");
   }
 
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
@@ -307,7 +313,7 @@ void test_if_node_has_attribute(genders_t handle) {
   else if (ret == 0)
     printf("No\n");
   else
-    output_error_and_return;
+    output_error_and_return("genders_testattr");
 
   printf("\n");
 }
@@ -320,16 +326,16 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
   printf("-------------------------------------------------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((ret = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, NULL, attrslen, nodes[0])) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs ; i++) {
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
@@ -344,7 +350,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_testattr");
   }
 
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
@@ -360,7 +366,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
   else if (ret == 0)
     printf("No\n");
   else
-    output_error_and_return;
+    output_error_and_return("genders_testattr");
 
   printf("\n");
 }
@@ -372,19 +378,19 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
   printf("--------------------------------------------------------------\n");
 
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
   if ((ret = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getnodes");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if (genders_vallist_clear(handle, vals) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_vallist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, vals, attrslen, nodes[0])) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs ; i++) {
     if (strlen(vals[i]) > 0) {
@@ -396,7 +402,7 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
       else if (ret == 0)
         printf("No\n");
       else
-	output_error_and_return;
+	output_error_and_return("genders_testattrval");
 
       printf("Does node \"%s\" have attribute \"%s\"=\"%s\"?: ", nodes[0], attrs[i], "foo");
       ret = genders_testattrval(handle, nodes[0], attrs[i], "foo");
@@ -405,7 +411,7 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
       else if (ret == 0)
         printf("No\n");
       else
-	output_error_and_return;
+	output_error_and_return("genders_testattrval");
     }
   }
 
@@ -417,25 +423,22 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
   else if (ret == 0)
     printf("No\n");
   else
-    output_error_and_return;
+    output_error_and_return("genders_testattrval");
 
   printf("\n");
 }
 
 void test_if_genders_file_has_certain_nodes(genders_t handle) {
-  int ret, i;
+  int numnodes, ret, i;
 
   printf("Does the genders file have the following nodes?               \n");
   printf("--------------------------------------------------------------\n");
   
-  if (numnodes == 0 || numattrs == 0)
-    return;
-
   if (genders_nodelist_clear(handle, nodes) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_nodelist_clear");
 
-  if ((ret = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
-    output_error_and_return;
+  if ((numnodes = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) < 0)
+    output_error_and_return("genders_getnodes");
 
   for (i = 0; i < numnodes ; i++) {
     printf("Does the genders file have node \"%s\"? ", nodes[i]);
@@ -446,7 +449,7 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_isnode");
   }
 
   printf("Does the genders file have node \"%s\"? ", "foo");
@@ -457,7 +460,7 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
   else if (ret == 0)
     printf("No\n");
   else
-    output_error_and_return;
+    output_error_and_return("genders_isnode");
 
   printf("\n");
 }
@@ -469,14 +472,11 @@ void test_if_genders_file_has_certain_attrs(genders_t handle) {
   printf("Does the genders file have the following attrs?               \n");
   printf("--------------------------------------------------------------\n");
 
-  if (numnodes == 0 || numattrs == 0)
-    return;
-
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, NULL, attrslen, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs; i++) {
     printf("Does the genders file have attr \"%s\"? ", attrs[i]);
@@ -487,7 +487,7 @@ void test_if_genders_file_has_certain_attrs(genders_t handle) {
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_isattr");
   }
   
   printf("Does the genders file have attr \"%s\"? ", "foo");
@@ -498,7 +498,7 @@ void test_if_genders_file_has_certain_attrs(genders_t handle) {
   else if (ret == 0)
     printf("No\n");
   else
-    output_error_and_return;
+    output_error_and_return("genders_isattr");
 
   printf("\n");
 }
@@ -510,13 +510,13 @@ void test_if_genders_file_has_certain_attrvals(genders_t handle) {
   printf("--------------------------------------------------------------\n");
 
   if (genders_attrlist_clear(handle, attrs) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_attrlist_clear");
 
   if (genders_vallist_clear(handle, vals) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_vallist_clear");
 
   if ((numattrs = genders_getattr(handle, attrs, vals, attrslen, NULL)) < 0)
-    output_error_and_return;
+    output_error_and_return("genders_getattr");
 
   for (i = 0; i < numattrs; i++) {
     printf("Does the genders file have \"%s=%s\"? ", attrs[i], vals[i]);
@@ -527,7 +527,7 @@ void test_if_genders_file_has_certain_attrvals(genders_t handle) {
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_isattrval");
 
     printf("Does the genders file have \"%s=%s\"? ", attrs[i], "foo");
     
@@ -537,7 +537,7 @@ void test_if_genders_file_has_certain_attrvals(genders_t handle) {
     else if (ret == 0)
       printf("No\n");
     else
-      output_error_and_return;
+      output_error_and_return("genders_isattrval");
   }
  
   printf("\n");
@@ -565,23 +565,21 @@ int main(int argc, char **argv) {
 
   if (argc != 2)
     usage();
-  else
-    filename = argv[1];
 
   if ((handle = genders_handle_create()) == NULL)
-    output_error_and_exit;
+    output_error_and_exit("genders_handle_create");
     
   if (genders_load_data(handle,argv[1]) < 0)
-    output_error_and_exit;
+    output_error_and_exit("genders_load_data");
 
   if ((nodeslen = genders_nodelist_create(handle, &nodes)) < 0)
-    output_error_and_exit;
+    output_error_and_exit("genders_nodelist_create");
 
   if ((attrslen = genders_attrlist_create(handle, &attrs)) < 0)
-    output_error_and_exit;
+    output_error_and_exit("genders_attrlist_create");
 
   if ((valslen = genders_vallist_create(handle, &vals)) < 0)
-    output_error_and_exit;
+    output_error_and_exit("genders_vallist_create");
 
   get_this_node_name(handle);
   get_gender_file_information(handle);
@@ -599,15 +597,15 @@ int main(int argc, char **argv) {
   test_if_genders_file_has_certain_attrvals(handle);
   example_using_genders_perror_and_errormsg(handle);
 
-  if (genders_nodelist_destroy(handle, nodes) < 0)
-    output_error_and_exit;
+  if (nodes && genders_nodelist_destroy(handle, nodes) < 0)
+    output_error_and_exit("genders_nodelist_destroy");
 
-  if (genders_attrlist_destroy(handle, attrs) < 0)
-    output_error_and_exit;
+  if (attrs && genders_attrlist_destroy(handle, attrs) < 0)
+    output_error_and_exit("genders_attrlist_destroy");
 
-  if (genders_vallist_destroy(handle, vals) < 0)
-    output_error_and_exit;
+  if (vals && genders_vallist_destroy(handle, vals) < 0)
+    output_error_and_exit("genders_vallist_destroy");
 
   if (genders_handle_destroy(handle) < 0)
-    output_error_and_exit;
+    output_error_and_exit("genders_handle_destroy");
 }
