@@ -92,7 +92,7 @@ install man/libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install man/Libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
 cp src/libgenders/genders.h src/Libgenders	
 cp src/libgenders/genders.c src/Libgenders	
-cd src/Libgenders; perl Makefile.PL "prefix=$RPM_BUILD_ROOT"; make; make pure_install; cd ../../..
+cd src/Libgenders; perl Makefile.PL "prefix=$RPM_BUILD_ROOT"; make; make pure_install; cd ../..
 DESTDIR="$RPM_BUILD_ROOT" make install 
 
 %files
