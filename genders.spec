@@ -146,7 +146,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/lib/libgenders.*
 /usr/lib/perl5/
 
-%FILES compat
+%files compat
 %defattr(-,root,root)
 %doc doc/TUTORIAL doc/genders.sample doc/clusters.sample doc/Distfile.sample
 /usr/man/man3/gendlib.3.gz
