@@ -1,3 +1,10 @@
+2003-11-07  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/Makefile.am: Added dependency check.
+
+	* src/Libgenders/Makefile.am, src/Genders/Makefile.am: Added
+	cleanup bug fix.
+	
 2003-11-06  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_parse_line): Fixed some parsing code
