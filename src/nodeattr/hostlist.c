@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: hostlist.c,v 1.2 2003-04-24 18:44:36 achu Exp $
+ *  $Id: hostlist.c,v 1.3 2003-04-25 00:42:11 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1987,19 +1987,25 @@ _get_bracketed_list(hostlist_t hl, int *start, const size_t n, char *buf)
     do {
         m = (n - len) <= n ? n - len : 0;
         len += hostrange_numstr(hr[i], m, buf + len);
-        if (len < n && len > 0)
-            buf[len++] = ',';
-        else
+        if (len >= n)
             break;
+        if (bracket_needed) /* Only need commas inside brackets */
+            buf[len++] = ',';
     } while (++i < hl->nranges && hostrange_within_range(hr[i], hr[i-1]));
 
     if (bracket_needed && len < n && len > 0) {
+
+        /* Add trailing bracket (change trailing "," from above to "]" */
         buf[len - 1] = ']';
 
         /* NUL terminate for safety, but do not add terminator to len */
         buf[len]   = '\0';
-    } else
-        buf[len > 0 ? len-1 : 0] = '\0';
+
+    } else {
+
+        /* If len is > 0, NUL terminate (but do not add to len) */
+        buf[len > 0 ? len : 0] = '\0';
+    }
 
     *start = i;
     return len;
@@ -2015,7 +2021,7 @@ size_t hostlist_ranged_string(hostlist_t hl, size_t n, char *buf)
     while (i < hl->nranges && len < n) {
         len += _get_bracketed_list(hl, &i, n - len, buf + len);
         if ((len > 0) && (len < n) && (i < hl->nranges))
-            buf[len-1] = ',';
+            buf[len++] = ',';
     }
     UNLOCK_HOSTLIST(hl);
 
