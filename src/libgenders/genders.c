@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.23 2003-04-23 20:01:51 achu Exp $
+ * $Id: genders.c,v 1.24 2003-04-24 18:52:13 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -383,27 +383,27 @@ cleanup:
 int genders_getline(genders_t handle, int fd, char **buf) {
   int buflen = 0;
   int start_offset = 0;
-  int ret, count, retval;
+  int ret, count;
   char chr;
 
   *buf = NULL;
 
   /* get beginning seek position */
   if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
-    retval = -1;
+    handle->errnum = GENDERS_ERR_INTERNAL;
     goto cleanup;
   }
 
   do {
     if (lseek(fd, start_offset, SEEK_SET) != start_offset) {
-      retval = -1;
+      handle->errnum = GENDERS_ERR_INTERNAL;
       goto cleanup;
     }
     
     free(*buf);
     buflen += GENDERS_GETLINE_BUFLEN;
     if ((*buf = (char *)malloc(buflen)) == NULL) {
-      retval = -1;
+      handle->errnum = GENDERS_ERR_OUTMEM;
       goto cleanup;
     }
     memset(*buf, '\0', buflen);
@@ -413,7 +413,7 @@ int genders_getline(genders_t handle, int fd, char **buf) {
     do {
       ret = read(fd, &chr, 1);
       if (ret == -1) {
-        retval = -1;
+        handle->errnum = GENDERS_ERR_READ;
         goto cleanup;
       }
       else if (ret == 1) {
