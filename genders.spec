@@ -30,7 +30,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files
 %defattr(-,root,root)
-%doc README ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
+%doc README NEWS ChangeLog DISCLAIMER COPYING TUTORIAL genders.sample
 /usr/man/man1/
 /usr/man/man3/genders*
 /usr/man/man3/libgenders.3.gz 

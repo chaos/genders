@@ -1,1 +1,12 @@
-No news to report ..
+This file describes changes in recent versions of genders. It
+primarily documents those changes that are of interest to users
+and admins.
+
+Changes in genders-1.2-pre1
+===========================
+ -- Hostlist code in hostlist.pl (genders-compat package only)
+    can now expand ranges without a prefix (.e.g "[0-10]" and "0-10")
+    as well as compress back to this same form.
+ -- started NEWS file.
+
+$Id: NEWS,v 1.2 2003-08-01 23:24:02 grondo Exp $
