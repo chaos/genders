@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.4 2003-04-01 16:16:14 garlick Exp $
+ *  * $Id: nodeattr.c,v 1.5 2003-04-01 16:17:49 garlick Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -359,7 +359,6 @@ static char *_to_altname(genders_t gp, char *node)
    
     if (genders_testattr(gp, node, "altname", val, genders_getmaxvallen(gp)) < 0)
         _gend_error_exit(gp, "genders_testattr");
-    printf("to_altname %s returned %p\n", node, val);
     return val;
 }
 
