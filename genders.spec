@@ -1,10 +1,10 @@
 Summary: Static cluster configuration database and tools.
 Name: genders
-Version: 0.1
+Version: 0.2
 Release: 1
 Copyright: none
 Group: System Environment/Base
-Source: genders-0.1.tgz
+Source: genders-0.2.tgz
 BuildRoot: /var/tmp/%{name}-buildroot
 Prereq: rdist pdksh net-tools diffutils perl
 
