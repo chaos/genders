@@ -32,11 +32,11 @@ workstations.
 
 Basic Operation
 
-This section describes the formats of the genders and clusters files, and the
-nodeattr command.  The genders file, briefly described in the introduction, 
-contains a list of node names, and for each node, a list of attributes.  The
-genders file is typically found in /etc (on Linux when installed from
-the genders RPM) or /admin/etc (on other systems).
+This section describes the formats of the genders file and the nodeattr 
+command.  The genders file, briefly described in the introduction, contains
+a list of node names, and for each node, a list of attributes.  The genders
+file is typically found in /etc (on Linux when installed from the genders
+RPM) or /admin/etc (on other systems).
 
 Genders Format
 
@@ -215,7 +215,7 @@ in the cluster.  It then adds them to the NMAP database used by NQS:
 
      #!/usr/bin/perl
      #
-     # $Id: TUTORIAL,v 1.6 2003-05-14 23:46:06 achu Exp $
+     # $Id: TUTORIAL,v 1.7 2003-05-14 23:48:36 achu Exp $
      # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
      #
 
@@ -260,5 +260,5 @@ Names for other network interfaces on the same node do not appear in the
 genders file.
 
   ------------------------------------------------------------------------
-$Id: TUTORIAL,v 1.6 2003-05-14 23:46:06 achu Exp $
+$Id: TUTORIAL,v 1.7 2003-05-14 23:48:36 achu Exp $
 $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
