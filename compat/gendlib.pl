@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.8 2003-05-09 23:07:54 achu Exp $
+#  $Id: gendlib.pl,v 1.9 2003-05-16 00:53:46 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -429,8 +429,7 @@ sub to_altnames
         } else {
             $altName = $handle->genders_getattrval($altAttr, $name);
             if (!defined($altName) &&
-                $handle->genders_errnum($handle) != 
-                  $handle->GENDERS_ERR_NOTFOUND) {
+                $handle->genders_errnum() != $handle->GENDERS_ERR_NOTFOUND) {
                 $debug && print "Error, genders_getattrval()\n";    
                 return ();
             } 
