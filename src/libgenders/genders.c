@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.49 2003-05-29 16:22:40 achu Exp $
+ * $Id: genders.c,v 1.50 2003-05-29 16:44:25 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -570,19 +570,17 @@ int insert_attrval_listnode(genders_t handle, char *attr, char *val) {
   }
 
   /* store attribute */
-  if ((avlist->name = (char *)malloc(strlen(attr)+1)) == NULL) {
+  if ((avlist->name = strdup(attr)) == NULL) {
     handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
-  strcpy(avlist->name,attr);
 
   /* store value */
   if (val != NULL) {
-    if ((avlist->val = (char *)malloc(strlen(val)+1)) == NULL) {
+    if ((avlist->val = strdup(val)) == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       return -1;
     }
-    strcpy(avlist->val,val);
   }
   else 
     avlist->val = NULL; 
@@ -621,11 +619,10 @@ int insert_attr_listnode(genders_t handle, char *attr) {
   }
 
   /* store attribute */
-  if ((alist->name = (char *)malloc(strlen(attr) + 1)) == NULL) {
+  if ((alist->name = strdup(attr)) == NULL) {
     handle->errnum = GENDERS_ERR_OUTMEM;
     return -1;
   }
-  strcpy(alist->name, attr);
   alist->next = NULL;
 
   handle->errnum = GENDERS_ERR_SUCCESS;
