@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: hostlist.c,v 1.4 2005-01-04 01:53:52 achu Exp $
+ *  $Id: hostlist.c,v 1.5 2005-01-04 01:57:53 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1338,7 +1338,7 @@ static int _parse_single_range(const char *str, struct _range *range)
         goto error;
 
     if (range->hi - range->lo + 1 > MAX_RANGE ) {
-        _error(__FILE__, __LINE__, "Too many hosts in range `%s'\n", orig);
+        _error(__FILE__, __LINE__, "Too many hosts in range `%s'", orig);
         free(orig);
         seterrno_ret(ERANGE, 0);
     }
@@ -1348,7 +1348,7 @@ static int _parse_single_range(const char *str, struct _range *range)
     return 1;
 
   error:
-    _error(__FILE__, __LINE__, "Invalid range: `%s'\n", orig);
+    _error(__FILE__, __LINE__, "Invalid range: `%s'", orig);
     free(orig);
     seterrno_ret(EINVAL, 0);
 }
@@ -2213,10 +2213,7 @@ char *hostlist_next(hostlist_iterator_t i)
         return NULL;
     }
 
-    printf("buflen = %u\n", (size_t)(MAXHOSTNAMELEN + 15));
     len = snprintf(buf, MAXHOSTNAMELEN + 15, "%s", i->hr->prefix);
-    printf("len = %u\n", (size_t)len);
-    printf("len2 = %u\n", (size_t)(MAXHOSTNAMELEN + 15 - len));
     if (!i->hr->singlehost)
         snprintf(buf + len, MAXHOSTNAMELEN + 15 - len, "%0*lu",
              i->hr->width, i->hr->lo + i->depth);
