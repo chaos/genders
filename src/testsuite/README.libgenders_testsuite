@@ -18,4 +18,8 @@ Run the test suite with 'libgenders_test'.
  
 III.  Future Development
 
-Functionality tests have not yet been implemented.
+Functionality tests.
+Good vs. Bad database files
+Strange corner cases like 
+- empty files
+- files with no attributes, only node names 
