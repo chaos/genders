@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.6 2003-03-10 17:52:17 achu Exp $
+ * $Id: genders.h,v 1.7 2003-03-10 19:04:41 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -21,11 +21,12 @@
 #define GENDERS_ERR_NOTCLOSED   5 /* genders file is not closed */
 #define GENDERS_ERR_OVERFLOW    6 /* array is not big enough for result */
 #define GENDERS_ERR_PARAMETERS  7 /* incorrect parameters passed in */
-#define GENDERS_ERR_NOTFOUND    8 /* node not found */
-#define GENDERS_ERR_OUTMEM      9 /* out of memory */
-#define GENDERS_ERR_FREEMEM    10 /* memory has not been freed */
-#define GENDERS_ERR_ISFREE     11 /* memory is already free */
-#define GENDERS_ERR_INTERNAL   12 /* internal system error */
+#define GENDERS_ERR_NULLPTR     8 /* null pointer in list */
+#define GENDERS_ERR_NOTFOUND    9 /* node not found */
+#define GENDERS_ERR_OUTMEM     10 /* out of memory */
+#define GENDERS_ERR_FREEMEM    11 /* memory has not been freed */
+#define GENDERS_ERR_ISFREE     12 /* memory is already free */
+#define GENDERS_ERR_INTERNAL   13 /* internal system error */
 
 typedef struct genders *genders_t;
 

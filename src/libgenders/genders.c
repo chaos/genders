@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.4 2003-03-10 17:52:17 achu Exp $
+ * $Id: genders.c,v 1.5 2003-03-10 19:04:41 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -106,6 +106,7 @@ static char * errmsg[] = {
   "genders file already open",
   "array passed in not large enough to store result",
   "incorrect parameters passed in",
+  "null pointer reached in list", 
   "node not found",
   "out of memory",
   "previously created lists not destroyed",
@@ -1011,6 +1012,10 @@ int genders_list_clear(genders_t handle,
   int i;
 
   for (i = 0; i < entries; i++) {
+    if (list[i] == NULL) {
+      handle->errnum = GENDERS_ERR_NULLPTR;
+      return -1;
+    }
     memset(list[i], '\0', entry_length);
   }
 
