@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.3 2003-04-01 15:58:22 garlick Exp $
+ *  * $Id: nodeattr.c,v 1.4 2003-04-01 16:16:14 garlick Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <assert.h>
+#include <string.h>
 
 #include "genders.h"
 #include "hostlist.h"
@@ -196,6 +197,7 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
     }
     for (i = 0; i < count; i++) {
         char *node = nodes[i];
+        char *altnode = NULL;
 
         /* The -r option just expresses a preference for alternate names, so
          * if the lookup fails, use the primary name.  Making this a hard
@@ -203,19 +205,18 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
          * than making direct use of libgenders.  -jg
          */
         if (ropt) {
-            node = _to_altname(gp, nodes[i]);
-            if (strlen(node) == 0) {
-                free(node);
-                node = nodes[i];
+            altnode = _to_altname(gp, nodes[i]);
+            if (strlen(altnode) == 0) {
+                free(altnode);
+                altnode = NULL;
             }
         } 
-
-        if (hostlist_push(hl, node) == 0) {
+        if (hostlist_push(hl, altnode ? altnode : node) == 0) {
             fprintf(stderr, "nodeattr: hostlist_push failed\n");
             exit(1);
         }
-        if (ropt)
-            free(node);
+        if (altnode != NULL)
+            free(altnode);
     }
     genders_nodelist_destroy(gp, nodes);
 
@@ -358,6 +359,7 @@ static char *_to_altname(genders_t gp, char *node)
    
     if (genders_testattr(gp, node, "altname", val, genders_getmaxvallen(gp)) < 0)
         _gend_error_exit(gp, "genders_testattr");
+    printf("to_altname %s returned %p\n", node, val);
     return val;
 }
 
