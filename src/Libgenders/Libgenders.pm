@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.14 2003-12-30 21:47:13 achu Exp $
+#  $Id: Libgenders.pm,v 1.15 2004-01-16 17:31:31 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -44,9 +44,6 @@ bootstrap Libgenders $VERSION;
 
 __END__
 
-# Below is stub documentation for your module. You better edit it!
-# Ok, ok, I will!
- 
 =head1 NAME
 
 Libgenders - Perl extension for libgenders

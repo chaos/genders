@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.9 2003-11-07 19:25:27 achu Exp $
+## $Id: Makefile.am,v 1.10 2004-01-16 17:31:31 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -35,6 +35,9 @@ install-data-local:
 
 clean: 
 	if test -a Makefile.xs; then $(MAKE) -f Makefile.xs clean; fi
+	rm -f genders.*
+	rm -f list.*
+	rm -f fd.*  
 	rm -f Makefile.xs
 	rm -f Makefile.xs.old
 	rm -f genders.c
