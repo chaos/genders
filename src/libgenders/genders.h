@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.13 2003-04-01 21:40:09 achu Exp $
+ * $Id: genders.h,v 1.14 2003-04-08 22:05:59 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -178,7 +178,10 @@ int genders_getnodename(genders_t handle, char *node, int len);
  * Nodes are returned in genders file order.
  * Returns: number of matches on success, -1 on failure.
  */
-int genders_getnodes(genders_t handle, char *nodes[], int len, char *attr, 
+int genders_getnodes(genders_t handle, 
+		     char *nodes[], 
+		     int len, 
+		     char *attr, 
 		     char *val);
 
 /* Gets list of attributes for the specified node.  
@@ -186,7 +189,10 @@ int genders_getnodes(genders_t handle, char *nodes[], int len, char *attr,
  * If vals array is non-NULL, stores any attribute values in it.
  * Returns: number of matches on success, -1 on failure.
  */
-int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len, 
+int genders_getattr(genders_t handle, 
+		    char *attrs[], 
+		    char *vals[], 
+		    int len, 
 		    char *node);
 
 /* Gets all attributes stored in the genders file
