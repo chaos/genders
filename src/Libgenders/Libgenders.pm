@@ -29,74 +29,69 @@ Libgenders - Perl extension for libgenders
 
  use Libgenders;
 
- Libgenders::GENDERS_ERR_SUCCESS
- Libgenders::GENDERS_ERR_NULLHANDLE
- Libgenders::GENDERS_ERR_OPEN
- Libgenders::GENDERS_ERR_READ
- Libgenders::GENDERS_ERR_PARSE
- Libgenders::GENDERS_ERR_NOTLOADED
- Libgenders::GENDERS_ERR_ISLOADED
- Libgenders::GENDERS_ERR_OVERFLOW
- Libgenders::GENDERS_ERR_PARAMETERS
- Libgenders::GENDERS_ERR_NULLPTR
- Libgenders::GENDERS_ERR_NOTFOUND
- Libgenders::GENDERS_ERR_OUTMEM
- Libgenders::GENDERS_ERR_MAGIC
- Libgenders::GENDERS_ERR_INTERNAL
- Libgenders::GENDERS_ERR_ERRNUMRANGE
- Libgenders::GENDERS_DEFAULT_FILE
+ $handle = Libgenders->genders_handle_create();
+ $handle->genders_load_data([$filename]);
 
- Libgenders::genders_handle_create
- Libgenders::genders_handle_destroy($handle)
- Libgenders::genders_load_data($handle, [$filename])
+ $handle->GENDERS_ERR_SUCCESS
+ $handle->GENDERS_ERR_NULLHANDLE
+ $handle->GENDERS_ERR_OPEN
+ $handle->GENDERS_ERR_READ
+ $handle->GENDERS_ERR_PARSE
+ $handle->GENDERS_ERR_NOTLOADED
+ $handle->GENDERS_ERR_ISLOADED
+ $handle->GENDERS_ERR_OVERFLOW
+ $handle->GENDERS_ERR_PARAMETERS
+ $handle->GENDERS_ERR_NULLPTR
+ $handle->GENDERS_ERR_NOTFOUND
+ $handle->GENDERS_ERR_OUTMEM
+ $handle->GENDERS_ERR_MAGIC
+ $handle->GENDERS_ERR_INTERNAL
+ $handle->GENDERS_ERR_ERRNUMRANGE
+ $handle->GENDERS_DEFAULT_FILE
 
- Libgenders::genders_errnum($handle)
- Libgenders::genders_strerror($errnum)
- Libgenders::genders_errormsg($handle)
- Libgenders::genders_perror($handle, $msg)
+ $handle->genders_errnum()
+ $handle->genders_strerror($errnum)
+ $handle->genders_errormsg()
+ $handle->genders_perror($msg)
 
- Libgenders::genders_handle_dump($handle)
- Libgenders::genders_getnumnodes($handle)
- Libgenders::genders_getnumattrs($handle)
- Libgenders::genders_getnodename($handle)
+ $handle->genders_handle_dump()
+ $handle->genders_getnumnodes()
+ $handle->genders_getnumattrs()
+ $handle->genders_getnodename()
 
- Libgenders::genders_getnodes($handle, [$attr, [$val]])
- Libgenders::genders_getattr($handle, [$node])
- Libgenders::genders_getattr_all($handle)
- Libgenders::genders_getattrval($handle, $attr, [$node])
- Libgenders::genders_testattr($handle, $attr, [$node])
- Libgenders::genders_testattrval($handle, $attr, $val, [$node])
+ $handle->genders_getnodes([$attr, [$val]])
+ $handle->genders_getattr([$node])
+ $handle->genders_getattr_all()
+ $handle->genders_getattrval($attr, [$node])
+ $handle->genders_testattr($attr, [$node])
+ $handle->genders_testattrval($attr, $val, [$node])
 
- Libgenders::genders_isnode($handle, [$node])
- Libgenders::genders_isattr($handle, $attr)
- Libgenders::genders_isattrval($handle, $attr, $val)
+ $handle->genders_isnode([$node])
+ $handle->genders_isattr($attr)
+ $handle->genders_isattrval($attr, $val)
 
- Libgenders::genders_parse($handle, [$filename]);
+ $handle->genders_parse([$filename]);
 
 =head1 DESCRIPTION
 
-This package provides a perl interface to the genders C API (see
-libgenders(3)).  The perl interface is nearly identical to the genders
-C API, with some necessary changes due to the inherent differences
-between C and perl.  Some of the functions from the C API cannot be
-accessed via this perl interface, some new functions were created, the
-behavior of some functions was modified, and the parameters passed
-into the some functions was changed.
+This package provides a OO perl interface to the genders C API (see
+libgenders(3)).  The perl interface is simliar to the genders C API,
+with some necessary changes due to the inherent differences between C
+and perl.  Some of the functions from the C API cannot be accessed via
+this perl interface, some new functions were created, the behavior of
+some functions was modified, and the parameters passed into the some
+functions was changed.  Please read the instructions below so to 
+understand how to use the Libgenders package.
 
 =head2 Initialization/Destruction
 
 =over 4
 
-=item B<Libgenders::genders_handle_create>
+=item B<Libgenders-E<gt>genders_handle_create>
 
-Returns a genders handle to be used throughout the genders API.
-Returns a genders handle on success, undef on error.
+Returns a genders object on success, undef on error.
 
-=item B<Libgenders::genders_handle_destroy($handle)>
-
-Destroys a genders handle. Returns 0 on success, -1 on error.
-
-=item B<Libgenders::genders_load_data($handle, [$filename])>
+=item B<$handle-E<gt>genders_load_data([$filename])>
 
 Opens, reads, and parses the genders file specified by $filename.  If
 $filename is not specified, the default genders file is parsed.
@@ -106,25 +101,25 @@ Returns 0 on success, -1 on error.
 
 =head2 Error Messages
 
-Similarly to the C API, an error code is stored in the genders handle
+Similarly to the C API, an error code is stored in the genders object
 after an error has occurred.  The following can be used to retrieve
-the error code and output information about the error.  
+the error code and output information about the error.
 
 =over 4
 
-=item B<Libgenders::genders_errnum($handle)>
+=item B<$handle-E<gt>genders_errnum()>
 
-Returns the error code most recently set in the handle.  
+Returns the error code most recently set.
 
-=item B<Libgenders::genders_strerror($errnum)>
+=item B<$handle-E<gt>genders_strerror($errnum)>
 
 Returns a string describing the error code $errnum.  
 
-=item B<Libgenders::genders_errormsg($handle)>
+=item B<$handle-E<gt>genders_errormsg()>
 
-Returns a string describing the most recent error set in the handle.
+Returns a string describing the most recent error.
 
-=item B<Libgenders::genders_perror($handle, [$msg])>
+=item B<$handle-E<gt>genders_perror([$msg])>
 
 Outputs $msg and a string describing the most recent error to standard
 error.  If $msg is not specified, only a description of the most
@@ -136,22 +131,22 @@ recent error will be output to standard error.
 
 =over 4
 
-=item B<Libgenders::genders_handle_dump($handle)>
+=item B<$handle-E<gt>genders_handle_dump()>
 
-Dump the contents stored in the genders handle.  This is used
+Dump the contents stored in the genders object.  This is used
 primarily for debugging purposes.  Returns 0 on success, -1 on error.
 
-=item B<Libgenders::genders_getnumnodes($handle)>
+=item B<$handle-E<gt>genders_getnumnodes()>
 
 Returns the number of nodes listed in the genders file.  Returns -1 on
 error.
 
-=item B<Libgenders::genders_getnumattrs($handle)>
+=item B<$handle-E<gt>genders_getnumattrs()>
 
 Returns the number of attributes listed in the genders file.  Returns
 -1 on error.
 
-=item B<Libgenders::genders_getnodename($handle)>
+=item B<$handle-E<gt>genders_getnodename()>
 
 Returns the hostname of the current node.  Returns undef on error.
 
@@ -159,61 +154,63 @@ Returns the hostname of the current node.  Returns undef on error.
 
 =head2 Parsing Functions
 
-=item B<Libgenders::genders_getnodes($handle, [$attr, [$val]])>
+=over 4
+
+=item B<$handle-E<gt>genders_getnodes([$attr, [$val]])>
 
 Returns a reference to a list of nodes that have the specified
 attribute and value.  If $val is not specified, only $attr is
 considered.  If both $attr and $val are not specified, all nodes
 listed in the genders file are returned.  Returns undef on error.
 
-=item B<Libgenders::genders_getattr($handle, [$node])>
+=item B<$handle-E<gt>genders_getattr([$node])>
 
 Returns a reference to an array that holds references to two lists.
-The first list is a reference to attributes for the specified node.
-The second list is a reference to values for the specified node.  If
-$node is not specified, the local node is used.  Returns undef on
-error.
+The first list is a reference to an array of attributes for the
+specified node.  The second list is a reference to an array of values
+for the specified node.  If $node is not specified, the local node is
+used.  Returns undef on error.
 
-=item B<Libgenders::genders_getattr_all($handle)>
+=item B<$handle-E<gt>genders_getattr_all()>
 
 Returns a reference to a list of all the attributes listed in the
 genders file.  Returns undef on error.
 
-=item B<Libgenders::genders_getattrval($handle, $attr, [$node])>
+=item B<$handle-E<gt>genders_getattrval($attr, [$node])>
 
 Returns the value of an attribute listed in a node.  Returns the empty
 string if the attribute has no value.  If $node is not specified,
 local node is used.  Returns undef on error.
 
-=item B<Libgenders::genders_testattr($handle, $attr, [$node])>
+=item B<$handle-E<gt>genders_testattr($attr, [$node])>
 
 Tests if a node has a specified attribute.  If $node is not specified,
 local node is used.  Returns 1 if the node contains the attribute, 0
 if not, -1 on error.
 
-=item B<Libgenders::genders_testattrval($handle, $attr, $val, [$node])>
+=item B<$handle-E<gt>genders_testattrval($attr, $val, [$node])>
 
 Tests if a node has a specified attribute=value pair.  If $node is not
 specified, local node is used.  Returns 1 if the node contains the
 attribute=value pair, 0 if not, -1 on error.
 
-=item B<Libgenders::genders_isnode($handle, [$node])>
+=item B<$handle-E<gt>genders_isnode([$node])>
 
 Tests if a node is listed in the genders file.  If $node is not
 specified, local node is used.  Returns 1 if the node is listed, 0 if
 it is not, -1 on error.
 
-=item B<Libgenders::genders_isattr($handle, $attr)>
+=item B<$handle-E<gt>genders_isattr($attr)>
 
 Tests if the attribute $attr is listed in the genders file.  Returns 1
 if the attribute is listed, 0 if it is not, -1 on error.
 
-=item B<Libgenders::genders_isattrval($handle, $attr, $val)>
+=item B<$handle-E<gt>genders_isattrval($attr, $val)>
 
 Tests if the attribute=value pair is listed in the genders file.
 Returns 1 if the pair is listed, 0 if it is not, -1 on error.
 
-=item B<Libgenders::genders_parse($handle, [$filename])>
+=item B<$handle-E<gt>genders_parse([$filename])>
 
 Parse a genders file and output parse errors to standard error.  If
 $filename is not specified, the default genders file is parsed.
@@ -227,22 +224,22 @@ success, -1 on error.
 The same error codes and constants listed in /usr/include/genders.h
 can be accessed through the following: 
 
- Libgenders::GENDERS_ERR_SUCCESS
- Libgenders::GENDERS_ERR_NULLHANDLE
- Libgenders::GENDERS_ERR_OPEN
- Libgenders::GENDERS_ERR_READ
- Libgenders::GENDERS_ERR_PARSE
- Libgenders::GENDERS_ERR_NOTLOADED
- Libgenders::GENDERS_ERR_ISLOADED
- Libgenders::GENDERS_ERR_OVERFLOW
- Libgenders::GENDERS_ERR_PARAMETERS
- Libgenders::GENDERS_ERR_NULLPTR
- Libgenders::GENDERS_ERR_NOTFOUND
- Libgenders::GENDERS_ERR_OUTMEM
- Libgenders::GENDERS_ERR_MAGIC
- Libgenders::GENDERS_ERR_INTERNAL
- Libgenders::GENDERS_ERR_ERRNUMRANGE
- Libgenders::GENDERS_DEFAULT_FILE
+ $handle->GENDERS_ERR_SUCCESS
+ $handle->GENDERS_ERR_NULLHANDLE
+ $handle->GENDERS_ERR_OPEN
+ $handle->GENDERS_ERR_READ
+ $handle->GENDERS_ERR_PARSE
+ $handle->GENDERS_ERR_NOTLOADED
+ $handle->GENDERS_ERR_ISLOADED
+ $handle->GENDERS_ERR_OVERFLOW
+ $handle->GENDERS_ERR_PARAMETERS
+ $handle->GENDERS_ERR_NULLPTR
+ $handle->GENDERS_ERR_NOTFOUND
+ $handle->GENDERS_ERR_OUTMEM
+ $handle->GENDERS_ERR_MAGIC
+ $handle->GENDERS_ERR_INTERNAL
+ $handle->GENDERS_ERR_ERRNUMRANGE
+ $handle->GENDERS_DEFAULT_FILE
 
 =head1 AUTHOR
 

@@ -16,39 +16,37 @@ ok(1); # If we made it this far, we're ok.
 # Insert your test code below, the Test module is use()ed here so read
 # its man page ( perldoc Test ) for help writing this test script.
 
-$handle = Libgenders::genders_handle_create();
+$handle = Libgenders->genders_handle_create();
 if (!defined($handle)) {
     print "Error, genders_handle_create()\n";
     exit(1);
 }
 
-#$ret = Libgenders::genders_load_data($handle);
-#if ($ret == -1) {
-#    print "Error, genders_load_data()\n";
-#    exit(1);
-#}
+print $handle->GENDERS_ERR_MAGIC,"\n";
+print $handle->GENDERS_ERR_NOTFOUND,"\n";
 
-$ret = Libgenders::genders_load_data($handle, undef);
+$ret = $handle->genders_load_data();
 if ($ret == -1) {
     print "Error, genders_load_data()\n";
+    print $handle->genders_errormsg();
     exit(1);
 }
 
-#$ret = Libgenders::genders_handle_dump($handle);
+#$ret = $handle->genders_handle_dump();
 #if ($ret == -1) {
 #    print "Error, genders_handle_dump()\n";
 #    exit(1);
 #}
 
-$nodename = Libgenders::genders_getnodename($handle);
+$nodename = $handle->genders_getnodename();
 if (!defined($nodename)) {
     print "Error, genders_getnodename()\n";
-    print Libgenders::genders_errormsg($handle);
+    print $handle->genders_errormsg();
     exit(1);
 }
 print "Nodename is: ",$nodename,"\n\n"; 
 
-$nodes = Libgenders::genders_getnodes($handle);
+$nodes = $handle->genders_getnodes();
 if (!defined($nodes)) {
     print "Error, genders_getnodes()\n";
     exit(1);
@@ -58,7 +56,7 @@ foreach $_ (@$nodes) {
 }
 print "\n";
 
-$temp = Libgenders::genders_getattr($handle);
+$temp = $handle->genders_getattr();
 if (!defined($temp)) {
     print "Error, genders_getattr()\n";
     exit(1);
@@ -71,14 +69,14 @@ $len = @$attrs;
 while ($i < $len) {
     print @$attrs[$i];
     if (@$vals[$i] ne "") {
-	print "=",@$vals[$i];
-   }
+        print "=",@$vals[$i];
+    }
     print "\n";
     $i++;
 } 
 print "\n";
 
-$allattr = Libgenders::genders_getattr_all($handle);
+$allattr = $handle->genders_getattr_all();
 if (!defined($allattr)) {
     print "Error, genders_getattr_all()\n";
     exit(1);
@@ -87,65 +85,59 @@ foreach $_ (@$allattr) {
     print "attr: ",$_,"\n";
 }
 
-$ret = Libgenders::genders_getattrval($handle, "resmgr", "mdevi");
+$ret = $handle->genders_getattrval("resmgr", "mdevi");
 print "getattrval resmgr - ",$ret,"\n";
-$ret = Libgenders::genders_getattrval($handle, "mgmt", "mdevi");
+$ret = $handle->genders_getattrval("mgmt", "mdevi");
 print "getattrval mgmt - ",$ret,"\n";
-$ret = Libgenders::genders_getattrval($handle, "foo", "mdevi");
+$ret = $handle->genders_getattrval("foo", "mdevi");
 print "getattrval foo - ",$ret,"\n";
 
-$ret = Libgenders::genders_testattr($handle, "resmgr");
+$ret = $handle->genders_testattr("resmgr");
 print "resmgr - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "mgmt");
+$ret = $handle->genders_testattr("mgmt");
 print "mgmt - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "foo");
+$ret = $handle->genders_testattr("foo");
 print "foo - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "resmgr", undef);
+$ret = $handle->genders_testattr("resmgr", undef);
 print "resmgr2 - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "mgmt", undef);
+$ret = $handle->genders_testattr("mgmt", undef);
 print "mgmt2 - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "foo", undef);
+$ret = $handle->genders_testattr("foo", undef);
 print "foo2 - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "resmgr", "both");
+$ret = $handle->genders_testattrval("resmgr", "both");
 print "resmgr=both - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "resmgr", "bar");
+$ret = $handle->genders_testattrval("resmgr", "bar");
 print "resmgr=bar - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "mgmt", "both");
+$ret = $handle->genders_testattrval("mgmt", "both");
 print "mgmt=both - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "mgmt", "bar");
+$ret = $handle->genders_testattrval("mgmt", "bar");
 print "mgmt=bar - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "foo", "both");
+$ret = $handle->genders_testattrval("foo", "both");
 print "foo=both - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "foo", "bar");
+$ret = $handle->genders_testattrval("foo", "bar");
 print "foo=bar - ",$ret,"\n";
 print "\n";
 
-$ret = Libgenders::genders_isnode($handle);
+$ret = $handle->genders_isnode();
 print "local - ",$ret,"\n";
-$ret = Libgenders::genders_isnode($handle, undef);
+$ret = $handle->genders_isnode(undef);
 print "local2 - ",$ret,"\n";
-$ret = Libgenders::genders_isnode($handle, "mdevi");
+$ret = $handle->genders_isnode("mdevi");
 print "mdevi - ",$ret,"\n";
-$ret = Libgenders::genders_isnode($handle, "foo");
+$ret = $handle->genders_isnode("foo");
 print "foo - ",$ret,"\n";
 
-$ret = Libgenders::genders_isattr($handle, "qla");
+$ret = $handle->genders_isattr("qla");
 print "qla - ",$ret,"\n";
-$ret = Libgenders::genders_isattr($handle, "foo");
+$ret = $handle->genders_isattr("foo");
 print "foo - ",$ret,"\n";
 
-$ret = Libgenders::genders_isattrval($handle, "resmgr", "both");
+$ret = $handle->genders_isattrval("resmgr", "both");
 print "resmgr=both - ",$ret,"\n";
-$ret = Libgenders::genders_isattrval($handle, "resmgr", "foo");
+$ret = $handle->genders_isattrval("resmgr", "foo");
 print "resmgr=foo - ",$ret,"\n";
-$ret = Libgenders::genders_isattrval($handle, "foo", "bar");
+$ret = $handle->genders_isattrval("foo", "bar");
 print "foo=bar - ",$ret,"\n";
 
-$ret = Libgenders::genders_parse($handle);
+$ret = $handle->genders_parse();
 print "errors - ", $ret, "\n"; 
-
-$ret = Libgenders::genders_handle_destroy($handle);
-if ($ret == -1) {
-    print "Error, genders_handle_destroy()\n";
-    exit(1);
-}

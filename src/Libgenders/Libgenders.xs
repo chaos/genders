@@ -9,146 +9,155 @@
 MODULE = Libgenders             PACKAGE = Libgenders            
 
 int
-GENDERS_ERR_SUCCESS ()
+GENDERS_ERR_SUCCESS (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_SUCCESS;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NULLHANDLE ()
+GENDERS_ERR_NULLHANDLE (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_NULLHANDLE;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OPEN ()
+GENDERS_ERR_OPEN (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_OPEN;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_READ ()
+GENDERS_ERR_READ (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_READ;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_PARSE ()
+GENDERS_ERR_PARSE (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_PARSE;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NOTLOADED ()
+GENDERS_ERR_NOTLOADED (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_NOTLOADED;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_ISLOADED ()
+GENDERS_ERR_ISLOADED (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_ISLOADED;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OVERFLOW ()
+GENDERS_ERR_OVERFLOW (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_OVERFLOW;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_PARAMETERS ()
+GENDERS_ERR_PARAMETERS (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_PARAMETERS;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NULLPTR ()
+GENDERS_ERR_NULLPTR (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_NULLPTR;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_NOTFOUND ()
+GENDERS_ERR_NOTFOUND (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_NOTFOUND;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_OUTMEM ()
+GENDERS_ERR_OUTMEM (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_OUTMEM;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_MAGIC ()
+GENDERS_ERR_MAGIC (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_MAGIC;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_INTERNAL ()
+GENDERS_ERR_INTERNAL (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_INTERNAL;
     OUTPUT:
         RETVAL    
 
 int
-GENDERS_ERR_ERRNUMRANGE ()
+GENDERS_ERR_ERRNUMRANGE (handle)
+    genders_t handle    
     CODE:
         RETVAL = GENDERS_ERR_ERRNUMRANGE;
     OUTPUT:
         RETVAL    
 
 SV * 
-GENDERS_DEFAULT_FILE ()
+GENDERS_DEFAULT_FILE (handle)
+    genders_t handle    
     CODE:
         RETVAL = newSVpv(GENDERS_DEFAULT_FILE, 0);
     OUTPUT:
         RETVAL    
 
-genders_t
-genders_handle_create()
-    PREINIT: 
-        genders_t handle;
+void
+DESTROY(handle)
+    genders_t handle    
     CODE:
-        handle = genders_handle_create();
-        if (handle != NULL) 
-            RETVAL = handle;
-        else
-            XSRETURN_UNDEF;
-    OUTPUT:
-        RETVAL
+       (void)genders_handle_destroy(handle);
 
-int
-genders_handle_destroy(handle)
-    genders_t handle
-    CODE:
-        RETVAL = genders_handle_destroy(handle);
-    OUTPUT:
-        RETVAL
+genders_t
+genders_handle_create(CLASS)
+        char *CLASS;
+        CODE:
+                RETVAL = genders_handle_create();
+        OUTPUT:
+                RETVAL
 
 int
 genders_load_data(handle, filename=NULL)
-    genders_t handle
-    char *filename
-    CODE:
-        RETVAL = genders_load_data(handle, filename);
-    OUTPUT:
-        RETVAL
+        genders_t handle
+        char *filename
+        CODE:
+                RETVAL = genders_load_data(handle, filename);
+        OUTPUT:
+                RETVAL
 
 int
 genders_errnum(handle)
@@ -159,7 +168,8 @@ genders_errnum(handle)
         RETVAL
 
 SV *
-genders_strerror(errnum)
+genders_strerror(handle, errnum)
+    genders_t handle    
     int errnum
     PREINIT:
         char *ptr;
