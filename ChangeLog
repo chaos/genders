@@ -1,3 +1,8 @@
+2004-02-09  Mark Grondona <mgrondona@llnl.gov>
+
+	* compat/hostlist.pl (expand): Properly handle multiple quadrics
+	style hostlists separated by the comma character.
+
 2004-02-03  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_testattr): Fix bug where

@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: hostlist.pl,v 1.3 2003-08-01 22:44:19 grondo Exp $
+#  $Id: hostlist.pl,v 1.4 2004-02-09 19:31:42 grondo Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -147,7 +147,15 @@ sub expand
         if ($list =~ /[^[]*\[.+\]/) {
 		# quadrics ranges are separated by whitespace in RMS -
 		# try to support that here
-  		return map { expand_quadrics_range($_) } split /\s+/, $list;
+		$list =~ s/\s+/,/g;
+
+		# 
+		# Replace ',' chars internal to "[]" with ':"
+		#
+		while ($list =~ s/(\[[^\]]*),([^\[]*\])/$1:$2/) {}
+
+		return map { expand_quadrics_range($_) } split /,/, $list;
+
 	} else {
 		return map { 
                             s/(\w*?)(\d+)-(\w*?)(\d+)/"$2".."$4"/ 
@@ -171,8 +179,8 @@ sub expand_quadrics_range
         return $list if (!defined $ranges);
 
         return map {"$pfx$_"} 
-	           map { s/(\d+)-(\d+)/"$1".."$2"/; eval } 
-		       split(/,/, $ranges);
+	           map { s/(\d+)-(\d+)/$1..$2/; eval } 
+		       split(/,|:/, $ranges);
 }
 
 # compress_to_quadrics
