@@ -43,6 +43,7 @@ if ($ret == -1) {
 $nodename = Libgenders::genders_getnodename($handle);
 if (!defined($nodename)) {
     print "Error, genders_getnodename()\n";
+    print Libgenders::genders_errormsg($handle);
     exit(1);
 }
 print "Nodename is: ",$nodename,"\n\n"; 
