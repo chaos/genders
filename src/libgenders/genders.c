@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.52 2003-05-30 17:19:58 achu Exp $
+ * $Id: genders.c,v 1.53 2003-05-31 01:25:08 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1151,9 +1151,8 @@ struct node_listnode *have_node(genders_t handle, const char *node) {
 struct attrval_listnode *have_attr(genders_t handle, 
                                    const char *attr, 
                                    struct node_listnode *nptr) {
-  struct attrval_listnode *avptr;
+  struct attrval_listnode *avptr = nptr->attrvals_head;
 
-  avptr = nptr->attrvals_head;
   while (avptr != NULL && strcmp(avptr->name,attr) != 0)
     avptr = avptr->next;
   
