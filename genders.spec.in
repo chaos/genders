@@ -51,6 +51,6 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files compat
 %defattr(-,root,root)
 %{_mandir}/man3/gendlib*
-%{_libdir}/genders/*
+%{_prefix}/lib/genders/*
 
 
