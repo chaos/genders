@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.9 2003-03-14 22:36:52 achu Exp $
+ * $Id: genders.c,v 1.10 2003-03-14 22:55:18 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -628,11 +628,6 @@ void genders_perror(genders_t handle, char *msg) {
 
   if (handle == NULL)
     return;
-
-  if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
-    return;
-  }
 
   errormsg = genders_strerror(genders_errnum(handle));
 
