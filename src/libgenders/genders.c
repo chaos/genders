@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.26 2003-05-02 23:25:31 achu Exp $
+ * $Id: genders.c,v 1.27 2003-05-05 16:53:11 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1475,6 +1475,7 @@ int genders_testvalue(genders_t handle, const char *attr, const char *val) {
         handle->errnum = GENDERS_ERR_SUCCESS;
         return 1;
       }
+      attrval_list = attrval_list->next;
     }
     
     node_list = node_list->next;
