@@ -1,11 +1,11 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.3 2003-02-11 03:03:12 achu Exp $
+## $Id: Makefile.am,v 1.4 2003-03-31 17:18:36 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
 ACLOCAL_AMFLAGS =	-I config
 
-SUBDIRS = libgenders 
+SUBDIRS = libgenders nodeattr
 
 include config/Make-rpm.mk
