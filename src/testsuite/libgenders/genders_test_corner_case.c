@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_corner_case.c,v 1.2 2004-12-30 00:14:35 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -88,7 +88,7 @@ genders_destroyed_loaded_handle(void)
 static genders_t
 genders_handle_get(genders_handle_type_t type)
 {
-  genders_t handle;
+  genders_t handle = NULL;
 
   switch (type)
     {
@@ -127,7 +127,7 @@ genders_handle_cleanup(genders_t handle)
 static char *
 genders_filename_get(genders_filename_type_t type)
 {
-  char *filename;
+  char *filename = NULL;
 
   switch (type)
     {
@@ -1295,6 +1295,40 @@ genders_isattrval_corner_case(int verbose)
       errnum = genders_errnum(handle);
 
       errcount += genders_return_value_errnum_check("genders_isattrval",
+						    tests[i].num,
+						    tests[i].expected_return_value,
+						    tests[i].expected_errnum,
+						    return_value,
+						    errnum,
+						    NULL,
+						    verbose);
+
+      genders_handle_cleanup(handle);
+      i++;
+    }
+
+  return errcount;
+}
+
+int
+genders_index_attrvals_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_index_attrvals_corner_case_t *tests = &genders_index_attrvals_corner_case_tests[0];
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      char *attrptr;
+      int return_value, errnum;
+
+      handle = genders_handle_get(tests[i].param1);
+      attrptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+      return_value = genders_index_attrvals(handle, attrptr);
+      errnum = genders_errnum(handle);
+
+      errcount += genders_return_value_errnum_check("genders_index_attrvals",
 						    tests[i].num,
 						    tests[i].expected_return_value,
 						    tests[i].expected_errnum,

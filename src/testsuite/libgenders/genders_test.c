@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test.c,v 1.2 2004-12-30 00:14:35 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -137,6 +137,7 @@ _test_corner_cases(void)
   errtotal += _corner_case(genders_isnode_corner_case, "genders_isnode");
   errtotal += _corner_case(genders_isattr_corner_case, "genders_isattr");
   errtotal += _corner_case(genders_isattrval_corner_case, "genders_isattrval");
+  errtotal += _corner_case(genders_index_attrvals_corner_case, "genders_index_attrvals");
   errtotal += _corner_case(genders_parse_corner_case, "genders_parse");
   errtotal += _corner_case(genders_set_errnum_corner_case, "genders_set_errnum");
 

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case_tests.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_corner_case_tests.c,v 1.2 2004-12-30 00:14:35 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -974,6 +974,20 @@ genders_isattrval_corner_case_t genders_isattrval_corner_case_tests[] = {
   {18, GENDERS_HANDLE_LOADED_DESTROYED,    GENDERS_POINTER_NON_NULL, GENDERS_POINTER_NULL,     -1, GENDERS_ERR_MAGIC     },
   {19, GENDERS_HANDLE_LOADED_DESTROYED,    GENDERS_POINTER_NON_NULL, GENDERS_POINTER_NON_NULL, -1, GENDERS_ERR_MAGIC     },
   {-1, -1, -1, -1, -1, -1},
+};
+
+genders_index_attrvals_corner_case_t genders_index_attrvals_corner_case_tests[] = {
+  {0, GENDERS_HANDLE_NULL,                GENDERS_POINTER_NULL,     -1, GENDERS_ERR_NULLHANDLE},
+  {1, GENDERS_HANDLE_NULL,                GENDERS_POINTER_NON_NULL, -1, GENDERS_ERR_NULLHANDLE},
+  {2, GENDERS_HANDLE_UNLOADED,            GENDERS_POINTER_NULL,     -1, GENDERS_ERR_NOTLOADED },
+  {3, GENDERS_HANDLE_UNLOADED,            GENDERS_POINTER_NON_NULL, -1, GENDERS_ERR_NOTLOADED },
+  {4, GENDERS_HANDLE_UNLOADED_DESTROYED,  GENDERS_POINTER_NULL,     -1, GENDERS_ERR_MAGIC     },
+  {5, GENDERS_HANDLE_UNLOADED_DESTROYED,  GENDERS_POINTER_NON_NULL, -1, GENDERS_ERR_MAGIC     },
+  {6, GENDERS_HANDLE_LOADED,              GENDERS_POINTER_NULL,     -1, GENDERS_ERR_PARAMETERS},
+  {7, GENDERS_HANDLE_LOADED,              GENDERS_POINTER_NON_NULL,  0, GENDERS_ERR_SUCCESS   },
+  {8, GENDERS_HANDLE_LOADED_DESTROYED,    GENDERS_POINTER_NULL,     -1, GENDERS_ERR_MAGIC     },
+  {9, GENDERS_HANDLE_LOADED_DESTROYED,    GENDERS_POINTER_NON_NULL, -1, GENDERS_ERR_MAGIC     },
+  {-1, -1, -1, -1, -1},
 };
 
 genders_parse_corner_case_t genders_parse_corner_case_tests[] = {
