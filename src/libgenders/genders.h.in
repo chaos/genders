@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.7 2003-05-07 19:15:21 achu Exp $
+ * $Id: genders.h.in,v 1.8 2003-05-07 19:18:37 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -54,12 +54,6 @@ int genders_handle_destroy(genders_t handle);
  */
 int genders_load_data(genders_t handle, const char *filename);
 
-/* Dumps the genders file stored in the handle to the file stream.
- * If stream is NULL, dumps to stdout.
- * Returns: 0 on success, -1 on failure 
- */
-int genders_handle_dump(genders_t handle, FILE *stream);
-
 /* Returns an error code associated with a handle 
  */
 int genders_errnum(genders_t handle);
@@ -77,6 +71,12 @@ char *genders_errormsg(genders_t handle);
  * error that occurred.  
  */
 void genders_perror(genders_t handle, const char *msg);
+
+/* Dumps the genders file stored in the handle to the file stream.
+ * If stream is NULL, dumps to stdout.
+ * Returns: 0 on success, -1 on failure 
+ */
+int genders_handle_dump(genders_t handle, FILE *stream);
 
 /* Get the number of nodes read from the genders file
  * Returns: number of nodes on success, -1 on failure 
