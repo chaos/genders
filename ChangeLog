@@ -3,8 +3,8 @@
 	* src/libgenders/genders.c (_readline): Fix corner case.
 
 	* src/libgenders/genders.c (_parse_line, genders_parse): Added
-	support for additional corner case checks, duplicate attributes
-	and duplicate nodenames.
+	support for additional corner case checks: non-shortened
+	hostnames, duplicate attributes, and duplicate nodenames.
 
 	* src/libgenders/genders.c: All list_create and
 	list_iterator_create errors are now OUTMEM errors.

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.74 2004-01-15 19:07:16 achu Exp $
+ *  $Id: genders.c,v 1.75 2004-01-16 01:00:04 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -402,6 +402,15 @@ _parse_line(genders_t handle, char *line, int line_num,
     if (strlen(nodename) > MAXHOSTNAMELEN) {
       if (line_num > 0) {
         fprintf(stream, "Line %d: hostname too long\n", line_num);
+        return 1;
+      }
+      handle->errnum = GENDERS_ERR_PARSE;
+      return -1;
+    }
+
+    if (strchr(nodename, '.') != NULL) {
+      if (line_num > 0) {
+        fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
         return 1;
       }
       handle->errnum = GENDERS_ERR_PARSE;
