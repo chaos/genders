@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.11 2003-03-18 00:18:25 achu Exp $
+ * $Id: genders.c,v 1.12 2003-03-31 16:49:45 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -189,7 +189,6 @@ int genders_handle_destroy(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -215,7 +214,6 @@ int genders_open(genders_t handle, char *filename) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -569,7 +567,6 @@ int genders_close(genders_t handle) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -648,7 +645,6 @@ int genders_handle_dump(genders_t handle, FILE *stream) {
   }
  
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -693,7 +689,6 @@ int genders_getnumnodes(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -712,7 +707,6 @@ int genders_getnumattrs(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -731,7 +725,6 @@ int genders_getmaxattrs(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -750,7 +743,6 @@ int genders_getmaxnodelen(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -769,7 +761,6 @@ int genders_getmaxattrlen(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -788,7 +779,6 @@ int genders_getmaxvallen(genders_t handle) {
   }
   
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -808,7 +798,6 @@ int genders_nodelist_create(genders_t handle, char ***nodelist) {
   }
  
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -843,7 +832,6 @@ int genders_nodelist_clear(genders_t handle, char **nodelist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -877,7 +865,6 @@ int genders_nodelist_destroy(genders_t handle, char **nodelist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -917,7 +904,6 @@ int genders_attrlist_create(genders_t handle, char ***attrlist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -952,7 +938,6 @@ int genders_attrlist_clear(genders_t handle, char **attrlist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -986,7 +971,6 @@ int genders_attrlist_destroy(genders_t handle, char **attrlist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1025,7 +1009,6 @@ int genders_vallist_create(genders_t handle, char ***vallist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1060,7 +1043,6 @@ int genders_vallist_clear(genders_t handle, char **vallist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1094,7 +1076,6 @@ int genders_vallist_destroy(genders_t handle, char **vallist) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1194,7 +1175,6 @@ int genders_getnodename(genders_t handle, char *node, int len) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1230,7 +1210,6 @@ int genders_getnodes(genders_t handle, char *nodes[], int len, char *attr,
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1297,7 +1276,6 @@ int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len,
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1358,7 +1336,6 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1402,7 +1379,6 @@ int genders_testattr(genders_t handle, char *node, char *attr, char *val, int le
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1466,7 +1442,6 @@ int genders_testattrval(genders_t handle, char *node, char *attr, char *val) {
   }
 
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1524,7 +1499,6 @@ int genders_testnode(genders_t handle, char *node) {
   }
  
   if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
 
@@ -1569,7 +1543,6 @@ int genders_elapsedtime(genders_t handle) {
     return -1;
   }
   else if (handle->magic != GENDERS_MAGIC_NUM) {
-    handle->errnum = GENDERS_ERR_MAGIC;
     return -1;
   }
   else if (handle->time_genders_loaded == 0) {
