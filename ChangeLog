@@ -6,10 +6,12 @@
 	* moved Libgenders manpage to perl document in Libgenders.pm
 	* Added error code/constants accessor functions in Libgenders
 	* Made Libgenders object-oriented.
-	* Nodeattr no longer has -C option
-	* Remoeved dist scripts, now in different package.
+	* Removed dist scripts, now in different package.
 	* Added Genders, an OO based replacement for gendlib.pl
 	  - will eventually phase out gendlib.pl 
+	* wrapped tags around nodeattr -r and -C code that will eventually 
+	  be removed. 
+	* tagged genders-2-0-1pre
 	
 2003-04-24 Albert Chu <chu11@llnl.gov>
 	* added portability by replacing getline(3) with
