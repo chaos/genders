@@ -1,4 +1,7 @@
-- Try and re-work code to reduce memory footprint
+- Re-work code to reduce memory footprint
+  - Decrease Hash multiplier?
+  - Remove MAXHOSTNAMELEN buffers?
+- Only export genders symbols.
 - Allow attributes or attributes=value checking for each line of the genders
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
