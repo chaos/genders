@@ -1,4 +1,7 @@
-2003-04-XX Albert Chu <chu11@llnl.gov>
+2003-04-29 Albert Chu <ch11@llnl.gov>
+	* added 'const' to manpages where appropriate
+	
+2003-04-24 Albert Chu <chu11@llnl.gov>
 	* added portability by replacing getline(3) with
 	  internally created getline()
 	* genders_open() renamed genders_load_data()
