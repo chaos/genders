@@ -6,6 +6,7 @@
 	  now based on cluster attribute of genders file.
 	* updated dist2 and nodeattr (perl) based on the change genders
 	  file change
+	* fixed gendlib(3) and nodeattr(1) manpages to reflect changes
 	* tagged genders-1-1-4
 	
 2003-03-12 Albert Chu <chu11@llnl.gov>
