@@ -17,11 +17,11 @@ Group: System Environment/Base
 %description compat
 genders API that is compatible with earlier releases of genders
 
-%package dist
-Summary: genders tools 
+%package llnl
+Summary: genders tools and site specific library
 Group: System Environment/Base
 %description dist
-set of tools distributed with genders 
+set of tools distributed with genders and a llnl site specific library 
 
 %prep
 %setup  -q -n %{name}-%{version}
