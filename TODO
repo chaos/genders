@@ -1,6 +1,3 @@
-- Provide C API to genders
-- Rewrite nodeattr in C
-- Replace /etc/clusters with cluster=name convention in genders file
 - Consider migrating some dist2 code into rdist, linked with genders API e.g.
   o natively expand ${cluster!attr_host} macros (modify yacc grammar)
   o select from multiple (configurable) remote shell services
