@@ -18,3 +18,8 @@
 - Fix calls to _calc_query, b/c can return NULL for empty
 - Clean things up in general, library state is currently in 
   a state with multiple hacks placed on top of other hacks.
+- List nodes in genders database with incremental ability 
+  mcr[1-50/2] would be mcr1,3,5,7,...
+  mcr[1-50/3] would be mcr1,4,7,10,...
+  - think about format, do through hostlist.[ch]??
+  
