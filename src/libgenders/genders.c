@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.115 2004-06-10 17:36:01 achu Exp $
+ *  $Id: genders.c,v 1.116 2004-09-10 17:21:02 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -624,7 +624,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 
       if (rv == 1) {
         if (line_num > 0) {
-          fprintf(stream, "Line %d: duplicate attributed listed for node \"%s\"\n",
+          fprintf(stream, "Line %d: duplicate attribute listed for node \"%s\"\n",
                   line_num, node);
           retval = 1;
         }
