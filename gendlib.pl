@@ -1,5 +1,5 @@
 #
-# $Id: gendlib.pl,v 1.4 2001-07-14 05:36:52 garlick Exp $
+# $Id: gendlib.pl,v 1.4.2.1 2003-07-16 23:45:30 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -90,11 +90,6 @@ sub init
 
 						# add to %attrs
 			@{$attrs{$node}} = @alist;
-						# special "all" attribute
-			push @{$attrs{$node}}, "all";
-						# add to %nodes	
-			push @{$nodes{"all"}}, $node;
-						# special "all" attribute
 			foreach $attr (@alist) {
 				push @{$xnodes{$attr}}, $node;
 				$attr =~ s/=.*//; # drop any =value on attribute
@@ -257,66 +252,22 @@ sub get_node_hash
 #	$rv (RETURN)	0 on failure opening attributes, 1 on success
 sub init_clusters
 {
-	if (@_) {
-		$path_clusters = shift(@_);
-	}
-
-	$init_clusters_called = 1;
-	$debug && print("init_clusters called\n");
-
-	my ($cluster, $cl, $blob, $found, $node, @dummies);
-
-	# initialize hostname
-	if (!$init_hname_called) {
-		init_hname();
-	}
-
-	#
-	# Read clusters file.  Set:
-	#   $cluster - name of "this" cluster (null if not on a listed machine)
-	#   @dummies - list of other clusters
-	#
-	$cluster = "";
-	@dummies = ();
-	if (open(CLUST, $path_clusters)) {
-		while (<CLUST>) {
-			chomp;		# delete trailing newline, if any
-			s/\#.*$//;	# strip comments
-			next if (/^\s*$/);    # skip blank lines
-			($cl, $blob) = split; # whitespace betw clust and list
-			$found = "";	# find this hostname in list?
-			foreach $node (split /,/, $blob) {
-				if ($node eq $hname) {
-					$found = $cl;
-				}
-			}
-			if (!$found) {
-				push @dummies, $cl;
-			} else {
-				$cluster = $found;
-			}
-		}
-		close(CLUST);
-
-		# first item is this cluster, or empty string
-		# remaining items are other clusters
-		push (@clusters, $cluster);	
-		foreach $cl (@dummies) {
-			push(@clusters, $cl);
-		}
-		return(1);
-	} else {
-		return(0);
-	}
+        # clusters file now removed, just return 1
+        return(1);
 }
 
 # get a copy of the list of clusters
+#       $rv (RETURN)    "" on failure (from getattrval()), cluster name on success
 sub get_clusters
 {
-	if (!$init_clusters_called) {
-		init_clusters();
+	my ($node,@nodes);
+
+	if (!$init_called) {
+	        init();
 	}
-	return @clusters;
+	$node = getattrval("cluster");
+	@nodes = ($node);
+	return @nodes;
 }
 
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 #
-# $Id: dist2,v 1.4 2002-05-31 15:56:45 garlick Exp $
+# $Id: dist2,v 1.4.2.1 2003-07-16 23:45:30 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist2,v $
 # 
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -75,6 +75,19 @@ if ($main::opt_c) {
 	$main::local_cluster = $main::opt_c;
 	Genders::init(sprintf($main::path_genders, $main::local_cluster));
 } else {
+	# get cluster name
+        if (!Genders::init($main::path_genders_fallback)) {
+                print STDERR ("Error initializing genders file\n");
+                exit(1);
+        }
+
+        ($main::local_cluster) = Genders::get_clusters();
+        if (!$main::local_cluster) {
+                print STDERR ("Error retrieving cluster name\n");
+                exit(1);
+        }
+
+
 	($main::local_cluster) = Genders::get_clusters();
 	Genders::init(sprintf($main::path_genders, $main::local_cluster));
 	if (!Genders::getnode("all")) {
