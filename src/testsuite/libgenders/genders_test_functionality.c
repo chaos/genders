@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.1 2004-12-29 22:27:17 achu Exp $
+ *  $Id: genders_test_functionality.c,v 1.2 2004-12-29 23:57:29 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1307,27 +1307,27 @@ genders_getattr_functionality(int verbose)
 								return_value,
 								databases[i]->filename,
 								verbose);
-	  if (err == 0)
-	    {
-	      
-#if 0
-	  err += genders_return_value_errnum_list_check("genders_getattr",
-							num,
-							databases[i]->data->node_attrvals[j].attrslen,
-							GENDERS_ERR_SUCCESS,
-							databases[i]->data->node_attrvals[j].vals_string,
-							databases[i]->data->node_attrvals[j].attrslen,
-							return_value,
-							errnum,
-							vallist,
-							return_value,
-							GENDERS_COMPARISON_MATCH,
-							databases[i]->filename,
-							verbose);
-#endif
+	  errcount += err;
+	}
 
+      /* Test invalid node */
+      if (databases[i]->data->node)
+	{
+	  return_value = genders_getattr(handle,
+					 attrlist,
+					 vallist,
+					 attrlist_len,
+					 GENDERS_DATABASE_INVALID_NODE);
+	  errnum = genders_errnum(handle);
 	  
-	    }
+	  err = genders_return_value_errnum_check("genders_getattr",
+						  num,
+						  -1,
+						  GENDERS_ERR_NOTFOUND,
+						  return_value,
+						  errnum,
+						  databases[i]->filename,
+						  verbose);
 	  errcount += err;
 	}
 
@@ -1450,6 +1450,27 @@ genders_testattr_functionality(int verbose)
 	    }
 	}
       
+      /* Test invalid node */
+      if (databases[i]->data->node && databases[i]->data->attr_with_val)
+	{
+	  return_value = genders_testattr(handle,
+					  GENDERS_DATABASE_INVALID_NODE,
+					  databases[i]->data->attr_with_val,
+					  valbuf,
+					  maxvallen + 1);
+	  errnum = genders_errnum(handle);
+	  
+	  err = genders_return_value_errnum_check("genders_testattr",
+						  num,
+						  -1,
+						  GENDERS_ERR_NOTFOUND,
+						  return_value,
+						  errnum,
+						  databases[i]->filename,
+						  verbose);
+	  errcount += err;
+	}
+
       /* Test invalidate attribute */
       return_value = genders_testattr(handle, 
 				      databases[i]->data->node,
@@ -1521,6 +1542,26 @@ genders_testattrval_functionality(int verbose)
 	    }
 	}
       
+      /* Test invalid node */
+      if (databases[i]->data->node && databases[i]->data->attr_with_val && databases[i]->data->val)
+	{
+	  return_value = genders_testattrval(handle,
+					     GENDERS_DATABASE_INVALID_NODE,
+					     databases[i]->data->attr_with_val,
+					     databases[i]->data->val);
+	  errnum = genders_errnum(handle);
+	  
+	  err = genders_return_value_errnum_check("genders_testattrval",
+						  num,
+						  -1,
+						  GENDERS_ERR_NOTFOUND,
+						  return_value,
+						  errnum,
+						  databases[i]->filename,
+						  verbose);
+	  errcount += err;
+	}
+
       /* Test attr without val */
       if (databases[i]->data->attr_without_val && databases[i]->data->val)
 	{
