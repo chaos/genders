@@ -1,3 +1,4 @@
+- I really really really need a test suite of some sort.
 - Only export genders symbols.
 - Allow attributes or attributes=value checking for each line of the genders
   file that works with nodeattr --check option
