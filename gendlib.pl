@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.5 2002-12-08 19:42:34 garlick Exp $
+#  $Id: gendlib.pl,v 1.6 2003-03-31 19:37:31 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -108,11 +108,7 @@ sub init
 
 						# add to %attrs
 			@{$attrs{$node}} = @alist;
-						# special "all" attribute
-			push @{$attrs{$node}}, "all";
-						# add to %nodes	
-			push @{$nodes{"all"}}, $node;
-						# special "all" attribute
+
 			foreach $attr (@alist) {
 				push @{$xnodes{$attr}}, $node;
 				$attr =~ s/=.*//; # drop any =value on attribute
