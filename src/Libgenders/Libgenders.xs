@@ -236,9 +236,7 @@ genders_getnodename(handle)
 
         handle_error:
 
-            if (buf != NULL) 
-                free(buf);
-                
+            free(buf);
             XSRETURN_UNDEF;
 
         the_end:
@@ -416,9 +414,7 @@ genders_getattrval(handle, attr, node=NULL)
 
         handle_error:
 
-            if (buf != NULL)
-                free(buf);
-
+            free(buf);
             XSRETURN_UNDEF;
         
         the_end:
