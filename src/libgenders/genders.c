@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.12 2003-03-31 16:49:45 achu Exp $
+ * $Id: genders.c,v 1.13 2003-04-01 21:38:56 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -73,7 +73,7 @@ struct genders {
  *   associated with this node
  */
 struct node_listnode {
-  char *name;
+  char name[MAXHOSTNAMELEN+1];
   struct node_listnode *next;
   void *attrvals_head;
   void *attrvals_tail;
@@ -105,7 +105,7 @@ static char * errmsg[] = {
   "genders file parse error",
   "genders file not open",
   "genders file already open",
-  "array passed in not large enough to store result",
+  "array or string passed in not large enough to store result",
   "incorrect parameters passed in",
   "null pointer reached in list", 
   "node not found",
@@ -130,7 +130,8 @@ static int genders_parse_line(genders_t handle, char *line);
 static int genders_insert_node_listnode(genders_t handle, char *name);
 
 /* insert an attribute (and value if necessary) into an attribute list */
-static int genders_insert_attrval_listnode(genders_t handle, char *name);
+static int genders_insert_attrval_listnode(genders_t handle, char *name, 
+					   int *all_flag, int *cluster_flag);
 
 /* place unique attribute names into the unique attribute list */
 static int genders_insert_attr_listnode(genders_t handle, char *attr);
@@ -291,7 +292,7 @@ int genders_parse_line(genders_t handle, char *line) {
   char *token = NULL;
   char *temp;
   char *buf;
-  int attrcount = 0;
+  int attrcount = 0, all_flag = 0, cluster_flag = 0;
 
   /* "remove" comments */
   if ((temp = strchr(line, '#')) != NULL) {
@@ -328,10 +329,13 @@ int genders_parse_line(genders_t handle, char *line) {
       }
     }
   }
+  else {
+    return 0;
+  }
 
   /* get attributes */
   if (*line != '\0') {
-    if (strspn(line," \t") > 0) {
+    if (strchr(line,' ') != NULL || strchr(line,'\t') != NULL) {
       handle->errnum = GENDERS_ERR_PARSE;
       return -1;
     }
@@ -341,17 +345,22 @@ int genders_parse_line(genders_t handle, char *line) {
      * will be parsed in genders_insert_attrval_listnode().  */
     token = strtok_r(line,",\n\0",&buf);
     while (token != NULL) {
-      if (genders_insert_attrval_listnode(handle, token) == -1) {
+      if (genders_insert_attrval_listnode(handle, token, &all_flag, &cluster_flag) == -1) {
 	return -1;
       }
       attrcount++;
       token = strtok_r(NULL,",\n\0",&buf);
     }
-    
   }
 
   if (attrcount > handle->maxattrs) {
     handle->maxattrs = attrcount;
+  }
+
+  /* are we missing a required attribute? */ 
+  if (all_flag == 0 || cluster_flag == 0) {
+    handle->errnum = GENDERS_ERR_PARSE;
+    return -1;
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -380,11 +389,7 @@ int genders_insert_node_listnode(genders_t handle, char *name) {
   }
   node_list = (struct node_listnode *)handle->nodes_tail;
 
-  node_list->name = (char *)malloc(strlen(name) + 1);
-  if (node_list->name == NULL) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    return -1;
-  }
+  memset(node_list->name, '\0', MAXHOSTNAMELEN+1);
   strcpy(node_list->name,name);
   node_list->next = NULL;
   node_list->attrvals_head = NULL;
@@ -394,11 +399,12 @@ int genders_insert_node_listnode(genders_t handle, char *name) {
   return 0;
 }
 
-int genders_insert_attrval_listnode(genders_t handle, char *attr) {
+int genders_insert_attrval_listnode(genders_t handle, char *attr, int *all_flag, int *cluster_flag) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
-  char *token;
-  char *buf;
+  char *attribute = NULL;
+  char *value = NULL;
+  char *buf = NULL;
 
   node_list = (struct node_listnode *)handle->nodes_tail;
   attrval_list = (struct attrval_listnode *)node_list->attrvals_tail;
@@ -436,34 +442,30 @@ int genders_insert_attrval_listnode(genders_t handle, char *attr) {
     if (genders_insert_attr_listnode(handle, attr) == -1) {
       return -1;
     }
+    
+    attribute = attr;
   }
   else {
-
-    if (strspn(attr,"=") > 1) {
-      handle->errnum = GENDERS_ERR_PARSE;
-      return -1;
-    }
-
     /* parse attribute & value */
-    token = strtok_r(attr,"=",&buf);
-    attrval_list->name = (char *)malloc(strlen(token)+1);
+    attribute = strtok_r(attr,"=",&buf);
+    attrval_list->name = (char *)malloc(strlen(attribute)+1);
     if (attrval_list->name == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       return -1;
     }
-    strcpy(attrval_list->name,token);
+    strcpy(attrval_list->name,attribute);
 
     if (genders_insert_attr_listnode(handle, attr) == -1) {
       return -1;
     }
 
-    token = strtok_r(NULL,"\0",&buf);
-    attrval_list->val = (char *)malloc(strlen(token)+1);
+    value = strtok_r(NULL,"\0",&buf);
+    attrval_list->val = (char *)malloc(strlen(value)+1);
     if (attrval_list->val == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       return -1;
     }
-    strcpy(attrval_list->val,token);
+    strcpy(attrval_list->val,value);
   }
   attrval_list->next = NULL;
  
@@ -474,6 +476,18 @@ int genders_insert_attrval_listnode(genders_t handle, char *attr) {
   if ((attrval_list->val != NULL) && 
       (strlen(attrval_list->val) > handle->maxvallen)) {
     handle->maxvallen = strlen(attrval_list->val);
+  }
+
+  if (strcmp(attribute, GENDERS_ALL_ATTRIBUTE) == 0) {
+    *all_flag = 1;
+  }
+
+  if (strcmp(attribute, GENDERS_CLUSTER_ATTRIBUTE) == 0) {
+    *cluster_flag = 1;
+    if (value == NULL || (value != NULL && strlen(value) > MAXHOSTNAMELEN)) {
+      handle->errnum = GENDERS_ERR_PARSE;
+      return -1;
+    }
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -546,7 +560,6 @@ void genders_free_cache(genders_t handle) {
       attrval_list = temp_attrval_list;
     }
     
-    free(node_list->name);
     free(node_list);
     node_list = temp_node_list;
   }
@@ -581,13 +594,12 @@ int genders_close(genders_t handle) {
   }
 
   fclose(handle->file);
- 
+
   free(handle->filename);
 
   genders_free_cache(handle);
 
   genders_handle_initialize(handle);
-
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 }
@@ -1558,6 +1570,139 @@ int genders_elapsedtime(genders_t handle) {
     handle->errnum = GENDERS_ERR_SUCCESS;
     return (int)(t - handle->time_genders_loaded);
   }
+}
+
+int genders_parse(genders_t handle, char *filename, FILE *stream) {
+  int len, line_count = 0, retval = 0;
+  int all_flag, cluster_flag;
+  FILE *fstr = NULL;
+  char *line = NULL;
+  char *line_ptr = NULL;
+  char *line_buf = NULL;
+  char *attr_buf = NULL;
+  char *token = NULL;
+  char *temp = NULL;
+  char *attribute = NULL;
+  char *value = NULL; 
+  
+  if (handle == NULL) {
+    return -1;
+  }
+
+  if (handle->magic != GENDERS_MAGIC_NUM) {
+    return -1;
+  }
+
+  if (filename == NULL) {
+    filename = DEFAULT_GENDERS_FILE;
+  } 
+  
+  if (stream == NULL) {
+    stream = stderr;
+  }
+
+  if ((fstr = fopen(filename,"r")) == NULL) {
+    handle->errnum = GENDERS_ERR_OPEN;
+    return -1;
+  }
+
+  while (getline(&line, &len, fstr) != -1) {
+    line_count++;
+    all_flag = 0;
+    cluster_flag = 0;
+
+    /* copy 'line' to 'line_ptr' so pointer is preserved */
+    line_ptr = line;
+
+    /* "remove" comments */
+    if ((temp = strchr(line_ptr, '#')) != NULL) {
+      *temp = '\0';
+    }
+    
+    /* move forward to node name */
+    while(*line_ptr == ' ' || *line_ptr == '\t' || *line_ptr == '\n' ) {  
+      line_ptr++;
+    }
+    
+    /* get node name */
+    if (*line_ptr != '\0') {
+      token = strsep(&line_ptr, " \t\n\0");
+      
+      if (token != NULL) {
+	
+	if (strlen(token) > MAXHOSTNAMELEN) {
+	  fprintf(stream, "Line %d: hostname too long\n", line_count);
+	  retval++;
+	  continue;
+	}
+	
+	/* move forward to attributes */
+	while(*line_ptr == ' ' || *line_ptr == '\t' || *line_ptr == '\n' ) {  
+	  line_ptr++;
+	}
+      }
+    }
+    else {
+      continue;
+    }
+
+    /* get attributes */
+    if (*line_ptr != '\0') {
+      if (strchr(line_ptr,' ') != NULL || strchr(line_ptr,'\t') != NULL) {
+	fprintf(stream, "Line %d: white space in attribute list\n", line_count);
+	retval++;
+	continue;
+      }
+      
+      attribute = strtok_r(line_ptr,",\n\0",&line_buf);
+      while (attribute != NULL) {
+	value = NULL;
+
+	if (strchr(attribute, '=') != NULL) {
+	  attribute = strtok_r(attribute,"=",&attr_buf);
+	  value = strtok_r(NULL,"\0",&attr_buf);
+	}
+
+	if (strcmp(attribute, GENDERS_ALL_ATTRIBUTE) == 0) {
+	  all_flag = 1;
+	}
+
+	if (strcmp(attribute, GENDERS_CLUSTER_ATTRIBUTE) == 0) {
+	  cluster_flag = 1;
+
+	  /* cluster attribute must have a value */
+	  if (value == NULL) {
+	    fprintf(stream, "Line %d: cluster attribute has no value\n", line_count);
+	    retval++;
+	  }
+	  else if (value != NULL && strlen(value) > MAXHOSTNAMELEN) {
+	    fprintf(stream, "Line %d: cluster value too long\n", line_count);
+	    retval++;
+	  }      
+	}
+	attribute = strtok_r(NULL,",\n\0",&line_buf);
+      }
+    }
+    
+    if (all_flag == 0) {
+      fprintf(stream, "Line %d: no \"%s\" attribute listed\n", line_count, 
+	      GENDERS_ALL_ATTRIBUTE);
+      retval++;
+    }
+    
+    if (cluster_flag == 0) {
+      fprintf(stream, "Line %d: no \"%s\" attribute listed\n", 
+	      line_count, GENDERS_CLUSTER_ATTRIBUTE);
+      retval++;
+    }
+  }
+
+  if (line != NULL) {
+    free(line);
+  }
+  
+  fclose(fstr);
+  return retval;
 }
 
 /*
