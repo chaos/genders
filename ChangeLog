@@ -1,3 +1,45 @@
+2004-10-07  Albert Chu  <chu11@llnl.gov>
+
+	Removed genders_index_nodes and genders_index_attrs API functions.
+	By default, genders will always hash nodes and attributes.
+
+	* src/libgenders/genders.h.in, src/libgenders/genders.c:
+	(genders_index_nodes, genders_index_attrs): Removed functions.
+
+	* src/libgenders/genders.c (genders_handle_create): Create
+	node_index and attr_index.
+
+	* src/libgenders/genders.c (_index_nodes, _index_attrs): New
+	functions.
+
+	* src/libgenders/genders.c (genders_load_data): Call _index_nodes
+	and _index_attrs to setup hashes.  Cleanup appropriately.
+
+	* src/libgenders/genders.c (genders_getnodes, genders_getattr,
+	genders_testattr, genders_testattrval, genders_isnoe,
+	genders_isattr): Use node and attr indexes automatically.
+	
+	* src/Libgenders/Libgenders.xs (genders_index_nodes,
+	genders_index_attrs): Removed functions.
+
+	* src/Libgenders/Libgenders.pm: Removed references to
+	genders_index_nodes and genders_index_attrs in docs.
+
+	* src/Genders/Genders.pm (genders_index_nodes,
+	genders_index_attrs): Removed functions and references to them the
+	documentation.
+
+	* man/libgenders.3: Removed genders_index_nodes and
+	genders_index_attrs.
+
+	* man/Makefile.am: Removed genders_index.3, genders_index_nodes.3,
+	and genders_index_attrs.3.
+
+	* man/genders_index_nodes.3, man/genders_index_attrs.3,
+	genders_index.3: Removed files.
+
+	* man/genders_index_attrvals.3: New file.
+	
 2004-09-10  Albert Chu  <chu11@llnl.gov>
 
 	* man/nodeattr.1: Re-word description of -k option.

@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm,v 1.19 2004-06-10 16:59:01 achu Exp $
+#  $Id: Libgenders.pm,v 1.20 2004-10-07 18:22:31 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -94,8 +94,6 @@ Libgenders - Perl extension for libgenders
  $handle->genders_isattr($attr)
  $handle->genders_isattrval($attr, $val)
 
- $handle->genders_index_nodes()
- $handle->genders_index_attrs()
  $handle->genders_index_attrvals($attr)
 
  $handle->genders_query($query)
@@ -235,18 +233,6 @@ if the attribute is listed, 0 if it is not, -1 on error.
 
 Tests if the attribute=value pair is listed in the genders file.
 Returns 1 if the pair is listed, 0 if it is not, -1 on error.
-
-=item B<$handle-E<gt>genders_index_nodes()>
-
-Internally adds indexing to decrease search times for genders nodes.
-Will specifically aid performance of the genders_getattr,
-genders_testattr, genders_testattrval, and genders_isnode functions.
-
-=item B<$handle-E<gt>genders_index_attrs()>
-
-Internally adds indexing to decrease search times for genders
-attributes.  Will specifically aid performance of the genders_getnodes
-and genders_isattr functions.
 
 =item B<$handle-E<gt>genders_index_attrvals($attr)>
 

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.25 2004-06-10 16:59:01 achu Exp $
+ *  $Id: genders.h.in,v 1.26 2004-10-07 18:22:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -224,21 +224,6 @@ int genders_isattr(genders_t handle, const char *attr);
  * Returns: 1=true , 0=false, -1=failure
  */
 int genders_isattrval(genders_t handle, const char *attr, const char *val);
-
-/* Internally index genders nodes for faster search times
- * on genders_getattr, genders_testattr, genders_testattrval, and
- * genders_isnode.  If the index was previously generated, the function
- * will do nothing and return 0.
- * Returns: 0 on success, -1 on failure
- */            
-int genders_index_nodes(genders_t handle);
-
-/* Internally index genders attributes for faster search times
- * on genders_getnodes and genders_isattr.  If the index was
- * previously generated, the function will do nothing and return 0.
- * Returns: 0 on success, -1 on failure
- */            
-int genders_index_attrs(genders_t handle);
 
 /* Internally index values for specified attribute for faster
  * search times on genders_getnodes and genders_isattrval.  If the

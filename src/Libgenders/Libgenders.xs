@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.35 2004-06-10 15:31:04 achu Exp $
+ *  $Id: Libgenders.xs,v 1.36 2004-10-07 18:22:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -495,22 +495,6 @@ genders_isattrval(handle, attr, val)
     char *val
     CODE:
         RETVAL = genders_isattrval(handle, attr, val);
-    OUTPUT:
-        RETVAL
-
-int
-genders_index_nodes(handle)
-    genders_t handle
-    CODE:
-        RETVAL = genders_index_nodes(handle);
-    OUTPUT:
-        RETVAL
-
-int
-genders_index_attrs(handle)
-    genders_t handle
-    CODE:
-        RETVAL = genders_index_attrs(handle);
     OUTPUT:
         RETVAL
 
