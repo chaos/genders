@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.4 2003-05-19 16:22:03 achu Exp $
+## $Id: Makefile.am,v 1.5 2003-05-30 15:48:55 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -27,7 +27,6 @@ man3_MANS = \
         genders_getnumnodes.3 \
         genders_handle_create.3 \
         genders_handle_destroy.3 \
-        genders_handle_dump.3 \
         genders_nodelist_clear.3 \
         genders_nodelist_create.3 \
         genders_nodelist_destroy.3 \

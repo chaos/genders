@@ -194,14 +194,6 @@ genders_perror(handle, msg=NULL)
         genders_perror(handle, msg);
 
 int
-genders_handle_dump(handle)
-    genders_t handle
-    CODE:
-        RETVAL = genders_handle_dump(handle, NULL);
-    OUTPUT:
-        RETVAL
-
-int
 genders_getnumnodes(handle)
     genders_t handle
     CODE:

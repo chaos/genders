@@ -1008,7 +1008,7 @@ Optional Packages:
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-genders-file=file
                           define default genders file
-  --with-xs-prefix=path   define perl xs prefix for install
+  --with-xs-prefix=path   define perl xs prefix dir
   --with-genders-pm-prefix=path
                           define genders.pm prefix dir
   --with-gnu-ld           assume the C compiler uses GNU ld default=no
@@ -7811,7 +7811,6 @@ _ACEOF
 fi
 
 done
-
 
 
 ##

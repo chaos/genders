@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.50 2003-05-29 16:44:25 achu Exp $
+ * $Id: genders.c,v 1.51 2003-05-30 15:48:55 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -688,40 +688,6 @@ void genders_perror(genders_t handle, const char *msg) {
     fprintf(stderr, "%s\n", errormsg);
   else
     fprintf(stderr, "%s: %s\n", msg, errormsg);
-}
-
-int genders_handle_dump(genders_t handle, FILE *stream) {
-  struct node_listnode *nlist;
-
-  if (loaded_handle_err_check(handle) == -1)
-    return -1;
-
-  if (stream == NULL)
-    stream = stdout;
-
-  nlist = handle->nodes_head;
-  while (nlist != NULL) {
-    struct attrval_listnode *avlist = nlist->attrvals_head;
-
-    fprintf(stream,"%s\t", nlist->name);
-    while (avlist != NULL) {
-      if (avlist->val != NULL)
-        fprintf(stream,"%s=%s",avlist->name,avlist->val);
-      else 
-        fprintf(stream,"%s", avlist->name);
-
-      if (avlist->next != NULL)
-        fprintf(stream,",");
-
-      avlist = avlist->next;
-    }
-
-    fprintf(stream,"\n");
-    nlist = nlist->next;
-  }
-
-  handle->errnum = GENDERS_ERR_SUCCESS;
-  return 0;
 }
 
 int genders_getnumnodes(genders_t handle) {

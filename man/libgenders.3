@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: libgenders.3,v 1.6 2003-05-09 20:15:31 achu Exp $
+\."$Id: libgenders.3,v 1.7 2003-05-30 15:48:55 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -22,8 +22,6 @@ libgenders \- a library of functions to parse and retrieve genders data
 .BI "char *genders_errormsg(genders_t handle);"
 .sp
 .BI "void genders_perror(genders_t handle, const char *msg);"
-.sp
-.BI "int genders_handle_dump(genders_t handle, FILE *stream);"
 .sp
 .BI "int genders_getnumnodes(genders_t handle);"
 .sp
@@ -117,14 +115,14 @@ cluster:
 Libgenders(3), Genders(3), genders_handle_create(3),
 genders_handle_destroy(3), genders_load_data(3), genders_errnum(3),
 genders_strerror(3), genders_errormsg(3), genders_perror(3),
-genders_handle_dump(3), genders_getnumnodes(3),
-genders_getnumattrs(3), genders_getmaxattrs(3),
-genders_getmaxnodelen(3), genders_getmaxattrlen(3),
-genders_getmaxvallen(3), genders_nodelist_create(3),
-genders_nodelist_clear(3), genders_nodelist_destroy(3),
-genders_attrlist_create(3), genders_attrlist_clear(3),
-genders_attrlist_destroy(3), genders_vallist_create(3),
-genders_vallist_clear(3), genders_vallist_destroy(3),
-genders_getnodename(3), genders_getnodes(3), genders_getattr(3),
-genders_getattr_all(3), genders_testattr(3), genders_testattrval(3),
-genders_testnode(3), genders_parse(3)
+genders_getnumnodes(3), genders_getnumattrs(3),
+genders_getmaxattrs(3), genders_getmaxnodelen(3),
+genders_getmaxattrlen(3), genders_getmaxvallen(3),
+genders_nodelist_create(3), genders_nodelist_clear(3),
+genders_nodelist_destroy(3), genders_attrlist_create(3),
+genders_attrlist_clear(3), genders_attrlist_destroy(3),
+genders_vallist_create(3), genders_vallist_clear(3),
+genders_vallist_destroy(3), genders_getnodename(3),
+genders_getnodes(3), genders_getattr(3), genders_getattr_all(3),
+genders_testattr(3), genders_testattrval(3), genders_testnode(3),
+genders_parse(3)

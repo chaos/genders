@@ -54,7 +54,6 @@ Libgenders - Perl extension for libgenders
  $handle->genders_errormsg()
  $handle->genders_perror($msg)
 
- $handle->genders_handle_dump()
  $handle->genders_getnumnodes()
  $handle->genders_getnumattrs()
  $handle->genders_getnodename()
@@ -130,11 +129,6 @@ recent error will be output to standard error.
 =head2 Utility Functions
 
 =over 4
-
-=item B<$handle-E<gt>genders_handle_dump()>
-
-Dump the contents stored in the genders object.  This is used
-primarily for debugging purposes.  Returns 0 on success, -1 on error.
 
 =item B<$handle-E<gt>genders_getnumnodes()>
 
