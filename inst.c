@@ -1,6 +1,5 @@
-
 /*****************************************************************************\
- *  $Id: inst.c,v 1.4 2002-12-08 19:42:34 garlick Exp $
+ *  $Id: inst.c,v 1.5 2003-01-22 04:19:42 garlick Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
