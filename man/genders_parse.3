@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_parse.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: genders_parse.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -30,6 +30,11 @@ Error codes are defined in genders.h.
 .br
 .SH ERRORS
 .TP
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be created
+with
+.BR genders_handle_create (3).
+.TP
 .B GENDERS_ERR_OPEN
 The genders file indicated by \fIfilename\fR cannot be opened for reading.
 .TP
@@ -41,4 +46,4 @@ handle or \fIhandle\fR has been destroyed by
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_errnum(3), genders_strerror(3)

@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_getattr_all.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: genders_getattr_all.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -33,9 +33,14 @@ Error codes are defined in genders.h.
 .br
 .SH ERRORS
 .TP
-.B GENDERS_ERR_NOTOPEN
-.BR genders_open (3)
-has not been called and an open genders file has not been associated with \fIhandle\fR.  
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be created
+with
+.BR genders_handle_create (3).
+.TP
+.B GENDERS_ERR_NOTLOADED
+.BR genders_load_data (3)
+has not been called to load genders data.
 .TP
 .B GENDERS_ERR_OVERFLOW
 The list pointed to by \fIattrs\fR is not large enough to store all the attributes.
@@ -51,4 +56,4 @@ handle or \fIhandle\fR has been destroyed by
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_open(3), genders_getnumattrs(3), genders_attrlist_create(3), genders_errnum(3), genders_strerror(3)
+libgenders(3), genders_handle_create(3), genders_load_data(3), genders_getnumattrs(3), genders_attrlist_create(3), genders_errnum(3), genders_strerror(3)

@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_errors.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: genders_errors.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -42,11 +42,10 @@ these functions can return information about the most recent error that
 has occurred.
 .br
 .SH RETURN VALUES
-On success, \fBgenders_errnum()\fR returns the error code stored in \fIhandle\fR.  
-On error, -1 is returned.
+\fBgenders_errnum()\fR returns the error code stored in \fIhandle\fR.  
 
-On success, \fBgenders_strerror()\fR and \fBgenders_errormsg()\fR, return a pointer
-to a string describing the error code stored in \fIhandle\fR.  On error, NULL is returned.
+\fBgenders_strerror()\fR and \fBgenders_errormsg()\fR, return a pointer
+to a string describing the error code stored in \fIhandle\fR.  
 .br
 .SH FILES
 /usr/include/genders.h

@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_handle_destroy.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: genders_handle_destroy.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -26,16 +26,26 @@ Error codes are defined in genders.h.
 .br
 .SH ERRORS
 .TP
-.B GENDERS_ERR_NOTCLOSED 
-.BR genders_close (3)
-has not been called to close a genders file associated with \fIhandle\fR.
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be created
+with
+.BR genders_handle_create (3).
 .TP
 .B GENDERS_ERR_MAGIC 
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
 handle or \fIhandle\fR has already been destroyed.
+.TP
+.B GENDERS_ERR_FREEMEM
+A list has been created with 
+.BR genders_nodelist_create (3),
+.BR genders_attrlist_create (3),
+or
+.BR genders_vallist_create (3) 
+but has not been destroyed.  The list must be destroyed before
+the genders handle can be destroyed.
 .br
 .SH FILES
 /usr/include/genders.h
 .SH SEE ALSO
-libgenders(3), genders_handle_create(3), genders_open(3),
+libgenders(3), genders_handle_create(3), genders_load_data(3),
 genders_errnum(3), genders_strerror(3)

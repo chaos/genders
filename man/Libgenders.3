@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: Libgenders.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: Libgenders.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -32,7 +32,7 @@ Libgenders::genders_handle_destroy($handle)
 .IP
 Destroys a genders handle. Returns 0 on success, -1 on error.
 .LP
-Libgenders::genders_open($handle, $filename)
+Libgenders::genders_load_data($handle, $filename)
 .IP
 Opens, reads, and parses the genders file specified by $filename.
 If $filename is the empty string, the default genders file
@@ -190,8 +190,8 @@ Error reading file.
 .B GENDERS_ERR_PARSE
 Parse error in genders file.
 .TP
-.B GENDERS_ERR_NOTOPEN
-Genders file has not been opened with genders_open().
+.B GENDERS_ERR_NOTLOADED
+Genders data has not been loaded with genders_load_data().
 .TP
 .B GENDERS_ERR_PARAMETERS
 Incorrect parameters have been passed in.

@@ -1,26 +1,26 @@
 \."#################################################################
-\."$Id: genders_load_data.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."$Id: genders_load_data.3,v 1.2 2003-04-23 20:04:16 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
-.TH GENDERS_OPEN 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.TH GENDERS_LOAD_DATA 3 "Release 1.1" "LLNL" "LIBGENDERS"
 .SH NAME
-genders_open \- open, read, and parse a genders file 
+genders_load_data \-  read and parse a genders file
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
-.BI "int genders_open(genders_t handle, char *filename);"
+.BI "int genders_load_data(genders_t handle, char *filename);"
 .br
 .SH DESCRIPTION
-\fBgenders_open()\fR opens, read, and parses the genders file
+\fBgenders_load_data()\fR read and parses the genders file
 indicated by \fIfilename\fR.  If \fIfilename\fR is NULL,
-\fBgenders_open()\fR will attempt to open, read, and parse the default
+\fBgenders_load_data()\fR will attempt to read and parse the default
 genders file defined by
 \fBDEFAULT_GENDERS_FILE\fR. \fIhandle\fR is a genders handle created
 by
 .BR genders_handle_create (3).  
 
-After \fBgenders_open()\fR is called, information about the genders
+After \fBgenders_load_data()\fR is called, information about the genders
 file is stored in the genders handle passed in.  This information is
 used by other genders C API functions.  All future use of \fIhandle\fR
 with other genders C API functions will be directly associated with
@@ -38,18 +38,20 @@ Error codes are defined in genders.h.
 .br
 .SH ERRORS
 .TP
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be created
+with
+.BR genders_handle_create (3).
+.TP
 .B GENDERS_ERR_OPEN
 The genders file indicated by \fIfilename\fR cannot be opened for reading.
 .TP
 .B GENDERS_ERR_PARSE
 The genders file indicated by \fIfilename\fR is incorrectly formatted.
 .TP
-.B GENDERS_ERR_NOTCLOSED 
-.BR genders_open (3) 
-has already been called with \fIhandle\fR.  Before 
-this genders handle can be associated with a new file,
-.BR genders_close (3)
-must be called to close the previous file associated with \fIhandle\fR.
+.B GENDERS_ERR_ISLOADED
+.BR genders_load_data (3) 
+has already been called with \fIhandle\fR.  
 .TP
 .B GENDERS_ERR_OUTMEM
 .BR malloc (3)
