@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.4 2003-02-26 21:19:52 achu Exp $
+ * $Id: genders.h,v 1.5 2003-03-07 20:33:05 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -79,6 +79,11 @@ int genders_errnum(genders_t handle);
  * Returns NULL if errnum out of range.
  */
 char *genders_strerror(int errnum);
+
+/* Returns a string describing the most recent error that occurred.
+ * Returns NULL on error, message on success.
+ */
+char *genders_errormsg(genders_t handle);
 
 /* Produces a message on standard error describing the most recent
  * error that occurred.  

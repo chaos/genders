@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.2 2003-02-26 21:19:52 achu Exp $
+ * $Id: genders_example.c,v 1.3 2003-03-07 20:33:05 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -644,10 +644,10 @@ void time_this_example_genders_took_to_run(genders_t handle) {
   printf("\n");
 }
 
-void example_using_genders_perror(genders_t handle) {
+void example_using_genders_perror_and_errormsg(genders_t handle) {
   /* Intentionally force errors to test and illustate genders_perror */
-  printf("Intentional errors to test and illustrate genders_perror()\n");
-  printf("----------------------------------------------------------\n");
+  printf("Intentional errors to test and illustrate genders error routines()\n");
+  printf("------------------------------------------------------------------\n");
 
   if (genders_getnodes(handle, NULL, 0, NULL, NULL) == -1) {
     genders_perror(handle, "Passing in Invalid Parameter, With messages");
@@ -656,6 +656,15 @@ void example_using_genders_perror(genders_t handle) {
   if (genders_getnodes(handle, NULL, 0, NULL, NULL) == -1) {
     genders_perror(handle, NULL);
   }
+
+  if (genders_getnodes(handle, NULL, 0, NULL, NULL) == -1) {
+    printf("%s\n",genders_errormsg(handle));
+  }
+
+  if (genders_getnodes(handle, NULL, 0, NULL, NULL) == -1) {
+    printf("%s\n",genders_errormsg(handle));
+  }
+
   printf("\n");
 
 }
@@ -722,7 +731,7 @@ mtrace();
 
   time_this_example_genders_took_to_run(handle);
 
-  example_using_genders_perror(handle);
+  example_using_genders_perror_and_errormsg(handle);
 
   if (genders_nodelist_destroy(handle, nodes) == -1) {
     printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
