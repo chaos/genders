@@ -27,3 +27,4 @@
   - genders-perl
     - must be based on current perl install
   - genders-compat
+- Add perl requirement to spec
