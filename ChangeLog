@@ -1,3 +1,8 @@
+2003-08-12  Albert Chu  <chu11@llnl.gov>
+
+	* genders.sample: Added "all" and "cluster=test" to each node in
+	the sample genders database.
+
 2003-08-04  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/nodeattr.c: Removed -r and -C options. 
@@ -92,7 +97,8 @@
 
 	* Libgenders.xs (string_constant): Uses SV * instead of char *.
 	
-	* Fixed build for libgenders.la
+	* genders.spec: Added proper prefix to configuration so
+	libgenders.la is built correctly.
 	
 	* Tagged genders-1-1-8.
 
