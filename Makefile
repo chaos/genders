@@ -5,6 +5,8 @@
 
 PROJECT=	genders
 
+CFLAGS = -Wall -g
+
 all: inst
 	cd src;	./configure; make 
 
