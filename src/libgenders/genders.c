@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.34 2003-05-08 15:49:51 achu Exp $
+ * $Id: genders.c,v 1.35 2003-05-08 16:16:17 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -359,9 +359,8 @@ int genders_getline(genders_t handle, int fd, char **buf) {
   int buflen = 0;
   int start_offset = 0;
   int ret, count;
+  char *buffer = NULL;
   char chr;
-
-  *buf = NULL;
 
   /* get beginning seek position */
   if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
@@ -375,13 +374,13 @@ int genders_getline(genders_t handle, int fd, char **buf) {
       goto cleanup;
     }
     
-    free(*buf);
+    free(buffer);
     buflen += GENDERS_GETLINE_BUFLEN;
-    if ((*buf = (char *)malloc(buflen)) == NULL) {
+    if ((buffer = (char *)malloc(buflen)) == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       goto cleanup;
     }
-    memset(*buf, '\0', buflen);
+    memset(buffer, '\0', buflen);
     
     /* read line */
     count = 0;
@@ -392,17 +391,19 @@ int genders_getline(genders_t handle, int fd, char **buf) {
         goto cleanup;
       }
       else if (ret == 1)
-        (*buf)[count++] = chr;
+        (buffer)[count++] = chr;
 
     } while (ret == 1 && chr != '\n' && count < buflen);
     
   } while(count >= buflen);
 
+  *buf = buffer;
+
   return count;
 
  cleanup:
 
-  free(*buf);
+  free(buffer);
   return -1;
 }
 
