@@ -69,6 +69,6 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 
 %files dist
 %defattr(-,root,root)
-/usr/man/man1/
+/usr/man/man1/*
 /usr/bin/*
 
