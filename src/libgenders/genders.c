@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.30 2003-05-07 18:44:23 achu Exp $
+ * $Id: genders.c,v 1.31 2003-05-07 19:02:33 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -306,7 +306,7 @@ int genders_load_data(genders_t handle, const char *filename) {
     return -1;
 
   if (filename == NULL)
-    filename = DEFAULT_GENDERS_FILE;
+    filename = GENDERS_DEFAULT_FILE;
 
   if ((fd = open(filename, O_RDONLY)) == -1) {
     handle->errnum = GENDERS_ERR_OPEN;
@@ -1467,7 +1467,7 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
     return -1;
 
   if (filename == NULL)
-    filename = DEFAULT_GENDERS_FILE;
+    filename = GENDERS_DEFAULT_FILE;
   
   if (stream == NULL)
     stream = stderr;
