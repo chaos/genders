@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.9 2003-03-11 17:03:39 achu Exp $
+ * $Id: genders.h,v 1.10 2003-03-14 22:36:52 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -26,7 +26,8 @@
 #define GENDERS_ERR_OUTMEM     10 /* out of memory */
 #define GENDERS_ERR_FREEMEM    11 /* memory has not been freed */
 #define GENDERS_ERR_ISFREE     12 /* memory is already free */
-#define GENDERS_ERR_INTERNAL   13 /* internal system error */
+#define GENDERS_ERR_MAGIC      13 /* magic number incorrect */
+#define GENDERS_ERR_INTERNAL   14 /* internal system error */
 
 #define DEFAULT_GENDERS_FILE        "/etc/genders"
 
