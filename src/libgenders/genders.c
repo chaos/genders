@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.104 2004-04-27 22:24:33 achu Exp $
+ *  $Id: genders.c,v 1.105 2004-04-27 23:23:30 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -870,19 +870,11 @@ cleanup:
 }
 
 int
-genders_compute_indexes(genders_t handle)
+_compute_node_index(genders_t handle)
 {
   genders_node_t n;
   ListIterator itr = NULL;
 
-  if (_loaded_handle_error_check(handle) < 0)
-    return -1;
-
-  if (handle->node_index) {
-    handle->errnum = GENDERS_ERR_ISINDEXED;
-    return -1;
-  }
-  
   if (!(handle->node_index = hash_create(handle->numnodes,
                                          (hash_key_f)hash_key_string,
                                          (hash_cmp_f)strcmp,
@@ -906,7 +898,6 @@ genders_compute_indexes(genders_t handle)
     }
   }
 
-  handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 
  cleanup:
@@ -917,6 +908,21 @@ genders_compute_indexes(genders_t handle)
     handle->node_index = NULL;
   }
   return -1;
+}
+
+int
+genders_compute_indexes(genders_t handle)
+{
+  if (_loaded_handle_error_check(handle) < 0)
+    return -1;
+
+  if (handle->node_index) {
+    handle->errnum = GENDERS_ERR_ISINDEXED;
+    return -1;
+  }
+
+  if (_compute_node_index(handle) < 0)
+    return -1;
 }
 
 int 
