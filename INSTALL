@@ -38,15 +38,11 @@ a newer version of `autoconf'.
 
 The simplest way to compile this package is:
 
-  0. `cd' to the directory containing the package's source code and type
-      ./bootstrap to make the build scripts.  Your system must have
-      autoconf, automake, and libtool installed to properly build
-      the build scripts.
-
-  1. Type `./configure' to configure the package for your system.  If
-     you're using `csh' on an old version of System V, you might need
-     to type `sh ./configure' instead to prevent `csh' from trying to
-     execute `configure' itself.
+  1. `cd' to the directory containing the package's source code and type
+     `./configure' to configure the package for your system.  If you're
+     using `csh' on an old version of System V, you might need to type
+     `sh ./configure' instead to prevent `csh' from trying to execute
+     `configure' itself.
 
      Running `configure' takes awhile.  While running, it prints some
      messages telling which features it is checking for.
@@ -75,8 +71,9 @@ Compilers and Options
 the `configure' script does not know about.  Run `./configure --help'
 for details on some of the pertinent environment variables.
 
-   You can give `configure' initial values for variables by setting
-them in the environment.  You can do that on the command line like this:
+   You can give `configure' initial values for configuration parameters
+by setting variables in the command line or in the environment.  Here
+is an example:
 
      ./configure CC=c89 CFLAGS=-O2 LIBS=-lposix
 
