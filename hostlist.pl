@@ -1,5 +1,5 @@
 #
-# $Id: hostlist.pl,v 1.5.2.2 2003-08-01 22:09:00 grondo Exp $
+# $Id: hostlist.pl,v 1.5.2.3 2003-08-01 22:18:59 grondo Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/hostlist.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -131,7 +131,7 @@ sub expand
   		return map { expand_quadrics_range($_) } split /\s+/, $list;
 	} else {
 		return map { 
-                            s/(\w+?)(\d+)-(\w*?)(\d+)/"$2".."$4"/ 
+                            s/(\w*?)(\d+)-(\w*?)(\d+)/"$2".."$4"/ 
 			                       || 
 				          s/(.+)/""/; 
                             map {"$1$_"} eval; 
