@@ -1,3 +1,7 @@
+2003-11-06  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (_parse_line): Fixed some funny parsing
+	code.
 2003-11-03  Albert Chu  <chu11@llnl.gov>
 
 	* man/genders_list.3: Added note about genders databases without

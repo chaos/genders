@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.69 2003-11-03 20:06:14 achu Exp $
+ * $Id: genders.c,v 1.70 2003-11-07 03:25:09 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -310,20 +310,24 @@ static int _parse_line(genders_t handle, char *line,
   if ((temp = strchr(line, '#'))) 
     *temp = '\0';
 
-  /* "remove" trailing white space, including newline */
+  /* remove trailing white space, including newline */
   temp = line + strlen(line);
-  for (--temp; temp > line; temp--) {
+  for (--temp; temp >= line; temp--) {
     if (isspace(*temp))
       *temp = '\0';
     else
       break;
   }
 
+  /* empty line */
+  if (*line == '\0')
+    return 0;
+
   /* move forward to node name */
   while(isspace(*line))  
     line++;
 
-  /* empty line */
+  /* just in case */
   if (*line == '\0')
     return 0;
 
