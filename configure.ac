@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.12 2003-05-16 18:22:26 achu Exp $
+## $Id: configure.ac,v 1.13 2003-05-16 23:53:27 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -52,13 +52,13 @@ AC_ARG_WITH(xs-prefix,
         ;;
     *)
         withxsprefix=yes
-        XS_PREFIX="\"$withval\""
+        XS_PREFIX="$withval"
         ;;
     esac ]
 )
 AC_MSG_RESULT(${withxsprefix=no})
 if test -z "$XS_PREFIX"; then
-   XS_PREFIX="/usr"
+   XS_PREFIX="${prefix}"
 fi
 AC_SUBST(XS_PREFIX)
 
@@ -74,13 +74,13 @@ AC_ARG_WITH(genders-pm-prefix,
         ;;
     *)
         withgenderspm=yes
-        GENDERS_PM_PREFIX="\"$withval\""
+        GENDERS_PM_PREFIX="$withval"
         ;;
     esac ]
 )
 AC_MSG_RESULT(${withgenderspm=no})
 if test -z "$GENDERS_PM_PREFIX"; then
-   GENDERS_PM_PREFIX="/usr"
+   GENDERS_PM_PREFIX="${prefix}"
 fi
 AC_SUBST(GENDERS_PM_PREFIX)
 

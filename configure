@@ -1921,7 +1921,7 @@ if test "${with_xs_prefix+set}" = set; then
         ;;
     *)
         withxsprefix=yes
-        XS_PREFIX="\"$withval\""
+        XS_PREFIX="$withval"
         ;;
     esac
 
@@ -1929,7 +1929,7 @@ fi;
 echo "$as_me:$LINENO: result: ${withxsprefix=no}" >&5
 echo "${ECHO_T}${withxsprefix=no}" >&6
 if test -z "$XS_PREFIX"; then
-   XS_PREFIX="/usr"
+   XS_PREFIX="${prefix}"
 fi
 
 
@@ -1948,7 +1948,7 @@ if test "${with_genders_pm_prefix+set}" = set; then
         ;;
     *)
         withgenderspm=yes
-        GENDERS_PM_PREFIX="\"$withval\""
+        GENDERS_PM_PREFIX="$withval"
         ;;
     esac
 
@@ -1956,7 +1956,7 @@ fi;
 echo "$as_me:$LINENO: result: ${withgenderspm=no}" >&5
 echo "${ECHO_T}${withgenderspm=no}" >&6
 if test -z "$GENDERS_PM_PREFIX"; then
-   GENDERS_PM_PREFIX="/usr"
+   GENDERS_PM_PREFIX="${prefix}"
 fi
 
 
