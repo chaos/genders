@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.2 2004-12-22 01:44:13 achu Exp $
+ *  $Id: genders_parsing.c,v 1.3 2004-12-22 02:02:51 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -154,39 +154,6 @@ _insert_attr(genders_t handle, char *attr)
 }
 
 static int
-_nodename_parse_check(genders_t handle, char *nodename,
-		      int line_num, FILE *stream)
-{
-  int retval = -1;
-
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(nodename);
-  assert((!line_num) || (line_num > 0 && stream));
-  
-  if (strlen(nodename) > MAXHOSTNAMELEN) {
-    if (line_num > 0) {
-      fprintf(stream, "Line %d: hostname too long\n", line_num);
-      retval = 1;
-    }
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
-    
-  if (strchr(nodename, '.')) {
-    if (line_num > 0) {
-      fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
-      retval = 1;
-    }
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
-  
-  retval = 0;
- cleanup:
-  return retval;
-}
-
-static int
 _duplicate_attr_check(genders_t handle, 
 		      genders_node_t n, 
 		      List attrvals)
@@ -212,34 +179,6 @@ _duplicate_attr_check(genders_t handle,
   retval = 0;
  cleanup:
   __list_iterator_destroy(attrvals_itr);
-  return retval;
-}
-
-static int
-_attrvals_parse_check(genders_t handle, genders_node_t n,
-		      List attrvals, int line_num, FILE *stream)
-{
-  int ret, retval = -1;
-
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(n && attrvals);
-  assert((!line_num) || (line_num > 0 && stream));
-
-  if ((ret = _duplicate_attr_check(handle, n, attrvals)) < 0)
-    goto cleanup;
-
-  if (ret == 1) {
-    if (line_num > 0) {
-      fprintf(stream, "Line %d: duplicate attribute listed for node \"%s\"\n",
-	      line_num, n->name);
-      retval = 1;
-    }
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
-
-  retval = 0;
- cleanup:
   return retval;
 }
 
@@ -353,11 +292,21 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
   __hostlist_create(hl, nodenames);
   __hostlist_iterator_create(hlitr, hl);
   while ((node = hostlist_next(hlitr))) {
-
-    if ((ret = _nodename_parse_check(handle, node, line_num, stream)) < 0)
+    if (strlen(node) > MAXHOSTNAMELEN) {
+      if (line_num > 0) {
+	fprintf(stream, "Line %d: hostname too long\n", line_num);
+	retval = 1;
+      }
+      handle->errnum = GENDERS_ERR_PARSE;
       goto cleanup;
-    if (ret) {
-      retval = 1;
+    }
+    
+    if (strchr(node, '.')) {
+      if (line_num > 0) {
+	fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
+	retval = 1;
+      }
+      handle->errnum = GENDERS_ERR_PARSE;
       goto cleanup;
     }
 
@@ -365,17 +314,22 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
       goto cleanup;
 
     if (attrvals) {
-      if ((ret = _attrvals_parse_check(handle, n, attrvals, 
-				       line_num, stream)) < 0)
+      if ((ret = _duplicate_attr_check(handle, n, attrvals)) < 0)
 	goto cleanup;
-      if (ret) {
-	retval = 1;
+      
+      if (ret == 1) {
+	if (line_num > 0) {
+	  fprintf(stream, "Line %d: duplicate attribute listed for node \"%s\"\n",
+		  line_num, n->name);
+	  retval = 1;
+	}
+	handle->errnum = GENDERS_ERR_PARSE;
 	goto cleanup;
       }
 
       if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
         goto cleanup;
-
+      
       n->attrcount += list_count(attrvals);
     }
 
@@ -390,7 +344,7 @@ _parse_line(genders_t handle, List nodeslist, List attrvalslist,
   node = NULL;
 
   /* %n substitution found on this line, update maxvallen */
-  if (max_n_subst_vallen)
+  if (!line_num && max_n_subst_vallen)
     handle->maxvallen = MAX(max_n_subst_vallen - 2 + line_maxnodelen,
                             handle->maxvallen);
 
