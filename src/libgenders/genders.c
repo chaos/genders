@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.38 2003-05-14 23:04:17 achu Exp $
+ * $Id: genders.c,v 1.39 2003-05-21 00:37:45 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1507,7 +1507,7 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
   free(line);
   close(fd);
 
-  return retval;
+  return -1;
 }
 
 
