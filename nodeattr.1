@@ -1,5 +1,5 @@
 .\"
-.\" $Id: nodeattr.1,v 1.3 2001-07-14 05:36:53 garlick Exp $
+.\" $Id: nodeattr.1,v 1.4 2003-03-31 23:39:58 achu Exp $
 .\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/nodeattr.1,v $
 .\"
 .\" Copyright (C) 2000-2001 Regents of the University of California
@@ -13,23 +13,33 @@
 nodeattr \- query genders file
 .SH SYNOPSIS
 .B nodeattr
-.I "{-c | -n} attribute
+.I "{-q | -c | -n | -s} [-r] attr[=val]
 .br
 .B nodeattr
-.I "[-v] [node] attribute
+.I "[-v] [node] attr[=val]
 .br
 .B nodeattr
-.I "-C"
+.I "-l [node]"
+.br
+.B nodeattr
+.I "-C [node]"
 .br
 .SH DESCRIPTION
 When invoked with the 
+.I "-q"
+,
 .I "-c"
-or 
+,
 .I "-n"
+, or 
+.I "-s"
 arguments,
 .B nodeattr
-reads the genders file and makes a list, comma or newline separated,
+reads the genders file and makes a list, hostlist, comma, newline, or space separated,
 of nodes that have the specified attribute.  
+When called with the 
+.I "-r"
+option, nodes are listed with their alternate names.  
 .LP
 When called with a node name (optional) and attribute name,
 .B nodeattr
@@ -39,6 +49,13 @@ If \fI-v\fR is present, the attribute name and any value (see below) is
 printed on the standard output.  If a node name is not specified, the local 
 host is assumed.
 .LP
+The 
+.I "-l"
+option causes
+.B nodeattr
+to print the attributes of the specified node.  If no node is listed, all
+attributes in the genders file are listed.
+.LP
 The
 .I "-C"
 option causes 
@@ -46,10 +63,6 @@ option causes
 to print the local cluster name, or 
 .I unknown
 if it cannot be determined.
-.LP
-.B Nodeattr
-generates an internal attribute called \fIall\fR, of which all hosts listed
-in the genders file are implicitly members.
 .LP
 Attribute names may optionally appear in the genders file with an equal sign 
 followed by a value.
@@ -76,8 +89,6 @@ nodeattr head && echo yes
 .SH "FILES"
 /etc/genders
 .br
-/etc/clusters
-.br
 /usr/lib/genders/gendlib.pl
 .SH "SEE ALSO"
-gendlib(1)
+gendlib(3), libgenders(3)
