@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.4 2003-05-06 19:29:54 achu Exp $
+#  $Id: gendlib.pl,v 1.5 2003-05-07 01:40:58 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -89,7 +89,7 @@ sub init
     }
     
     $handle = Libgenders::genders_handle_create();
-    if (!defined $handle) {
+    if (!defined($handle)) {
         $debug && print "Error, genders_handle_create()\n";
         return 0;
     }
@@ -187,7 +187,7 @@ sub getattrval
     
     if (defined($attr)) {
         $val = Libgenders::genders_getattrval($handle, $attr, $node);
-        if (!defined $val) {
+        if (!defined($val)) {
             $debug && print "Error, genders_getattrval()\n";    
             return "";
         } 
@@ -216,7 +216,7 @@ sub getattr
         
     $temp = Libgenders::genders_getattr($handle, $node);
     
-    if (!defined $temp) @$temp == 0 { 
+    if (!defined($temp)) { 
         $debug && print "Error, genders_getattr()\n";
         return ();
     }
@@ -240,7 +240,7 @@ sub getallattr
     my ($attr);
 
     $attr = Libgenders::genders_getattr_all($handle);
-    if (!defined $attr) {
+    if (!defined($attr)) {
         $debug && print "Error, genders_getattr_all()\n";
         return ();
     }
@@ -286,7 +286,7 @@ sub getnode
         $nodes = Libgenders::genders_getnodes($handle);
     }
         
-    if (!defined $nodes) {
+    if (!defined($nodes)) {
         $debug && print "Error, genders_getnodes()\n";
         return ();
     }
@@ -313,7 +313,7 @@ sub get_node_hash
     
     # must construct hash
     $attrs = Libgenders::genders_getattr_all($handle);
-    if (!defined $attrs) {         
+    if (!defined($attrs)) {         
         $debug && print "Error, genders_getattr_all()\n";
         %nodes = ();
     }
@@ -323,7 +323,7 @@ sub get_node_hash
     else {
         foreach $attr (@$attrs) {
             $attrnodes = Libgenders::genders_getnodes($handle, $attr);
-            if (!defined $attrnodes) {                
+            if (!defined($attrnodes)) {
                 $debug && print "Error, genders_getnodes()\n";
                 %nodes = ();
                 last;
@@ -361,7 +361,7 @@ sub get_clusters
     my (@cluster, $cluster);
     
     $cluster = Libgenders::genders_getattrval($handle, $clusterAttr);
-    if (!defined $cluster) {
+    if (!defined($cluster)) {
         $debug && print "Error, genders_getattrval()\n";    
         return "";
     } 
@@ -448,7 +448,7 @@ sub to_altnames
             $altName = Sdr::nn2ename(Sdr::sname2nn($name));
         } else {
             $altName = Libgenders::genders_getattrval($handle, $altAttr, $name);
-            if ((!defined $altName) &&
+            if (!defined($altName) &&
                 Libgenders::genders_errnum($handle) != $GENDERS_ERR_NOTFOUND) {
                 $debug && print "Error, genders_getattrval()\n";    
                 return ();
@@ -483,14 +483,14 @@ sub to_gendnames
             $name = Sdr::nn2sname(Sdr::ename2nn($altName));
         } else {
             $nodes = Libgenders::genders_getnodes($handle, $altAttr);
-            if (!defined $nodes) {
+            if (!defined($nodes)) {
                 $debug && print "Error, genders_getnodes()\n";    
                 return ();
             }
 
             foreach $tmp (@$nodes) {
                 $val = Libgenders::genders_getattrval($handle, $altAttr, $tmp);
-                if (!defined $val) {
+                if (!defined($val)) {
                     $debug && print "Error, genders_getattrval()\n";    
                     return ();
                 } 
