@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.7 2003-03-10 19:04:41 achu Exp $
+ * $Id: genders.h,v 1.8 2003-03-11 17:01:15 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -197,6 +197,12 @@ int genders_testattr(genders_t handle, char *node, char *attr, char *val);
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_testattrval(genders_t handle, char *node, char *attr, char *val);
+
+/* Tests whether the node exists in th genders file
+ * If node is NULL, tests the current node.
+ * Returns: 1=true , 0=false, -1=failure.
+ */
+int genders_testnode(genders_t handle, char *node);
 
 /* Returns the time (in seconds) since genders file was opened
  * Returns: 0 on success, -1 on failure

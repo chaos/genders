@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.5 2003-03-10 19:04:41 achu Exp $
+ * $Id: genders.c,v 1.6 2003-03-11 17:01:15 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1298,6 +1298,43 @@ int genders_testattrval(genders_t handle, char *node, char *attr, char *val) {
   
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
+}
+
+int genders_testnode(genders_t handle, char *node) {
+  struct node_listnode *node_list;
+  char *nodename;
+  int retval;
+
+  if (handle == NULL) {
+    return -1;
+  }
+ 
+  if (node == NULL) {
+    nodename = handle->nodename;
+  }
+  else {
+    nodename = node;
+  }
+
+  /* find node */
+  node_list = (struct node_listnode *)handle->nodes_head;
+  while (node_list != NULL && strcmp(node_list->name,nodename) != 0) {
+    node_list = node_list->next;
+  }
+
+  if (node_list == NULL) {
+    retval = 0;
+  }
+  else if (strcmp(node_list->name,nodename) == 0) {
+    retval = 1;
+  }
+  else {
+    handle->errnum = GENDERS_ERR_INTERNAL;
+    return -1;
+  }
+
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return retval;
 }
 
 int genders_elapsedtime(genders_t handle) {

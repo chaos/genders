@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.3 2003-03-07 20:33:05 achu Exp $
+ * $Id: genders_example.c,v 1.4 2003-03-11 17:01:15 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -8,6 +8,7 @@
 #include <sys/param.h>
 #include "genders.h"
 #include <mcheck.h>
+#include <string.h>
 
 int numnodes = 0;
 int numattrs = 0;
@@ -630,6 +631,60 @@ void test_if_node_has_attribute_equal_to_a_value(genders_t handle) {
   return;
 }
 
+void test_if_genders_file_has_certain_nodes(genders_t handle) {
+  int num_attributes, ret, i;
+  
+  if (numnodes == 0 || numattrs == 0)
+    return;
+
+  if (genders_nodelist_clear(handle, nodes) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  if ((ret = genders_getnodes(handle, nodes, nodeslen, NULL, NULL)) == -1) {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  printf("Does the genders file have the following nodes?               \n");
+  printf("--------------------------------------------------------------\n");
+
+  for (i = 0; i < numnodes ; i++) {
+    printf("Does the genders file have node \"%s\"? ", nodes[i]);
+    
+    ret = genders_testnode(handle, nodes[i]);
+    if (ret == 1) {
+      printf("Yes\n");
+    }
+    else if (ret == 0) {
+      printf("No\n");
+    }
+    else {
+      printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+      cleanup_and_exit(handle,1);
+    }
+  }
+  
+  printf("Does the genders file have node \"%s\"? ", "foo");
+    
+  ret = genders_testnode(handle, "foo");
+  if (ret == 1) {
+    printf("Yes\n");
+  }
+  else if (ret == 0) {
+    printf("No\n");
+  }
+  else {
+    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
+    cleanup_and_exit(handle,1);
+  }
+
+  printf("\n");
+
+  return;
+}
+
 void time_this_example_genders_took_to_run(genders_t handle) {
   int seconds;
 
@@ -728,6 +783,8 @@ mtrace();
   test_if_node_has_attribute_and_return_the_attribute_value(handle);
   
   test_if_node_has_attribute_equal_to_a_value(handle);
+
+  test_if_genders_file_has_certain_nodes(handle);
 
   time_this_example_genders_took_to_run(handle);
 
