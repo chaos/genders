@@ -16,7 +16,6 @@ and building rdist Distfile macros.
 %setup  -q -n %{name}-%{version}
 
 %build
-%configure
 make all
 
 %install
@@ -42,7 +41,7 @@ install dist_local.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install inst.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install nodeattr.1.gz $RPM_BUILD_ROOT/usr/man/man1
 install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd src; make DESTDIR="$RPM_BUILD_ROOT" install
+cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include install
 
 %files
 %defattr(-,root,root)
@@ -64,6 +63,9 @@ cd src; make DESTDIR="$RPM_BUILD_ROOT" install
 /usr/man/man1/inst.1.gz
 /usr/man/man1/nodeattr.1.gz
 /usr/man/man3/gendlib.3.gz
-%{_includedir}/*
-%{_libdir}/*
-
+/usr/lib/libgenders.a
+/usr/lib/libgenders.la
+/usr/lib/libgenders.so
+/usr/lib/libgenders.so.0
+/usr/lib/libgenders.so.0.0.0
+/usr/include/genders.h

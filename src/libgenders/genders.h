@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.1 2003-02-10 22:15:26 achu Exp $
+ * $Id: genders.h,v 1.2 2003-02-11 22:07:05 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -39,44 +39,6 @@
 #define GENDERS_ERR_MIN         GENDERS_ERR_SUCCESS
 #define GENDERS_ERR_MAX         GENDERS_ERR_INTERNAL
 #define DEFAULT_GENDERS_FILE    "/etc/genders"
-
-/* genders handle
- * errnum - error number returned to user
- * filename - genders filename
- * file - file stream for genders file
- * numnodes - number of nodes in the genders file
- * numattrs - number of attributes in the genders file
- * maxattrs - maximum number of attributes in the genders file for one node
- * maxxnodelen - maximum name length of a node
- * maxattrlen - maximum name length of an attribute
- * maxvallen - maximum name length of a value
- * allocatd - number of lists that have been allocated with *create functions
- * nodename - name of the current node
- * nodes_head - head of list that stores node names
- * nodes_tail - tail of list that stores node names
- * attrs_head - head of list that stores all unique attributes
- * attrs_tail - tail of list that stores all unique attributes
- * time_genders_loaded - time when the genders file was opened
- */
-
-struct genders {
-  int errnum;
-  char *filename;
-  FILE *file;
-  int numnodes;
-  int numattrs;
-  int maxattrs;
-  int maxnodelen;
-  int maxattrlen;
-  int maxvallen;
-  int allocated_count;
-  char nodename[MAXHOSTNAMELEN+1];
-  void *nodes_head;
-  void *nodes_tail;
-  void *attrs_head;
-  void *attrs_tail;
-  time_t time_genders_loaded;
-};
 
 typedef struct genders *genders_t;
 
