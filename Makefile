@@ -7,11 +7,11 @@ PROJECT=	genders
 
 all: inst
 	src/configure
-	src/make
+	make -f src/Makefile
 
 install:
 	install -m 555 -o root -g root inst /usr/local/bin
-	src/make install
+	make -f src/Makefile install
 
 clean:
 	rm -f inst a.out core *.rpm *.tgz *.a *.o
