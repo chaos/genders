@@ -1,5 +1,6 @@
 2003-04-XX Albert Chu <chu11@llnl.gov>
 	* updated TODO
+	* fixed typo in gendlib.pl
 
 2003-04-08 Albert chu <chu11@llnl.gov>
 	* created Libgenders(3), perl extension that allows genders
