@@ -1,6 +1,7 @@
-2004-12-13  Albert Chu  <chu11@llnl.gov>
+2004-12-14  Albert Chu  <chu11@llnl.gov>
 
-	* genders.spec.in: Fix 64 bit lib build problem.
+	* genders.spec.in, src/Genders/Makefile.PL: Backport fixes for
+	x86_64 build problems.
 
 	* META: Updated for new release.
 

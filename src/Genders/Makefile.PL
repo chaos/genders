@@ -1,6 +1,8 @@
-use ExtUtils::MakeMaker;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
+use ExtUtils::MakeMaker;
+use Config;
+
 WriteMakefile(
     'NAME'		=> 'Genders',
     'VERSION_FROM'	=> 'Genders.pm', # finds $VERSION
@@ -12,4 +14,6 @@ WriteMakefile(
     'DEFINE'		=> '', # e.g., '-DHAVE_SOMETHING'
 	# Insert -I. if you add *.h files later:
     'INC'		=> '', # e.g., '-I/usr/include/other'
+    # force install into same location as arch 'Libgenders' lib
+    'INSTALLSITELIB'    => $Config{installsitearch},
 );
