@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.17 2004-06-08 01:19:05 achu Exp $
+## $Id: Makefile.am,v 1.18 2004-06-08 01:39:16 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -21,7 +21,7 @@ rev     = 0
 age     = 0
 
 if WITH_GNU_LD
-VERSION_SCRIPT = genders.map
+VERSION_SCRIPT = $(srcdir)/genders.map
 OTHER_FLAGS = -Wl,--version-script=$(VERSION_SCRIPT)
 endif
 
@@ -33,12 +33,13 @@ libgenders_la_CFLAGS  = -D_REENTRANT
 libgenders_la_SOURCES = genders_parse.c genders_query.c genders.c genders_common.c \
 	                fd.c list.c hash.c thread.c hostlist.c
 libgenders_la_LDFLAGS = -version-info $(current):$(rev):$(age) $(OTHER_FLAGS)
-EXTRA_DIST            = genders.map
 
-genders_parse.c:
+genders_parse.c: genders_query.c
 	$(LEX) -ogenders_parse.c genders_parse.l
 
-genders_query.c: genders_parse.c
+genders_query.c: 
 	$(YACC) -d -o genders_query.c genders_query.y
 
 CLEANFILES += genders_parse.c genders_query.c genders_query.h
+
+EXTRA_DIST = genders.map genders_query.h
