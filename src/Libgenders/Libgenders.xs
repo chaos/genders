@@ -130,11 +130,11 @@ GENDERS_ERR_ERRNUMRANGE (sv=&PL_sv_undef)
     OUTPUT:
         RETVAL    
 
-SV * 
+char * 
 GENDERS_DEFAULT_FILE (sv=&PL_sv_undef)
     SV *sv    
     CODE:
-        RETVAL = newSVpv(GENDERS_DEFAULT_FILE, 0);
+        RETVAL = GENDERS_DEFAULT_FILE;
     OUTPUT:
         RETVAL    
 
@@ -169,26 +169,20 @@ genders_errnum(handle)
     OUTPUT:
         RETVAL
 
-SV *
+char *
 genders_strerror(handle, errnum)
     genders_t handle    
     int errnum
-    PREINIT:
-        char *ptr;
     CODE:
-        ptr = genders_strerror(errnum);
-        RETVAL = newSVpv(ptr, 0);       
+        RETVAL = genders_strerror(errnum);
     OUTPUT:
         RETVAL
 
-SV *
+char *
 genders_errormsg(handle)
     genders_t handle
-    PREINIT:
-       char *ptr;
     CODE:
-        ptr = genders_errormsg(handle);
-        RETVAL = newSVpv(ptr, 0);       
+        RETVAL = genders_errormsg(handle);
     OUTPUT:
         RETVAL
 
@@ -260,7 +254,7 @@ genders_getnodes(handle, attr=NULL, val=NULL)
     char *attr
     char *val
     PREINIT:
-        int num, ret, i;
+        int num, ret, temp, i;
         char **nodelist = NULL; 
     CODE:
         if ((num = genders_nodelist_create(handle, &nodelist)) == -1) 
@@ -277,16 +271,18 @@ genders_getnodes(handle, attr=NULL, val=NULL)
         for (i = 0; i < ret; i++)
             av_push(RETVAL, newSVpv(nodelist[i], 0));
         
-        (void)genders_nodelist_destroy(handle, nodelist);
+        if (genders_nodelist_destroy(handle, nodelist) == -1)
+            goto handle_error;
+
         goto the_end;
 
         handle_error:
-            /* manually destroy lists, to preserve error value */
-            if (nodelist != NULL) {
-                for (i = 0; i < num; i++)
-                    free(nodelist[i]);
-                free(nodelist);
-            }
+
+            temp = genders_errnum(handle);
+
+            (void)genders_nodelist_destroy(handle, nodelist);
+
+            genders_set_errnum(handle, temp);
 
             XSRETURN_UNDEF;
 
@@ -299,7 +295,7 @@ genders_getattr(handle, node=NULL)
     genders_t handle
     char *node
     PREINIT:
-        int num, ret, i;
+        int num, ret, temp, i;
         char **attrlist = NULL; 
         char **vallist = NULL; 
         AV *attrs;
@@ -330,24 +326,23 @@ genders_getattr(handle, node=NULL)
         av_push(RETVAL, newRV_noinc((SV *)attrs));
         av_push(RETVAL, newRV_noinc((SV *)vals));
     
-        (void)genders_attrlist_destroy(handle, attrlist);
-        (void)genders_vallist_destroy(handle, vallist);
+        if (genders_attrlist_destroy(handle, attrlist) == -1)
+            goto handle_error;
+
+        if (genders_vallist_destroy(handle, vallist) == -1)
+            goto handle_error;
+
         goto the_end;
 
         handle_error:
-            /* manually destroy lists, to preserve error value */
-            if (attrlist != NULL) {
-                for (i = 0; i < num; i++)
-                    free(attrlist[i]);
-                free(attrlist);
-            }
 
-            if (vallist != NULL) {
-                for (i = 0; i < num; i++)
-                    free(vallist[i]);
-                free(vallist);
-            }
+            temp = genders_errnum(handle);
 
+            (void)genders_attrlist_destroy(handle, attrlist);
+            (void)genders_vallist_destroy(handle, vallist);
+
+            genders_set_errnum(handle, temp);
+           
             XSRETURN_UNDEF;
 
         the_end:
@@ -358,7 +353,7 @@ AV *
 genders_getattr_all(handle)
     genders_t handle
     PREINIT:
-        int num, ret, i;
+        int num, ret, temp, i;
         char **attrlist = NULL; 
     CODE:
         if ((num = genders_attrlist_create(handle, &attrlist)) == -1) 
@@ -371,17 +366,18 @@ genders_getattr_all(handle)
         for (i = 0; i < ret; i++)
             av_push(RETVAL, newSVpv(attrlist[i], 0));
         
-        (void)genders_attrlist_destroy(handle, attrlist);
+        if (genders_attrlist_destroy(handle, attrlist) == -1)
+            goto handle_error;
+
         goto the_end;
                     
         handle_error:
 
-            /* manually destroy lists, to preserve error value */
-            if (attrlist != NULL) {
-                for (i = 0; i < num; i++)
-                    free(attrlist[i]);
-                free(attrlist);
-            }
+            temp = genders_errnum(handle);
+        
+            (void)genders_attrlist_destroy(handle, attrlist);
+
+            genders_set_errnum(handle, temp);
 
             XSRETURN_UNDEF;
 
@@ -411,9 +407,8 @@ genders_getattrval(handle, attr, node=NULL)
                                     node, 
                                     attr, 
                                     buf, 
-                                    maxvallen+1)) == -1) {
+                                    maxvallen+1)) == -1)
             goto handle_error;
-        }
 
         if (ret == 1 && strlen(buf) > 0) 
             RETVAL = newSVpv(buf, 0);
@@ -489,4 +484,3 @@ genders_parse(handle, filename=NULL)
         RETVAL = genders_parse(handle, filename, NULL);
     OUTPUT:
         RETVAL
-
