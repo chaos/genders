@@ -5,6 +5,8 @@
 
 	* man/libgenders.3: Updated with hostlist range info.
 
+	* src/Genders/Genders.pm: Added more notes to Genders::getattrval.
+
 2004-01-30  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Makefile.am: Support hostlist code.

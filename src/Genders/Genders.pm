@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm,v 1.12 2003-12-31 18:37:21 achu Exp $
+#  $Id: Genders.pm,v 1.13 2004-02-02 18:10:18 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -352,8 +352,9 @@ Returns a list of all attributes listed in the genders file.
 =item B<$obj-E<gt>getattrval($attr, [$node])>
 
 Returns the value of the specified attribute for the specified node.
-If the node is not specified, the local node's attribute value is
-returned.
+If the attribute does not exist or the attribute has no value, an
+empty string is returned.  If the node is not specified, the local
+node's attribute value is returned.
 
 =item B<$obj-E<gt>testattr($attr, [$node])>
 
