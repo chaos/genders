@@ -465,7 +465,7 @@ genders_parse(handle, filename=NULL)
     OUTPUT:
         RETVAL
 
-int
+void
 genders_set_errnum(handle, errnum)
     genders_t handle
     int errnum
