@@ -31,7 +31,7 @@ Changes while living on linux:
 
 	Removed jmd stuff (hostlist.pl).
 
-vers0.1 Jim Garlick <garlick@llnl.gov>
+genders-0.1
 	
 	Added genders.spec, DISCLAIMER.
 	Removed dist_passwd.
@@ -50,3 +50,7 @@ vers0.1 Jim Garlick <garlick@llnl.gov>
 	Makefile only attempts to build inst.
 
 	Remove "require 5.003" lines; instead require perl in spec file.
+
+genders-0.2
+
+	RPM target in Makefile
