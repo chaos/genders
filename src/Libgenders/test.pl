@@ -18,7 +18,7 @@ ok(1); # If we made it this far, we're ok.
 print "\n";
 
 $handle = Libgenders::genders_handle_create();
-if (!defined $handle) {
+if (!defined($handle)) {
     print "Error, genders_handle_create()\n";
     exit(1);
 }
@@ -42,14 +42,14 @@ if ($ret == -1) {
 #}
 
 $nodename = Libgenders::genders_getnodename($handle);
-if (!defined $nodename) {
+if (!defined($nodename)) {
     print "Error, genders_getnodename()\n";
     exit(1);
 }
 print "Nodename is: ",$nodename,"\n\n"; 
 
 $nodes = Libgenders::genders_getnodes($handle);
-if (!defined $nodes) {
+if (!defined($nodes)) {
     print "Error, genders_getnodes()\n";
     exit(1);
 }
@@ -59,7 +59,7 @@ foreach $_ (@$nodes) {
 print "\n";
 
 $temp = Libgenders::genders_getattr($handle);
-if (!defined $temp) {
+if (!defined($temp)) {
     print "Error, genders_getattr()\n";
     exit(1);
 }
@@ -79,7 +79,7 @@ while ($i < $len) {
 print "\n";
 
 $allattr = Libgenders::genders_getattr_all($handle);
-if (!defined $allattr) {
+if (!defined($allattr)) {
     print "Error, genders_getattr_all()\n";
     exit(1);
 }
