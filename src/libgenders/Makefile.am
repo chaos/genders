@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.5 2003-12-31 18:37:21 achu Exp $
+## $Id: Makefile.am,v 1.6 2003-12-31 18:38:09 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -23,4 +23,4 @@ age     = 0
 include_HEADERS       = genders.h
 lib_LTLIBRARIES       = libgenders.la
 libgenders_la_SOURCES = genders.c fd.c list.c
-libslurm_la_LDFLAGS   = -version-info $(current):$(rev):$(age)
+libgenders_la_LDFLAGS   = -version-info $(current):$(rev):$(age)
