@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.110 2004-04-28 23:35:42 achu Exp $
+ *  $Id: genders.c,v 1.111 2004-05-04 00:42:16 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1207,6 +1207,7 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
   }
 
   if (handle->attrval_index 
+      && attr
       && !strcmp(handle->attrval_index_attr, attr)
       && val) {
     List l;

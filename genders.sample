@@ -1,5 +1,5 @@
 #
-# $Id: genders.sample,v 1.6 2003-08-12 18:33:52 achu Exp $
+# $Id: genders.sample,v 1.7 2004-05-04 00:42:16 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/genders.sample,v $
 #
 slc0  passwdhost,up2000,type=up2000,ditty=0,crash,eip,elan,all,cluster=test
@@ -18,3 +18,4 @@ slc12 es40,type=es40,ditty=12,crash,eip,elan,all,cluster=test
 slc13 es40,type=es40,ditty=13,crash,eip,elan,all,cluster=test
 slc14 es40,type=es40,ditty=14,crash,eip,elan,all,cluster=test
 slc15 es40,type=es40,ditty=15,crash,eip,elan,all,cluster=test
+whatsup
