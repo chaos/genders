@@ -136,13 +136,8 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man3/libgenders.3.gz 
 /usr/man/man3/Libgenders.3.gz 
 /usr/include/genders.h
-/usr/lib/libgenders.a
-/usr/lib/libgenders.la
-/usr/lib/libgenders.so
-/usr/lib/libgenders.so.0
-/usr/lib/libgenders.so.0.0.0
+/usr/lib/
 /usr/lib/perl5/
-
 
 %files compat
 %defattr(-,root,root)
