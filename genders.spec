@@ -95,6 +95,7 @@ cd src; DESTDIR="$RPM_BUILD_ROOT" make install
 %doc genders.sample clusters.sample Distfile.sample
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
+/usr/lib/genders/Libgenders.pm
 /usr/bin/inst
 /usr/bin/dist2
 /usr/bin/nodeattr
@@ -153,3 +154,6 @@ cd src; DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/lib/libgenders.so.0
 /usr/lib/libgenders.so.0.0.0
 /usr/include/genders.h
+/usr/lib/genders/auto/Libgenders/Libgenders.bs
+/usr/lib/genders/auto/Libgenders/Libgenders.so
+/usr/lib/genders/auto/Libgenders/Libgenders.ix
