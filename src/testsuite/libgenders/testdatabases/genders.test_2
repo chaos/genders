@@ -1,0 +1,4 @@
+node1  attr1,attr2=val2,attr3,attr4=val4
+node2  attr5,attr6=val6,attr7,attr8=val8
+node3  attr1,attr2=val2,attr3,attr4=val4
+node4  attr5,attr6=val6,attr7,attr8=val8

@@ -1,6 +1,13 @@
 2004-12-29  Albert Chu  <chu11@llnl.gov>
 
-	Fix various bugs
+	Fix various bugs based on testsuite results
+
+	* src/testsuite/Makefile.am, src/testsuite/libgenders/*,
+	src/testsuite/libgenders/testdatabases/*: New libgenders testsuite
+	added.
+
+	* configure.ac, src/Makefile.am: Made appropriate changes for new
+	testsuite.
 
 	* src/libgenders/genders.c (_initialize_handle,
 	genders_load_data): Fix attrval_buflist initialization corner case

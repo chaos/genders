@@ -1,0 +1,2 @@
+node[1-2] attr1,attr2=val2
+node[1-2] attr3,attr4=val2,attr1
