@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_handle_destroy.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: genders_handle_destroy.3,v 1.3 2003-05-05 22:26:03 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -34,15 +34,6 @@ with
 .B GENDERS_ERR_MAGIC 
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
 handle or \fIhandle\fR has already been destroyed.
-.TP
-.B GENDERS_ERR_FREEMEM
-A list has been created with 
-.BR genders_nodelist_create (3),
-.BR genders_attrlist_create (3),
-or
-.BR genders_vallist_create (3) 
-but has not been destroyed.  The list must be destroyed before
-the genders handle can be destroyed.
 .br
 .SH FILES
 /usr/include/genders.h
