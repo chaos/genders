@@ -1,5 +1,5 @@
 #
-# $Id: gendlib.pl,v 1.4.4.2 2003-07-17 23:45:13 achu Exp $
+# $Id: gendlib.pl,v 1.4.4.3 2003-07-17 23:51:18 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -118,7 +118,8 @@ sub init
 		close(GEND);
 
                 if ($allnodesallflag == 1) {
-                    print stderr "Warning: \"all\" attribute not listed on every ";                     print stderr "line of the genders database.\n"; 
+                    print STDERR "Warning: \"all\" attribute not listed on every ";
+                    print STDERR "line of the genders database.\n"; 
                 }
 
 	}
@@ -344,8 +345,8 @@ sub get_clusters
             return @nodes;
         }
         else {
-            print stderr "Warning: \"cluster\" attribute not listed in "; 
-            print stderr "genders database.\n"; 
+            print STDERR "Warning: \"cluster\" attribute not listed in "; 
+            print STDERR "genders database.\n"; 
             if (!$init_clusters_called) {
             init_clusters();
             }
