@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.56 2003-09-19 21:51:48 achu Exp $
+ * $Id: genders.c,v 1.57 2003-09-20 00:42:03 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -468,6 +468,10 @@ int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
         handle->maxnodelen = strlen(line_token);
     }
       
+    /* line has no attributes */
+    if (line == NULL)
+      return 0;
+
     /* move forward to attributes */
     while(isspace(*line))  
       line++;
