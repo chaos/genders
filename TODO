@@ -8,3 +8,4 @@
     the need for the root install from package source into /var/dist.
 - enable hostlist formatted genders attributes??
   o i.e. mdev[0-24]	cluster=mdev,all
+- cleanup cvs source tree hierarchy, code is everywhere and a mess
