@@ -4,7 +4,7 @@
 	Removed unused variables.
 
 	* src/libgenders/genders.c (genders_parse): Output more appropriate
-	message when no listed successfully parsed.
+	message when no list successfully parsed.
 
 	* src/libgenders/genders.c (_parse_line): Fix output bug when very
 	long attrs or vals found.
@@ -15,7 +15,7 @@
 	
 2004-03-05  Albert Chu  <chu11@llnl.gov>
 
-	* man/libgenders.3: Fixed typo found by Py Watson.
+	* man/libgenders.3: Fixed typo found by Py Watson (watson30@llnl.gov).
 	
 2004-02-11  Albert Chu  <chu11@llnl.gov>
 
