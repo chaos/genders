@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.12 2004-11-08 19:09:20 achu Exp $
+ *  $Id: genders_query.y,v 1.13 2004-11-10 21:52:26 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -334,6 +334,10 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
     handle->errnum = GENDERS_ERR_PARAMETERS;
     goto cleanup;
   }
+
+  /* Special case for NULL query */
+  if (!query)
+    return genders_getnodes(handle, nodes, len, NULL, NULL);
 
   if (_parse_query(handle, query) < 0)
     goto cleanup;
