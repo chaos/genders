@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.6 2003-05-16 00:17:14 achu Exp $
+# $Id: Genders.pm,v 1.7 2003-05-22 16:12:24 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -12,19 +12,24 @@ our $VERSION = "2.0";
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(_errormsg GENDERS_DEFAULT_FILE);
-our @EXPORT_OK = qw(_errormsg GENDERS_DEFAULT_FILE);
-our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg GENDERS_DEFAULT_FILE) ] );
+our @EXPORT = qw(_errormsg GENDERS_DEFAULT_FILE debugkey handlekey);
+our @EXPORT_OK = qw(_errormsg GENDERS_DEFAULT_FILE debugkey handlekey);
+our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg 
+                                   GENDERS_DEFAULT_FILE 
+                                   debugkey 
+                                   handlekey) ] );
 
 our $GENDERS_DEFAULT_FILE = Libgenders->GENDERS_DEFAULT_FILE;
+our $debugkey = "_DEBUG";
+our $handlekey = "_HANDLE";
 
 sub _errormsg {
     my $self = shift;
     my $msg = shift;
     my $str;
 
-    if ($self->{"_DEBUG"}) {
-        $str = $self->{"_HANDLE"}->genders_errormsg();
+    if ($self->{$debugkey}) {
+        $str = $self->{$handlekey}->genders_errormsg();
         print STDERR "Error: $msg, $str\n";
     }
 }
@@ -37,7 +42,7 @@ sub new {
     my $handle;
     my $ret;
     
-    $self->{"_DEBUG"} = 0;
+    $self->{$debugkey} = 0;
     
     $handle = Libgenders->genders_handle_create();
     if (!defined($handle)) {
@@ -45,9 +50,9 @@ sub new {
         return undef;
     }
 
-    $self->{"_HANDLE"} = $handle;
+    $self->{$handlekey} = $handle;
 
-    $ret = $self->{"_HANDLE"}->genders_load_data($filename);
+    $ret = $self->{$handlekey}->genders_load_data($filename);
     if ($ret == -1) {
         _errormsg($self, "genders_load_data()");
         return undef;
@@ -63,7 +68,7 @@ sub debug {
 
     if (ref($self)) {
         if (defined $num) {
-            $self->{"_DEBUG"} = $num;
+            $self->{$debugkey} = $num;
         }
     }
 }
@@ -73,7 +78,7 @@ sub getnodename {
     my $node;
 
     if (ref($self)) {
-        $node = $self->{"_HANDLE"}->genders_getnodename();
+        $node = $self->{$handlekey}->genders_getnodename();
         if (!defined($node)) {
             _errormsg($self, "genders_getnodename()");
             return "";
@@ -92,7 +97,7 @@ sub getnodes {
     my $nodes;
 
     if (ref($self)) {
-        $nodes = $self->{"_HANDLE"}->genders_getnodes($attr, $val);
+        $nodes = $self->{$handlekey}->genders_getnodes($attr, $val);
         if (!defined($nodes)) {
             _errormsg($self, "genders_getnodes()");
             return ();
@@ -111,14 +116,12 @@ sub getattr {
     my $attrs;
 
     if (ref($self)) {
-        $attrsvals = $self->{"_HANDLE"}->genders_getattr($node);
+        $attrsvals = $self->{$handlekey}->genders_getattr($node);
         if (!defined($attrsvals)) {
             _errormsg($self, "genders_getattr()");
             return ();
         }
-        
         ($attrs) = @$attrsvals;
-
         return @$attrs;
     }
     else {
@@ -133,7 +136,7 @@ sub getattrval {
     my $val;
 
     if (ref($self)) {
-        $val = $self->{"_HANDLE"}->genders_getattrval($attr, $node);
+        $val = $self->{$handlekey}->genders_getattrval($attr, $node);
         if (!defined($val)) {
             _errormsg($self, "genders_getattrval()");
             return "";
@@ -150,12 +153,11 @@ sub getattr_all {
     my $attrs;
 
     if (ref($self)) {
-        $attrs = $self->{"_HANDLE"}->genders_getattr_all();
+        $attrs = $self->{$handlekey}->genders_getattr_all();
         if (!defined($attrs)) {
             _errormsg($self, "genders_getattr_all()");
             return ();
         }
-       
         return @$attrs;
     }
     else {
@@ -170,7 +172,7 @@ sub testattr {
     my $retval;
 
     if (ref($self)) {
-        $retval = $self->{"_HANDLE"}->genders_testattr($attr, $node);
+        $retval = $self->{$handlekey}->genders_testattr($attr, $node);
         if ($retval == -1) {
             _errormsg($self, "genders_testattr()");
             return 0;
@@ -190,7 +192,7 @@ sub testattrval {
     my $retval;
 
     if (ref($self)) {
-        $retval = $self->{"_HANDLE"}->genders_testattrval($attr, $val, $node);
+        $retval = $self->{$handlekey}->genders_testattrval($attr, $val, $node);
         if ($retval == -1) {
             _errormsg($self, "genders_testattrval()");
             return 0;
@@ -208,7 +210,7 @@ sub isnode {
     my $retval;
 
     if (ref($self)) {
-        $retval = $self->{"_HANDLE"}->genders_isnode($node);
+        $retval = $self->{$handlekey}->genders_isnode($node);
         if ($retval == -1) {
             _errormsg($self, "genders_isnode()");
             return 0;
@@ -226,7 +228,7 @@ sub isattr{
     my $retval;
 
     if (ref($self)) {
-        $retval = $self->{"_HANDLE"}->genders_isattr($attr);
+        $retval = $self->{$handlekey}->genders_isattr($attr);
         if ($retval == -1) {
             _errormsg($self, "genders_isattr()");
             return 0;
@@ -245,7 +247,7 @@ sub isattrval {
     my $retval;
 
     if (ref($self)) {
-        $retval = $self->{"_HANDLE"}->genders_isattrval($attr, $val);
+        $retval = $self->{$handlekey}->genders_isattrval($attr, $val);
         if ($retval == -1) {
             _errormsg($self, "genders_isattrval()");
             return 0;
@@ -264,7 +266,7 @@ __END__
 
 =head1 NAME
 
-Genders - Perl library for querying genders file
+Genders - Perl library for querying a genders file
 
 =head1 SYNOPSIS
 
@@ -294,11 +296,7 @@ This package provides a perl interface for querying a genders file.
 
 =over 4
 
-=item B<$Genders::GENDERS_DEFAULT_FILE>
-
-The default genders file.
-
-=item B<Genders->new([$filename])>
+=item B<Genders-E<gt>new([$filename])>
 
 Creates a Genders object and load genders data from the specified
 file.  If the genders file is not specified, the default genders file
