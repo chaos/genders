@@ -1,182 +1,285 @@
-2003-08-04 Albert Chu <chu11@llnl.gov>
-        * removed -r and -C options from nodeattr
-	* tagged genders-1-2-1
+2003-08-04  Albert Chu  <chu11@llnl.gov>
 
-2003-07-15 Albert Chu <chu11@llnl.gov>
-	* re-tagged to genders-1-2-0-pre0
+	* src/nodeattr/nodeattr.c: Removed -r and -C options. 
 
-2003-05-15 Albert Chu <chu11@llnl.gov>
-	* fixed several minor issues in manpages
-	* changed testnode()->isnode()
-	* added isattr() and isattrval() 
-	* fixed mem-leak in genders_load_data()
-	* moved Libgenders manpage to perl document in Libgenders.pm
-	* Added error code/constants accessor functions in Libgenders
-	* Made Libgenders object-oriented.
-	* Removed dist scripts, now in different package.
-	* Added Genders, an OO based replacement for gendlib.pl
-	  - will eventually phase out gendlib.pl 
-	* wrapped tags around nodeattr -r and -C code that will eventually 
-	  be removed. 
-	* tagged genders-1-1-10pre
+	* ChangeLog: Rewritten to conform to GNU standards.
 	
-2003-04-24 Albert Chu <chu11@llnl.gov>
-	* added portability by replacing getline(3) with
-	  internally created getline()
-	* genders_open() renamed genders_load_data()
-	* NOTOPEN and NOTCLOSED errors renamed to 
-	  NOTLOADED and ISLOADED and error messages updated appropriately
-	* added error codes GENDERS_ERR_NULLHANDLE and
-	  GENDERS_ERR_ERRNUMRANGE.  These changes ultimately
-	  modify the possible return values of genders_errnum(),
-	  genders_strerror(), and genders_errormsg().
-	* removed gender's API dependance on "all" and "cluster"
-	  attributes being stored in genders file
-	* removed definition of "altname", "all", and "cluster" 
-	  from genders.h
-	* removed genders_close() and genders_elapsedtime()
-	* genders code was cleaned up in a variety of ways
-	* manpages fixed to reflect changes
-	* directory structure of entire genders package cleaned up
-	* split off dist and gendlib.pl into two RPM sub packages
-	* tagged genders-1-1-9
+	* Tagged genders-1-2-1
+
+2003-07-15  Albert Chu  <chu11@llnl.gov>
+
+	* Tagged genders-1-2-0-pre0
+
+2003-05-15  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Code cleaned up.
+ 
+	* src/libgenders/genders.c (genders_testnode): Renamed to
+	genders_isnode.
+
+	* src/libgenders/genders.c (genders_isattr, genders_isattrval):
+	New Functions.
+
+	* src/libgenders/genders.c (genders_load_data): Removed memory leak.
+
+	* src/nodeattr/nodeattr.c: Added warning message about future
+	removal of -C option.
+
+	* src/Libgenders/Libgenders.pm: Added perldoc manpage.
+	
+	* src/Libgenders/Libgenders.xs: Added accessor functions for
+	genders error codes and constants.
+	
+	* src/Libgenders/Libgenders.xs: Rewritten to be an Object-Oriented
+	API.
+	
+	* src/Genders/Genders.pm: New File.
+	
+	* man/genders_testnode.3: Removed
+
+	* man/genders_isnode.3, man/genders_isattr.3,
+	man/genders_isattrval.3: New Files.
+
+	* dist subpackage: Removed. 
+
+	* Tagged genders-1-1-10pre.
+	
+2003-04-24  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c: Rewritten.
+
+	* src/libgenders/genders.c (genders_open): Renamed to
+	genders_load_data.
+	
+	* src/libgenders/genders.h.in: 
+	Renamed GENDERS_ERR_NOTOPEN to GENDERS_ERR_NOTLOADED.  
+	Renamed GENDERS_ERR_NOTCLOSED to GENDERS_ERR_ISLOADED.  
+	Added GENDERS_ERR_NULLHANDLE and GENDERS_ERR_ERRNUMRANGE error codes.
+	Removed GENDERS_ALTNAME_ATTRIBUTE, GENDERS_ALL_ATTRIBUTE, and
+	GENDERS_CLUSTER_ATTRIBUTE.
+
+	* src/libgenders/genders.c: Return appropriate new error codes,
+	GENDERS_ERR_NOTCLOSED, GENDERS_ERR_ISLOADED, and
+	GENDERS_ERR_NULLHANDLE.
+	
+	* src/libgenders/genders.c (genders_errnum, genders_strerror):
+	Handle new error codes GENDERS_ERR_NULLHANDLE and
+	GENDERS_ERR_ERRNUMRANGE.
+	
+	* src/libgenders/genders.c: Removed parse checks for "all" and
+	"cluster" attributes in genders file.
+
+	* genders.sample: Removed "cluster" and "all" attributes from sample.
+	
+	* src/libgenders/genders.c (genders_close, genders_elapsedtime): 
+	Removed.
+	
+	* man/genders_open.3: Removed
+
+	* man/genders_load_data.3: Added
+
+	* Manpages updated to reflect new error codes.
+
+	* Organization of project files reworked. 
+
+	* Created compat and dist subpackages.
+	
+	* Tagged genders-1-1-9.
 		
-2003-04-14 Albert chu <chu11@llnl.gov>
-        * fixed string_constant() function in Libgenders(3) to
-	  use SV * instead of char *
-	* added string_constant() function to Libgenders(3) manpage
-	* fixed build to properly create libgenders.la
-	* tagged genders-1-1-8
+2003-04-14  Albert Chu  <chu11@llnl.gov>
 
-2003-04-09 Albert chu <chu11@llnl.gov>
-	* created Libgenders(3), perl extension that allows genders
-	  C API to be called via perl code.
-	* crated manpage for Libgenders(3)  
-	* updated gendlib.pl to use Libgenders(3) perl extension  
-	* updated gendlib.3 with changes and fixed some typos
-	* removed reference to "/etc/cluster" in dist2 manpage
-	* updated TODO
-	* tagged genders-1-1-7
-
-2003-04-01 Albert Chu <chu11@llnl.gov>
-	* added parse checks in genders_open(3) for cluster and all
-	  attributes.
-	* added genders_parse() to libgenders
-	* added/updated manpages for genders_parse(3)
-	* added --check option to nodeattr
-	* variety of code cleanup in libgenders
-	* updated genders sample file with cluster and all attributes
-	* tagged genders-1-1-6
+	* Libgenders.xs (string_constant): Uses SV * instead of char *.
 	
-2003-04-01 Jim Garlick <garlick@llnl.gov>
-	* Change nodeattr to make -r option return primary hostname when
+	* Fixed build for libgenders.la
+	
+	* Tagged genders-1-1-8.
+
+2003-04-09  Albert Chu  <chu11@llnl.gov>
+
+	* Added Libgenders Perl Extension library.
+	
+	* gendlib.pl: Updated to use Libgenders perl extension.
+	
+	* dist2.1: Removed reference to "/etc/cluster".
+	
+	* Tagged genders-1-1-7.
+
+2003-04-01  Albert Chu  <chu11@llnl.gov>
+
+	* genders.c (genders_open): Added parse checks for "cluster" and
+	"all" attributes.
+	
+	* genders.c (genders_parse): New API Function.
+
+	* genders.h (genders_parse): New API Function.
+
+	* genders_parse.3: New File.
+	
+	* nodeattr.c: Added --check (-k) option.
+	
+	* genders.c: Cleaned up code.
+	
+	* genders.sample: Added "cluster" and "all" to sample.
+	
+	* Tagged genders-1-1-6.
+	
+2003-04-01  Jim Garlick  <garlick@llnl.gov>
+
+	* nodeattr.c: Fixed -r option to return primary hostname when
 	  altname lookup fails.
-	* tagged genders-1-1-5
+	
+	* Tagged genders-1-1-5.
 
-2003-03-31 Albert Chu <chu11@llnl.gov>
-        * fixed error with magic numbers in libgenders
-	* added nodeattr C version as nodeattr command to install
-	* removed nodeattr perl version from installation
-	* updated gendlib(3) from accessing /etc/clusters, cluster is
-	  now based on cluster attribute of genders file.
-	* updated dist2 and nodeattr (perl) based on the change genders
-	  file change
-	* fixed gendlib(3) and nodeattr(1) manpages to reflect changes
-	* tagged genders-1-1-4
+2003-03-31  Albert Chu  <chu11@llnl.gov>
 
-2003-03-12 Albert Chu <chu11@llnl.gov>
-        * moved unnecessary #includes and #defines from genders.h
-	  into genders.c  
-	* added magic numbers to genders.c
-	* added val length to genders_testattr()
-	* added genders_testnode() to libgenders 
-	* added genders_testnode() man pages  
-	* added genders_errormsg() man pages
-	* added genders_handle_destroy() man page
-	* renamed genders_getmaxnodenamelen manpage to genders_getmaxnodelen
-	* updated all manpages to be highly detailed and thorough
-	* added new corner case check to genders_list_clear() and
-	  appropriate error code genders.h
-	* fixed variety of corner case issues based on results from
-	  libgenders testsuite parameter checks
-        * tagged genders-1-1-3
+	* genders.c: Fixed magic numbers error.
 
-2003-03-07 Albert Chu <chu11@llnl.gov>
-        * added libgenders manpages
-	* added genders_errormsg() to libgenders
-        * tagged genders-1-1-2
+	* nodeattr.c: nodeattr.c binary installed instead of nodeattr perl
+	script.
 
-2003-02-19  Albert chu <chu11@llnl.gov>
-        * fixed comments on genders.h for libgenders.
+	* gendlib.pl: Removed dependence on /etc/clusters.
+
+	* dist2: Removed dependence on /etc/clusters.
+
+	* gendlib.3, dist2.1: Updated with above changes.
+	
+	* Tagged genders-1-1-4
+
+2003-03-12  Albert Chu  <chu11@llnl.gov>
+
+	* genders.h: 
+	Moved unnecessary #include and #defines to genders.c.
+	Added GENDERS_ERR_NULLPTR error code.
+	
+	* genders.c: 
+	Added magic numbers to genders context.
+	Fixed corner case errors based on test suite results.
+	
+	* genders.c (genders_testattr): Added buffer length parameter.
+
+	* genders.c (genders_list_clear): Added corner case check.
+	
+	* genders.c (genders_getmaxnodenamelen): Renamed to genders_getmaxnodelen.
+
+	* genders.c (genders_testnode, genders_errormsg): New Functions.
+
+	* genders_testnode.3, genders_handle_destroy.3, genders_errormsg.3:
+	New Files.
+
+	* genders_testattr.3: Modified for API change.
+	
+	* genders_errors.3: Updated to include genders_errormsg.
+
+        * Tagged genders-1-1-3.
+
+2003-03-07  Albert Chu  <chu11@llnl.gov>
+
+	* Libgenders manpages added.
+
+	* genders.c (genders_errormsg): New Function.
+
+	* Tagged genders-1-1-2.
+
+2003-02-19  Albert Chu  <chu11@llnl.gov>
+
+        * genders.h: Fixed comments.
 
 2003-02-10  Albert Chu  <chu11@llnl.gov>
-	* : Tagged genders-1-0-3
-		- Renamed to genders-1-1-1 shortly thereafter. See below.
-	* : Tagged genders-1-1-1
-		- Initial commit of libgenders.  A C API
-		  to parse and retrieve data from a genders
-		  database.
-		- Initial commit of C implementation of 
-		  'nodeattr' command. 
-                - Makefiles, META, genders.spec all updated
-                  appropriately to reflect additions.
 
-2003-01-21 garlick
-	* Finally getting around to release.
+	* genders.c, genders.h, nodeattr.c: New Files.
+
+	* META, genders.spec, Makefile.am: Updated for new additions.
+	
+	* Tagged genders-1-1-1.
+
+2003-01-21  Jim Garlick  <garlick@llnl.gov>
+
 	* Tag genders-1-0-2
 
-2002-12-08 garlick
-        * Updated source file headers and DISCLAIMER file according to release 
-          instructions.
-        * Ran inst.c through "indent --no-tabs -kr *.[ch]" and installed 
-	  standard vi footers in all scripts and source files.
-        * Updated to latest project Make-rpm.mk.
-        * Tag genders-1-0-1chaos
+2002-12-08  Jim Garlick  <garlick@llnl.gov>
 
-2002-09-13 garlick
-	* Reformatted changelog
+	* inst.c: Ran through "indent --no-tabs -kr *.[ch]". 
+
+	* DISCLAIMER: Updated in accordance to release instructions.
+
+	* Added headers to source files in accordance to release instructions.
+
+	* Added vi footers in all scripts and source files.
+	
+        * Make-rpm.mk: Updated to latest project.
+	
+        * Tagged genders-1-0-1chaos.
+
+2002-09-13  Jim Garlick  <garlick@llnl.gov>
+
+	* ChangeLog: Reformmated.
+
 	* Changed ksh to sh in shell scripts
-	* Updated to latest Make-rpm.mk
+
+	* Make-rpm.mk: Updated to latest.
+
 	* Tagged genders-0-2-7chaos.
 
-2002-05-31 garlick
-	* Removed -r option from dist2.  The default is now to use
-	  "altnames" if available (reliable_hostname on SP, altname= attribute
-	  elsewhere).  Added -i option to select canonical names 
- 	  (the names on the LHS of each genders line). 
-	* Updated dist2 man page.
+2002-05-31  Jim Garlick  <garlick@llnl.gov>
+
+	* dist2: Removed -r optoin. Added -i option.
+
+	* dist2.1: Updated to reflect changes.
+	
 	* Tagged genders-0-2-6chaos.
 
-2002-05-24 garlick
+2002-05-24  Jim Garlick  <garlick@llnl.gov>
 	* Added -r option to nodeattr in dist_all.
 	* Tagged genders-0-2-5chaos.
 
-2002-04-24 garlick
-	* Minor TUTORIAL cleanup.
-	* Remove updatefstab/updateservice from spec file.
-	* Tagged genders-0-2-4chaos?
+2002-04-24  Jim Garlick  <garlick@llnl.gov>
+	
+	* TUTORIAL: Cleaned up.
+	
+	* genders.spec: Removed updatefstab and updateservice.
+	
+	* Tagged genders-0-2-4chaos.
 
-2002-04-23 garlick
-	* Updated to Chris's latest RPM rules.
-	* Removed updatefstab and updateservice scripts per Robin's request.
-	* Added TUTORIAL.
-	* Tagged genders-0-2-3chaos (sent to Rand at lanl)
+2002-04-23  Jim Garlick  <garlick@llnl.gov>
+	
+	* TUTORIAL: New File.
 
-2001-07-14 garlick
-	* Updated to Chris's latest RPM rules.
-	* Added updatefstab and updateservice scripts.
-	* tagged genders-0-2-2
+	* Updated to Chris Dunlap's latest RPM rules.
 
-2001-07-14 garlick
-	* RPM target in Makefile
-	* tagged genders-0-2
+	* Removed updatefstab and updateservice scripts per Robin
+	Goldstone's request.
 
-2001-07-14 garlick
-	* Added genders.spec, DISCLAIMER.
-	* Removed dist_passwd.
-	* tagged genders-0-1
+	* Sent to Rand at LANL.
+	
+	* Tagged genders-0-2-3chaos.
+	
 
-<date unknown> garlick
+2001-07-14  Jim Garlick  <garlick@llnl.gov>
+
+	* Updated to Chris Dunlap's latest RPM rules.
+
+	* updatefstab, updateservice: New Files.
+
+	* Tagged genders-0-2-2.
+
+2001-07-14  Jim Garlick  <garlick@llnl.gov>
+
+	* Makefile: Added RPM target.
+
+	* Tagged genders-0-2.
+
+2001-07-14  Jim Garlick  <garlick@llnl.gov>
+
+	* genders.spec, DISCLAIMER: New Files.
+
+	* dist_passwd: Removed File.
+
+	* Tagged genders-0-1.
+
+XXXX-XX-XX  Jim Garlick  <garlick@llnl.gov>
+
+	Following are early notes on modifications and additions.
+	
 	* Path changes: 
 	  /admin/bin/per	-> /usr/bin/perl
 	  /admin/etc/genders 	-> /etc/genders
@@ -184,30 +287,42 @@
 	  /admin/lib/gendlib.pl	-> /usr/lib/genders/gendlib.pl
 	  /admin/scripts/dist2	-> /usr/bin/dist2
 	  /var/dist/bootstrap	-> /usr/bin/dist_bootstrap
+
 	* Now that we have an RPM, dist_bootstrap only has to copy out
 	  /etc/genders and /etc/clusters.
+
 	* Makefile only attempts to build inst.
+
 	* Remove "require 5.003" lines; instead require perl in spec file.
+
 	* Removed herolib.pl stuff temporarily.  It needs to be merged back in.
+
 	* If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh 
 	  is OK.
+
 	* Only include sdrlib.pl in gendlib.pl.  Genders::to_altnames and
 	  Genders::to_gendnames now provide conversion between genders 
 	  hostnames and alternate hostnames.  On the SP, this is accomplished 
 	  using the sdrlib functions which access the initial_hostname and 
 	  reliable_hostname SDR attributes.  On other systems, "altname" 
 	  genders attribute holds the alternate hostname (gendlib.pl, dist2).
+
 	* Added "-c <cluster>" option.  This tells dist2 to use 
 	  /admin/etc/genders.<cluster> instead of the default.  Handy for 
 	  rdisting to a foreign cluster, e.g. one that is behind a bastion 
 	  host that can mount /var/dist (but inside can't mount it) (dist2).
+
 	* Added "-o <options>" option.  List of options are passed
 	  through to the real rdist, e.g. "dist2 -o verify" (dist2).
+
 	* Don't look for /var/dist/VAR_DIST_IS_MOUNTED if "-f Distfile" option
 	  specified (dist2).
+
 	* If -n option specified, implicitly set -v (dist2).
+
 	* GNU fileutils 4.0p include install program with -C option.
 	  This is the main reason for having the 'inst' utility, therefore it
 	  should now be considered deprecated.  Update your rdist Makefiles
 	  to use GNU install -C.
+
 	* Removed jmd stuff (hostlist.pl).
