@@ -6,7 +6,8 @@
 
 	* Added attribute indexing.
 
-	* New genders_index_nodes and genders_index_attrs functions.
+	* New genders_index_nodes, genders_index_attrs, and
+	genders_inde_attrvals functions with indexing support in genders.
 	
 2004-04-27  Albert Chu  <chu11@llnl.gov>
 
