@@ -20,3 +20,7 @@ inst		similar to gnu fileutils install -C
 nodeattr	query genders attributes - see nodeattr(1)
 
 dist_bootstrap	install /etc/genders and /etc/clusters from /var/dist
+
+libgenders      C API to operate on /etc/genders
+
+genders.h       header file for C API in libgenders
