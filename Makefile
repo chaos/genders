@@ -17,5 +17,6 @@ install:
 
 clean:
 	rm -f inst a.out core *.rpm *.tgz *.a *.o
+	cd src; make clean
 
 include Make-rpm.mk
