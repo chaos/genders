@@ -1,3 +1,13 @@
+2003-04-01 Albert Chu <chu11@llnl.gov>
+	* added parse checks in genders_open(3) for cluster and all
+	  attributes.
+	* added genders_parse() to libgenders
+	* added/updated manpages for genders_parse(3)
+	* added --check option to nodeattr
+	* variety of code cleanup in libgenders
+	* updated genders sample file with cluster and all attributes
+	* tagged genders-1-1-6
+	
 2003-04-01 Jim Garlick <garlick@llnl.gov>
 	* Change nodeattr to make -r option return primary hostname when
 	  altname lookup fails.
