@@ -1,0 +1,85 @@
+.\"
+.\" $Id: nodeattr.1,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+.\" $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/nodeattr.1,v $
+.\"
+.\" Copyright (C) 2000 Regents of the University of California
+.\" See the DISCLAIMER file distributed with this package.
+.\"
+.\" Author: Jim Garlick
+.\" Adapted from IBM SP version for linux 4/00.
+.\"
+.TH NODEATTR 1 "4/14/99" "LLNL" "NODEATTR"
+.SH NAME
+nodeattr \- query genders file
+.SH SYNOPSIS
+.B nodeattr
+.I "{-c | -n} attribute
+.br
+.B nodeattr
+.I "[-v] [node] attribute
+.br
+.B nodeattr
+.I "-C"
+.br
+.SH DESCRIPTION
+When invoked with the 
+.I "-c"
+or 
+.I "-n"
+arguments,
+.B nodeattr
+reads the genders file and makes a list, comma or newline separated,
+of nodes that have the specified attribute.  
+.LP
+When called with a node name (optional) and attribute name,
+.B nodeattr
+returns \fI0\fR to the environment if the node has the attribute;
+else \fI1\fR.
+If \fI-v\fR is present, the attribute name and any value (see below) is 
+printed on the standard output.  If a node name is not specified, the local 
+host is assumed.
+.LP
+The
+.I "-C"
+option causes 
+.B nodeattr
+to print the local cluster name, or 
+.I unknown
+if it cannot be determined.
+.LP
+.B Nodeattr
+generates an internal attribute called \fIall\fR, of which all hosts listed
+in the genders file are implicitly members.
+.LP
+Attribute names may optionally appear in the genders file with an equal sign 
+followed by a value.
+.B Nodeattr
+ignores these values except when the 
+.I -v 
+option requests that the value, if any, be displayed;  and when an
+attribute is specified on the command line with a value, in which case
+only an attribute with the specified value in the genders file will match.
+.SH EXAMPLES
+.LP
+To use nodeattr with dsh to run a command on all fddi nodes:
+.IP
+dsh -w`nodeattr -c fddi` command
+.LP
+To use nodeattr in a ksh script to collect a list of users on login nodes:
+.IP
+for i in `nodeattr -n login`; do rsh $i who; done
+.LP
+To verify whether or not this node is a head node:
+.IP
+nodeattr head && echo yes
+.LP
+.SH "FILES"
+/admin/etc/genders
+.br
+/admin/etc/attributes
+.br
+/admin/etc/clusters
+.br
+/admin/lib/gendlib.pl
+.SH "SEE ALSO"
+gendlib(1)

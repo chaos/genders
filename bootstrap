@@ -1,0 +1,27 @@
+#!/bin/ksh
+#
+# $Id: bootstrap,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/bootstrap,v $
+# 
+# Copyright (C) 2000 Regents of the University of California
+# See the DISCLAIMER file distributed with this package.
+#
+# Author: Jim Garlick
+#
+# Build the simplest /admin tree on a node to get dist_local to work.
+#
+if [ $# -ne 1 ]; then
+	echo Usage: bootstrap.sh clustername
+	exit 1
+fi
+CLUSTER=$1
+
+umask 022
+mkdir -p /admin/lib /admin/scripts /admin/etc /admin/scripts /admin/bin
+install -m 444 genders/genders.$CLUSTER /admin/etc/genders
+install -m 444 genders/clusters /admin/etc
+install -m 555 admin/scripts/dist2 /admin/scripts
+install -m 555 admin/scripts/dist_local /admin/scripts
+install -m 444 admin/lib/hostlist.pl /admin/lib
+install -m 444 admin/lib/gendlib.pl /admin/lib
+ln -s /usr/bin/perl /admin/bin/perl

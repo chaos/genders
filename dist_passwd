@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# $Id: dist_passwd,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist_passwd,v $
+#
+# Copyright (C) 2000 Regents of the University of California
+# See the DISCLAIMER file distributed with this package.
+# 
+# Author: Jim Garlick
+#
+PATH=/admin/scripts:$PATH
+if nodeattr passwdhost; then
+	exec dist2 -f /admin/etc/Distfile.passwd
+else
+	echo dist_passwd: wrong host
+	exit 1
+fi

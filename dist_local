@@ -1,0 +1,13 @@
+#!/bin/ksh
+#
+# $Id: dist_local,v 1.1.1.1 2001-04-25 21:01:50 garlick Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/dist_local,v $
+#
+# Copyright (C) 2000 Regents of the University of California
+# See the DISCLAIMER file distributed with this package.
+# 
+# Author: Jim Garlick
+# Adapted from IBM SP version for linux 4/00.
+#
+
+exec /admin/scripts/dist2 -l "$@"

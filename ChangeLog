@@ -1,0 +1,31 @@
+Changes while living on linux:
+	Removed herolib.pl stuff temporarily.  It needs to be merged back in.
+
+	If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh is OK.
+
+	Only include sdrlib.pl in gendlib.pl.   Genders::to_altnames and
+	Genders::to_gendnames now provide conversion between genders hostnames 
+	and alternate hostnames.  On the SP, this is accomplished using the
+	sdrlib functions which access the initial_hostname and 
+	reliable_hostname SDR attributes.  On other systems, "altname" 
+	genders attribute holds the alternate hostname (gendlib.pl, dist2).
+
+	Added "-c <cluster>" option.  This tells dist2 to use 
+	/admin/etc/genders.<cluster> instead of the default.  Handy for 
+	rdisting to a foreign cluster, e.g. one that is behind a bastion 
+	host that can mount /var/dist (but inside can't mount it) (dist2).
+
+	Added "-o <options>" option.  List of options are passed
+	through to the real rdist, e.g. "dist2 -o verify" (dist2).
+
+	Don't look for /var/dist/VAR_DIST_IS_MOUNTED if "-f Distfile" option
+	specified (dist2).
+
+	If -n option specified, implicitly set -v (dist2).
+
+	GNU fileutils 4.0p include install program with -C option.
+	This is the main reason for having the 'inst' utility, therefore it
+	should now be considered deprecated.  Update your rdist Makefiles
+	to use GNU install -C.
+
+	Removed jmd stuff (hostlist.pl).
