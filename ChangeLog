@@ -1,5 +1,5 @@
 2003-02-19  Albert chu <chu11@llnl.gov>
-        * fixed comments on genders.h for libganglia.
+        * fixed comments on genders.h for libgenders.
 
 2003-02-10  Albert Chu  <chu11@llnl.gov>
 	* : Tagged genders-1-0-3
