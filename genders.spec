@@ -21,7 +21,7 @@ genders API that is compatible with earlier releases of genders
 %setup  -q -n %{name}-%{version}
 
 %build
-./configure --prefix=/usr --with-xs-prefix="$RPM_BUILD_ROOT/usr" --with-genders-pm-prefix="$RPM_BUILD_ROOT/usr" --with-compat-installdir="/usr/lib/genders"
+./configure --prefix=/usr --with-xs-prefix="$RPM_BUILD_ROOT/usr" --with-genders-pm-prefix="$RPM_BUILD_ROOT/usr"
 make 
 
 %install

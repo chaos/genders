@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.11 2003-05-15 00:22:53 achu Exp $
+## $Id: configure.ac,v 1.12 2003-05-16 18:22:26 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -83,28 +83,6 @@ if test -z "$GENDERS_PM_PREFIX"; then
    GENDERS_PM_PREFIX="/usr"
 fi
 AC_SUBST(GENDERS_PM_PREFIX)
-
-# compat install location
-AC_MSG_CHECKING(for --with-compat-installdir )
-AC_ARG_WITH(compat-installdir,
-    AC_HELP_STRING([--with-compat-installdir=path], [define compat subpackage install dir]),
-    [ case "$withval" in
-    yes)
-        withcompatinstalldir=yes
-        ;;
-    no)
-        ;;
-    *)
-        withcompatinstalldir=yes
-        COMPAT_INSTALLDIR="\"$withval\""
-        ;;
-    esac ]
-)
-AC_MSG_RESULT(${withcompatinstalldir=no})
-if test -z "$COMPAT_INSTALLDIR"; then
-   COMPAT_INSTALLDIR="/usr/lib/genders"
-fi
-AC_SUBST(COMPAT_INSTALLDIR)
 
 ##
 # Checks for programs.

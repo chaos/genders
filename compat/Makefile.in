@@ -73,7 +73,6 @@ AMTAR = @AMTAR@
 AS = @AS@
 AWK = @AWK@
 CC = @CC@
-COMPAT_INSTALLDIR = @COMPAT_INSTALLDIR@
 DEPDIR = @DEPDIR@
 DLLTOOL = @DLLTOOL@
 ECHO = @ECHO@
@@ -94,7 +93,7 @@ am__include = @am__include@
 am__quote = @am__quote@
 install_sh = @install_sh@
 
-gendlibdir = @COMPAT_INSTALLDIR@
+gendlibdir = ${prefix}/lib/genders
 
 gendlib_SCRIPTS = gendlib.pl hostlist.pl
 subdir = compat
