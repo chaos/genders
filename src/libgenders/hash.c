@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: hash.c,v 1.2 2005-01-18 20:23:03 achu Exp $
+ *  $Id: hash.c,v 1.3 2005-01-18 20:33:11 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2003-2005 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -399,6 +399,7 @@ hash_node_alloc (void)
 
     assert (HASH_ALLOC > 0);
     lsd_mutex_lock (&hash_free_lock);
+#if 0
     if (!hash_free_list) {
         if ((hash_free_list = malloc (HASH_ALLOC * sizeof (*p)))) {
             for (i = 0; i < HASH_ALLOC - 1; i++)
@@ -413,6 +414,10 @@ hash_node_alloc (void)
     else {
         errno = ENOMEM;
     }
+#else
+    if (!(p = malloc (sizeof(*p))))
+        errno = ENOMEM;
+#endif
     lsd_mutex_unlock (&hash_free_lock);
     return (p);
 }
@@ -426,8 +431,12 @@ hash_node_free (struct hash_node *node)
     assert (node != NULL);
     memset (node, 0, sizeof (*node));
     lsd_mutex_lock (&hash_free_lock);
+#if 0
     node->next = hash_free_list;
     hash_free_list = node;
+#else
+    free (node);
+#endif
     lsd_mutex_unlock (&hash_free_lock);
     return;
 }
