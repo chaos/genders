@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.48 2003-05-28 15:55:45 achu Exp $
+ * $Id: genders.c,v 1.49 2003-05-29 16:22:40 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -206,20 +206,20 @@ static int save_in_list(genders_t handle,
 
 /* determines if node is stored in the handle's nodelist
  * Returns 1 if it is stored, 0 if it is not  
- * Pointer to node is stored in node_listnode
+ * Pointer to node is stored in node_ptr
  */        
 static int has_node(genders_t handle, 
                     const char *node, 
-                    struct node_listnode **node_listnode);
+                    struct node_listnode **node_ptr);
 
-/* determines if attr is an attribute in the node pointed to by node_listnode
+/* determines if attr is an attribute in the node pointed to by node_ptr
  * Returns 1 if it is stored, 0 if it is not  
- * Pointer to attribute is stored in attrval_listnode
+ * Pointer to attribute is stored in attrval_ptr
  */        
 static int has_attr(genders_t handle, 
                     const char *attr, 
-                    struct node_listnode *node_listnode, 
-                    struct attrval_listnode **attrval_listnode);
+                    struct node_listnode *node_ptr, 
+                    struct attrval_listnode **attrval_ptr);
 
 int handle_err_check(genders_t handle) {
   if (handle == NULL || handle->magic != GENDERS_MAGIC_NUM)
@@ -1214,15 +1214,15 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val) {
 
 int has_node(genders_t handle, 
              const char *node, 
-             struct node_listnode **node_listnode) {
+             struct node_listnode **node_ptr) {
   struct node_listnode *nlist;
 
   nlist = handle->nodes_head;
   while (nlist != NULL && strcmp(nlist->name,node) != 0)
     nlist = nlist->next;
 
-  if (node_listnode != NULL)
-    *node_listnode = nlist;
+  if (node_ptr != NULL)
+    *node_ptr = nlist;
 
   if (nlist != NULL)
     return 1;
@@ -1232,17 +1232,17 @@ int has_node(genders_t handle,
 
 int has_attr(genders_t handle, 
              const char *attr, 
-             struct node_listnode *node_listnode,
-             struct attrval_listnode **attrval_listnode) {
+             struct node_listnode *node_ptr,
+             struct attrval_listnode **attrval_ptr) {
   struct attrval_listnode *avlist;
 
-  avlist = node_listnode->attrvals_head;
+  avlist = node_ptr->attrvals_head;
   while (avlist != NULL && strcmp(avlist->name,attr) != 0)
     avlist = avlist->next;
   
   if (avlist != NULL) {
-    if (attrval_listnode != NULL)
-      *attrval_listnode = avlist;
+    if (attrval_ptr != NULL)
+      *attrval_ptr = avlist;
     return 1;
   }
 
