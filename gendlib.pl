@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.10 2003-04-08 21:29:38 achu Exp $
+#  $Id: gendlib.pl,v 1.11 2003-04-09 00:21:59 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -82,6 +82,7 @@ sub init
     
     if ($init_called) {
 	# destroy previous handle
+
 	Libgenders::genders_close($handle);
 	Libgenders::genders_handle_destroy($handle);
 	$handle = 0;  
@@ -327,7 +328,7 @@ sub get_node_hash
 	    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
 
 	    $debug && print "Error, genders_getattr_all()\n";
-	    $nodes = ();
+	    %nodes = ();
 	}
 	elsif (@$attrs == 0) {
 	    %nodes = ();
