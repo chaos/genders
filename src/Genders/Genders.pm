@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.8 2003-05-22 18:16:42 achu Exp $
+# $Id: Genders.pm,v 1.9 2003-07-01 00:28:34 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -278,6 +278,7 @@ Genders - Perl library for querying a genders file
 
  $obj->debug($num)
 
+ $obj->getnodename()
  $obj->getnodes([$attr, [$val]])
  $obj->getattr([$node])
  $obj->getattr_all()
@@ -307,6 +308,10 @@ will be used.  Returns undef if file cannot be read.
 Set the debug level in the genders object.  By default, the debug
 level is 0 and all debugging is turned off.  To turn it on, set the
 level to 1.
+
+=item B<$obj-E<gt>getnodename()>
+
+Returns the name of the current node.
 
 =item B<$obj-E<gt>getnodes([$attr, [$val]])>
 
