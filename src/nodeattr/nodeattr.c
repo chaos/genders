@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.7 2003-04-01 22:05:23 achu Exp $
+ *  * $Id: nodeattr.c,v 1.8 2003-04-01 23:18:47 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -121,7 +121,7 @@ main(int argc, char *argv[])
 	  _gend_error_exit(gp, "genders_parse");
 	}
 	fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
-	exit(0);
+	exit(errors);
     }
 
     if (genders_open(gp, filename) < 0)
