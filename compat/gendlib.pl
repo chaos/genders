@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.2 2003-04-23 21:48:17 achu Exp $
+#  $Id: gendlib.pl,v 1.3 2003-04-23 22:21:35 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -33,7 +33,6 @@ use vars qw($init_called $init_hname_called $hname);
 use vars qw($altAttr $clusterAttr);
 use vars qw($GENDERS_ERR_SUCCESS $GENDERS_ERR_NOTFOUND);
 
-use lib '/usr/lib/genders/';
 use Libgenders;
 
 if (!$included) {
@@ -77,7 +76,7 @@ sub init
     if (@_) {
         $gendfile = $_[0];
     } else {    
-        $gendfile = "";
+        $gendfile = Libgenders::string_constant("DEFAULT_GENDERS_FILE");
     }
     
     if ($init_called) {
@@ -97,7 +96,7 @@ sub init
 
     $ret = Libgenders::genders_load_data($handle, $gendfile);
     if ($ret == -1) {
-        $debug && print "Error, genders_open()\n";
+        $debug && print "Error, genders_load_data()\n";
         Libgenders::genders_handle_destroy($handle);
         $handle = 0;  
         return 0;
@@ -269,7 +268,7 @@ sub getnode
     }
 
     my $attr = shift(@_);
-    my (@attrtemp, $attrname, $attrval, $nodes);
+    my (@attrtemp, $nodes);
 
     if (defined($attr)) {
         if ($attr =~ /=/) {
@@ -280,21 +279,19 @@ sub getnode
                 return ();
             }
             else {
-                $attrname = $attrtemp[0];
-                $attrval = $attrtemp[1];
+                $nodes = Libgenders::genders_getnodes($handle, 
+                                                      $attrtemp[0], 
+                                                      $attrtemp[1]);
             }
         }
         else {
-            $attrname = $attr;
-            $attrval = "";
+            $nodes = Libgenders::genders_getnodes($handle, $attr);
         }
     }
     else {
-        $attrname = "";
-        $attrval = "";
+        $nodes = Libgenders::genders_getnodes($handle);
     }
         
-    $nodes = Libgenders::genders_getnodes($handle, $attrname, $attrval);
     if (@$nodes == 0 &&
         Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
 
