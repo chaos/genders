@@ -33,4 +33,18 @@ Changes while living on linux:
 
 vers0.1 Jim Garlick <garlick@llnl.gov>
 	
-	Added genders.spec, DISCLAIMER
+	Added genders.spec, DISCLAIMER.
+	Removed dist_passwd.
+
+	Path changes:
+	/admin/bin/perl		-> /usr/bin/perl
+	/admin/etc/genders 	-> /etc/genders
+	/admin/etc/clusters	-> /etc/clusters
+	/admin/lib/gendlib.pl 	-> /usr/lib/genders/gendlib.pl
+	/admin/scripts/dist2	-> /usr/bin/dist2
+	/var/dist/bootstrap	-> /usr/bin/dist_bootstrap
+
+	Now that we have an RPM, dist_bootstrap only has to copy out
+	/etc/genders and /etc/clusters.
+
+	Makefile only attempts to build inst.
