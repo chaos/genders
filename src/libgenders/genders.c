@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.80 2004-01-27 01:04:49 achu Exp $
+ *  $Id: genders.c,v 1.81 2004-01-27 18:14:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -49,23 +49,9 @@
 #define MAX(x,y)                  ((x > y) ? x : y)
 #endif
 
-struct genders {
-  int magic;                          /* magic number */ 
-  int errnum;                         /* error code */
-  int is_loaded;                      /* genders data loaded? */
-  int numnodes;                       /* number of nodes in database */
-  int numattrs;                       /* number of attrs in database */
-  int maxnodelen;                     /* max node name length */
-  int maxattrlen;                     /* max attr name length */
-  int maxvallen;                      /* max value name length */
-  char nodename[MAXHOSTNAMELEN+1];    /* local hostname */
-  List nodeslist;                     /* stores nodes */
-  List attrvalslist;                  /* stores Lists of attrvals */ 
-  List attrslist;                     /* unique attributes */
-};
-
-/* stores node name and a list of pointers to the attrval lists in the
- * handle that indicate this node's attributes and values.
+/* stores node name and a list of pointers to the attrval lists containing
+ * the attributes and values of this node.  The pointers point to lists
+ * stored within the attrvalslist list in the handle.
  */
 struct genders_node {
   char name[MAXHOSTNAMELEN+1];
@@ -79,6 +65,59 @@ struct genders_attrval {
   char *val;
 };
 typedef struct genders_attrval *genders_attrval_t;
+
+/* Genders handle, caches all information loaded from a genders
+ * database.  Consider the following genders database
+ *
+ * nodename[1-2]  attrname1=val1,attrname2=val2
+ * nodename1      attrname3=val3,attrname4
+ * nodename2      attrname5   
+ * nodename3      attrname6
+ *
+ * After the genders database has been loaded using genders_load_data,
+ * the lists and data in the handle can be viewed like the following:
+ *
+ * magic = GENDERS_MAGIC_NUM
+ * errnum = current error code
+ * is_loaded = 1
+ * numnodes = 3
+ * numattrs = 6 
+ * maxnodelen = 9 (localhost)
+ * maxattrlen = 14 (5 + 9, 9 added for potential %n substitution)
+ * maxvallen = 13 (4 + 9, 9 added for %n substitution)
+ * nodename = localhost
+ * nodeslist = node1 -> node2 -> node3 -> \0
+ *    node1.name = nodename1, node1.attrptrs = listptr1 -> listptr2 -> \0
+ *    node2.name = nodename2, node2.attrptrs = listptr1 -> listptr3 -> \0
+ *    node3.name = nodename3, node3.attrptrs = listptr4 -> \0
+ * attrvalslist = listptr1 -> listptr2 -> listptr3 -> listptr4 -> \0
+ *    listptr1 = attr1 -> attr2 -> \0
+ *    listptr2 = attr3 -> attr4 -> \0
+ *    listptr3 = attr5 -> \0
+ *    listptr4 = attr6 -> \0
+ *      attr1.attr = attrname1, attr1.val = val1
+ *      attr2.attr = attrname2, attr2.val = val2
+ *      attr3.attr = attrname3, attr3.val = val3
+ *      attr4.attr = attrname4, attr4.val = NULL
+ *      attr5.attr = attrname5, attr5.val = NULL
+ *      attr6.attr = attrname6, attr6.val = NULL
+ * attrslist = attrname1 -> attrname2 -> attrname3 -> attrname4 -> 
+ *             attrname5 -> attrname6 -> \0
+ */
+struct genders {
+  int magic;                        /* magic number */ 
+  int errnum;                       /* error code */
+  int is_loaded;                    /* genders data loaded? */
+  int numnodes;                     /* number of nodes in database */
+  int numattrs;                     /* number of attrs in database */
+  int maxnodelen;                   /* max node name length */
+  int maxattrlen;                   /* max attr name length */
+  int maxvallen;                    /* max value name length */
+  char nodename[MAXHOSTNAMELEN+1];  /* local hostname */
+  List nodeslist;                   /* Lists of genders_node */
+  List attrvalslist;                /* Lists of ptrs to Lists of genders_attrvals */
+  List attrslist;                   /* List of unique attribute strings */
+};
 
 /* Error messages */
 static char * errmsg[] = {
