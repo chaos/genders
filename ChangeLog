@@ -1,7 +1,7 @@
 2004-11-04  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/genders.c, src/libgenders/genders_query.y:
-	Various minor code cleanup.
+	* src/libgenders/genders.c, src/libgenders/genders_query.y,
+	src/libgenders/genders_common.h: Various minor code cleanup.
 
 	* man/genders_index.3, man/gender_index_nodes.3,
 	man/genders_index_attrs.3: Remove unnecessary manpages.

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.h,v 1.3 2004-09-10 23:26:01 achu Exp $
+ *  $Id: genders_common.h,v 1.4 2004-11-04 18:58:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -105,13 +105,11 @@ typedef struct genders_attrval *genders_attrval_t;
  *             attrname5 -> attrname6 -> \0
  * valbuf -> buffer of length 5 (maxvallen + 1) 
  *
- * If genders_index_nodes is called:
  * node_index = hash table with
  *              KEY(nodename1): node1
  *              KEY(nodename2): node2
  *              KEY(nodename3): node3
  *
- * If genders_index_attrs is called:
  * attr_index = hash table with
  *              KEY(attrname1): node1 -> node2
  *              KEY(attrname2): node1 -> node2
