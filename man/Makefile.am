@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.6 2004-02-03 23:12:46 achu Exp $
+## $Id: Makefile.am,v 1.7 2004-02-03 23:42:35 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -18,6 +18,7 @@ man3_MANS = \
         genders_getattr.3 \
         genders_getattr_all.3 \
         genders_getmaxattrlen.3 \
+	genders_getmaxattrs.3 \
         genders_getmaxnodelen.3 \
         genders_getmaxvallen.3 \
         genders_getnodename.3 \

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_stats.3,v 1.7 2004-02-03 23:12:46 achu Exp $
+\."  $Id: genders_stats.3,v 1.8 2004-02-03 23:42:35 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -35,6 +35,8 @@ genders file
 .sp
 .BI "int genders_getnumattrs(genders_t handle);"
 .sp
+.BI "int genders_getmaxattrs(genders_t handle);"
+.sp
 .BI "int genders_getmaxnodelen(genders_t handle);"
 .sp
 .BI "int genders_getmaxattrlen(genders_t handle);"
@@ -43,15 +45,18 @@ genders file
 .br
 .SH DESCRIPTION
 \fBgenders_getnumnodes()\fR, \fBgenders_getnumattrs()\fR,
-\fBgenders_getmaxnodelen()\fR, \fBgenders_getmaxattrlen()\fR, and
-\fBgenders_getmaxvallen()\fR get statistics about the genders file
-associated with \fIhandle\fR.
+\fBgenders_getmaxattrs()\fR, \fBgenders_getmaxnodelen()\fR,
+\fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR get
+statistics about the genders file associated with \fIhandle\fR.
 
 \fBgenders_getnumnodes()\fR returns the number of nodes stored in the
 genders file.
 
 \fBgenders_getnumattrs()\fR returns the number of attributes listed in
 the genders file.
+
+\fBgenders_getmaxattrs()\fR returns the maximum number of attributes
+listed with a node in the genders file.
 
 \fBgenders_getmaxnodelen()\fR returns the maximum length of any node
 listed in the genders file.
@@ -63,10 +68,10 @@ attribute listed in the genders file.
 attribute value listed in the genders file.
 
 In general, \fBgenders_getnumnodes()\fR, \fBgenders_getnumattrs()\fR,
-\fBgenders_getmaxnodelen()\fR, \fBgenders_getmaxattrlen()\fR, and
-\fBgenders_getmaxvallen()\fR are used so a programmer can dynamically
-allocate a proper amount of memory to store genders file information
-in.
+\fBgenders_getmaxattrs()\fR, \fBgenders_getmaxnodelen()\fR,
+\fBgenders_getmaxattrlen()\fR, and \fBgenders_getmaxvallen()\fR are
+used so a programmer can dynamically allocate a proper amount of
+memory to store genders file information in.
 .br
 .SH RETURN VALUES
 On success, 0 is returned.  On error, -1 is returned, and an error

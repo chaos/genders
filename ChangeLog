@@ -3,8 +3,6 @@
 	* src/libgenders/genders.c (genders_testattr): Fix bug where
 	incorrect attribute copied into buffer.
 
-	* man: Removed all references to genders_getmaxattrs. 
-	
 	* tagged genders-1-3-0-pre3
 
 2004-02-02  Albert Chu  <chu11@llnl.gov>
