@@ -29,3 +29,5 @@
   - genders-compat
 - and perl versioning
 - and linking to new libgenders?
+- nodeattr --diff option
+   - but how would the output look like? sigh ...
