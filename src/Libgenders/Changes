@@ -1,6 +1,5 @@
 Revision history for Perl extension Libgenders.
 
-0.01  Fri Apr  4 10:50:23 2003
-	- original version; created by h2xs 1.21 with options
-		-n Libgenders genders.h
+May 2003 - Upgraded for genders-2-0-1a
 
+April 2003 - Original Version for genders-1-1-8
