@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.3 2003-05-14 20:04:32 achu Exp $
+# $Id: Genders.pm,v 1.4 2003-05-14 22:24:06 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -15,6 +15,10 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(_errormsg);
 our @EXPORT_OK = qw(_errormsg);
 our %EXPORT_TAGS = ( 'all' => [ qw(_errormsg) ] );
+
+sub GENDERS_DEFAULT_FILE {
+    return Libgenders->GENDERS_DEFAULT_FILE;
+}
 
 sub _errormsg {
     my $self = shift;
@@ -268,6 +272,8 @@ Genders - Perl library for querying genders file
 
  use Genders;
 
+ Genders::GENDERS_DEFAULT_FILE;
+
  $obj = Genders->new([$filename])
 
  $obj->debug($num)
@@ -289,6 +295,10 @@ Genders - Perl library for querying genders file
 This package provides a perl interface for querying a genders file.
 
 =over 4
+
+=item B<Genders::GENDERS_DEFAULT_FILE>
+
+Retrieve name of default genders file.
 
 =item B<Genders->new([$filename])>
 
