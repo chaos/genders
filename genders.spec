@@ -77,7 +77,7 @@ install src/libgenders/man/genders_list.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_stats.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/genders_errors.3.gz $RPM_BUILD_ROOT/usr/man/man3
 install src/libgenders/man/libgenders.3.gz $RPM_BUILD_ROOT/usr/man/man3
-cd src; make DESTDIR="$RPM_BUILD_ROOT" libdir=/usr/lib includedir=/usr/include install
+cd src; make DESTDIR="$RPM_BUILD_ROOT" bindir=/usr/bin libdir=/usr/lib includedir=/usr/include install
 
 %files
 %defattr(-,root,root)
