@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.97 2004-04-16 17:03:42 achu Exp $
+ *  $Id: genders.c,v 1.98 2004-04-20 22:55:40 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -667,8 +667,8 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 
 	if (list_find_first(attrvals, _is_attr_in_attrvals, attr) != NULL) {
 	  if (line_num > 0) {
-	    fprintf(stream, "Line %d: duplicate attributed listed\n",
-		    line_num);
+	    fprintf(stream, "Line %d: duplicate attribute \"%s\" listed\n",
+		    line_num, attr);
 	  }
 	  handle->errnum = GENDERS_ERR_PARSE;
 	  goto cleanup;
@@ -744,7 +744,7 @@ _parse_line(genders_t handle, char *line, int line_num, FILE *stream,
 
       if (rv == 1) {
         if (line_num > 0) {
-          fprintf(stream, "Line %d: duplicate attributed listed for node %s\n",
+          fprintf(stream, "Line %d: duplicate attributed listed for node \"%s\"\n",
                   line_num, node);
           retval = 1;
         }
