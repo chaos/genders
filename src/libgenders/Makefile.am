@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.15 2004-06-07 20:14:37 achu Exp $
+## $Id: Makefile.am,v 1.16 2004-06-07 22:11:30 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -25,11 +25,18 @@ VERSION_SCRIPT = genders.map
 OTHER_FLAGS = -Wl,--version-script=$(VERSION_SCRIPT)
 endif
 
+BUILT_SOURCES         = genders_parse.c genders_query.c
 include_HEADERS       = genders.h
 noinst_HEADERS        = genders_common.h fd.h hash.h hostlist.h list.h thread.h
 lib_LTLIBRARIES       = libgenders.la
 libgenders_la_CFLAGS  = -D_REENTRANT
-libgenders_la_SOURCES = genders.c genders_common.c fd.c \
-	                list.c hash.c thread.c hostlist.c
+libgenders_la_SOURCES = genders_parse.c genders_query.c genders.c genders_common.c \
+	                fd.c list.c hash.c thread.c hostlist.c
 libgenders_la_LDFLAGS = -version-info $(current):$(rev):$(age) $(OTHER_FLAGS)
 EXTRA_DIST            = genders.map
+
+genders_parse.c:
+	$(LEX) -ogenders_parse.c genders_parse.l
+
+genders_query.c: genders_parse.c
+	$(YACC) -d -o genders_query.c genders_query.y

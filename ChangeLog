@@ -1,12 +1,20 @@
 2004-06-07  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/genders_common.h, src/libgenders/genders_common.c: New files.
+	Added genders_query API function
+
+	* src/libgenders/genders.h.in (genders_query): New function.
+
+	* src/libgenders/genders_common.h,
+	src/libgenders/genders_common.c, src/libgenders/genders_query.l,
+	src/libgenders/genders_query.y: New files.
 
 	* src/libgenders/genders.c: Split off number of declarations and
 	functions into genders_common files.
 
 	* src/libgenders/Makefile.am: Updated to include new files.
-	
+
+	* configure.ac: Added yacc and lex check.
+
 2004-05-19  Albert Chu  <chu11@llnl.gov>
 
 	* Makefile.am, compat/Makefile.am, src/libgenders/Makefile.am,

@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.27 2004-04-27 17:49:00 achu Exp $
+## $Id: configure.ac,v 1.28 2004-06-07 22:11:30 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -71,6 +71,8 @@ AC_SUBST(PERL_INSTALL_PREFIX)
 AC_PROG_CC
 AC_PROG_LIBTOOL
 AC_PROG_MAKE_SET
+AM_PROG_LEX
+AC_PROG_YACC
 AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG(PERL, perl)
 

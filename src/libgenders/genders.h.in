@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.20 2004-04-28 23:35:42 achu Exp $
+ *  $Id: genders.h.in,v 1.21 2004-06-07 22:11:30 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -249,6 +249,14 @@ int genders_index_attrs(genders_t handle);
  */            
 int genders_index_attrvals(genders_t handle, const char *attr);
         
+/* Query the genders database for a set of nodes based on 
+ * union, intersection, or set difference of genders attributes.
+ * Signify union with '+', intersection with ',', and set difference
+ * '-'.  Operations are performed left to right.  Parentheses can be
+ * used to change the order of operations.
+ */ 
+int genders_query(genders_t handle, char *query, char *nodes[], int len);
+
 /* Parses a genders file, and outputs parse debugging 
  * information to the file stream  
  * if filename is NULL, parses default genders file
