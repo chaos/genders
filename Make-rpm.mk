@@ -1,55 +1,56 @@
-##
-# Makefile Include for RPM Construction
-#   by Chris Dunlap <cdunlap@llnl.gov>
-##
-# $Id: Make-rpm.mk,v 1.4 2002-12-08 19:42:34 garlick Exp $
-##
-# REQUIREMENTS:
-# - requires project to be under CVS version control
-# - requires "PROJECT" macro definition set to the CVS project name
-# - requires "META" file to reside in the top-level directory of the project
-# - requires RPM spec file named "$(PROJECT).spec.in" or "$(PROJECT).spec"
-#     to reside in the top-level directory of the project
-##
-# META FILE FORMAT:
-# - whitespace is ignored
-# - comments are ignored (ie, lines beginning with the pound character)
-# - lines are of the form "TAG:VALUE"
-# - TAGs and VALUEs cannot contain whitespace
-# - supported tags: NAME, VERSION, RELEASE
-# - NAME tag must be set the same as the PROJECT macro definition
-##
-# CVS TAG FORMAT:
-# - if RELEASE is not defined, tags are of the form "NAME-VERSION";
-#     o/w, they are of the form "NAME-VERSION-RELEASE"
-# - periods are converted to hyphens
-# - examples: foo v1.2.3 (foo-1-2-3), foo v1.2.3 r4 (foo-1-2-3-4)
-##
-# NOTES:
-# - RPM will be built directly from the CVS repository based on the CVS tag
-# - CVS tag will be based on the contents of the META file by default;
-#     this allows the version information to be stored and tagged within CVS
-# - CVS tag can be specified on the make cmdline to override the default
-#     (eg, make rpm tag=foo-1-2-3)
-# - CVS "HEAD" tag can be used to build the most recent version in CVS
-#     w/o requiring it to be tagged within CVS (eg, make rpm tag=HEAD);
-#     this is intended for pre-release testing purposes only
-# - if RELEASE is not specified in the META file when using a "HEAD" tag,
-#     a "rev" can be specified on the cmdline (eg, make rpm tag=HEAD rev=2);
-#     o/w, the RPM release is set to 1
-# - CVS "HEAD" releases have a release number of the form "YYMMDDHHMM".
-# - CVS "BASE" tag is not supported
-# - RPM will be signed with a PGP/GPG key if one is specified in ~/.rpmmacros
-##
-# USAGE:
-# - update and cvs commit the META file (cf, META FILE FORMAT)
-# - cvs tag/rtag the project (cf, CVS TAG FORMAT)
-# - make rpm
-##
+##*
+## Makefile Include for RPM Construction
+##   by Chris Dunlap <cdunlap@llnl.gov>
+##*
+## ConManId: Make-rpm.mk,v 1.20 2002/08/16 00:18:29 dun Exp
+## $Id: Make-rpm.mk,v 1.5 2003-04-09 19:54:19 achu Exp $
+##*
+## REQUIREMENTS:
+## - requires project to be under CVS version control
+## - requires "PACKAGE" macro definition set to the CVS project name
+## - requires "META" file to reside in the top-level directory of the project
+## - requires RPM spec file named "$(PACKAGE).spec.in" or "$(PACKAGE).spec"
+##     to reside in the top-level directory of the project
+##*
+## META FILE FORMAT:
+## - whitespace is ignored
+## - comments are ignored (ie, lines beginning with the pound character)
+## - lines are of the form "TAG:VALUE"
+## - TAGs and VALUEs cannot contain whitespace
+## - supported tags: NAME, VERSION, RELEASE
+## - NAME tag must be set the same as the PACKAGE macro definition
+##*
+## CVS TAG FORMAT:
+## - if RELEASE is not defined, tags are of the form "NAME-VERSION";
+##     o/w, they are of the form "NAME-VERSION-RELEASE"
+## - periods are converted to hyphens
+## - examples: foo v1.2.3 (foo-1-2-3), foo v1.2.3 r4 (foo-1-2-3-4)
+##*
+## NOTES:
+## - RPM will be built directly from the CVS repository based on the CVS tag
+## - CVS tag will be based on the contents of the META file by default;
+##     this allows the version information to be stored and tagged within CVS
+## - CVS tag can be specified on the make cmdline to override the default
+##     (eg, make rpm tag=foo-1-2-3)
+## - CVS "HEAD" tag can be used to build the most recent version in CVS
+##     w/o requiring it to be tagged within CVS (eg, make rpm tag=HEAD);
+##     this is intended for pre-release testing purposes only
+## - if RELEASE is not specified in the META file when using a "HEAD" tag,
+##     a "rev" can be specified on the cmdline (eg, make rpm tag=HEAD rev=2);
+##     o/w, the RPM release is set to 1
+## - CVS "HEAD" releases have a release number of the form "YYMMDDHHMM".
+## - CVS "BASE" tag is not supported
+## - RPM will be signed with a PGP/GPG key if one is specified in ~/.rpmmacros
+##*
+## USAGE:
+## - update and cvs commit the META file (cf, META FILE FORMAT)
+## - cvs tag/rtag the project (cf, CVS TAG FORMAT)
+## - make rpm
+##*
 
 tar rpm:
-	@proj=$(PROJECT); if test -z "$$proj"; then \
-	  echo "ERROR: PROJECT macro def is not defined." 1>&2; exit 1; fi; \
+	@proj=$(PACKAGE); if test -z "$$proj"; then \
+	  echo "ERROR: PACKAGE macro def is not defined." 1>&2; exit 1; fi; \
 	if test -z "$$tag"; then \
 	  if ! test -f META; then \
 	    echo "ERROR: Cannot find $$proj metadata in \"`pwd`/META\"." 1>&2;\
@@ -73,7 +74,7 @@ tar rpm:
 	  echo "ERROR: Cannot find $$proj metadata in CVS." 1>&2; exit 1; fi; \
 	name=`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' $$meta`; \
 	if test "$$proj" != "$$name"; then \
-	  echo "ERROR: PROJECT does not match metadata." 1>&2; exit 1; fi; \
+	  echo "ERROR: PACKAGE does not match metadata." 1>&2; exit 1; fi; \
 	ver=`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' $$meta`; \
 	rel=`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' $$meta`; \
 	test "$$tag" = "HEAD" && rel="`date +%y%m%d%H%M`"; \
@@ -110,10 +111,11 @@ rpm-internal: tar-internal
 	    <$$spec >$$tmp/SPECS/$$proj.spec; \
 	if ! test -s $$tmp/SPECS/$$proj.spec; then \
 	  echo "ERROR: Cannot create $$proj.spec." 1>&2; exit 1; fi; \
-	rpm --showrc | egrep "[[:space:]]_(gpg|pgp)_name[[:space:]]" \
+	rpmbuild --showrc | egrep "[[:space:]]_(gpg|pgp)_name[[:space:]]" \
 	  >/dev/null && sign="--sign"; \
-	if ! rpm -ba --define "_tmppath $$tmp/TMP" --define "_topdir $$tmp" \
-	  $$sign --quiet $$tmp/SPECS/$$proj.spec >$$tmp/rpm.log 2>&1; then \
+	if ! rpmbuild -ba --define "_tmppath $$tmp/TMP" \
+	  --define "_topdir $$tmp" $$sign --quiet $$tmp/SPECS/$$proj.spec \
+	  >$$tmp/rpm.log 2>&1; then \
 	    cat $$tmp/rpm.log; exit 1; fi; \
 	cp -p $$tmp/RPMS/*/$$proj-*.rpm $$tmp/SRPMS/$$proj-*.src.rpm . \
 	  || exit 1
