@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.10 2003-03-14 22:55:18 achu Exp $
+ * $Id: genders.c,v 1.11 2003-03-18 00:18:25 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1392,7 +1392,7 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
   return attrcount;  
 }
 
-int genders_testattr(genders_t handle, char *node, char *attr, char *val) {
+int genders_testattr(genders_t handle, char *node, char *attr, char *val, int len) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
   char *nodename;
@@ -1406,7 +1406,7 @@ int genders_testattr(genders_t handle, char *node, char *attr, char *val) {
     return -1;
   }
 
-  if (attr == NULL) {
+  if (attr == NULL || (val != NULL && len <= 0)) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -1440,6 +1440,10 @@ int genders_testattr(genders_t handle, char *node, char *attr, char *val) {
     
     if (strcmp(attrval_list->name,attr) == 0) {
       if (val != NULL && attrval_list->val != NULL) {
+	if ((strlen(attrval_list->val) + 1) > len) {
+	  handle->errnum = GENDERS_ERR_OVERFLOW;
+	  return -1;
+	}
 	strcpy(val,attrval_list->val);
       }
       handle->errnum = GENDERS_ERR_SUCCESS;
