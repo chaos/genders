@@ -18,7 +18,7 @@ ok(1); # If we made it this far, we're ok.
 print "\n";
 
 $handle = Libgenders::genders_handle_create();
-if ($handle == 0) {
+if (!defined $handle) {
     print "Error, genders_handle_create()\n";
     exit(1);
 }
@@ -94,33 +94,38 @@ $ret = Libgenders::genders_testattr($handle, "mgmt");
 print "mgmt - ",$ret,"\n";
 $ret = Libgenders::genders_testattr($handle, "foo");
 print "foo - ",$ret,"\n";
-
-$ret = Libgenders::genders_testattr($handle, "resmgr");
-print "resmgr - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "mgmt");
-print "mgmt - ",$ret,"\n";
-$ret = Libgenders::genders_testattr($handle, "foo");
-print "foo - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "resmgr", "rms");
-print "resmgr=rms - ",$ret,"\n";
+$ret = Libgenders::genders_testattrval($handle, "resmgr", "both");
+print "resmgr=both - ",$ret,"\n";
 $ret = Libgenders::genders_testattrval($handle, "resmgr", "bar");
 print "resmgr=bar - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "mgmt", "rms");
-print "mgmt=rms - ",$ret,"\n";
+$ret = Libgenders::genders_testattrval($handle, "mgmt", "both");
+print "mgmt=both - ",$ret,"\n";
 $ret = Libgenders::genders_testattrval($handle, "mgmt", "bar");
 print "mgmt=bar - ",$ret,"\n";
-$ret = Libgenders::genders_testattrval($handle, "foo", "rms");
-print "foo=rms - ",$ret,"\n";
+$ret = Libgenders::genders_testattrval($handle, "foo", "both");
+print "foo=both - ",$ret,"\n";
 $ret = Libgenders::genders_testattrval($handle, "foo", "bar");
 print "foo=bar - ",$ret,"\n";
 print "\n";
 
-$ret = Libgenders::genders_testnode($handle);
+$ret = Libgenders::genders_isnode($handle);
 print "local - ",$ret,"\n";
-$ret = Libgenders::genders_testnode($handle, "mdevi");
+$ret = Libgenders::genders_isnode($handle, "mdevi");
 print "mdevi - ",$ret,"\n";
-$ret = Libgenders::genders_testnode($handle, "foo");
+$ret = Libgenders::genders_isnode($handle, "foo");
 print "foo - ",$ret,"\n";
+
+$ret = Libgenders::genders_isattr($handle, "qla");
+print "qla - ",$ret,"\n";
+$ret = Libgenders::genders_isattr($handle, "foo");
+print "foo - ",$ret,"\n";
+
+$ret = Libgenders::genders_isattrval($handle, "resmgr", "both");
+print "resmgr=both - ",$ret,"\n";
+$ret = Libgenders::genders_isattrval($handle, "resmgr", "foo");
+print "resmgr=foo - ",$ret,"\n";
+$ret = Libgenders::genders_isattrval($handle, "foo", "bar");
+print "foo=bar - ",$ret,"\n";
 
 $ret = Libgenders::genders_parse($handle);
 print "errors - ", $ret, "\n"; 
