@@ -1,0 +1,264 @@
+                                  Genders
+
+                                Jim Garlick
+
+                  High Performance Computing Systems Group
+                            Livermore Computing
+                   Lawrence Livermore National Laboratory
+
+                               June 19, 2000
+
+                     (Revised by Albert Chu - May 2003) 
+
+  ------------------------------------------------------------------------
+NOTE: This document is part of the "Genders" software package,
+approved by LLNL for public release.  Please see the DISCLAIMER file
+distributed with the package for restrictions.
+  ------------------------------------------------------------------------
+
+Introduction
+
+Genders is a simple concept that has been extended to address configuration
+management issues that arise on MPP clusters[1].  The basic concept is that a
+genders file containing a list of node names and their attributes is
+replicated on each node in a cluster.  By representing the configuration of
+an MPP in this file, scripts and rdist Distfiles that might otherwise
+contain hard-coded node lists, can be generalized to work with different
+configurations of the same cluster, and even with multiple clusters.
+
+The framework has proven to be useful on clusters ranging in size from the
+ASCI Blue-Pacific SST system at 1464 nodes, to collections of two or three
+workstations.  
+
+Basic Operation
+
+This section describes the formats of the genders and clusters files, and the
+nodeattr command.  The genders file, briefly described in the introduction, 
+contains a list of node names, and for each node, a list of attributes.  The
+genders file is typically found in /etc (on Linux when installed from
+the genders RPM) or /admin/etc (on other systems).
+
+Genders Format
+
+Each line of the genders file has the following format:
+
+     nodename attr[=value],attr[=value],attr[=value],...
+
+The nodename is the shortened[2] hostname of a node and must be unique in
+the genders file.  This is followed by any number of spaces or tabs, and then
+the comma-separated list of attributes, each of which can optionally have a
+value.  There must be no spaces embedded in the attribute list and there is
+no provision for continuation lines.  Commas and equal characters are special
+and cannot appear in attribute names or their values.  Comments are prefixed 
+with the hash chracter (#) and can appear anywhere in the file.  The active
+genders file is typically found at /etc/genders or /admin/etc/genders.
+
+Here is a rather undeveloped genders file from a small 8-node linux cluster:
+
+     slc0 elanid=8,passwdhost,nqsmgr
+     slc1 elanid=9,nqscompute
+     slc2 elanid=10,nqscompute
+     slc3 elanid=11,nqscompute
+     slc4 elanid=12,nqscompute
+     slc5 elanid=13,nqscompute
+     slc6 elanid=14,nqscompute
+     slc7 elanid=15,nqscompute
+
+Nodeattr Usage
+
+A program called nodeattr is used to query data in the genders file.  Because
+the genders file is replicated on all nodes in a cluster, this query is a
+local operation, not dependent on the network.  Nodeattr is invoked as
+follows:
+
+     nodeattr [-f genders] [-q | -c | -n | -s] [-r] attr[=val]
+     nodeattr [-f genders] [-v] [node] attr[=val]
+     nodeattr [-f genders] -l [node]
+     nodeattr [-f genders] --check
+
+The -f option specifies a genders file path other than the default.
+
+The -q, -c, -n, or -s options followed by an attribute name cause a list of
+nodes having the specified attribute to be printed on stdout, formatted
+according to the option specified: -q is hostrange, -c is comma-separated, 
+-n is newline separated, and -s is space separated.  
+
+If none of the formatting options are specified, nodeattr returns a zero
+value if the local node has the specified attribute, else nonzero.  The -v
+option causes any value associated with the attribute to go to stdout.  If a
+node name is specified before the attribute, it is queried instead of the
+local node.
+
+The -l option is used to generate a list of attributes for a particular
+node.  If the node is not specified, a unique attributes appearing in the
+genders file.
+
+Nodeattr can usually be found in /usr/bin (Linux RPM) or /admin/scripts 
+(other systems).
+
+Example: Rc Script
+
+The nodeattr command can enable a single script to behave differently
+depending on the role or gender of the node it is executing on, simplifying
+configuration management of the MPP.  For example, all nodes in an MPP
+could have the same rc.local file:
+
+     #!/bin/sh
+     if nodeattr raid; then
+             initialize_raid
+     fi
+     if nodeattr login;
+             then sshd
+     fi
+     ...
+
+If the node has "raid" in its attribute list, it would execute
+initialize_raid; if it had "login" in its attribute list, it would start the
+secure shell daemon.  This technique is simpler and less prone to failure
+than adding code to test for "clues" to a nodes function, such as the
+existence of a RAID device in /dev or a different set of installed products
+on a login node.  Further, changing the role of a node does not require
+a laborious audit of scripts; one simply changes the genders file and
+all genders-enabled scripts change their behavior.
+
+Attribute values might be used to store node configuration information such
+as a node's default IP route.  For example, the node may have an attribute:
+
+     iprouter=big-rtr.llnl.gov
+
+and rc script could extract this value and pass it to the route command:
+
+     route add net default `nodeattr -v iprouter`
+
+Example: Host Lists
+
+Host lists are commonly needed on MPP's to set up parallel jobs or to run
+system administration commands on particular sets of nodes.  In the following
+example, nodeattr generates a newline-separated list of nodes with the login
+attribute to pass to the fping parallel ping command:
+
+     fping `nodeattr -c login`
+
+Batch system configurations typically need lists of nodes that belong to
+batch queues.  These might be generated by assigning nodes belonging to a
+particular queue an attribute in the genders file and then using nodeattr to
+generate the batch configuration.  For example, an NQS manager host might get
+its configuration as follows, assuming the nqsmgr and nqscompute attributes
+are appropriately assigned in the genders file:
+
+     #!/bin/sh
+
+     #
+     # Configure queues on the nqsmgr node.
+     #
+     if nodeattr nqsmgr; then
+
+             # All nodes with the nqscompute attribute will be B queue destinations.
+             # Make a comma-separated list of B@host destinations.
+             for host in `nodeattr -n nqscompute`; do
+                     CPU_QUEUES=${CPU_QUEUES}B@${host},
+             done
+             CPU_QUEUES=`echo $CPU_QUEUES|sed 's/,$//'`
+
+             echo Adding manager queues
+             qmgr << EOT
+                     set log_file /var/spool/nqs/log
+                     set shell_strategy fixed = (/bin/sh)
+                     set default destination_retry wait 1
+                     create pipe_queue X priority = 10 \
+                         server = (/usr/lib/nqs/pipeclient) \
+                         destination = ($CPU_QUEUES)
+                     run_limit = 1
+                     set default batch_request queue X
+                     enable queue X
+                     start queue X
+                     exit
+     EOT
+     fi
+
+     #
+     # Configure queues on the nqscompute nodes.
+     #
+     if nodeattr nqscompute; then
+             echo Adding compute queues
+             qmgr << EOT2
+                     set log_file /var/spool/nqs/log
+                     set shell_strategy fixed = (/bin/sh)
+                     create batch_queue A priority=10
+                     create pipe_queue B priority=10 \
+                         server=(/usr/lib/nqs/pipeclient)  \
+                         destination=(A) run_limit=1
+                     enable queue A
+                     enable queue B
+                     start queue A
+                     start queue B
+                     exit
+     EOT2
+     fi
+     exit 0
+
+Programming with Genders
+
+Three different APIs have been developed that allow programmers to
+programmatically parse the genders file.  "libgenders" is a C API which
+can be linked by including genders.h and linking the library libgenders.
+"Libgenders" is a Perl extensions interface directly to the C API (with
+minor changes for the inherent differences between C and Perl). "Genders"
+is another Perl API, but offers a more traditional Perl API than
+"Libgenders."  The reader can learn more about these libraries by reading
+the manpages libgenders(3), Libgenders(3), and Genders(3).
+
+Example: nqs_mknmap
+
+The following script uses the Genders library to get a list of all nodes
+in the cluster.  It then adds them to the NMAP database used by NQS:
+
+     #!/usr/bin/perl
+     #
+     # $Id: TUTORIAL,v 1.6 2003-05-14 23:46:06 achu Exp $
+     # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $
+     #
+
+     use Genders;
+
+     $prog = "nqs_mknmap";
+     $path_nmapmgr = "/usr/bin/nmapmgr";
+     $path_nmapdir = "/etc/nmap";
+
+     if (opendir(DIR, $path_nmapdir)) {
+             foreach $file (grep(!/^\.\.?$/, readdir(DIR))) {
+                     unlink("$path_nmapdir/$file");
+             }
+             closedir(DIR);
+     }
+     if (! -d $path_nmapdir) {
+             mkdir($path_nmapdir, 0755);
+     }
+
+     if (open(PIPE, "|$path_nmapmgr")) {
+             printf PIPE ("create\n");
+             $i = 0;
+             $obj = Genders->new();   
+             foreach $node ($obj->getnodes()) {
+                     printf PIPE ("add mid %d %s\n", $i, $node);
+                     $i++;
+             }
+             printf PIPE ("exit\n");
+             close(PIPE);
+     }  else {
+             printf STDERR ("%s: could not exec $path_nmap_mgr\n", $prog);
+             exit(1);
+     }
+     exit(0);
+
+  ------------------------------------------------------------------------
+[1] Here a cluster is a collection of nodes that are administered as a unit,
+where each node runs its own UNIX operating system image.
+
+[2] This should be the hostname as reported by the hostname -s command.
+Names for other network interfaces on the same node do not appear in the
+genders file.
+
+  ------------------------------------------------------------------------
+$Id: TUTORIAL,v 1.6 2003-05-14 23:46:06 achu Exp $
+$Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/TUTORIAL,v $

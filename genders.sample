@@ -1,0 +1,20 @@
+#
+# $Id: genders.sample,v 1.5 2003-05-14 23:46:06 achu Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/genders.sample,v $
+#
+slc0  passwdhost,up2000,type=up2000,ditty=0,crash,eip,elan
+slc1  up2000,type=up2000,ditty=0,wti=/dev/ttyD23:0,crash,eip,elan
+slc2  up2000,type=up2000,ditty=2,wti=/dev/ttyD23:1,crash,eip,elan
+slc3  up2000,type=up2000,ditty=3,wti=/dev/ttyD23:2,crash,eip,elan
+slc4  up2000,type=up2000,ditty=4,wti=/dev/ttyD23:3,crash,eip,elan
+slc5  up2000,type=up2000,ditty=5,wti=/dev/ttyD23:4,crash,eip,elan
+slc6  cs20,type=cs20,ditty=6,mac0=00:02:56:00:05:F2,crash,eip,elan
+slc7  cs20,type=cs20,ditty=7,mac0=00:02:56:00:03:49,crash,eip,elan
+slc8  es40,type=es40,ditty=0,crash,eip,elan
+slc9  es40,type=es40,ditty=0,crash,eip,elan
+slc10 es40,type=es40,ditty=10,crash,eip,elan
+slc11 es40,type=es40,ditty=11,crash,eip,elan
+slc12 es40,type=es40,ditty=12,crash,eip,elan
+slc13 es40,type=es40,ditty=13,crash,eip,elan
+slc14 es40,type=es40,ditty=14,crash,eip,elan
+slc15 es40,type=es40,ditty=15,crash,eip,elan
