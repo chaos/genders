@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.6 2003-04-01 18:00:50 achu Exp $
+ *  * $Id: nodeattr.c,v 1.7 2003-04-01 22:05:23 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -31,6 +31,7 @@ static struct option longopts[] = {
     { "listattr", 0, 0, 'l' },
     { "altnames", 0, 0, 'r' },
     { "filename", 1, 0, 'f' },
+    { "check", 0, 0, 'k'},
     { 0,0,0,0 },
 };
 
@@ -56,8 +57,8 @@ static char *_attr_create(genders_t gp);
 int
 main(int argc, char *argv[])
 {
-    int c;
-    int ropt = 0, lopt = 0, qopt = 0, Copt = 0, vopt = 0;
+    int c, errors;
+    int ropt = 0, lopt = 0, qopt = 0, Copt = 0, vopt = 0, kopt = 0;
     char *filename = DEFAULT_GENDERS_FILE;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
@@ -95,13 +96,16 @@ main(int argc, char *argv[])
         case 'f':   /* --filename */
             filename = optarg;
             break;
+	case 'k':   /* --check */ 
+	    kopt = 1;
+	    break;
         default:
             usage();
             break;
         }
     }
 
-    if (optind == argc && !Copt && !lopt)
+    if (optind == argc && !Copt && !lopt && !kopt)
         usage();
 
     /* Initialize genders package. */
@@ -110,6 +114,16 @@ main(int argc, char *argv[])
         fprintf(stderr, "nodeattr: out of memory\n");
         exit(1);
     }
+
+    /* parse check */
+    if (kopt) {
+        if ((errors = genders_parse(gp, filename, NULL)) == -1) {
+	  _gend_error_exit(gp, "genders_parse");
+	}
+	fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
+	exit(0);
+    }
+
     if (genders_open(gp, filename) < 0)
         _gend_error_exit(gp, filename);
 
@@ -280,7 +294,8 @@ static void usage(void)
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-r] attr[=val]\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
-        "or     nodeattr [-f genders] -C [node]\n");
+        "or     nodeattr [-f genders] -C [node]\n"
+	"or     nodeattr [-f genders] --check\n");
     exit(1);
 }
 
