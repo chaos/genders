@@ -1,3 +1,13 @@
+2003-03-31 Albert Chu <chu11@llnl.gov>
+        * fixed error with magic numbers in libgenders
+	* added nodeattr C version as nodeattr command to install
+	* removed nodeattr perl version from installation
+	* updated gendlib(3) from accessing /etc/clusters, cluster is
+	  now based on cluster attribute of genders file.
+	* updated dist2 and nodeattr (perl) based on the change genders
+	  file change
+	* tagged genders-1-1-4
+	
 2003-03-12 Albert Chu <chu11@llnl.gov>
         * moved unnecessary #includes and #defines from genders.h
 	  into genders.c  
