@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.46 2003-05-27 23:27:28 achu Exp $
+ * $Id: genders.c,v 1.47 2003-05-28 15:09:22 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -435,8 +435,10 @@ int genders_parse_line(genders_t handle,
                        char *line, 
                        int debug_line, 
                        FILE *stream) {
-  char *line_token = NULL, *attr = NULL, *val = NULL;
   char *linebuf, *attrbuf, *temp;
+  char *line_token = NULL;
+  char *attr = NULL;
+  char *val = NULL;
   int ret, attrcount = 0;
 
   /* "remove" comments */
@@ -991,7 +993,6 @@ int genders_getnodes(genders_t handle,
                      int len, 
                      const char *attr, 
                      const char *val) {
-  
   struct node_listnode *nlist;
   struct attrval_listnode *avlist;
   int count = 0;
@@ -1029,7 +1030,6 @@ int genders_getattr(genders_t handle,
                     char *vals[], 
                     int len, 
                     const char *node) {
-
   struct node_listnode *nlist;
   struct attrval_listnode *avlist;
   int count = 0;
@@ -1280,7 +1280,6 @@ int genders_has_attr(genders_t handle,
                      const char *attr, 
                      struct node_listnode *node_listnode,
                      struct attrval_listnode **attrval_listnode) {
-
   struct attrval_listnode *avlist;
 
   avlist = node_listnode->attrvals_head;
@@ -1297,7 +1296,10 @@ int genders_has_attr(genders_t handle,
 }
 
 int genders_parse(genders_t handle, const char *filename, FILE *stream) {
-  int ret, line_count = 1, retval = 0, fd = -1;
+  int line_count = 1;
+  int retval = 0;
+  int fd = -1;
+  int ret;
   char *line = NULL;
 
   if (genders_handle_err_check(handle) == -1)
