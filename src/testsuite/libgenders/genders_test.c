@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test.c,v 1.2 2004-12-30 00:14:35 achu Exp $
+ *  $Id: genders_test.c,v 1.3 2004-12-30 00:21:17 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -36,8 +36,9 @@
 #include "genders_test_functionality.h"
 
 static int verbose = 0;
-static int corner_case_tests = 1;
-static int functionality_tests = 1;
+static int all_tests = 1;
+static int corner_case_tests = 0;
+static int functionality_tests = 0;
 
 static void
 _usage(void)
@@ -46,8 +47,9 @@ _usage(void)
 	  "Usage: genders_test [OPTIONS]\n"
 	  "-h        output usage\n"
 	  "-v        verbose output (can be used multiple times)\n"
-	  "-c        disable corner case tests\n"
-	  "-f        disable functionality tests\n"
+	  "-a        run all tests (default)\n"
+	  "-c        run only corner case tests\n"
+	  "-f        run only functionality tests\n"
 	  );
   exit(1);
 }
@@ -57,7 +59,7 @@ _cmdline_parse(int argc, char **argv)
 {
   int c;
 
-  while ((c = getopt(argc, argv, "hvcf")) != -1)
+  while ((c = getopt(argc, argv, "hvacf")) != -1)
     {
       switch (c)
 	{
@@ -66,11 +68,16 @@ _cmdline_parse(int argc, char **argv)
 	case 'v':
 	  verbose++;
 	  break;
+	case 'a':
+	  all_tests++;
+	  break;
 	case 'c':
-	  corner_case_tests = 0;
+	  corner_case_tests++;
+	  all_tests = 0;
 	  break;
 	case 'f':
-	  functionality_tests = 0;
+	  functionality_tests++;
+	  all_tests = 0;
 	  break;
 	default:
 	  fprintf(stderr, "command line option error");
@@ -215,7 +222,7 @@ main(int argc, char **argv)
   genders_err_init(argv[0]);
   _cmdline_parse(argc, argv);
 
-  if (corner_case_tests)
+  if (all_tests || corner_case_tests)
     {
       errcount = _test_corner_cases();
       if ((verbose && errcount)
@@ -224,7 +231,7 @@ main(int argc, char **argv)
       errtotal += errcount;
     }
   
-  if (functionality_tests)
+  if (all_tests || functionality_tests)
     {
       errcount = _test_functionality();
       if ((verbose && errcount)
@@ -233,7 +240,8 @@ main(int argc, char **argv)
       errtotal += errcount;
     }
 
-  if (corner_case_tests 
+  if (all_tests 
+      || corner_case_tests 
       || functionality_tests)
     {
       if ((verbose && errtotal)
