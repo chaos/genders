@@ -6,7 +6,7 @@
 
 	* genders.spec.in: Removed execution of bootstrap.
 
-	* compat/Makefile.am, src/Genders/Makefile.am,
+	* Makefile.am, compat/Makefile.am, src/Genders/Makefile.am,
 	src/Libgenders/Makefile.am, src/libgenders/Makefile.am,
 	man/Makefile.am, man/compat/Makefile.am: distcheck fixes.
 
