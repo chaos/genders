@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.13 2003-04-24 18:45:26 achu Exp $
+ *  * $Id: nodeattr.c,v 1.14 2003-05-08 17:03:24 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -59,7 +59,7 @@ main(int argc, char *argv[])
 {
     int c, errors;
     int ropt = 0, lopt = 0, qopt = 0, Copt = 0, vopt = 0, kopt = 0;
-    char *filename = DEFAULT_GENDERS_FILE;
+    char *filename = GENDERS_DEFAULT_FILE;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
 
