@@ -22,4 +22,4 @@ genders.h       header file for C API in libgenders
 
 Libgenders.pm   Perl extensions interface to C API
 
-Genders.pm      Cleaner Perl interface to C API   
+Genders.pm      perl interface to libgenders
