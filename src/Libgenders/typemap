@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: typemap,v 1.5 2003-12-30 21:47:13 achu Exp $
+#  $Id: typemap,v 1.6 2003-12-30 23:07:48 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -25,7 +25,7 @@
 #############################################################################
 
 #
-# O_OBJECT by Dean Roehrich, CPAN 
+# O_OBJECT from Dean Roehrich's Cookbook      
 # http://www.cpan.org/modules/by-authors/id/DMR/
 #
 
