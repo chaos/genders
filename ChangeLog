@@ -3,7 +3,7 @@
 	* src/libgenders/genders_query.y (_calc_query): Handle NULL query
 	special by getting all genders nodes.
 
-	* man/genders_query.y: Node special case of NULL query.
+	* man/genders_query.y: Note special case of NULL query.
 
 	* src/libgenders/genders_query.y, src/libgenders/genders_parse.l:
 	Add parsing for tilde ('~') token for set complements.
@@ -14,6 +14,13 @@
 	* src/libgenders/genders_query.y (genders_set_complement_flag):
 	New function.
 	
+	* src/libgenders/genders_query.y (_calc_attrval, _calc_union,
+	_calc_intersection, _calc_difference, _calc_complement): New
+	functions to clean up code.
+
+	* src/libgenders/genders_query.y: Call only hostlist_uniq in
+	situations where calling both it and hostlist_sort.
+
 2004-11-06  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query.y (_calc_query): Modified to return

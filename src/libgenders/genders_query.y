@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.14 2004-11-10 22:59:44 achu Exp $
+ *  $Id: genders_query.y,v 1.15 2004-11-11 00:04:21 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -152,9 +152,7 @@ _parse_query(genders_t handle, char *query)
 
   yyparse();
 
-  /* This can happen if the user passes in all whitespace for
-   * example 
-   */
+  /* For example, this can happen if the user passes in all whitespace */
   if (!genders_treeroot && genders_query_err == GENDERS_ERR_SUCCESS)
     genders_query_err = GENDERS_ERR_SYNTAX;
 
@@ -171,200 +169,249 @@ _parse_query(genders_t handle, char *query)
 }
 
 static hostlist_t
+_calc_attrval(genders_t handle, struct genders_treenode *t)
+{
+  hostlist_t h = NULL;
+  char **nodes = NULL;
+  int i, len, num;
+  char *attr, *val;
+    
+  attr = t->str; 
+  if ((val = strchr(attr, '=')))
+    *val++ = '\0';
+    
+  if ((len = genders_nodelist_create(handle, &nodes)) < 0)
+    return NULL;
+
+  if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
+    return NULL;
+
+  if (!(h = hostlist_create(NULL))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  for (i = 0; i < num; i++) {
+    if (hostlist_push(h, nodes[i]) == 0) {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
+  }
+
+  genders_nodelist_destroy(handle, nodes);
+  hostlist_uniq(h);
+  return h;
+ cleanup:
+  genders_nodelist_destroy(handle, nodes);
+  hostlist_destroy(h);
+  return NULL;
+}
+
+static hostlist_t
+_calc_union(genders_t handle, hostlist_t l, hostlist_t r)
+{
+  hostlist_t h = NULL;
+  hostlist_iterator_t itr = NULL;
+  char buf[HOSTLIST_BUFLEN];
+  int rv;
+  
+  if (!(h = hostlist_create(NULL))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  memset(buf, '\0', HOSTLIST_BUFLEN);
+  if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) {
+    handle->errnum = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
+  
+  if (rv > 0)
+    hostlist_push(h, buf);
+  
+  memset(buf, '\0', HOSTLIST_BUFLEN);
+  if ((rv = hostlist_ranged_string(r, HOSTLIST_BUFLEN, buf)) < 0) {
+    handle->errnum = GENDERS_ERR_INTERNAL;
+    goto cleanup;
+  }
+  
+  if (rv > 0)
+    hostlist_push(h, buf);
+  
+  hostlist_uniq(h);
+  hostlist_iterator_destroy(itr);
+  return h;
+ cleanup:
+  hostlist_iterator_destroy(itr);
+  hostlist_destroy(h);
+  return NULL;
+}
+            
+static hostlist_t
+_calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
+{
+  hostlist_t h = NULL;
+  hostlist_iterator_t itr = NULL;
+  char *node;
+  
+  if (!(h = hostlist_create(NULL))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  if (!(itr = hostlist_iterator_create(l))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+  
+  while ((node = hostlist_next(itr))) {
+    if (hostlist_find(r, node) >= 0) {
+      if (hostlist_push_host(h, node) <= 0) {
+        free(node);
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup;
+      }
+    }
+    free(node);
+  }
+  
+  hostlist_uniq(h);
+  hostlist_iterator_destroy(itr);
+  return h;
+ cleanup:
+  hostlist_iterator_destroy(itr);
+  hostlist_destroy(h);
+  return NULL;
+}
+
+static hostlist_t
+_calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
+{
+  hostlist_t h = NULL;
+  hostlist_iterator_t itr = NULL;
+  char *node;
+      
+  if (!(h = hostlist_create(NULL))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  if (!(itr = hostlist_iterator_create(l))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+      
+  while ((node = hostlist_next(itr))) {
+    if (hostlist_find(r, node) < 0) {
+      if (hostlist_push_host(h, node) <= 0) {
+        free(node);
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup;
+      }
+    }
+    free(node);
+  }
+          
+  hostlist_uniq(h);
+  hostlist_iterator_destroy(itr);
+  return h;
+ cleanup:
+  hostlist_iterator_destroy(itr);
+  hostlist_destroy(h);
+  return NULL;
+
+}
+
+static hostlist_t
+_calc_complement(genders_t handle, hostlist_t h)
+{
+  hostlist_t ch = NULL;
+  char **nodes = NULL;
+  char *node = NULL;
+  int i, len, num;
+    
+  if ((len = genders_nodelist_create(handle, &nodes)) < 0)
+    return NULL;
+
+  if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0)
+    return NULL;
+  
+  if (!(ch = hostlist_create(NULL))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
+
+  for (i = 0; i < num; i++) {
+    if (hostlist_find(h, nodes[i]) < 0) {
+      if (hostlist_push_host(ch, nodes[i]) <= 0) {
+        free(node);
+        handle->errnum = GENDERS_ERR_INTERNAL;
+        goto cleanup;
+      }
+    }
+    free(node);
+  }
+ 
+  genders_nodelist_destroy(handle, nodes);
+  hostlist_uniq(ch);
+  hostlist_destroy(h);
+  return ch;
+ cleanup:
+  genders_nodelist_destroy(handle, nodes);
+  hostlist_destroy(ch);
+  return NULL;
+}
+
+static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
   hostlist_t h = NULL;
 
-  if (!t->left && !t->right) {
-    char **nodes = NULL;
-    int i, len, num;
-    char *attr, *val;
-    
-    attr = t->str; 
-    if ((val = strchr(attr, '=')))
-      *val++ = '\0';
-    
-    if ((len = genders_nodelist_create(handle, &nodes)) < 0)
-      return NULL;
-
-    if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
-      return NULL;
-
-    if (!(h = hostlist_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup_attr;
-    }
-
-    for (i = 0; i < num; i++) {
-      if (hostlist_push(h, nodes[i]) == 0) {
-        handle->errnum = GENDERS_ERR_INTERNAL;
-        goto cleanup_attr;
-      }
-    }
-
-    genders_nodelist_destroy(handle, nodes);
-    hostlist_uniq(h);
-    goto do_complement;
-  cleanup_attr:
-    genders_nodelist_destroy(handle, nodes);
-    hostlist_destroy(h);
-    return NULL;
-  }
+  if (!t->left && !t->right)
+    h = _calc_attrval(handle, t);
   else {
-    hostlist_t l, r;
-    hostlist_iterator_t itr = NULL;
-    char buf[HOSTLIST_BUFLEN];
-    int rv;
-    
-    l = r = NULL;
-
-    /* Is this possible? Leave just in case */
-    if (!(t->left && t->right)) {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      return NULL;
-    }
+    hostlist_t l = NULL;
+    hostlist_t r = NULL;
 
     if (!(l = _calc_query(handle, t->left)))
       goto cleanup_calc;
     if (!(r = _calc_query(handle, t->right)))
       goto cleanup_calc;
-
-    if (!(h = hostlist_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup_calc;
-    }
     
     /* | is Union
      * & is Intersection
      * - is Set Difference
      */
     
-    if (strcmp(t->str, "|") == 0) {
-      memset(buf, '\0', HOSTLIST_BUFLEN);
-      if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) {
-        handle->errnum = GENDERS_ERR_INTERNAL;
-        goto cleanup_calc;
-      }
-
-      if (rv > 0)
-        hostlist_push(h, buf);
-
-      memset(buf, '\0', HOSTLIST_BUFLEN);
-      if ((rv = hostlist_ranged_string(r, HOSTLIST_BUFLEN, buf)) < 0) {
-        handle->errnum = GENDERS_ERR_INTERNAL;
-        goto cleanup_calc;
-      }
-          
-      if (rv > 0)
-        hostlist_push(h, buf);
-
-      hostlist_uniq(h);
-      hostlist_destroy(l);
-      hostlist_destroy(r);
-      goto do_complement;
-    }
-    else if (strcmp(t->str, "&") == 0) {
-      char *node;
-      
-      if (!(itr = hostlist_iterator_create(l))) {
-        handle->errnum = GENDERS_ERR_OUTMEM;
-        goto cleanup_calc;
-      }
-      
-      while ((node = hostlist_next(itr))) {
-        if (hostlist_find(r, node) >= 0) {
-          if (hostlist_push_host(h, node) <= 0) {
-            free(node);
-            handle->errnum = GENDERS_ERR_INTERNAL;
-            goto cleanup_calc;
-          }
-        }
-        free(node);
-      }
-          
-      hostlist_uniq(h);
-      hostlist_iterator_destroy(itr);
-      hostlist_destroy(l);
-      hostlist_destroy(r);
-      goto do_complement;
-    }
-    else if (strcmp(t->str, "-") == 0) {
-      char *node;
-      
-      if (!(itr = hostlist_iterator_create(l))) {
-        handle->errnum = GENDERS_ERR_OUTMEM;
-        goto cleanup_calc;
-      }
-      
-      while ((node = hostlist_next(itr))) {
-        if (hostlist_find(r, node) < 0) {
-          if (hostlist_push_host(h, node) <= 0) {
-            free(node);
-            handle->errnum = GENDERS_ERR_INTERNAL;
-            goto cleanup_calc;
-          }
-        }
-        free(node);
-      }
-          
-      hostlist_uniq(h);
-      hostlist_iterator_destroy(itr);
-      hostlist_destroy(l);
-      hostlist_destroy(r);
-      goto do_complement;
-    }
+    if (strcmp(t->str, "|") == 0)
+      h = _calc_union(handle, l, r);
+    else if (strcmp(t->str, "&") == 0) 
+      h = _calc_intersection(handle, l, r);
+    else if (strcmp(t->str, "-") == 0) 
+      h = _calc_difference(handle, l, r);
     else {
       handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup_calc;
+    }
+
+    if (!h) {
     cleanup_calc:
-      hostlist_iterator_destroy(itr);
       hostlist_destroy(l);
       hostlist_destroy(r);
-      hostlist_destroy(h);
       return NULL;
     }
   }
 
- do_complement:
   if (t->complement) {
-    hostlist_t ch = NULL;
-    char *node = NULL;
-    char **nodes = NULL;
-    int i, len, num;
-    
-    if ((len = genders_nodelist_create(handle, &nodes)) < 0)
-      return NULL;
-
-    if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0)
-      return NULL;
-
-    if (!(ch = hostlist_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup_attr;
+    hostlist_t temp;
+    temp = _calc_complement(handle, h);
+    if (!temp) {
+      hostlist_destroy(h);
+      h = NULL;
     }
-
-    for (i = 0; i < num; i++) {
-      if (hostlist_find(h, nodes[i]) < 0) {
-        if (hostlist_push_host(ch, nodes[i]) <= 0) {
-          free(node);
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          goto cleanup_complement;
-        }
-      }
-      free(node);
-    }
- 
-    genders_nodelist_destroy(handle, nodes);
-    hostlist_uniq(ch);
-    hostlist_destroy(h);
-    h = ch;
-    goto done;
-  cleanup_complement:
-    genders_nodelist_destroy(handle, nodes);
-    hostlist_destroy(ch);
-    hostlist_destroy(h);
-    return NULL;
+    else
+      h = temp;
   }
- done:
   return h;
 }
 
@@ -450,19 +497,19 @@ query: term {$$ = $1;}
            {
              $$ = genders_makenode("-", $1, $3);
            }
-       | TILDETOK term
-           {
-             genders_set_complement_flag($2);
-             $$ = $2;
-           }
        ;
 
 term: ATTRTOK 
            {
              $$ = genders_makenode($1, NULL, NULL);
            }
-      | LPARENTOK query RPARENTOK 
+       | LPARENTOK query RPARENTOK 
            {
+             $$ = $2;
+           }
+       | TILDETOK term
+           {
+             genders_set_complement_flag($2);
              $$ = $2;
            }
 %%
