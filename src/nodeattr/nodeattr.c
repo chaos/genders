@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.8 2003-04-01 23:18:47 achu Exp $
+ *  * $Id: nodeattr.c,v 1.9 2003-04-22 17:24:20 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -124,7 +124,7 @@ main(int argc, char *argv[])
 	exit(errors);
     }
 
-    if (genders_open(gp, filename) < 0)
+    if (genders_load_data(gp, filename) < 0)
         _gend_error_exit(gp, filename);
 
     /* Usage 1: list nodes with specified attribute. */
@@ -252,8 +252,10 @@ static int test_attr(genders_t gp, char *node, char *attr, int vopt)
    
     if (vopt || wantval)
         val = _val_create(gp); /* full of nulls initially */
+
     if ((res = genders_testattr(gp, node, attr, val, genders_getmaxvallen(gp) + 1)) < 0)
         _gend_error_exit(gp, "genders_testattr");
+
     if (vopt) {
         if (strlen(val) > 0)
             printf("%s\n", val);
@@ -363,6 +365,7 @@ static char *_val_create(genders_t gp)
     if ((maxvallen = genders_getmaxvallen(gp)) < 0) 
         _gend_error_exit(gp, "genders_getmaxvallen");
     val = (char *)_safe_malloc(maxvallen + 1);
+
     return val;
 }
 
