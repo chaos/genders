@@ -1,5 +1,5 @@
 /*
- * $Id: libgenders_test.c,v 1.3 2003-03-14 22:36:38 achu Exp $
+ * $Id: libgenders_test.c,v 1.4 2003-03-18 00:19:12 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/testsuite/libgenders_test.c,v $
  */
 
@@ -158,6 +158,7 @@ void run_a_parameter_test(struct test_env *test_env,
   char **list = NULL;
   char ***list_create = NULL;
   genders_t handle = NULL;
+  char buffer[1000];
   
   /* setup necessary test parameters */
   if (param1 == IS_NOT_NULL_NOT_OPEN) {
@@ -197,8 +198,7 @@ void run_a_parameter_test(struct test_env *test_env,
 
   if ((function == GENDERS_TESTATTR || function == GENDERS_TESTATTRVAL) && 
       param3 == IS_NOT_NULL) {
-      /* grab a string from a list */
-      str1 = test_env->nodelist[0];
+    str1 = "param2";
   }
 
   if (function == GENDERS_TESTATTRVAL && param4 == IS_NOT_NULL) {
@@ -297,7 +297,7 @@ void run_a_parameter_test(struct test_env *test_env,
     int_result = genders_getattr_all(handle, list, param3);
   }
   else if (function == GENDERS_TESTATTR) {
-    int_result = genders_testattr(handle, nodename, str1, NULL);
+    int_result = genders_testattr(handle, nodename, str1, buffer, param4);
   }
   else if (function == GENDERS_TESTATTRVAL) {
     int_result = genders_testattrval(handle, nodename, str1, str2);
