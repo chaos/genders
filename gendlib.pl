@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.12 2003-04-11 18:59:51 achu Exp $
+#  $Id: gendlib.pl,v 1.13 2003-04-11 19:11:22 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -51,8 +51,8 @@ if ($havePSSP) {
 	require "/admin/lib/sdrlib.pl";
 } 
 
-$altAttr =      Libgenders::string_constant("GENDERS_ALTNAME_ATTRIBUTE");
-$clusterAttr =  Libgenders::string_constant("GENDERS_CLUSTER_ATTRIBUTE");
+$altAttr =              Libgenders::string_constant("GENDERS_ALTNAME_ATTRIBUTE");
+$clusterAttr =          Libgenders::string_constant("GENDERS_CLUSTER_ATTRIBUTE");
 
 $hname =		""; 	# short hostname
 
