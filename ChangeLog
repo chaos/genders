@@ -2,6 +2,7 @@
 	* fixed several minor issues in manpages
 	* changed testnode()->isnode()
 	* added isattr() and isattrval() 
+	* fixed mem-leak in genders_load_data()
 	* moved Libgenders manpage to perl document in Libgenders.pm
 	* Added error code/constants accessor functions in Libgenders
 	* Made Libgenders object-oriented.
