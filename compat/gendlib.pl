@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.5 2003-05-07 01:40:58 achu Exp $
+#  $Id: gendlib.pl,v 1.6 2003-05-08 17:05:24 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -31,7 +31,6 @@ use strict;
 use vars qw($included $debug $havePSSP $handle);
 use vars qw($init_called $init_hname_called $hname);
 use vars qw($altAttr $clusterAttr);
-use vars qw($GENDERS_ERR_SUCCESS $GENDERS_ERR_NOTFOUND);
 
 use Libgenders;
 
@@ -60,9 +59,6 @@ $init_hname_called = 0;
 
 $handle = 0;                    # genders handle
 
-$GENDERS_ERR_SUCCESS  = Libgenders::errnum("GENDERS_ERR_SUCCESS");   
-$GENDERS_ERR_NOTFOUND = Libgenders::errnum("GENDERS_ERR_NOTFOUND");   
-
 ##
 ## Subroutines
 ##
@@ -76,7 +72,7 @@ sub init
     if (@_) {
         $gendfile = $_[0];
     } else {    
-        $gendfile = Libgenders::string_constant("DEFAULT_GENDERS_FILE");
+        $gendfile = Libgenders::GENDERS_DEFAULT_FILE
     }
     
     if ($init_called) {
@@ -449,7 +445,8 @@ sub to_altnames
         } else {
             $altName = Libgenders::genders_getattrval($handle, $altAttr, $name);
             if (!defined($altName) &&
-                Libgenders::genders_errnum($handle) != $GENDERS_ERR_NOTFOUND) {
+                Libgenders::genders_errnum($handle) != 
+                  Libgenders::GENDERS_ERR_NOTFOUND) {
                 $debug && print "Error, genders_getattrval()\n";    
                 return ();
             } 
