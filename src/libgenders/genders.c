@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.36 2003-05-12 20:52:24 achu Exp $
+ * $Id: genders.c,v 1.37 2003-05-13 16:24:13 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -139,6 +139,12 @@ static int genders_loaded_handle_err_check(genders_t handle);
 
 /* Initialize handle variables */
 static void genders_handle_initialize(genders_t handle);
+
+/* genders_readline
+ * - read a line from fd, return a buffer pointer in buf
+ * Returns numbers of bytes read on success, -1 on error
+ */
+int genders_readline(genders_t handle, int fd, int buflen, char **buf);
 
 /* genders_getline
  * - portable version of getline(3) for genders
@@ -361,7 +367,7 @@ cleanup:
 }
 
 int genders_readline(genders_t handle, int fd, int buflen, char **buf) {
-  int ret, count;
+  int ret, count = 0;
   char *buffer = NULL;
   char chr;
 
@@ -372,7 +378,6 @@ int genders_readline(genders_t handle, int fd, int buflen, char **buf) {
   memset(buffer, '\0', buflen);
     
   /* read line */
-  count = 0;
   do {
     ret = read(fd, &chr, 1);
     if (ret == -1) {
@@ -381,13 +386,8 @@ int genders_readline(genders_t handle, int fd, int buflen, char **buf) {
     }
     else if (ret == 1)
       buffer[count++] = chr;
-    
-  } while (ret == 1 && chr != '\n' && count < buflen);
 
-  if (count >= buflen) { 
-    free(buffer);
-    return 0;
-  }
+  } while (ret == 1 && chr != '\n' && count < buflen);
 
   *buf = buffer;
   return count;
@@ -408,7 +408,8 @@ int genders_getline(genders_t handle, int fd, char **buf) {
     return -1;
   }
 
-  while ((retval = genders_readline(handle, fd, buflen, buf)) == 0) {
+  /* if genders_readline() returns >= buflen, truncation occurred */
+  while ((retval = genders_readline(handle, fd, buflen, buf)) >= buflen) {
     if (lseek(fd, start_offset, SEEK_SET) != start_offset) {
       handle->errnum = GENDERS_ERR_INTERNAL;
       return -1;
