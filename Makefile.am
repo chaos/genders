@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.6.4.1 2004-10-27 01:30:15 achu Exp $
+## $Id: Makefile.am,v 1.6.4.2 2004-10-27 01:35:57 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -11,4 +11,4 @@ SUBDIRS = \
         compat \
         man
 
-EXTRA_DIST = META
+EXTRA_DIST = META DISCLAIMER genders.sample TUTORIAL bootstrap
