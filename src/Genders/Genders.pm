@@ -1,5 +1,5 @@
 ;#############################################################################
-# $Id: Genders.pm,v 1.1 2003-05-10 00:06:13 achu Exp $
+# $Id: Genders.pm,v 1.2 2003-05-12 23:24:06 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/Genders/Genders.pm,v $
 #############################################################################
 
@@ -79,7 +79,7 @@ sub getnodename {
         return $node;
     }
     else {
-        return undef;
+        return "";
     }
 }
 
@@ -95,11 +95,10 @@ sub getnodes {
             _errormsg($self, "genders_getnodes()");
             return ();
         }
-        
         return @$nodes;
     }
     else {
-        return undef;
+        return ();
     }
 }
 
@@ -121,7 +120,7 @@ sub getattr {
         return @$attrs;
     }
     else {
-        return undef;
+        return ();
     }
 }
 
@@ -137,11 +136,10 @@ sub getattrval {
             _errormsg($self, "genders_getattrval()");
             return "";
         }
-        
         return $val;
     }
     else {
-        return undef;
+        return "";
     }
 }
 
@@ -159,7 +157,7 @@ sub getattr_all {
         return @$attrs;
     }
     else {
-        return undef;
+        return ();
     }
 }
 
@@ -178,7 +176,7 @@ sub testattr {
         return $retval; 
     }
     else {
-        return undef;
+        return 0;
     }
 }
 
@@ -198,7 +196,7 @@ sub testattrval {
         return $retval; 
     }
     else {
-        return undef;
+        return 0;
     }
 }
 
@@ -216,7 +214,7 @@ sub isnode {
         return $retval; 
     }
     else {
-        return undef;
+        return 0;
     }
 }
 
@@ -231,9 +229,10 @@ sub isattr{
             _errormsg($self, "genders_isattr()");
             return 0;
         }
+        return $retval;
     }
     else {
-        return undef;
+        return 0;
     }
 }
 
@@ -249,9 +248,10 @@ sub isattrval {
             _errormsg($self, "genders_isattrval()");
             return 0;
         }
+        return $retval;
     }
     else {
-        return undef;
+        return 0;
     }
 }
 
@@ -268,7 +268,7 @@ Genders - Perl library for querying genders file
 
  use Genders;
 
- $obj = Genders->new()
+ $obj = Genders->new([$filename])
 
  $obj->debug($num)
 
@@ -290,9 +290,11 @@ This package provides a perl interface for querying a genders file.
 
 =over 4
 
-=item B<Genders->new()>
+=item B<Genders->new([$filename])>
 
-Creates a genders object.
+Creates a Genders object and load genders data from the specified
+file.  If the genders file is not specified, the default genders file
+will be used.  Returns undef if file cannot be read.
 
 =item B<$obj-E<gt>debug($num)>
 
