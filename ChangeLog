@@ -1,3 +1,8 @@
+2004-01-22  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.h.in, src/libgenders/genders.c: Initial
+	re-programming to support hostlist formatting in genders database.
+
 2004-01-15  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_readline): Fix corner case.
