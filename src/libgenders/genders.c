@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.15 2003-04-11 18:14:50 achu Exp $
+ * $Id: genders.c,v 1.16 2003-04-11 18:42:58 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -32,11 +32,11 @@
  * file - file stream for genders file
  * numnodes - number of nodes in the genders file
  * numattrs - number of attributes in the genders file
- * maxattrs - maximum number of attributes in the genders file for one node
+ * maxattrs - maximum number of attributes for one node
  * maxxnodelen - maximum name length of a node
  * maxattrlen - maximum name length of an attribute
  * maxvallen - maximum name length of a value
- * allocatd - number of lists that have been allocated with *create functions
+ * allocated - number of lists that have been created 
  * nodename - name of the current node
  * nodes_head - head of list that stores node names
  * nodes_tail - tail of list that stores node names
@@ -407,7 +407,9 @@ int genders_insert_attrval_listnode(genders_t handle,
 
   /* create new node at the end of the list */
   if (attrval_list == NULL) {
-    node_list->attrvals_head = (void *)malloc(sizeof(struct attrval_listnode));
+    node_list->attrvals_head = 
+               (void *)malloc(sizeof(struct attrval_listnode));
+
     if (node_list->attrvals_head == NULL) {
       handle->errnum = GENDERS_ERR_OUTMEM;
       return -1;
@@ -483,7 +485,8 @@ int genders_insert_attrval_listnode(genders_t handle,
 
   if (strcmp(attribute, GENDERS_CLUSTER_ATTRIBUTE) == 0) {
     *cluster_flag = 1;
-    if (value == NULL || (value != NULL && strlen(value) > MAXHOSTNAMELEN)) {
+    if (value == NULL || 
+	(value != NULL && strlen(value) > MAXHOSTNAMELEN)) {
       handle->errnum = GENDERS_ERR_PARSE;
       return -1;
     }
@@ -1473,7 +1476,10 @@ int genders_testattr(genders_t handle,
   return 0;
 }
 
-int genders_testattrval(genders_t handle, char *node, char *attr, char *val) {
+int genders_testattrval(genders_t handle, 
+			char *node, 
+			char *attr, 
+			char *val) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
   char *nodename;
@@ -1651,7 +1657,9 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
     }
     
     /* move forward to node name */
-    while(*line_ptr == ' ' || *line_ptr == '\t' || *line_ptr == '\n' ) {  
+    while(*line_ptr == ' ' || 
+	  *line_ptr == '\t' || 
+	  *line_ptr == '\n' ) {  
       line_ptr++;
     }
     
@@ -1668,7 +1676,9 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
 	}
 	
 	/* move forward to attributes */
-	while(*line_ptr == ' ' || *line_ptr == '\t' || *line_ptr == '\n' ) {  
+	while(*line_ptr == ' ' || 
+	      *line_ptr == '\t' || 
+	      *line_ptr == '\n' ) {  
 	  line_ptr++;
 	}
       }
@@ -1679,7 +1689,8 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
 
     /* get attributes */
     if (*line_ptr != '\0') {
-      if (strchr(line_ptr,' ') != NULL || strchr(line_ptr,'\t') != NULL) {
+      if (strchr(line_ptr,' ') != NULL || 
+	  strchr(line_ptr,'\t') != NULL) {
 	fprintf(stream, "Line %d: white space in attribute list\n", 
 		line_count);
 	retval++;
@@ -1709,7 +1720,8 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
 	    retval++;
 	  }
 	  else if (value != NULL && strlen(value) > MAXHOSTNAMELEN) {
-	    fprintf(stream, "Line %d: cluster value too long\n", line_count);
+	    fprintf(stream, "Line %d: cluster value too long\n", 
+		    line_count);
 	    retval++;
 	  }      
 	}
@@ -1718,8 +1730,8 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
     }
     
     if (all_flag == 0) {
-      fprintf(stream, "Line %d: no \"%s\" attribute listed\n", line_count, 
-	      GENDERS_ALL_ATTRIBUTE);
+      fprintf(stream, "Line %d: no \"%s\" attribute listed\n", 
+	      line_count, GENDERS_ALL_ATTRIBUTE);
       retval++;
     }
     
