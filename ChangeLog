@@ -1,3 +1,11 @@
+2002-12-08 garlick
+        * Updated source file headers and DISCLAIMER file according to release 
+          instructions.
+        * Ran inst.c through "indent --no-tabs -kr *.[ch]" and installed 
+	  standard vi footers in all scripts and source files.
+        * Updated to latest project Make-rpm.mk.
+        * Tag genders-1-0-1chaos
+
 2002-09-13 garlick
 	* Reformatted changelog
 	* Changed ksh to sh in shell scripts

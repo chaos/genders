@@ -6,7 +6,7 @@ Copyright: none
 Group: System Environment/Base
 Source0:
 Prereq: rdist pdksh net-tools diffutils perl
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
 Genders is a static cluster configuration database and tools for querying
@@ -44,7 +44,7 @@ install gendlib.3.gz $RPM_BUILD_ROOT/usr/man/man3
 
 %files
 %defattr(-,root,root)
-%doc README TUTORIAL ChangeLog DISCLAIMER 
+%doc README TUTORIAL ChangeLog DISCLAIMER COPYING
 %doc genders.sample clusters.sample Distfile.sample
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
