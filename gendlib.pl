@@ -1,5 +1,5 @@
 #
-# $Id: gendlib.pl,v 1.4 2001-07-14 05:36:52 garlick Exp $
+# $Id: gendlib.pl,v 1.4.4.1 2003-07-17 23:28:39 achu Exp $
 # $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/gendlib.pl,v $
 #
 # Copyright (C) 2000-2001 Regents of the University of California
@@ -59,6 +59,8 @@ $init_clusters_called = 0;
 sub init
 {
 	my (@alist, $attr, $node, $blob, @gendfiles, $gendfile);
+        my ($i, $allflag, $allnodesallflag);
+
 	if (@_) {
 		@gendfiles = @_;
 	} else {	
@@ -75,6 +77,7 @@ sub init
 
 	foreach $gendfile (@gendfiles) {
 	
+                $allnodesallflag = 0;
 		# populate hashes
 		if (!open(GEND, $gendfile)) {
 			printf STDERR ("Error: could not open %s\n", $gendfile);
@@ -90,11 +93,22 @@ sub init
 
 						# add to %attrs
 			@{$attrs{$node}} = @alist;
-						# special "all" attribute
-			push @{$attrs{$node}}, "all";
-						# add to %nodes	
-			push @{$nodes{"all"}}, $node;
-						# special "all" attribute
+
+                        # is "all" in the list yet??
+                        $allflag = 0;
+                        foreach $i (@alist) {
+                            if ($i eq "all") {
+                                $allflag = 1;
+                                last;
+                            }
+                        }
+
+                        if ($allflag == 1) {
+                            push @{$attrs{$node}}, "all";
+                            push @{$nodes{"all"}}, $node;
+                            $allnodesallflag = 1;
+                        } 
+
 			foreach $attr (@alist) {
 				push @{$xnodes{$attr}}, $node;
 				$attr =~ s/=.*//; # drop any =value on attribute
@@ -102,6 +116,11 @@ sub init
 			}
 		}
 		close(GEND);
+
+                if ($allnodesallflag == 1) {
+                    print stderr "Warning: \"all\" attribute not listed on every ";                     print stderr "line of the genders database.\n"; 
+                }
+
 	}
 
 	# initialize hostname
@@ -313,10 +332,25 @@ sub init_clusters
 # get a copy of the list of clusters
 sub get_clusters
 {
-	if (!$init_clusters_called) {
-		init_clusters();
-	}
-	return @clusters;
+        my ($node, @nodes);
+
+        if (!$init_called) {
+            init();
+        }
+
+        $node = getattrval("cluster");
+        if ($node ne "") {
+            @nodes = ($node);
+            return @nodes;
+        }
+        else {
+            print stderr "Warning: \"cluster\" attribute not listed in "; 
+            print stderr "genders database.\n"; 
+            if (!$init_clusters_called) {
+            init_clusters();
+            }
+            return @clusters;
+        }
 }
 
 
