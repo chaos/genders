@@ -3,7 +3,6 @@ Libgenders.pm
 Libgenders.xs
 Makefile.PL
 MANIFEST
-README
 test.pl
 typemap
 
