@@ -1,6 +1,8 @@
 2004-02-11  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/Makefile.am: Compile with _REENTRANT.
+
+	* tagged genders-1-3-1
 	
 2004-02-09  Mark Grondona <mgrondona@llnl.gov>
 
