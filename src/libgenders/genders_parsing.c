@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.4 2004-12-22 18:10:13 achu Exp $
+ *  $Id: genders_parsing.c,v 1.5 2004-12-22 18:38:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -28,6 +28,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <assert.h>
 
 #include "genders.h"
@@ -491,4 +494,54 @@ _index_attrs(genders_t handle)
   __hash_destroy(handle->attr_index);
   handle->attr_index = NULL;
   return -1;
+}
+
+int
+_open_and_parse(genders_t handle,
+		const char *filename,
+		List nodeslist,
+		List attrvalslist,
+		int debug,
+		FILE *stream)
+{
+  int line_count = 1;
+  int errcount = 0;
+  int ret, rv, fd = -1;
+  int retval = -1;
+  char buf[GENDERS_READLINE_BUFLEN];
+
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(nodeslist && attrvalslist);
+  assert(!debug || (debug && stream));
+
+  if (!filename)
+    filename = GENDERS_DEFAULT_FILE;
+
+  if ((fd = open(filename, O_RDONLY)) < 0) {
+    handle->errnum = GENDERS_ERR_OPEN;
+    goto cleanup;
+  }
+
+  /* parse line by line */
+  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
+    if ((rv = _parse_line(handle, nodeslist, attrvalslist, buf,
+			  (debug) ? line_count : 0, stream)) < 0)
+      goto cleanup;
+
+    if (debug) {
+      if (rv)
+	errcount++;
+      line_count++;
+    }
+  }
+  if (ret < 0) {
+    if (debug && handle->errnum == GENDERS_ERR_OVERFLOW)
+      fprintf(stream, "Line %d: exceeds maximum allowed length\n", line_count);
+    goto cleanup;
+  }
+
+  retval = (debug) ? errcount : 0;
+ cleanup:
+  close(fd);
+  return retval;
 }

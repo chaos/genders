@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.h,v 1.1 2004-12-22 18:10:13 achu Exp $
+ *  $Id: genders_parsing.h,v 1.2 2004-12-22 18:38:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -33,9 +33,12 @@
 #include "genders_common.h"
 #include "list.h"
 
-int _readline(genders_t handle, int fd, char *buf, int buflen);
-int _parse_line(genders_t handle, List nodeslist, List attrvalslist, 
-		char *line, int line_num, FILE *stream);
+int _open_and_parse(genders_t handle,
+		    const char *filename,
+		    List nodeslist,
+		    List attrvalslist,
+		    int debug,
+		    FILE *stream);
 int _index_nodes(genders_t handle);
 int _index_attrs(genders_t handle);
 

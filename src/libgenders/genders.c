@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.124 2004-12-22 18:10:13 achu Exp $
+ *  $Id: genders.c,v 1.125 2004-12-22 18:38:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -27,9 +27,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <assert.h>
 
@@ -146,32 +143,17 @@ genders_handle_destroy(genders_t handle)
   return 0;
 }
 
-
 int
 genders_load_data(genders_t handle, const char *filename) 
 {
   char *temp;
-  int ret, fd = -1;
-  char buf[GENDERS_READLINE_BUFLEN];
 
   if (_unloaded_handle_error_check(handle) < 0)
     goto cleanup;
 
-  if (!filename)
-    filename = GENDERS_DEFAULT_FILE;
-
-  if ((fd = open(filename, O_RDONLY)) < 0) {
-    handle->errnum = GENDERS_ERR_OPEN;
-    goto cleanup;
-  }
-
-  /* parse line by line */
-  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if (_parse_line(handle, handle->nodeslist, handle->attrvalslist, 
-                    buf, 0, NULL) < 0)
-      goto cleanup;
-  }
-  if (ret < 0)
+  if (_open_and_parse(handle, filename, 
+		      handle->nodeslist, handle->attrvalslist,
+		      0, NULL) < 0)
     goto cleanup;
 
   handle->numnodes = list_count(handle->nodeslist);
@@ -205,13 +187,11 @@ genders_load_data(genders_t handle, const char *filename)
 
   handle->attrval_buflist = NULL;
   
-  close(fd);
   handle->is_loaded++;
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 
 cleanup:
-  close(fd);
   free(handle->valbuf);
 
   /* Can't pass NULL for key, so pass junk, _is_all() will ensure
@@ -942,54 +922,32 @@ genders_set_errnum(genders_t handle, int errnum)
 int 
 genders_parse(genders_t handle, const char *filename, FILE *stream) 
 {
-  int line_count = 1;
-  int retval = -1;
-  int errcount = 0;
-  int rv, ret, fd = -1;
-  char buf[GENDERS_READLINE_BUFLEN];
+  int errcount, retval = -1;
   List debugnodeslist = NULL;
   List debugattrvalslist = NULL;
 
   if (_handle_error_check(handle) < 0)
     goto cleanup;
 
-  if (!filename)
-    filename = GENDERS_DEFAULT_FILE;
-  
   if (!stream)
     stream = stderr;
-
-  if ((fd = open(filename,O_RDONLY)) < 0) {
-    handle->errnum = GENDERS_ERR_OPEN;
-    goto cleanup;
-  }
 
   __list_create(debugnodeslist, _free_genders_node);
   __list_create(debugattrvalslist, NULL);
 
-  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if ((rv = _parse_line(handle, debugnodeslist, debugattrvalslist, buf, 
-                          line_count, stream)) < 0)
-      goto cleanup;
-
-    if (rv)
-      errcount++;
-    line_count++;
-  }
-  if (ret < 0 && handle->errnum == GENDERS_ERR_OVERFLOW) {
-    fprintf(stderr, "Line %d: exceeds maximum allowed length\n", line_count);
+  if ((errcount = _open_and_parse(handle, filename,
+				  debugnodeslist, debugattrvalslist,
+				  1, stream)) < 0)
     goto cleanup;
-  }
 
   if (list_count(debugnodeslist) == 0) {
-    fprintf(stderr, "No nodes successfully parsed\n");
+    fprintf(stream, "No nodes successfully parsed\n");
     goto cleanup;
   }
 
   retval = errcount;
   handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
-  close(fd);
   __list_destroy(debugnodeslist);
   __list_destroy(debugattrvalslist);
   return retval;

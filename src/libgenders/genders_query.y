@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.17 2004-12-22 00:01:13 achu Exp $
+ *  $Id: genders_query.y,v 1.18 2004-12-22 18:38:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -30,6 +30,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <paths.h>
+#include <assert.h>
+
 #include "genders.h"
 #include "genders_common.h"
 
@@ -51,6 +53,8 @@ static struct genders_treenode *
 genders_makenode(char *str, void *left, void *right)
 {
   struct genders_treenode *t; 
+
+  assert(str && ((!left && !right) || (left && right)));
 
   if (genders_query_err)
     return NULL;
@@ -75,7 +79,11 @@ genders_makenode(char *str, void *left, void *right)
 static void
 genders_set_complement_flag(void *node)
 {
-  struct genders_treenode *t = (struct genders_treenode *)node; 
+  struct genders_treenode *t;
+
+  assert(node);
+
+  t = (struct genders_treenode *)node; 
   t->complement++;
 }
 
@@ -84,10 +92,12 @@ genders_freetree(struct genders_treenode *t)
 {
   if (!t)
     return;
+
   genders_freetree(t->left);
   genders_freetree(t->right);
   free(t->str);
   free(t);
+
   return;
 }
 
@@ -109,6 +119,9 @@ _parse_query(genders_t handle, char *query)
 {
   extern FILE *yyin, *yyout; 
   int fds[2];
+
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(query);
 
   genders_query_err = GENDERS_ERR_SUCCESS;
   genders_treeroot = NULL;
@@ -147,7 +160,7 @@ _parse_query(genders_t handle, char *query)
     genders_query_err = GENDERS_ERR_SYNTAX;
 
  cleanup:
-  /* no need to close fds[0], fclose is enough */
+  /* no need to close fds[0] and fds[1], fclose is enough */
   fclose(yyin);
   fclose(yyout);
   
@@ -166,6 +179,9 @@ _calc_attrval(genders_t handle, struct genders_treenode *t)
   int i, len, num;
   char *attr, *val;
     
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(t);
+
   attr = t->str; 
   if ((val = strchr(attr, '=')))
     *val++ = '\0';
@@ -200,6 +216,9 @@ _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
   char buf[HOSTLIST_BUFLEN];
   int rv;
   
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(l && r);
+
   __hostlist_create(h, NULL);
   memset(buf, '\0', HOSTLIST_BUFLEN);
   if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) {
@@ -231,27 +250,31 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
-  char *node;
+  char *node = NULL;
   
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(l && r);
+
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
   while ((node = hostlist_next(itr))) {
     if (hostlist_find(r, node) >= 0) {
       if (hostlist_push_host(h, node) <= 0) {
-        free(node);
         handle->errnum = GENDERS_ERR_INTERNAL;
         goto cleanup;
       }
     }
     free(node);
   }
-  
+  node = NULL;
+
   hostlist_uniq(h);
   __hostlist_iterator_destroy(itr);
   return h;
  cleanup:
   __hostlist_iterator_destroy(itr);
   __hostlist_destroy(h);
+  free(node);
   return NULL;
 }
 
@@ -260,28 +283,32 @@ _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
-  char *node;
+  char *node = NULL;
     
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(l && r);
+
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
       
   while ((node = hostlist_next(itr))) {
     if (hostlist_find(r, node) < 0) {
       if (hostlist_push_host(h, node) <= 0) {
-        free(node);
         handle->errnum = GENDERS_ERR_INTERNAL;
         goto cleanup;
       }
     }
     free(node);
   }
-          
+  node = NULL;
+
   hostlist_uniq(h);
   __hostlist_iterator_destroy(itr);
   return h;
  cleanup:
   __hostlist_iterator_destroy(itr);
   __hostlist_destroy(h);
+  free(node);
   return NULL;
 
 }
@@ -294,6 +321,9 @@ _calc_complement(genders_t handle, hostlist_t h)
   char *node = NULL;
   int i, len, num;
     
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(h);
+
   if ((len = genders_nodelist_create(handle, &nodes)) < 0)
     return NULL;
 
@@ -304,20 +334,21 @@ _calc_complement(genders_t handle, hostlist_t h)
   for (i = 0; i < num; i++) {
     if (hostlist_find(h, nodes[i]) < 0) {
       if (hostlist_push_host(ch, nodes[i]) <= 0) {
-        free(node);
         handle->errnum = GENDERS_ERR_INTERNAL;
         goto cleanup;
       }
     }
     free(node);
   }
- 
+  node = NULL;
+
   genders_nodelist_destroy(handle, nodes);
   hostlist_uniq(ch);
   return ch;
  cleanup:
   genders_nodelist_destroy(handle, nodes);
   __hostlist_destroy(ch);
+  free(node);
   return NULL;
 }
 
@@ -325,6 +356,10 @@ static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
   hostlist_t h = NULL;
+
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(t);
+  assert((!t->left && !t->right) || (t->left && t->right));
 
   if (!t->left && !t->right)
     h = _calc_attrval(handle, t);
@@ -375,7 +410,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
-  char *node;
+  char *node = NULL;
   int retval = -1;
   int index = 0;
 
@@ -399,21 +434,20 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
 
   __hostlist_iterator_create(itr, h);
   while ((node = hostlist_next(itr))) {
-    if (_put_in_array(handle, node, nodes, index++, len) < 0) {
-      free(node);
+    if (_put_in_array(handle, node, nodes, index++, len) < 0)
       goto cleanup;
-    }
     free(node);
   }
-  
-  /* genders_printtree(genders_treeroot); */
-  handle->errnum = GENDERS_ERR_SUCCESS;
+  node = NULL;
+
   retval = index;
+  handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
   __hostlist_iterator_destroy(itr);
   __hostlist_destroy(h);
   if (genders_treeroot)
     genders_freetree(genders_treeroot);
+  free(node);
   return retval;
 }
 %}
