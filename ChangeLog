@@ -1,12 +1,13 @@
 2004-01-27  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/genders.c: Cleaned up code with additional comments.
+	* src/libgenders/genders.c: Cleaned up code significantly.
 
 	* src/libgenders/hostlist.h, src/libgenders.c: New files
 	
 2004-01-26  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/genders.c: Fixed numerous small bugs.
+	* src/libgenders/genders.c: Fixed numerous bugs to support
+	hostlist format.
 	
 2004-01-22  Albert Chu  <chu11@llnl.gov>
 
