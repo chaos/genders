@@ -9,8 +9,11 @@ Prereq: rdist pdksh net-tools diffutils perl
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
-Genders is a static cluster configuration database and tools for querying
-and building rdist Distfile macros.
+Genders is a static cluster configuration database.  
+
+%package compat
+
+%package dist
 
 %prep
 %setup  -q -n %{name}-%{version}
