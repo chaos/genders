@@ -15,13 +15,287 @@ not_here(char *s)
 }
 
 static double
-constant(char *name, int len, int arg)
+constant_GENDERS_ERR_NO(char *name, int len, int arg)
 {
+    if (14 + 1 >= len ) {
+        errno = EINVAL;
+        return 0;
+    }
+    switch (name[14 + 1]) {
+    case 'F':
+        if (strEQ(name + 14, "TFOUND")) {       /* GENDERS_ERR_NO removed */
+#ifdef GENDERS_ERR_NOTFOUND
+            return GENDERS_ERR_NOTFOUND;
+#else
+            goto not_there;
+#endif
+        }
+    case 'L':
+        if (strEQ(name + 14, "TLOADED")) {      /* GENDERS_ERR_NO removed */
+#ifdef GENDERS_ERR_NOTLOADED
+            return GENDERS_ERR_NOTLOADED;
+#else
+            goto not_there;
+#endif
+        }
+    }
     errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
     return 0;
 }
 
+static double
+constant_GENDERS_ERR_NU(char *name, int len, int arg)
+{
+    if (14 + 2 >= len ) {
+        errno = EINVAL;
+        return 0;
+    }
+    switch (name[14 + 2]) {
+    case 'H':
+        if (strEQ(name + 14, "LLHANDLE")) {     /* GENDERS_ERR_NU removed */
+#ifdef GENDERS_ERR_NULLHANDLE
+            return GENDERS_ERR_NULLHANDLE;
+#else
+            goto not_there;
+#endif
+        }
+    case 'P':
+        if (strEQ(name + 14, "LLPTR")) {        /* GENDERS_ERR_NU removed */
+#ifdef GENDERS_ERR_NULLPTR
+            return GENDERS_ERR_NULLPTR;
+#else
+            goto not_there;
+#endif
+        }
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant_GENDERS_ERR_N(char *name, int len, int arg)
+{
+    switch (name[13 + 0]) {
+    case 'O':
+        return constant_GENDERS_ERR_NO(name, len, arg);
+    case 'U':
+        return constant_GENDERS_ERR_NU(name, len, arg);
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant_GENDERS_ERR_O(char *name, int len, int arg)
+{
+    switch (name[13 + 0]) {
+    case 'P':
+        if (strEQ(name + 13, "PEN")) {  /* GENDERS_ERR_O removed */
+#ifdef GENDERS_ERR_OPEN
+            return GENDERS_ERR_OPEN;
+#else
+            goto not_there;
+#endif
+        }
+    case 'U':
+        if (strEQ(name + 13, "UTMEM")) {        /* GENDERS_ERR_O removed */
+#ifdef GENDERS_ERR_OUTMEM
+            return GENDERS_ERR_OUTMEM;
+#else
+            goto not_there;
+#endif
+        }
+    case 'V':
+        if (strEQ(name + 13, "VERFLOW")) {      /* GENDERS_ERR_O removed */
+#ifdef GENDERS_ERR_OVERFLOW
+            return GENDERS_ERR_OVERFLOW;
+#else
+            goto not_there;
+#endif
+        }
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant_GENDERS_ERR_P(char *name, int len, int arg)
+{
+    if (13 + 2 >= len ) {
+        errno = EINVAL;
+        return 0;
+    }
+    switch (name[13 + 2]) {
+    case 'A':
+        if (strEQ(name + 13, "ARAMETERS")) {    /* GENDERS_ERR_P removed */
+#ifdef GENDERS_ERR_PARAMETERS
+            return GENDERS_ERR_PARAMETERS;
+#else
+            goto not_there;
+#endif
+        }
+    case 'S':
+        if (strEQ(name + 13, "ARSE")) { /* GENDERS_ERR_P removed */
+#ifdef GENDERS_ERR_PARSE
+            return GENDERS_ERR_PARSE;
+#else
+            goto not_there;
+#endif
+        }
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant_GENDERS_ERR_IS(char *name, int len, int arg)
+{
+    switch (name[14 + 0]) {
+    case 'F':
+        if (strEQ(name + 14, "FREE")) { /* GENDERS_ERR_IS removed */
+#ifdef GENDERS_ERR_ISFREE
+            return GENDERS_ERR_ISFREE;
+#else
+            goto not_there;
+#endif
+        }
+    case 'L':
+        if (strEQ(name + 14, "LOADED")) {       /* GENDERS_ERR_IS removed */
+#ifdef GENDERS_ERR_ISLOADED
+            return GENDERS_ERR_ISLOADED;
+#else
+            goto not_there;
+#endif
+        }
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant_GENDERS_ERR_I(char *name, int len, int arg)
+{
+    switch (name[13 + 0]) {
+    case 'N':
+        if (strEQ(name + 13, "NTERNAL")) {      /* GENDERS_ERR_I removed */
+#ifdef GENDERS_ERR_INTERNAL
+            return GENDERS_ERR_INTERNAL;
+#else
+            goto not_there;
+#endif
+        }
+    case 'S':
+        return constant_GENDERS_ERR_IS(name, len, arg);
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+static double
+constant(char *name, int len, int arg)
+{
+    errno = 0;
+    if (0 + 12 >= len ) {
+        errno = EINVAL;
+        return 0;
+    }
+    switch (name[0 + 12]) {
+    case 'E':
+        if (strEQ(name + 0, "GENDERS_ERR_ERRNUMRANGE")) {       /*  removed */
+#ifdef GENDERS_ERR_ERRNUMRANGE
+            return GENDERS_ERR_ERRNUMRANGE;
+#else
+            goto not_there;
+#endif
+        }
+    case 'F':
+        if (strEQ(name + 0, "GENDERS_ERR_FREEMEM")) {   /*  removed */
+#ifdef GENDERS_ERR_FREEMEM
+            return GENDERS_ERR_FREEMEM;
+#else
+            goto not_there;
+#endif
+        }
+    case 'I':
+        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
+            break;
+        return constant_GENDERS_ERR_I(name, len, arg);
+    case 'M':
+        if (strEQ(name + 0, "GENDERS_ERR_MAGIC")) {     /*  removed */
+#ifdef GENDERS_ERR_MAGIC
+            return GENDERS_ERR_MAGIC;
+#else
+            goto not_there;
+#endif
+        }
+    case 'N':
+        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
+            break;
+        return constant_GENDERS_ERR_N(name, len, arg);
+    case 'O':
+        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
+            break;
+        return constant_GENDERS_ERR_O(name, len, arg);
+    case 'P':
+        if (!strnEQ(name + 0,"GENDERS_ERR_", 12))
+            break;
+        return constant_GENDERS_ERR_P(name, len, arg);
+    case 'R':
+        if (strEQ(name + 0, "GENDERS_ERR_READ")) {      /*  removed */
+#ifdef GENDERS_ERR_READ
+            return GENDERS_ERR_READ;
+#else
+            goto not_there;
+#endif
+        }
+    case 'S':
+        if (strEQ(name + 0, "GENDERS_ERR_SUCCESS")) {   /*  removed */
+#ifdef GENDERS_ERR_SUCCESS
+            return GENDERS_ERR_SUCCESS;
+#else
+            goto not_there;
+#endif
+        }
+    }
+    errno = EINVAL;
+    return 0;
+
+not_there:
+    errno = ENOENT;
+    return 0;
+}
+
+
 MODULE = Libgenders             PACKAGE = Libgenders            
+
 
 double
 constant(sv,arg)
@@ -238,7 +512,6 @@ genders_getnodes(handle, attr=NULL, val=NULL)
         goto the_end;
 
         handle_error:
-
             /* manually destroy lists, to preserve error value */
             if (nodelist != NULL) {
                 for (i = 0; i < num; i++)
@@ -293,7 +566,6 @@ genders_getattr(handle, node=NULL)
         goto the_end;
 
         handle_error:
-
             /* manually destroy lists, to preserve error value */
             if (attrlist != NULL) {
                 for (i = 0; i < num; i++)
