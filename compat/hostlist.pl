@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: hostlist.pl,v 1.4 2004-02-09 19:31:42 grondo Exp $
+#  $Id: hostlist.pl,v 1.5 2004-02-09 19:53:36 grondo Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -179,7 +179,7 @@ sub expand_quadrics_range
         return $list if (!defined $ranges);
 
         return map {"$pfx$_"} 
-	           map { s/(\d+)-(\d+)/$1..$2/; eval } 
+	           map { s/(\d+)-(\d+)/"$1".."$2"/; eval } 
 		       split(/,|:/, $ranges);
 }
 
