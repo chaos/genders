@@ -105,52 +105,14 @@ __END__
 
 =head1 NAME
 
-Libgenders - Perl extension for blah blah blah
-
-=head1 SYNOPSIS
-
-  use Libgenders;
-  blah blah blah
+Libgenders - Perl extension for libgenders
 
 =head1 DESCRIPTION
 
-Stub documentation for Libgenders, created by h2xs. It looks like the
-author of the extension was negligent enough to leave the stub
-unedited.
-
-Blah blah blah.
-
-=head2 EXPORT
-
-None by default.
-
-=head2 Exportable constants
-
-  GENDERS_ERR_ERRNUMRANGE
-  GENDERS_ERR_FREEMEM
-  GENDERS_ERR_INTERNAL
-  GENDERS_ERR_ISFREE
-  GENDERS_ERR_ISLOADED
-  GENDERS_ERR_MAGIC
-  GENDERS_ERR_NOTFOUND
-  GENDERS_ERR_NOTLOADED
-  GENDERS_ERR_NULLHANDLE
-  GENDERS_ERR_NULLPTR
-  GENDERS_ERR_OPEN
-  GENDERS_ERR_OUTMEM
-  GENDERS_ERR_OVERFLOW
-  GENDERS_ERR_PARAMETERS
-  GENDERS_ERR_PARSE
-  GENDERS_ERR_READ
-  GENDERS_ERR_SUCCESS
-
+  Please see Libgenders(3) manpage.
 
 =head1 AUTHOR
 
-A. U. Thor, E<lt>a.u.thor@a.galaxy.far.far.awayE<gt>
-
-=head1 SEE ALSO
-
-L<perl>.
+Albert Chu E<lt>chu11@llnl.govE<gt>
 
 =cut
