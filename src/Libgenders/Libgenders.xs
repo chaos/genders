@@ -2,7 +2,6 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#include <stdarg.h>
 #include <string.h>
 
 #include "genders.h"
@@ -123,7 +122,7 @@ GENDERS_DEFAULT_FILE ()
 
 genders_t
 genders_handle_create()
-    INIT: 
+    PREINIT: 
         genders_t handle;
     CODE:
         handle = genders_handle_create();
