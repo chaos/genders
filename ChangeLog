@@ -2,11 +2,15 @@
 
 	Modified build files
 
-	* configure.ac: Added output of genders.spec.
+	* configure.ac: 
+	Added output of genders.spec.
+	Added call to AC_META.
 
 	* genders.spec: Removed file.
 
 	* genders.spec.in: New file, which replaces genders.spec.
+
+	* config/ac_meta.m4: New file.
 
 	* Removed all Makefile.in files and config files that will be
 	generatd by bootstrap from the repository.

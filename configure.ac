@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.20 2003-09-11 15:18:51 achu Exp $
+## $Id: configure.ac,v 1.21 2003-09-11 15:55:47 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -7,21 +7,11 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders], [1.1], [chu11@llnl.gov])
+AC_INIT([genders])
+AC_META
 AC_CONFIG_AUX_DIR([config])
+AC_CONFIG_SRCDIR([README])
 AC_CANONICAL_SYSTEM
-
-PROJECT="`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' $srcdir/META`"
-AC_DEFINE_UNQUOTED([PROJECT], ["$PROJECT"], [Define the package name.])
-AC_SUBST([PROJECT])
-
-VERSION="`perl -ne 'print,exit if s/^\s*VERSION:\s*(\S*).*/\1/i' $srcdir/META`"
-AC_DEFINE_UNQUOTED([VERSION], ["$VERSION"], [Define the package version.])
-AC_SUBST([VERSION])
-
-RELEASE="`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' $srcdir/META`"
-AC_DEFINE_UNQUOTED([RELEASE], ["$RELEASE"], [Define the project's release.])
-AC_SUBST([RELEASE])
 
 ##
 # Automake support.
