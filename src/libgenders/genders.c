@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.91 2004-02-04 01:44:58 achu Exp $
+ *  $Id: genders.c,v 1.92 2004-02-04 03:12:24 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -541,6 +541,7 @@ static int
 _duplicate_attr_check(genders_t handle, List attrlist, List attrvals)
 {
   ListIterator itr = NULL;
+  genders_attrval_t av = NULL;
   char *attr = NULL;
   int retval = -1;
 
@@ -549,8 +550,8 @@ _duplicate_attr_check(genders_t handle, List attrlist, List attrvals)
     goto cleanup;
   }
 
-  while ((attr = list_next(itr))) {
-    if (list_find_first(attrlist, _is_attr_in_attrlist, attr)) {
+  while ((av = list_next(itr))) {
+    if (list_find_first(attrlist, _is_attr_in_attrlist, av->attr)) {
       retval = 1;
       goto cleanup;
     }
