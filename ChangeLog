@@ -1,3 +1,26 @@
+2003-09-20  Albert Chu  <chu11@llnl.gov>
+
+	Enhanced performance of genders database input based on profile
+	analysis.
+
+	* src/libgenders/genders.c (_getline): Removed function.
+
+	* src/libgenders/genders.c (_readline): Function no longer creates
+	a buffer for the genders database line.  Takes a buffer as a
+	parameter.  Returns GENDERS_ERR_OVERFLOW on buffer overflow.  
+
+	* src/libgenders/genders.c (genders_load_data, genders_parse):
+	Functions modified to use _readline instead of _getline.
+
+	* src/libgenders/genders.c (genders_parse): Added message output
+	informing user that a line in the genders file is too long.
+
+	* man/genders_load_data.3, man/genders_parse.3: Added information
+	regarding new GENDERS_ERR_OVERFLOW error that can be returned.
+
+	* src/libgenders/genders.c (insert_attr_listnode): Minor code
+	cleanup fix.
+	
 2003-09-19  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_parse_line): Added code to remove

@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_load_data.3,v 1.7 2003-08-18 22:45:50 achu Exp $
+\."$Id: genders_load_data.3,v 1.8 2003-09-20 17:36:09 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -53,6 +53,9 @@ The genders file indicated by \fIfilename\fR is incorrectly formatted.
 .B GENDERS_ERR_ISLOADED
 .BR genders_load_data (3) 
 has already been called with \fIhandle\fR.  
+.TP
+.B GENDERS_ERR_OVERFLOW
+A line in the genders database exceeds the maximum allowed length.
 .TP
 .B GENDERS_ERR_OUTMEM
 .BR malloc (3)

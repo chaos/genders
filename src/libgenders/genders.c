@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.57 2003-09-20 00:42:03 achu Exp $
+ * $Id: genders.c,v 1.58 2003-09-20 17:36:09 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -25,7 +25,7 @@
 
 #define GENDERS_MAGIC_NUM         0xdeadbeef
 
-#define GENDERS_GETLINE_BUFLEN    65536
+#define GENDERS_READLINE_BUFLEN   65536
 
 #ifndef MAXHOSTNAMELEN
 #define MAXHOSTNAMELEN 64
@@ -105,8 +105,7 @@ static int  _unloaded_handle_error_check(genders_t);
 static int  _loaded_handle_error_check(genders_t);
 static void _initialize_handle(genders_t);
 static void _free_handle_lists(genders_t);
-static int  _getline(genders_t, int, char **);
-static int  _readline(genders_t, int, int, char **);
+static int  _readline(genders_t, int, char *, int);
 static int  _insert_node_listnode(genders_t, char *);
 static int  _insert_attrval_listnode(genders_t, char *, char *);
 static int  _insert_attr_listnode(genders_t, char *);
@@ -229,71 +228,32 @@ int genders_handle_destroy(genders_t handle) {
   return 0;
 }
 
-/* create buffer of length buflen and read a line from fd
- * - buffer returned only if read > 0 chars
- * - truncation occurred if read >= buflen
- * Returns numbers of bytes read on success, -1 on error
- */
-int _readline(genders_t handle, int fd, int buflen, char **buf) {
+/* read a line from the indicated file descriptor
+ * Returns length of line read on success, 0 for EOF, -1 on error 
+ */ 
+int _readline(genders_t handle, int fd, char *buf, int buflen) {
   int ret, count = 0;
-  char *buffer = NULL;
   char chr;
-
-  if ((buffer = (char *)malloc(buflen)) == NULL) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-  memset(buffer, '\0', buflen);
-    
+  
+  memset(buf, '\0', buflen);
   /* read line */
   do {
     if ((ret = read(fd, &chr, 1)) == -1) {
       handle->errnum = GENDERS_ERR_READ;
-      goto cleanup;
+      return -1;
     }
     
     if (ret == 1)
-      buffer[count++] = chr;
+      buf[count++] = chr;
 
   } while (ret == 1 && chr != '\n' && count < buflen);
 
-  if (count == 0)
-    free(buffer);
-  else
-    *buf = buffer;
-  
-  return count;
-
- cleanup:
-
-  free(buffer);
-  return -1;
-}
-
-/* portable version of getline(3) for genders
- * - user is responsible for freeing memory
- * Returns length of line read on success, 0 for EOF, -1 on error 
- */ 
-int _getline(genders_t handle, int fd, char **buf) {
-  int retval, start_offset;
-  int buflen = GENDERS_GETLINE_BUFLEN;
-  
-  /* get beginning seek position */
-  if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+  if (count > buflen) {
+    handle->errnum = GENDERS_ERR_OVERFLOW;
     return -1;
   }
-
-  while ((retval = _readline(handle, fd, buflen, buf)) >= buflen) {
-    if (lseek(fd, start_offset, SEEK_SET) != start_offset) {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      return -1;
-    }
-    buflen += GENDERS_GETLINE_BUFLEN;
-    free(buf);
-  }
-
-  return retval;
+  
+  return count;
 }
 
 /* insert a node into the node list 
@@ -359,11 +319,9 @@ int _insert_attrval_listnode(genders_t handle, char *attr, char *val) {
   }
 
   /* store value? */
-  if (val != NULL) {
-    if ((avptr->val = strdup(val)) == NULL) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      return -1;
-    }
+  if (val != NULL && ((avptr->val = strdup(val)) == NULL)) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    return -1;
   }
   else 
     avptr->val = NULL; 
@@ -536,8 +494,9 @@ int _parse_line(genders_t handle, char *line, int line_num, FILE *stream) {
 }
 
 int genders_load_data(genders_t handle, const char *filename) {
-  char *temp, *line = NULL;
+  char *temp;
   int ret, fd = -1;
+  char buf[GENDERS_READLINE_BUFLEN];
 
   if (_unloaded_handle_error_check(handle) == -1)
     return -1;
@@ -551,12 +510,10 @@ int genders_load_data(genders_t handle, const char *filename) {
   }
 
   /* parse genders file line by line */
-  while ((ret = _getline(handle, fd, &line)) > 0) {
-    if (_parse_line(handle, line, 0, NULL) == -1)
+  while ((ret = _readline(handle, fd, &buf[0], GENDERS_READLINE_BUFLEN)) > 0) {
+    if (_parse_line(handle, &buf[0], 0, NULL) == -1)
       goto cleanup;
-    free(line);
   }
-  line = NULL;
 
   if (ret == -1) 
     goto cleanup;
@@ -587,7 +544,6 @@ int genders_load_data(genders_t handle, const char *filename) {
 cleanup:
 
   close(fd);
-  free(line);
  
   _free_handle_lists(handle);
   _initialize_handle(handle);
@@ -1154,10 +1110,9 @@ struct attrval_listnode *_have_attr(genders_t handle,
 
 int genders_parse(genders_t handle, const char *filename, FILE *stream) {
   int line_count = 1;
-  int retval = 0;
+  int ret, retval = 0;
   int fd = -1;
-  int ret;
-  char *line = NULL;
+  char buf[GENDERS_READLINE_BUFLEN];
 
   if (_handle_error_check(handle) == -1)
     return -1;
@@ -1173,24 +1128,23 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
     goto cleanup;
   }
 
-  while (_getline(handle, fd, &line) != 0) {
-    if ((ret = _parse_line(handle, line, line_count, stream)) == -1)
+  while (_readline(handle, fd, &buf[0], GENDERS_READLINE_BUFLEN) != 0) {
+    if ((ret = _parse_line(handle, &buf[0], line_count, stream)) == -1) {
+      if (handle->errnum == GENDERS_ERR_OVERFLOW) 
+        fprintf(stderr, "Line %d: exceeds maximum allowed length\n"); 
       goto cleanup;
+    }
 
     retval += ret;
-    free(line);
     line_count++;
   }
-  line = NULL;
 
   close(fd);
   return retval;
 
  cleanup:
 
-  free(line);
   close(fd);
-
   return -1;
 }
 

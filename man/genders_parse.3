@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_parse.3,v 1.6 2003-08-18 22:45:50 achu Exp $
+\."$Id: genders_parse.3,v 1.7 2003-09-20 17:36:09 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -37,6 +37,9 @@ with
 .TP
 .B GENDERS_ERR_OPEN
 The genders file indicated by \fIfilename\fR cannot be opened for reading.
+.TP
+.B GENDERS_ERR_OVERFLOW
+A line in the genders database exceeds the maximum allowed length.
 .TP
 .B GENDERS_ERR_MAGIC 
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
