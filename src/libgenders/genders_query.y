@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.9 2004-06-10 18:35:45 achu Exp $
+ *  $Id: genders_query.y,v 1.10 2004-09-10 17:30:16 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -94,13 +94,15 @@ genders_freetree(struct genders_treenode *t)
   return;
 }
 
-void yyerror(const char *str) 
+void 
+yyerror(const char *str) 
 {
   if (!genders_query_err)
     genders_query_err = GENDERS_ERR_SYNTAX;
 }
   
-int yywrap()
+int 
+yywrap()
 {
   return 1;
 }

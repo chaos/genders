@@ -11,6 +11,8 @@
 	to ensure nodes are sorted in order before output.
 
 	* src/libgenders/genders.c (_parse_line): Fixed english typo.
+
+	* src/libgenders/genders_query.y: Minor code style cleanup.
 	
 2004-06-11  Albert Chu  <chu11@llnl.gov>
 
