@@ -1,3 +1,11 @@
+2003-11-03  Albert Chu  <chu11@llnl.gov>
+
+	* man/genders_list.3: Added note about genders databases without
+	any attributes.
+
+	* man/genders_getattr.3, man/genders_testattr.3: Added additional
+	note under GENDERS_ERR_NOTFOUND error.
+
 2003-11-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/list.h, src/libgenders/list.c,
