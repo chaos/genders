@@ -1,14 +1,11 @@
-2003-04-XX Albert Chu <chu11@llnl.gov>
-	* updated TODO
-	* fixed typo in gendlib.pl
-
-2003-04-08 Albert chu <chu11@llnl.gov>
+2003-04-09 Albert chu <chu11@llnl.gov>
 	* created Libgenders(3), perl extension that allows genders
 	  C API to be called via perl code.
 	* crated manpage for Libgenders(3)  
 	* updated gendlib.pl to use Libgenders(3) perl extension  
 	* updated gendlib.3 with changes and fixed some typos
 	* removed reference to "/etc/cluster" in dist2 manpage
+	* updated TODO
 	* tagged genders-1-1-7
 
 2003-04-01 Albert Chu <chu11@llnl.gov>
