@@ -1,25 +1,11 @@
-dist2		wrapper for USC rdist which expands special macros
-		into node lists from /etc/genders and operates on a 
-		localization "repository" in /var/dist - see dist2(1)
-		
-dist_all	dist2 wrapper to rdist repository to cluster 
-		see dist_all(1)
+libgenders      C API to operate on /etc/genders
 
-dist_local	dist2 wrapper to rdist repository to local host 
-		see dist_local(1)
+Libgenders.pm   Perl extensions interface to the C API
 
-dist_cmp	filter to compress output of dist2 - see dist_cmp(1)
-
-inst		similar to gnu fileutils install -C
+Genders.pm      Perl interface to libgenders
 
 nodeattr	query genders attributes - see nodeattr(1)
 
-dist_bootstrap	install /etc/genders and /etc/clusters from /var/dist
+subpackage compat
 
-libgenders      C API to operate on /etc/genders
-
-genders.h       header file for C API in libgenders
-
-Libgenders.pm   Perl extensions interface to C API
-
-Genders.pm      perl interface to libgenders
+gendlib.pl      genders perl api for backwards compatability 
