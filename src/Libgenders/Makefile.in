@@ -235,7 +235,6 @@ all: Makefile.xs
 Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	cp ../libgenders/genders.c .
 	cp ../libgenders/genders.h .
-	cp ../libgenders/genders_local.h .
 	$(PERL) Makefile.PL PREFIX=$(XS_PREFIX) MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
 
 test: Makefile.xs 
@@ -256,7 +255,6 @@ clean:
 	rm -f Makefile.xs.old
 	rm -f genders.c
 	rm -f genders.h
-	rm -f genders_local.h
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
