@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.12 2003-03-18 00:18:25 achu Exp $
+ * $Id: genders.h,v 1.13 2003-04-01 21:40:09 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -32,6 +32,10 @@
 #define DEFAULT_GENDERS_FILE        "/etc/genders"
 
 #define GENDERS_ALTNAME_ATTRIBUTE   "altname"
+
+#define GENDERS_CLUSTER_ATTRIBUTE   "cluster"
+
+#define GENDERS_ALL_ATTRIBUTE       "all" 
 
 typedef struct genders *genders_t;
 
@@ -213,6 +217,14 @@ int genders_testnode(genders_t handle, char *node);
  * Returns: 0 on success, -1 on failure
  */
 int genders_elapsedtime(genders_t handle);
+
+/* Parses a genders file, and outputs parse debugging 
+ * information to the file stream.  
+ * if filename is NULL, parses default genders file.
+ * if stream is NULL, outputs to stderr
+ * Returns the number of parse errors (0 if no parse errors), -1 on error
+ */
+int genders_parse(genders_t handle, char *filename, FILE *stream);
 
 /*
  * vi:tabstop=4 shiftwidth=4 expandtab
