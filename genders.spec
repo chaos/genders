@@ -27,7 +27,7 @@ set of tools distributed with genders
 %setup  -q -n %{name}-%{version}
 
 %build
-./configure --prefix=/usr
+./configure --prefix=/usr --with-xs-prefix="$RPM_BUILD_ROOT/usr" --with-genders-pm-prefix="$RPM_BUILD_ROOT/usr"
 make 
 
 %install
@@ -44,7 +44,7 @@ install dist/dist_all $RPM_BUILD_ROOT/usr/bin
 install dist/dist_local $RPM_BUILD_ROOT/usr/bin
 install dist/dist_cmp $RPM_BUILD_ROOT/usr/bin
 install dist/dist_bootstrap $RPM_BUILD_ROOT/usr/bin
-DESTDIR="$RPM_BUILD_ROOT" XS_PREFIX="$RPM_BUILD_ROOT/usr" GENDERS_PM_PREFIX="$RPM_BUILD_ROOT/usr" make install 
+DESTDIR="$RPM_BUILD_ROOT" make install 
 
 %files
 %defattr(-,root,root)
