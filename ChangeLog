@@ -4,6 +4,8 @@
 
 	* Removed MAXHOSTNAMELEN buffer and replaced with pointer and
 	malloced buffer.
+
+	* Removed pthread linking.
 	
 2004-04-22  Albert Chu  <chu11@llnl.gov>
 

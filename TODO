@@ -1,6 +1,4 @@
 - Only export genders symbols.
-- Have libgenders have lib dependency of pthread.
-  - Or do not compile with pthreads?
 - Allow attributes or attributes=value checking for each line of the genders
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
