@@ -1,0 +1,58 @@
+\."#################################################################
+\."$Id: genders_getnodes.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."by Albert Chu <chu11@llnl.gov>
+\."#################################################################
+.\"
+.TH GENDERS_GETNODES 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_getnodes \- get nodes from the genders file
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_getnodes(genders_t handle, char *nodes[], int len, char *attr, char *val);"
+.br
+.SH DESCRIPTION
+\fBgenders_getnodes()\fR gets the names of nodes in the genders file that have
+the attribute specified by \fIattr\fR and the value specified by \fIval\fR.  The
+nodes are stored in the list pointed to by \fInodes\fR.  \fIlen\fR indicates the
+number of nodes that can be stored in the list.  If \fIattr\fR is NULL, \fBgenders_getnodes()\fR returns all the nodes listed in the genders file.  If \fIval\fR is NULL, attribute values are ignored.  The nodes returned in \fInodes\fR are returned in the order they are listed in the genders file.
+
+To avoid passing in a list that is not large enough to store all the nodes,
+.BR genders_getnumnodes (3)
+should be used to determine the minimum number of elements \fInodes\fR should
+be able to store.  
+.BR genders_nodelist_create (3) 
+could be used to create a list
+that is guaranteed to be large enough to store all of the nodes.
+.br
+.SH RETURN VALUES
+On success, the number of nodes stored in \fInodes\fR is returned.  
+On error, -1 is returned, and an error code
+is returned in \fIhandle\fR.  The error code can be retrieved
+via
+.BR genders_errnum (3)
+, and a description of the error code can be retrieved via 
+.BR genders_strerror (3).  
+Error codes are defined in genders.h.
+.br
+.SH ERRORS
+.TP
+.B GENDERS_ERR_NOTOPEN
+.BR genders_open (3)
+has not been called and an open genders file has not been associated with \fIhandle\fR.  
+.TP
+.B GENDERS_ERR_OVERFLOW
+The list pointed to by \fInodes\fR is not large enough to store all the nodes.
+.TP
+.B GENDERS_ERR_PARAMETERS
+An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_MAGIC 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
+handle or \fIhandle\fR has been destroyed by 
+.BR genders_handle_destroy (3).
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3), genders_open(3), genders_getnumnodes(3), genders_nodelist_create(3), genders_errnum(3), genders_strerror(3)

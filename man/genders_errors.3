@@ -1,0 +1,54 @@
+\."#################################################################
+\."$Id: genders_errors.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."by Albert Chu <chu11@llnl.gov>
+\."#################################################################
+.\"
+.TH GENDERS_ERRNUM 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_errnum, genders_strerror, genders_errormsg, genders_perror \- get information
+about recent genders errors
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_errnum(genders_t handle);"
+.sp
+.BI "char *genders_strerror(int errnum);"
+.sp
+.BI "char *genders_errormsg(genders_t handle);"
+.sp
+.BI "void genders_perror(genders_t handle, char *msg);"
+.br
+.SH DESCRIPTION
+\fBgenders_errnum()\fR returns the error code stored in \fIhandle\fR.  
+
+\fBgenders_strerror()\fR returns a string describing the error code
+\fIerrnum\fR.
+
+\fBgenders_errormsg()\fR returns a string describing the error code stored
+in \fIhandle\fR.  It equivalent to: 
+
+char *genders_strerror(genders_errnum(genders_t handle));
+
+\fBgenders_perror()\fR is similar to 
+.BR perror (3).
+It produces a message on standard error output, describing the error
+stored in \fIhandle\fR.  If \fImsg\fR is not NULL, the string pointed
+to by \fImsg\fR, a colon, and a blank are printed before the error message.  
+
+In general, \fBgenders_errnum()\fR, \fBgenders_strerror()\fR, 
+\fBgenders_errormsg()\fR, and \fBgenders_perror()\fR should be used
+immediately after a genders C API function returns an error.  Thus,
+these functions can return information about the most recent error that
+has occurred.
+.br
+.SH RETURN VALUES
+On success, \fBgenders_errnum()\fR returns the error code stored in \fIhandle\fR.  
+On error, -1 is returned.
+
+On success, \fBgenders_strerror()\fR and \fBgenders_errormsg()\fR, return a pointer
+to a string describing the error code stored in \fIhandle\fR.  On error, NULL is returned.
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3)

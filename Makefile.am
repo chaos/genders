@@ -1,9 +1,11 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.5 2003-04-18 22:37:13 achu Exp $
+## $Id: Makefile.am,v 1.1 2003-04-18 22:37:12 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = \
-	libgenders \
-	nodeattr 
+include config/Make-rpm.mk
+
+SUBDIRS = src dist
+
+

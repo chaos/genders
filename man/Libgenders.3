@@ -1,0 +1,215 @@
+\."#################################################################
+\."$Id: Libgenders.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."by Albert Chu <chu11@llnl.gov>
+\."#################################################################
+.\"
+.TH LIBGENDERS 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.SH NAME
+Libgenders \- a perl library that interfaces with the genders C API
+.SH SYNOPSIS
+.B "use lib '/usr/lib/genders/';"
+.br
+.B "use Libgenders;"
+.br
+.SH DESCRIPTION
+This package provides a perl interface to the genders C API (see
+.BR libgenders (3)).  
+The perl interface is nearly identical to the genders C API, however
+some changes were necessary due to the differences between C and perl.
+In particular, some of the functions from the C API cannot be accessed
+via this perl interface, some new functions were created, the behavior
+of some functions was modified, and the parameters passed into the
+some functions were changed.
+.LP
+.B Initialization/Destruction
+.LP
+Libgenders::genders_handle_create()
+.IP
+Returns a genders handle to be used throughout the genders API.
+Returns a genders handle on success, 0 on error.
+.LP
+Libgenders::genders_handle_destroy($handle)
+.IP
+Destroys a genders handle. Returns 0 on success, -1 on error.
+.LP
+Libgenders::genders_open($handle, $filename)
+.IP
+Opens, reads, and parses the genders file specified by $filename.
+If $filename is the empty string, the default genders file
+is parsed.  Returns 0 on success, -1 on error.
+.LP 
+Libgenders::genders_handle_close($handle)
+.IP
+Closes the file associated with the genders handle.  Once the
+file is closed, the genders handle can be re-used to open a
+different genders file.  Returns 0 on success, -1 on error.
+.LP
+.B Error Messages
+.LP
+Similarly to the C API, an error code is stored in the genders
+handle after an error has occurred.  The following can be used 
+to retrieve the error code and output information about the error.
+See GENDERS ERRORS below for information on genders error codes.
+.LP
+Libgenders::genders_errnum($handle)
+.IP
+Returns the error code most recently set in the handle.  Returns -1 
+on error.
+.LP 
+Libgenders::genders_strerror($errnum)
+.IP
+Returns a string describing the error code $errnum.  Returns the
+empty string on error.
+.LP 
+Libgenders::genders_errormsg($handle)
+.IP
+Returns a string describing the most recent error set in the handle.
+Returns the empty string on error.
+.LP
+Libgenders::genders_perror($handle, $msg)
+.IP
+Outputs $msg and a string describing the most recent error to standard
+error.  If $msg is the empty string, only a description of the most
+recent error will be output to standard error.
+.LP  
+.B Utility Functions
+.LP
+Libgenders::genders_handle_dump($handle)
+.IP
+Dump the contents stored in the genders handle.  This is used
+primarily for debugging purposes.  Returns 0 on success, -1 on
+error.
+.LP
+Libgenders::genders_getnumnodes($handle)
+.IP
+Returns the number of nodes listed in the genders file.  Returns
+-1 on error.
+.LP
+Libgenders::genders_getnumattrs($handle)
+.IP
+Returns the number of attributes listed in the genders file.
+Returns -1 on error.
+.LP
+Libgenders::genders_getnodename($handle)
+.IP
+Returns the hostname of the current node.  Returns the empty string
+on error.
+.LP
+.B Parsing Functions
+.LP
+Libgenders::genders_getnodes($handle, $attr, $val)
+.IP
+Returns a reference to a list of nodes that have the specified
+attribute and value.  If $val is the empty string, the attribute is
+only considered.  If $attr is the empty string, all the nodes listed
+in the genders file are returned.  Returns a reference to an empty
+list and an unsuccessful error code when an error occurs.
+.LP
+Libgenders::genders_getattr($handle, $node)
+.IP
+Returns a reference to a list of attributes for the specified node.
+If $node is the empty string, the current node is considered.  Returns
+a reference to an empty list and an unsuccessful error code when an
+error occurs.
+.LP
+Libgenders::genders_getval($handle, $node)
+.IP
+Returns a reference to a list of values for the specified node.  Each
+value in the list is related to the attribute in the same index
+position of the list returned by genders_getattr().  If $node is the
+empty string, the current node is considered.  Returns a reference to
+an empty list and an unsuccessful error code when an error occurs.
+.LP
+Libgenders::genders_getattr_all($handle)
+.IP
+Returns a reference to a list of all the attributes listed in the
+genders file.  Returns a reference to an empty list and an
+unsuccessful error code when an error occurs.
+.LP
+Libgenders::genders_testattr($handle, $node, $attr)
+.IP
+Tests if a node has a specified attribute.  Returns 1 if the 
+node contains the attribute, 0 if not, -1 on error.
+.LP
+Libgenders::genders_testattrval($handle, $node, $attr, $val)
+.IP
+Tests if a node has a specified attribute=value pair.  Returns 1 if the 
+node contains the attribute=value pair, 0 if not, -1 on error.
+.LP
+Libgenders::genders_getattrval($handle, $node, $attr)
+.IP
+Returns the value of an attribute listed in a node.  Returns the empty
+string if the attribute has no value or if the attribute is not
+found. Returns the empty string and an unsuccessful error code when an
+error occurs.
+.LP
+Libgenders::genders_testnode($handle, $node)
+.IP
+Tests if a node is listed in the genders file.  Returns 1 if the node
+is listed, 0 if it is not, -1 on error.
+.LP
+Libgenders::genders_parse($handle, $filename)
+.IP
+Parse a genders file and output parse errors to standard error.  Returns
+the number of errors (0 if no parse errors were found) on success, -1 on error.
+.LP
+.br
+.SH STRING CONSTANTS
+.LP
+The value of the string constants DEFAULT_GENDERS_FILE, GENDERS_ALTNAME_ATTRIBUTE,
+GENDERS_CLUSTER_ATTRIBUTE, and GENDERS_ALL_ATTRIBUTE can be accessed via the
+following function.
+.LP
+Libgenders::string_constant($strname)
+.IP
+Returns a string representing the value of the string constant $strname.  
+Returns the empty string on error.
+.br
+.SH GENDERS ERRORS
+The same error codes in the genders C API are returned in the perl
+interface, although some are not relevant in perl.  The relevant error
+codes from /usr/include/genders.h are listed below.  Their numeric
+value can be accessed using the following
+.BR h2xs (1)
+created function. 
+.LP
+Libgenders::constant($errname, 0)
+.IP
+Returns the numeric value of the error name indicated by $errname.
+.LP
+.TP
+.B GENDERS_ERR_SUCCESS
+Success
+.TP
+.B GENDERS_ERR_OPEN
+Error opening file.
+.TP
+.B GENDERS_ERR_READ
+Error reading file.
+.TP
+.B GENDERS_ERR_PARSE
+Parse error in genders file.
+.TP
+.B GENDERS_ERR_NOTOPEN
+Genders file has not been opened with genders_open().
+.TP
+.B GENDERS_ERR_PARAMETERS
+Incorrect parameters have been passed in.
+.TP
+.B GENDERS_ERR_NOTFOUND
+The node has not been found in the genders file.
+.TP
+.B GENDERS_ERR_OUTMEM
+System is out of memory, memory cannot be allocated internally.
+.TP
+.B GENDERS_ERR_MAGIC
+Genders handle has an incorrect magic number.  The handle is not
+a proper genders handle or it has been destroyed.
+.TP
+.B GENDERS_ERR_INTERNAL
+An internal system error has occurred.
+.br
+.SH FILES
+/usr/lib/genders/Libgenders.pm
+.SH SEE ALSO
+h2xs(1), gendlib(3), libgenders(3)

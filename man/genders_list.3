@@ -1,0 +1,98 @@
+\."#################################################################
+\."$Id: genders_list.3,v 1.1 2003-04-18 22:37:12 achu Exp $
+\."by Albert Chu <chu11@llnl.gov>
+\."#################################################################
+.\"
+.TH GENDERS_NODELIST_CREATE 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_nodelist_create, genders_nodelist_clear, genders_nodelist_destroy, genders_attrlist_create, genders_attrlist_clear, genders_attrlist_destroy, genders_vallist_create, genders_vallist_clear, genders_vallist_destroy - create, clear, and destroy lists
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_nodelist_create(genders_t handle, char ***nodelist);"
+.sp
+.BI "int genders_nodelist_clear(genders_t handle, char **nodelist);"
+.sp
+.BI "int genders_nodelist_destroy(genders_t handle, char **nodelist);"
+.sp
+.BI "int genders_attrlist_create(genders_t handle, char ***attrlist);"
+.sp
+.BI "int genders_attrlist_clear(genders_t handle, char **attrlist);"
+.sp
+.BI "int genders_attrlist_destroy(genders_t handle, char **attrlist);"
+.sp
+.BI "int genders_vallist_create(genders_t handle, char ***vallist);"
+.sp
+.BI "int genders_vallist_clear(genders_t handle, char **vallist);"
+.sp
+.BI "int genders_vallist_destroy(genders_t handle, char **vallist);"
+.br
+.SH DESCRIPTION
+\fBgenders_nodelist_create()\fR, \fBgenders_nodelist_clear()\fR, \fBgenders_nodelist_destroy()\fR, \fBgenders_attrlist_create()\fR, \fBgenders_attrlist_clear()\fR, \fBgenders_attrlist_destroy()\fR, \fBgenders_vallist_create()\fR, \fBgenders_vallist_clear()\fR, and \fBgenders_vallist_destroy()\fR are used to create, clear, and destroy lists (arrays of strings) for use with 
+.BR genders_getnodes (3),
+.BR genders_getattr (3),
+and
+.BR genders_getattr_all (3).  
+
+\fBgenders_nodelist_create()\fR, \fBgenders_attrlist_create()\fR, and \fBgenders_vallist_create()\fR creates a list with minimum size to store nodes, attributes, and attribute values respectively.  \fInodelist\fR, \fIattrlist\fR, and \fIvallist\fR are respectively set to point to the created list.  The created lists are guaranteed to store all the node, attribute, and value information 
+returned from 
+.BR genders_getnodes (3),
+.BR genders_getattr (3),
+and
+.BR genders_getattr_all (3).  
+
+\fBgenders_nodelist_clear()\fR, \fBgenders_attrlist_clear()\fR, and \fBgenders_vallist_clear()\fR clear any information stored in the lists pointed to by \fInodelist\fR, \fIattrlist\fR, and \fIvallist\fR repectively.  They do not have be called after their respective create functions.   They only have to
+be called after they are used in
+.BR genders_getnodes (3),
+.BR genders_getattr (3),
+and
+.BR genders_getattr_all (3),
+and the programmer wishes to re-use the list.  
+
+\fBgenders_nodelist_destroy()\fR, \fBgenders_attrlist_destroy()\fR, and \fBgenders_vallist_destroy()\fR destroy the lists pointed to by \fInodelist\fR, \fIattrlist\fR, and \fIvallist\fR respectively.  In addition, all memory assocated with the list is freed.  
+Before the genders file associated with \fIhandle\fR can be closed, all 
+lists must be destroyed by their respective destroy functions.
+.br
+.SH RETURN VALUES
+On success, \fBgenders_nodelist_create()\fR,
+\fBgenders_attrlist_create()\fR, and \fBgenders_vallist_create()\fR
+return the number of elements the created list can store.  On success,
+\fBgenders_nodelist_clear()\fR, \fBgenders_attrlist_clear()\fR,
+\fBgenders_vallist_clear()\fR \fBgenders_nodelist_destroy()\fR,
+\fBgenders_attrlist_destroy()\fR, \fBgenders_vallist_destroy()\fR
+return 0.  On error, -1 is returned, and an error code
+is returned in \fIhandle\fR.  The error code can be retrieved
+via
+.BR genders_errnum (3)
+, and a description of the error code can be retrieved via 
+.BR genders_strerror (3).  
+Error codes are defined in genders.h.
+.br
+.SH ERRORS
+.TP
+.B GENDERS_ERR_NOTOPEN
+.BR genders_open (3)
+has not been called and an open genders file has not been associated with \fIhandle\fR.  Before lists of appropriate size can be created, the genders file must be read and parsed.
+.TP
+.B GENDERS_ERR_PARAMETERS
+An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_NULLPTR
+A null pointer has been found in the list passed in.
+.TP
+.B GENDERS_ERR_OUTMEM
+.BR malloc (3)
+has failed internally, system is out of memory.
+.TP
+.B GENDERS_ERR_ISFREE
+All lists associated with \fIhandle\fR have already been freed.
+.TP
+.B GENDERS_ERR_MAGIC 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
+handle or \fIhandle\fR has been destroyed by 
+.BR genders_handle_destroy (3).
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3), genders_open(3), genders_getnodes(3), genders_getattr(3), genders_getattr_all(3), genders_errnum(3), genders_strerror(3)

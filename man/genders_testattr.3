@@ -1,0 +1,72 @@
+\."#################################################################
+\."$Id: genders_testattr.3,v 1.1 2003-04-18 22:37:13 achu Exp $
+\."by Albert Chu <chu11@llnl.gov>
+\."#################################################################
+.\"
+.TH GENDERS_TESTATTR 3 "Release 1.1" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_testattr \- test if a node has an attribute  
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_testattr(genders_t handle, char *node, char *attr, char *val, int len);"
+.sp
+.BI "int genders_testattrval(genders_t handle, char *node, char *attr, char *val);"
+.br
+.SH DESCRIPTION
+\fBgenders_testattr()\fR tests if the node pointed to by \fInode\fR
+contains the attribute pointed to by \fIattr\fR.  If \fInode\fR is
+NULL, the current node is tested.  If the attribute is found, its
+value is stored in the buffer pointed to by \fIval\fR.  \fIlen\fR
+should indicate the length of the buffer.  If the attribute value is
+not needed, \fIval\fR can be set to NULL.
+
+To avoid passing in an attribute value buffer that is not large enough
+to store the attribute value,
+.BR genders_getmaxvallen (3)
+should be used to determine the minimum buffer size that should be used.
+
+\fBgenders_testattrval()\fR tests if the node pointed to by \fInode\fR contains the attribute
+pointed to by \fIattr\fR and if that attribute is equal to the attribute value pointed to by \fIval\fR.  
+.br
+.SH RETURN VALUES
+For \fBgenders_testattr()\fR, if the node contains the attribute, 1 is
+returned.  0 is returned if the node does not contain the attribute.
+
+For \fBgenders_testattrval()\fR, if the node contains the attribute
+and is equal to the attribute value, 1 is returned.  0 is returned if
+the node does not contain the attribute, or if the attribute is not
+equal to the attribute value.  
+
+For both \fBgenders_testattr()\fR and
+\fBgenders_testattrval()\fR, -1 is returned on error, and an error
+code is returned in \fIhandle\fR.  The error code can be retrieved via
+.BR genders_errnum (3)
+, and a description of the error code can be retrieved via 
+.BR genders_strerror (3).  
+Error codes are defined in genders.h.
+.br
+.SH ERRORS
+.TP
+.B GENDERS_ERR_NOTOPEN
+.BR genders_open (3)
+has not been called and an open genders file has not been associated with \fIhandle\fR.  
+.TP
+.B GENDERS_ERR_OVERFLOW
+The buffer pointed to by \fIval\fR is not large enough to store the attribute value.
+.TP
+.B GENDERS_ERR_PARAMETERS
+An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_NOTFOUND
+The node pointed to by \fInode\fR is not found in the genders file.  
+.TP
+.B GENDERS_ERR_MAGIC 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not point to a genders
+handle or \fIhandle\fR has been destroyed by 
+.BR genders_handle_destroy (3).
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3), genders_open(3), genders_getmaxvallen(3), genders_errnum(3), genders_strerror(3)
