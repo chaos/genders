@@ -1,5 +1,5 @@
 /*
- * $Id: genders_example.c,v 1.5 2003-03-18 00:19:41 achu Exp $
+ * $Id: genders_example.c,v 1.6 2003-04-19 00:01:03 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders_example.c,v $
  */
 
@@ -433,7 +433,7 @@ void test_if_node_has_attribute(genders_t handle) {
   for (i = 0; i < num_attributes; i++) {
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
 
-    ret = genders_testattr(handle, nodes[0], attrs[i], NULL, 0);
+    ret = genders_testattr(handle, nodes[0], attrs[i]);
     if (ret == 1) {
       printf("Yes\n");
     }
@@ -447,7 +447,7 @@ void test_if_node_has_attribute(genders_t handle) {
   }
 
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
-  ret = genders_testattr(handle, nodes[0], "foobar", NULL, 0);
+  ret = genders_testattr(handle, nodes[0], "foobar");
   if (ret == 1) {
     printf("Yes\n");
   }
@@ -501,7 +501,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
     printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], attrs[i]);
 
     memset(buffer, '\0', maxvallen + 1);
-    ret = genders_testattr(handle, nodes[0], attrs[i], buffer, maxvallen+1);
+    ret = genders_getattrval(handle, nodes[0], attrs[i], buffer, maxvallen+1);
     if (ret == 1) {
       if (strlen(buffer) > 0) {
 	printf("Yes, and it has value \"%s\"\n", buffer);
@@ -522,7 +522,7 @@ void test_if_node_has_attribute_and_return_the_attribute_value(genders_t handle)
   printf("Does node \"%s\" have attribute \"%s\"?: ", nodes[0], "foobar");
 
   memset(buffer, '\0', maxvallen + 1);
-  ret = genders_testattr(handle, nodes[0], "foobar", buffer, maxvallen+1);
+  ret = genders_getattrval(handle, nodes[0], "foobar", buffer, maxvallen+1);
   if (ret == 1) {
     if (strlen(buffer) > 0) {
       printf("Yes, and it has value \"%s\"\n", buffer);
@@ -685,19 +685,6 @@ void test_if_genders_file_has_certain_nodes(genders_t handle) {
   return;
 }
 
-void time_this_example_genders_took_to_run(genders_t handle) {
-  int seconds;
-
-  if ((seconds = genders_elapsedtime(handle)) == -1) {
-    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-    cleanup_and_exit(handle,1);
-  }
-
-  printf("Time this executable took to run\n");
-  printf("--------------------------------\n");
-  printf("Time: %d\n", seconds);
-  printf("\n");
-}
 
 void example_using_genders_perror_and_errormsg(genders_t handle) {
   /* Intentionally force errors to test and illustate genders_perror */
@@ -740,7 +727,7 @@ mtrace();
     cleanup_and_exit(handle,1);
   }
 
-  if (genders_open(handle,filename) == -1) {
+  if (genders_load_data(handle,filename) == -1) {
     printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
     cleanup_and_exit(handle,1);
   }
@@ -786,8 +773,6 @@ mtrace();
 
   test_if_genders_file_has_certain_nodes(handle);
 
-  time_this_example_genders_took_to_run(handle);
-
   example_using_genders_perror_and_errormsg(handle);
 
   if (genders_nodelist_destroy(handle, nodes) == -1) {
@@ -801,11 +786,6 @@ mtrace();
   }
 
   if (genders_vallist_destroy(handle, vals) == -1) {
-    printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
-    cleanup_and_exit(handle,1);
-  }
-
-  if (genders_close(handle) == -1) {
     printf("Error: %s\n", genders_strerror(genders_errnum(handle)));
     cleanup_and_exit(handle,1);
   }
