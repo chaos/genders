@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.70 2003-11-07 03:25:09 achu Exp $
+ * $Id: genders.c,v 1.71 2003-11-07 16:38:10 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -326,10 +326,6 @@ static int _parse_line(genders_t handle, char *line,
   /* move forward to node name */
   while(isspace(*line))  
     line++;
-
-  /* just in case */
-  if (*line == '\0')
-    return 0;
 
   /* get node name */
   if ((node = strsep(&line, " \t\0")) != NULL) { 
