@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.14 2003-04-08 22:05:58 achu Exp $
+ * $Id: genders.c,v 1.15 2003-04-11 18:14:50 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -1406,7 +1406,11 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
   return attrcount;  
 }
 
-int genders_testattr(genders_t handle, char *node, char *attr, char *val, int len) {
+int genders_testattr(genders_t handle, 
+		     char *node, 
+		     char *attr, 
+		     char *val, 
+		     int len) {
   struct node_listnode *node_list;
   struct attrval_listnode *attrval_list;
   char *nodename;
@@ -1676,7 +1680,8 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
     /* get attributes */
     if (*line_ptr != '\0') {
       if (strchr(line_ptr,' ') != NULL || strchr(line_ptr,'\t') != NULL) {
-	fprintf(stream, "Line %d: white space in attribute list\n", line_count);
+	fprintf(stream, "Line %d: white space in attribute list\n", 
+		line_count);
 	retval++;
 	continue;
       }
@@ -1699,7 +1704,8 @@ int genders_parse(genders_t handle, char *filename, FILE *stream) {
 
 	  /* cluster attribute must have a value */
 	  if (value == NULL) {
-	    fprintf(stream, "Line %d: cluster attribute has no value\n", line_count);
+	    fprintf(stream, "Line %d: cluster attribute has no value\n", 
+		    line_count);
 	    retval++;
 	  }
 	  else if (value != NULL && strlen(value) > MAXHOSTNAMELEN) {
