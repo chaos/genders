@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.8 2003-05-07 19:18:37 achu Exp $
+ * $Id: genders.h.in,v 1.9 2003-05-12 20:52:24 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -99,13 +99,13 @@ int genders_getmaxattrs(genders_t handle);
  */
 int genders_getmaxnodelen(genders_t handle);
 
-/* Get the max attribute name length of any one node in the genders
- * file
+/* Get the max attribute name length of any one attribute in the
+ * genders file
  * Returns: maximum attribute length on success, -1 on failure 
  */
 int genders_getmaxattrlen(genders_t handle);
 
-/* Get the max value length of any one attribute in the genders file
+/* Get the max value length of any one value in the genders file
  * Returns: maximum value length on success, -1 on failure 
  */
 int genders_getmaxvallen(genders_t handle);
@@ -158,8 +158,8 @@ int genders_vallist_clear(genders_t handle, char **vallist);
  */
 int genders_vallist_destroy(genders_t handle, char **vallist);
 
-/* Get the name of the current node (node name is the shortened
- * hostname).
+/* Get the name of the current node 
+ * Node name returned is the shortened hostname.
  * Returns: 0 on success, -1 on failure 
  */
 int genders_getnodename(genders_t handle, char *node, int len);
@@ -224,7 +224,8 @@ int genders_isnode(genders_t handle, const char *node);
  */
 int genders_isattr(genders_t handle, const char *attr);
 
-/* Tests whether an attribute=value exists in the genders file 
+/* Tests whether an attribute=value exists for some node in the
+ * genders file
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_isattrval(genders_t handle, const char *attr, const char *val);

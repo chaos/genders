@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.35 2003-05-08 16:16:17 achu Exp $
+ * $Id: genders.c,v 1.36 2003-05-12 20:52:24 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -143,14 +143,16 @@ static void genders_handle_initialize(genders_t handle);
 /* genders_getline
  * - portable version of getline(3) for genders
  * - user is responsible for freeing memory
- * - Returns length of line read on success, -1 on error, 0 for EOF 
+ * - Returns length of line read on success, 0 for EOF, -1 on error 
  */ 
 static int genders_getline(genders_t handle, int fd, char **buf);
 
 /* parse a line from the genders file 
  * - if debug_line > 0, only debug the line of data, do not
  *   store any genders data in the handle
- * Returns -1 on error, 0 on success
+ * If debug_line == 0, Returns -1 on error, 0 on success
+ * If debug_line > 0, Returns -1 on error, number of parse errors
+ * found for the line on success
  */
 static int genders_parse_line(genders_t handle, 
                               char *line, 
@@ -162,7 +164,8 @@ static int genders_parse_line(genders_t handle,
  */
 static int genders_insert_node_listnode(genders_t handle, char *name);
 
-/* insert an attribute (and value if necessary) into an attribute list 
+/* insert an attribute (and value if value != NULL) into an
+ * attribute-value list 
  * Returns -1 on error, 0 on success
  */
 static int genders_insert_attrval_listnode(genders_t handle, 
@@ -174,7 +177,8 @@ static int genders_insert_attrval_listnode(genders_t handle,
  */
 static int genders_insert_attr_listnode(genders_t handle, char *attr);
 
-/* free all members of the cache (i.e. node and attribute lists) 
+/* free all members of the node, attribute-value, and and attribute
+ * lists 
  * Returns -1 on error, 0 on success
  */
 static void genders_free_cache(genders_t handle);
@@ -208,7 +212,8 @@ int genders_has_node(genders_t handle,
                      const char *node, 
                      struct node_listnode **node_listnode);
 
-/* determines if attr is an attribute in node_listnode.
+/* determines if attr is an attribute for the node pointed to be
+ * node_listnode.
  * Returns 1 if it is stored, 0 if it is not.  
  * Pointer to attribute is stored in attrval_listnode
  */        
@@ -355,56 +360,63 @@ cleanup:
   return -1;
 }
 
-int genders_getline(genders_t handle, int fd, char **buf) {
-  int buflen = 0;
-  int start_offset = 0;
+int genders_readline(genders_t handle, int fd, int buflen, char **buf) {
   int ret, count;
   char *buffer = NULL;
   char chr;
 
-  /* get beginning seek position */
-  if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
+  if ((buffer = (char *)malloc(buflen)) == NULL) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
     goto cleanup;
   }
-
+  memset(buffer, '\0', buflen);
+    
+  /* read line */
+  count = 0;
   do {
-    if (lseek(fd, start_offset, SEEK_SET) != start_offset) {
-      handle->errnum = GENDERS_ERR_INTERNAL;
+    ret = read(fd, &chr, 1);
+    if (ret == -1) {
+      handle->errnum = GENDERS_ERR_READ;
       goto cleanup;
     }
+    else if (ret == 1)
+      buffer[count++] = chr;
     
-    free(buffer);
-    buflen += GENDERS_GETLINE_BUFLEN;
-    if ((buffer = (char *)malloc(buflen)) == NULL) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-    memset(buffer, '\0', buflen);
-    
-    /* read line */
-    count = 0;
-    do {
-      ret = read(fd, &chr, 1);
-      if (ret == -1) {
-        handle->errnum = GENDERS_ERR_READ;
-        goto cleanup;
-      }
-      else if (ret == 1)
-        (buffer)[count++] = chr;
+  } while (ret == 1 && chr != '\n' && count < buflen);
 
-    } while (ret == 1 && chr != '\n' && count < buflen);
-    
-  } while(count >= buflen);
+  if (count >= buflen) { 
+    free(buffer);
+    return 0;
+  }
 
   *buf = buffer;
-
   return count;
 
  cleanup:
 
   free(buffer);
   return -1;
+}
+
+int genders_getline(genders_t handle, int fd, char **buf) {
+  int start_offset = 0;
+  int retval, buflen = GENDERS_GETLINE_BUFLEN;
+  
+  /* get beginning seek position */
+  if ((start_offset = lseek(fd, 0, SEEK_CUR)) == (off_t)-1) {
+    handle->errnum = GENDERS_ERR_INTERNAL;
+    return -1;
+  }
+
+  while ((retval = genders_readline(handle, fd, buflen, buf)) == 0) {
+    if (lseek(fd, start_offset, SEEK_SET) != start_offset) {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      return -1;
+    }
+    buflen += GENDERS_GETLINE_BUFLEN;
+  }
+
+  return retval;
 }
 
 int genders_parse_line(genders_t handle, 
@@ -466,7 +478,7 @@ int genders_parse_line(genders_t handle,
       if (debug_line > 0) {
         fprintf(stream, "Line %d: white space in attribute list\n", 
                 debug_line);
-        return 0;
+        return 1;
       }
 
       handle->errnum = GENDERS_ERR_PARSE;
@@ -498,12 +510,10 @@ int genders_parse_line(genders_t handle,
         if ((value != NULL) && (strlen(value) > handle->maxvallen))
           handle->maxvallen = strlen(value);
 
-        /* store attribute in unique attribute list */
         if ((ret = genders_insert_attr_listnode(handle, attribute)) == -1)
           return -1;
       
-        if (ret == 1)
-          handle->numattrs++;
+        handle->numattrs += ret;
 
         attrcount++;
       }
@@ -1237,13 +1247,14 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
     return -1;
   }
 
+  if (handle->numattrs > len) {
+    handle->errnum = GENDERS_ERR_OVERFLOW;
+    return -1;
+  }
+
   /* store attributes */
   attr_list = handle->attrs_head;
   while (attr_list != NULL) {
-    if (attrcount >= len) {
-      handle->errnum = GENDERS_ERR_OVERFLOW;
-      return -1;
-    }
     if (attrs[attrcount] == NULL) {
       handle->errnum = GENDERS_ERR_NULLPTR;
       return -1;
@@ -1251,11 +1262,6 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
     strcpy(attrs[attrcount],attr_list->name);
     attrcount++;
     attr_list = attr_list->next;
-  }
-  
-  if (attrcount != handle->numattrs) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
-    return -1;
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
