@@ -1,3 +1,7 @@
+2004-11-16  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Remove copyright, add License.
+	
 2004-11-13  Albert Chu  <chu11@llnl.gov>
 
 	* README: Updated with better descriptions.
