@@ -1,3 +1,8 @@
+2004-12-14  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in, src/Genders/Makefile.am,
+	src/Libgenders/Makefile.am: Fix 64bit build issue.
+	
 2004-11-16  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in: Remove copyright, add License.

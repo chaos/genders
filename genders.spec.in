@@ -28,7 +28,7 @@ genders API that is compatible with earlier releases of genders
 %setup  -q -n %{name}-%{version}-%{release}
 
 %build
-%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT/usr"
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-install-prefix="$RPM_BUILD_ROOT"
 make 
 
 %install
@@ -51,6 +51,6 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files compat
 %defattr(-,root,root)
 %{_mandir}/man3/gendlib*
-%{_libdir}/genders/*
+%{_prefix}/lib/genders/*
 
 
