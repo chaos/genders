@@ -3,6 +3,8 @@
 	* src/libgenders/genders.c: Globally added support for %n
 	substitution.
 
+	* man/libgenders.3: Updated with hostlist range info.
+
 2004-01-30  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Makefile.am: Support hostlist code.
