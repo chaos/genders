@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.108 2004-04-28 21:31:54 achu Exp $
+ *  $Id: genders.c,v 1.109 2004-04-28 21:43:35 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -108,11 +108,22 @@ typedef struct genders_attrval *genders_attrval_t;
  *      attr6.attr = attrname6, attr6.val = NULL
  * attrslist = attrname1 -> attrname2 -> attrname3 -> attrname4 -> 
  *             attrname5 -> attrname6 -> \0
- * node_index = hash table with
- *              KEY(nodename1) -> node1
- *              KEY(nodename2) -> node2
- *              KEY(nodename3) -> node3
  * valbuf -> buffer of length 5 (maxvallen + 1) 
+ *
+ * If genders_index_nodes is called:
+ * node_index = hash table with
+ *              KEY(nodename1): node1
+ *              KEY(nodename2): node2
+ *              KEY(nodename3): node3
+ *
+ * If genders_index_attrs is called:
+ * attr_index = hash table with
+ *              KEY(attrname1): node1 -> node2
+ *              KEY(attrname2): node1 -> node2
+ *              KEY(attrname3): node1
+ *              KEY(attrname4): node1
+ *              KEY(attrname5): node2
+ *              KEY(attrname6): node3 
  */
 struct genders {
   int magic;                        /* magic number */ 
@@ -128,10 +139,9 @@ struct genders {
   List nodeslist;                   /* Lists of genders_node */
   List attrvalslist;                /* Lists of ptrs to Lists of genders_attrvals */
   List attrslist;                   /* List of unique attribute strings */
+  char *valbuf;                     /* Buffer for value substitution */
   hash_t node_index;                /* Index table for quicker node access */
   hash_t attr_index;                /* Index table for quicker search times */
-  char *valbuf;                     /* Buffer for value substitution */
-  
 };
 
 /* Error messages */
@@ -365,9 +375,9 @@ genders_handle_create(void)
   handle->nodeslist = NULL;
   handle->attrvalslist = NULL;
   handle->attrslist = NULL;
+  handle->valbuf = NULL;
   handle->node_index = NULL;
   handle->attr_index = NULL;
-  handle->valbuf = NULL;
 
   if (!(handle->nodeslist = list_create(_free_genders_node)))
     goto cleanup;
@@ -406,11 +416,11 @@ genders_handle_destroy(genders_t handle)
   list_destroy(handle->nodeslist);
   list_destroy(handle->attrvalslist);
   list_destroy(handle->attrslist);
+  free(handle->valbuf);
   if (handle->node_index)
     hash_destroy(handle->node_index);
   if (handle->attr_index)
     hash_destroy(handle->attr_index);
-  free(handle->valbuf);
 
   /* "clean" handle */
   _initialize_handle_info(handle);
@@ -419,9 +429,9 @@ genders_handle_destroy(genders_t handle)
   handle->nodeslist = NULL;
   handle->attrvalslist = NULL;
   handle->attrslist = NULL;
+  handle->valbuf = NULL;
   handle->node_index = NULL;
   handle->attr_index = NULL;
-  handle->valbuf = NULL;
   free(handle);
   return 0;
 }
