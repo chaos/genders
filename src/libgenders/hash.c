@@ -1,25 +1,25 @@
 /*****************************************************************************
- *  $Id: hash.c,v 1.1 2004-04-14 21:02:51 achu Exp $
+ *  $Id: hash.c,v 1.2 2005-01-18 20:23:03 achu Exp $
  *****************************************************************************
- *  Copyright (C) 2003 The Regents of the University of California.
+ *  Copyright (C) 2003-2005 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Chris Dunlap <cdunlap@llnl.gov>.
  *  
  *  This file is from LSD-Tools, the LLNL Software Development Toolbox.
  *
- *  LSD-Tools is free software; you can redistribute it and/or modify it under
- *  the terms of the GNU General Public License as published by the Free
- *  Software Foundation; either version 2 of the License, or (at your option)
- *  any later version.
+ *  This is free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- *  LSD-Tools is distributed in the hope that it will be useful, but WITHOUT
+ *  This is distributed in the hope that it will be useful, but WITHOUT
  *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- *  more details.
+ *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ *  for more details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with LSD-Tools; if not, write to the Free Software Foundation, Inc.,
- *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+ *  You should have received a copy of the GNU General Public License;
+ *  if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+ *  Suite 330, Boston, MA  02111-1307  USA.
  *****************************************************************************
  *  Refer to "hash.h" for documentation on public functions.
  *****************************************************************************/
@@ -42,7 +42,7 @@
  *  Constants
  *****************************************************************************/
 
-#define HASH_ALLOC      256
+#define HASH_ALLOC      1024
 #define HASH_DEF_SIZE   1213
 #define HASH_MAGIC      0xDEADBEEF
 
@@ -156,7 +156,10 @@ hash_destroy (hash_t h)
     int i;
     struct hash_node *p, *q;
 
-    assert (h != NULL);
+    if (!h) {
+        errno = EINVAL;
+        return;
+    }
     lsd_mutex_lock (&h->mutex);
     assert (h->magic == HASH_MAGIC);
     for (i = 0; i < h->size; i++) {
@@ -170,6 +173,7 @@ hash_destroy (hash_t h)
     assert (h->magic = ~HASH_MAGIC);    /* clear magic via assert abuse */
     lsd_mutex_unlock (&h->mutex);
     lsd_mutex_destroy (&h->mutex);
+    free (h->table);
     free (h);
     return;
 }
@@ -180,7 +184,10 @@ hash_is_empty (hash_t h)
 {
     int n;
 
-    assert (h != NULL);
+    if (!h) {
+        errno = EINVAL;
+        return (0);
+    }
     lsd_mutex_lock (&h->mutex);
     assert (h->magic == HASH_MAGIC);
     n = h->count;
@@ -194,7 +201,10 @@ hash_count (hash_t h)
 {
     int n;
 
-    assert (h != NULL);
+    if (!h) {
+        errno = EINVAL;
+        return (0);
+    }
     lsd_mutex_lock (&h->mutex);
     assert (h->magic == HASH_MAGIC);
     n = h->count;
@@ -210,8 +220,7 @@ hash_find (hash_t h, const void *key)
     struct hash_node *p;
     void *data = NULL;
 
-    assert (h != NULL);
-    if (!key) {
+    if (!h || !key) {
         errno = EINVAL;
         return (NULL);
     }
@@ -236,8 +245,7 @@ hash_insert (hash_t h, const void *key, void *data)
     struct hash_node *p;
     unsigned int slot;
 
-    assert (h != NULL);
-    if (!key || !data) {
+    if (!h || !key || !data) {
         errno = EINVAL;
         return (NULL);
     }
@@ -251,7 +259,7 @@ hash_insert (hash_t h, const void *key, void *data)
             goto end;
         }
     }
-    if (!(p = hash_node_alloc())) {
+    if (!(p = hash_node_alloc ())) {
         data = lsd_nomem_error (__FILE__, __LINE__, "hash_insert");
         goto end;
     }
@@ -275,8 +283,7 @@ hash_remove (hash_t h, const void *key)
     unsigned int slot;
     void *data = NULL;
 
-    assert (h != NULL);
-    if (!key) {
+    if (!h || !key) {
         errno = EINVAL;
         return (NULL);
     }
@@ -306,8 +313,7 @@ hash_delete_if (hash_t h, hash_arg_f arg_f, void *arg)
     struct hash_node *p;
     int n = 0;
 
-    assert (h != NULL);
-    if (!arg_f) {
+    if (!h || !arg_f) {
         errno = EINVAL;
         return (-1);
     }
@@ -316,7 +322,7 @@ hash_delete_if (hash_t h, hash_arg_f arg_f, void *arg)
     for (i = 0; i < h->size; i++) {
         pp = &(h->table[i]);
         while ((p = *pp) != NULL) {
-            if (arg_f (p->data, arg) > 0) {
+            if (arg_f (p->data, p->hkey, arg) > 0) {
                 if (h->del_f)
                     h->del_f (p->data);
                 *pp = p->next;
@@ -341,8 +347,7 @@ hash_for_each (hash_t h, hash_arg_f arg_f, void *arg)
     struct hash_node *p;
     int n = 0;
 
-    assert (h != NULL);
-    if (!arg_f) {
+    if (!h || !arg_f) {
         errno = EINVAL;
         return (-1);
     }
@@ -350,7 +355,7 @@ hash_for_each (hash_t h, hash_arg_f arg_f, void *arg)
     assert (h->magic == HASH_MAGIC);
     for (i = 0; i < h->size; i++) {
         for (p = h->table[i]; p != NULL; p = p->next) {
-            if (arg_f (p->data, arg) > 0) {
+            if (arg_f (p->data, p->hkey, arg) > 0) {
                 n++;
             }
         }

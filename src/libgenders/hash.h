@@ -1,25 +1,25 @@
 /*****************************************************************************
- *  $Id: hash.h,v 1.1 2004-04-14 21:02:51 achu Exp $
+ *  $Id: hash.h,v 1.2 2005-01-18 20:23:03 achu Exp $
  *****************************************************************************
- *  Copyright (C) 2003 The Regents of the University of California.
+ *  Copyright (C) 2003-2005 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Chris Dunlap <cdunlap@llnl.gov>.
  *  
  *  This file is from LSD-Tools, the LLNL Software Development Toolbox.
  *
- *  LSD-Tools is free software; you can redistribute it and/or modify it under
- *  the terms of the GNU General Public License as published by the Free
- *  Software Foundation; either version 2 of the License, or (at your option)
- *  any later version.
+ *  This is free software; you can redistribute it and/or modify it
+ *  under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
  *
- *  LSD-Tools is distributed in the hope that it will be useful, but WITHOUT
+ *  This is distributed in the hope that it will be useful, but WITHOUT
  *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
- *  more details.
+ *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ *  for more details.
  *
- *  You should have received a copy of the GNU General Public License along
- *  with LSD-Tools; if not, write to the Free Software Foundation, Inc.,
- *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
+ *  You should have received a copy of the GNU General Public License;
+ *  if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+ *  Suite 330, Boston, MA  02111-1307  USA.
  *****************************************************************************/
 
 
@@ -79,11 +79,11 @@ typedef void (*hash_del_f) (void *data);
  *    the [data] item, including any subordinate items.
  */
 
-typedef int (*hash_arg_f) (void *data, void *arg);
+typedef int (*hash_arg_f) (void *data, const void *key, void *arg);
 /*
  *  Function prototype for operating on each element in the hash table.
  *  The function will be invoked once for each [data] item in the hash,
- *    with [arg] being passed in as an argument.
+ *    with the item's [key] and the specified [arg] being passed in as args.
  */
 
 
