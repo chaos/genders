@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.120 2004-11-04 18:49:51 achu Exp $
+ *  $Id: genders.c,v 1.121 2004-11-08 19:09:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -55,7 +55,6 @@ static char * errmsg[] = {
   "node not found",
   "out of memory",
   "query syntax error",
-  "invalid attribute or value found in query", 
   "genders handle magic number incorrect, improper handle passed in",
   "unknown internal error",
   "error number out of range",

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_query.3,v 1.4 2004-11-04 21:23:17 achu Exp $
+\."  $Id: genders_query.3,v 1.5 2004-11-08 19:09:20 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -57,7 +57,7 @@ could be used to create a list that is guaranteed to be large enough
 to store all of the nodes.
 .br
 .SH EXAMPLES
-The following are examples of syntax correct queries that can be
+The following are example queries that can be
 passed to \fBgenders_query()\fR.
 .LP
 Determine the set of nodes with the mgmt and login attributes:
@@ -100,10 +100,6 @@ An incorrect parameter has been passed in.
 .TP
 .B GENDERS_ERR_SYNTAX
 There is a syntax error in the query.
-.TP
-.B GENDERS_ERR_QUERY_INPUT
-In invalid genders attribute or attribute=value pair was listed in the
-query.
 .TP
 .B GENDERS_ERR_OUTMEM
 .BR malloc (3)

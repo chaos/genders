@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.11 2004-11-04 18:49:51 achu Exp $
+ *  $Id: genders_query.y,v 1.12 2004-11-08 19:09:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -167,25 +167,13 @@ _calc_query(genders_t handle, struct genders_treenode *t)
   if (!t->left && !t->right) {
     char **nodes = NULL;
     hostlist_t h = NULL;
-    int i, rv, len, num;
+    int i, len, num;
     char *attr, *val;
     
     attr = t->str; 
-    if ((val = strchr(attr, '='))) {
+    if ((val = strchr(attr, '=')))
       *val++ = '\0';
-      if ((rv = genders_isattrval(handle, attr, val)) < 0)
-        return NULL;
-    }
-    else {
-      if ((rv = genders_isattr(handle, attr)) < 0)
-        return NULL;
-    }
     
-    if (rv == 0) {
-      handle->errnum = GENDERS_ERR_QUERYINPUT;
-      return NULL;
-    }
-
     if ((len = genders_nodelist_create(handle, &nodes)) < 0)
       return NULL;
 

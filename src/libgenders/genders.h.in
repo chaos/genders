@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.26 2004-10-07 18:22:31 achu Exp $
+ *  $Id: genders.h.in,v 1.27 2004-11-08 19:09:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,10 +43,9 @@
 #define GENDERS_ERR_NOTFOUND     10 /* node not found */
 #define GENDERS_ERR_OUTMEM       11 /* out of memory */
 #define GENDERS_ERR_SYNTAX       12 /* query syntax error */
-#define GENDERS_ERR_QUERYINPUT   13 /* bad query attr or val */
-#define GENDERS_ERR_MAGIC        14 /* magic number incorrect */
-#define GENDERS_ERR_INTERNAL     15 /* internal system error */
-#define GENDERS_ERR_ERRNUMRANGE  16 /* error number out of range */
+#define GENDERS_ERR_MAGIC        13 /* magic number incorrect */
+#define GENDERS_ERR_INTERNAL     14 /* internal system error */
+#define GENDERS_ERR_ERRNUMRANGE  15 /* error number out of range */
 
 #define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 

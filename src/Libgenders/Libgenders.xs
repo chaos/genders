@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.36 2004-10-07 18:22:31 achu Exp $
+ *  $Id: Libgenders.xs,v 1.37 2004-11-08 19:09:20 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -137,14 +137,6 @@ GENDERS_ERR_SYNTAX (sv=&PL_sv_undef)
     SV *sv    
     CODE:
         RETVAL = GENDERS_ERR_SYNTAX;
-    OUTPUT:
-        RETVAL    
-
-int
-GENDERS_ERR_QUERYINPUT (sv=&PL_sv_undef)
-    SV *sv    
-    CODE:
-        RETVAL = GENDERS_ERR_QUERYINPUT;
     OUTPUT:
         RETVAL    
 

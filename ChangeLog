@@ -1,3 +1,15 @@
+2004-11-06  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_query.y (_calc_query): 
+
+	* src/libgenders/genders.c, src/libgenders/genders.h.in: Remove
+	GENDERS_QUERYINPUT definition and error message.
+
+	* man/genders_query.y: Removed GENDERS_ERR_QUERYINPUT error
+	condition.  Cleaned up some english.
+
+	* src/Libgenders/Libgenders.xs: Removed GENDERS_ERR_QUERYINPUT.
+	
 2004-11-04  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c, src/libgenders/genders_query.y,
