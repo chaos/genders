@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: libgenders.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: libgenders.3,v 1.3 2003-04-30 00:07:14 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -13,7 +13,7 @@ libgenders \- a library of functions to parse and retrieve genders data
 .sp
 .BI "int genders_handle_destroy(genders_t handle);"
 .sp
-.BI "int genders_load_data(genders_t handle, char *filename);"
+.BI "int genders_load_data(genders_t handle, const char *filename);"
 .sp
 .BI "int genders_errnum(genders_t handle);"
 .sp
@@ -21,7 +21,7 @@ libgenders \- a library of functions to parse and retrieve genders data
 .sp
 .BI "char *genders_errormsg(genders_t handle);"
 .sp
-.BI "void genders_perror(genders_t handle, char *msg);"
+.BI "void genders_perror(genders_t handle, const char *msg);"
 .sp
 .BI "int genders_handle_dump(genders_t handle, FILE *stream);"
 .sp
@@ -57,19 +57,19 @@ libgenders \- a library of functions to parse and retrieve genders data
 .sp
 .BI "int genders_getnodename(genders_t handle, char *node, int len);"
 .sp
-.BI "int genders_getnodes(genders_t handle, char *nodes[], int len, char *attr, char *val);"
+.BI "int genders_getnodes(genders_t handle, char *nodes[], int len, const char *attr, const char *val);"
 .sp
-.BI "int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len, char *node);"
+.BI "int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len, const char *node);"
 .sp
 .BI "int genders_getattr_all(genders_t handle, char *attrs[], int len);"
 .sp
-.BI "int genders_testattr(genders_t handle, char *node, char *attr, char *val, int len);"
+.BI "int genders_testattr(genders_t handle, const char *node, const char *attr, char *val, int len);"
 .sp
-.BI "int genders_testattrval(genders_t handle, char *node, char *attr, char *val);"
+.BI "int genders_testattrval(genders_t handle, const char *node, const char *attr, const char *val);"
 .sp
-.BI "int genders_testnode(genders_t handle, char *node);"
+.BI "int genders_testnode(genders_t handle, const char *node);"
 .sp
-.BI "int genders_parse(genders_t handle, char *filename, FILE *stream);"
+.BI "int genders_parse(genders_t handle, const char *filename, FILE *stream);"
 .br
 .SH DESCRIPTION
 The genders library functions are a set of functions used to parse and

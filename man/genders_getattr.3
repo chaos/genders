@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_getattr.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: genders_getattr.3,v 1.3 2003-04-30 00:07:14 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -9,7 +9,7 @@ genders_getattr \- get attributes from a genders file
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
-.BI "int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len, char *node);"
+.BI "int genders_getattr(genders_t handle, char *attrs[], char *vals[], int len, const char *node);"
 .br
 .SH DESCRIPTION
 \fBgenders_getattr()\fR gets the attributes and values for the node pointed to by \fInode\fR.  If \fInode\fR is NULL, attributes and values are retrieved for the current node.  The attributes are stored in the attribute list pointed to by \fIattrs\fR and the attribute values are stored in \fIvals\fR.  If attribute values are not desired, \fIvals\fR can be set to NULL.  \fIlen\fR should indicate the number of elements that can be stored in both the attribute list and attribute values list. 

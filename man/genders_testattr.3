@@ -1,5 +1,5 @@
 \."#################################################################
-\."$Id: genders_testattr.3,v 1.2 2003-04-23 20:04:16 achu Exp $
+\."$Id: genders_testattr.3,v 1.3 2003-04-30 00:07:14 achu Exp $
 \."by Albert Chu <chu11@llnl.gov>
 \."#################################################################
 .\"
@@ -9,9 +9,9 @@ genders_testattr \- test if a node has an attribute
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
-.BI "int genders_testattr(genders_t handle, char *node, char *attr, char *val, int len);"
+.BI "int genders_testattr(genders_t handle, const char *node, const char *attr, char *val, int len);"
 .sp
-.BI "int genders_testattrval(genders_t handle, char *node, char *attr, char *val);"
+.BI "int genders_testattrval(genders_t handle, const char *node, const char *attr, const char *val);"
 .br
 .SH DESCRIPTION
 \fBgenders_testattr()\fR tests if the node pointed to by \fInode\fR
@@ -27,14 +27,14 @@ to store the attribute value,
 should be used to determine the minimum buffer size that should be used.
 
 \fBgenders_testattrval()\fR tests if the node pointed to by \fInode\fR contains the attribute
-pointed to by \fIattr\fR and if that attribute is equal to the attribute value pointed to by \fIval\fR.  
+pointed to by \fIattr\fR and if that attribute is equal to the attribute value pointed to by \fIval\fR.  If \fIval\fR is NULL, only the attribute is tested.
 .br
 .SH RETURN VALUES
 For \fBgenders_testattr()\fR, if the node contains the attribute, 1 is
 returned.  0 is returned if the node does not contain the attribute.
 
 For \fBgenders_testattrval()\fR, if the node contains the attribute
-and is equal to the attribute value, 1 is returned.  0 is returned if
+and it is equal to the attribute value, 1 is returned.  0 is returned if
 the node does not contain the attribute, or if the attribute is not
 equal to the attribute value.  
 
