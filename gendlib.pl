@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: gendlib.pl,v 1.8 2003-03-31 22:43:35 achu Exp $
+#  $Id: gendlib.pl,v 1.9 2003-04-08 15:57:59 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2002 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -28,10 +28,13 @@
 package Genders;
 
 use strict;
-use Sys::Hostname;
-use vars qw($included $debug $havePSSP $path_genders $path_clusters);
-use vars qw($path_hostname %attrs %nodes %xnodes @clusters $init_called);
-use vars qw($init_hname_called $init_clusters_called $altAttr $hname);
+use vars qw($included $debug $havePSSP $handle $path_genders);
+use vars qw($init_called $init_hname_called $hname);
+use vars qw($altAttr $clusterAttr $allAttr);
+use vars qw($GENDERS_ERR_SUCCESS $GENDERS_ERR_NOTFOUND);
+
+use lib '/usr/lib/genders/';
+use Libgenders;
 
 if (!$included) {
 $included = 1;
@@ -46,26 +49,22 @@ $debug = 		0;
 $havePSSP = 		(-d "/usr/lpp/ssp");
 if ($havePSSP) {
 	require "/admin/lib/sdrlib.pl";
-} else {
-	$altAttr =	"altname";
-}
+} 
 
-$path_genders = 	"/etc/genders";
-$path_clusters = 	"/etc/clusters";
-$path_hostname =	"/bin/hostname";
-
-%attrs = 		();	# attributes by node
-%nodes = 		();	# nodes by attribute
-%xnodes = 		();	# nodes by attribute with =val
-
-@clusters =		();	# first item is my cluster or null,
-				# remaining items are other clusters
+$path_genders = 	Libgenders::string_constant("DEFAULT_GENDERS_FILE");
+$altAttr =              Libgenders::string_constant("GENDERS_ALTNAME_ATTRIBUTE");
+$clusterAttr =          Libgenders::string_constant("GENDERS_CLUSTER_ATTRIBUTE");
+$allAttr =              Libgenders::string_constant("GENDERS_ALL_ATTRIBUTE");
 
 $hname =		""; 	# short hostname
 
-$init_called = 0;		# needed for self-initialization
-$init_hname_called = 0;	
-$init_clusters_called = 0;
+$init_called = 0;               # needed for self-initialization
+$init_hname_called = 0;
+
+$handle = 0;                    # genders handle
+
+$GENDERS_ERR_SUCCESS =  Libgenders::constant("GENDERS_ERR_SUCCESS", 0);   
+$GENDERS_ERR_NOTFOUND =  Libgenders::constant("GENDERS_ERR_NOTFOUND", 0);   
 
 ##
 ## Subroutines
@@ -76,66 +75,67 @@ $init_clusters_called = 0;
 #	$rv (RETURN)	0 on failure opening genders, 1 on success
 sub init
 {
-	my (@alist, $attr, $node, $blob, @gendfiles, $gendfile);
-	if (@_) {
-		@gendfiles = @_;
+        my (@alist, $attr, $node, $blob, $gendfile, $ret);
+        if (@_) {
+	        $gendfile = $_[0];
 	} else {	
-		@gendfiles = ($path_genders);
+	        $gendfile = ($path_genders);
+	}
+    
+        if ($init_called) {
+	        # destroy previous handle
+	        Libgenders::genders_close($handle);
+	        Libgenders::genders_handle_destroy($handle);
+	        $handle = 0;  
+	      
+	        $init_called = 0;
+	}
+    
+	$handle = Libgenders::genders_handle_create();
+	if ($handle == 0) {
+	        $debug && print "Error, genders_handle_create()\n";
+	        return 0;
+	}
+
+	$ret = Libgenders::genders_open($handle, "");
+	if ($ret == -1) {
+	        $debug && print "Error, genders_open()\n";
+		Libgenders::genders_handle_destroy($handle);
+		$handle = 0;  
+	        return 0;
+	}
+	
+	# initialize hostname
+	if (!$init_hname_called) {
+	        $ret = init_hname();
+	        if ($ret == 0) {
+		        Libgenders::genders_close($handle);
+ 		        Libgenders::genders_handle_destroy($handle);
+		        $handle = 0;  
+		        return 0;
+	      }
 	}
 
 	$init_called = 1;
 	$debug && print("init called\n");
-
-	# zero hashes
-	%attrs = ();
-	%nodes = ();
-	%xnodes = ();
-
-	foreach $gendfile (@gendfiles) {
-	
-		# populate hashes
-		if (!open(GEND, $gendfile)) {
-			printf STDERR ("Error: could not open %s\n", $gendfile);
-			next;
-		}
-		while (<GEND>) {
-			chomp;			# delete trailing \n, if any
-			s/\#.*$//;		# strip comments
-			next if (/^\s*$/);	# skip blank lines
-			($node, $blob) = split;	# blank separates node and alist
-						# commas separate attrs in list
-			@alist = split /,/, $blob; 
-
-						# add to %attrs
-			@{$attrs{$node}} = @alist;
-
-			foreach $attr (@alist) {
-				push @{$xnodes{$attr}}, $node;
-				$attr =~ s/=.*//; # drop any =value on attribute
-				push @{$nodes{$attr}}, $node;
-			}
-		}
-		close(GEND);
-	}
-
-	# initialize hostname
-	if (!$init_hname_called) {
-		init_hname();
-	}
-
-	return(1);
+    
+	return 1;
 }
 
 # cache the local hostname
 sub init_hname
 {
+        # get 'my' hostname
+        $hname = Libgenders::genders_getnodename($handle);
+	if ($hname eq "") {
+	        print "Error, genders_getnodename()\n";
+	        return 0;
+	}
+
 	$init_hname_called = 1;
 	$debug && print("init_hname called\n");
 
-	# get 'my' hostname
-	# oddly enough, running `hostname` seems to be faster than
-	# calling hostname() from Sys::hostname.
-	$hname = `$path_hostname -s`;  chomp($hname);
+	return 1;
 }
 
 
@@ -145,22 +145,29 @@ sub init_hname
 #	$found (RETURN)	0 if not found, 1 if found
 sub hasattr
 {
-	if (!$init_called) {
-		init();
+        if (!$init_called) {
+	        init();
+	        if (!$init_called) {
+		        return 0;
+		}
 	}
 
 	my $attr = shift(@_);
 	my $node = (@_) ? shift(@_) : $hname;
 
-	my ($xattr);
+	my ($ret);
 
-	if (defined($attrs{$node})) {
-		foreach $xattr (@{$attrs{$node}}) {
-			if ($xattr eq $attr || $xattr =~ /^$attr=.*/) {
-				return $xattr;
-			}
+	if (defined($attr)) {
+	        $ret = Libgenders::genders_testattr($handle, $node, $attr);
+	        if ($ret == -1) {
+	   	        $debug && print "Error, genders_testattr()\n";    
+		        return 0;
+		} 
+		else {
+		        return $ret;
 		}
 	}
+	
 	return 0;
 }
 
@@ -170,22 +177,29 @@ sub hasattr
 #	$value (RETURN)	value or null if (no value or node does not have attr)
 sub getattrval
 {
-	if (!$init_called) {
-		init();
+        if (!$init_called) {
+	        init();
+		if (!$init_called) {
+		        return "";
+		}
 	}
-
+	
 	my $attr = shift(@_);
 	my $node = (@_) ? shift(@_) : $hname;
 
-	my ($xattr);
-
-	if (defined($attrs{$node})) {
-		foreach $xattr (@{$attrs{$node}}) {
-			if ($xattr =~ /^$attr=(.*)/) {
-				return $1;
-			}
+	my ($val);
+	
+	if (defined($attr)) {
+	        $val = Libgenders::genders_getattrval($handle, $node, $attr);
+		if ($val eq "" && 
+		    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+		        $debug && print "Error, genders_getattrval()\n";    
+		        return "";
+		} 
+		else {
+		        return $val;
 		}
-	}
+	}	    
 	return "";
 }
 
@@ -194,16 +208,25 @@ sub getattrval
 #	@attrs (RETURN)	list of attributes
 sub getattr
 {
-	if (!$init_called) {
-		init();
+        if (!$init_called) {
+	        init();
+		if (!$init_called) {
+		        return ();
+		}
 	}
-
+    
 	my $node = (@_) ? shift(@_) : $hname;
-
-	if (defined($attrs{$node})) {
-		return @{$attrs{$node}};
-	} else {
-		return ();
+    
+	my ($attr);
+	
+	$attr = Libgenders::genders_getattr($handle, $node);
+	if (@$attr == 0 &&
+	    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+	        $debug && print "Error, genders_getattr()\n";
+	        return ();
+	}
+	else {
+	        return @$attr;
 	}
 }
 
@@ -211,16 +234,24 @@ sub getattr
 #	@attrs (RETURN)	list of attributes
 sub getallattr
 {
-	if (!$init_called) {
-		init();
+        if (!$init_called) {
+	        init();
+		if (!$init_called) {
+		        return ();
+		}
 	}
-
-	my ($attr, @attrs);
-
-        foreach $attr (keys %nodes) {
-		push (@attrs, $attr);
-        }
-	return @attrs;
+    
+	my ($attr);
+	
+	$attr = Libgenders::genders_getattr_all($handle);
+	if (@$attr == 0 &&
+	    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+	        $debug && print "Error, genders_getattr_all()\n";
+		return ();
+	}
+	else {
+	        return @$attr;
+	}
 }
 
 # get list of nodes that have attribute
@@ -228,41 +259,90 @@ sub getallattr
 #	@nodes (RETURN)	list of nodes
 sub getnode
 {
-	if (!$init_called) {
-		init();
+        if (!$init_called) {
+	        init();
+		if (!$init_called) {
+		        return ();
+		}
 	}
 
 	my $attr = shift(@_);
-	my (@rv);
+	my (@attrtemp, $attrname, $attrval, $nodes);
 
-	if ($attr =~ /=/) {
-		if (defined($xnodes{$attr})) {
-			@rv = @{$xnodes{$attr}};
-		} else {
-			@rv = ();
+	if (defined($attr)) {
+	        if ($attr =~ /=/) {
+		        #strip attribute name and value
+		        @attrtemp = split(/=/, $attr);
+			if (@attrtemp != 2) {
+			        return ();
+			}
+			else {
+			        $attrname = $attrtemp[0];
+			        $attrval = $attrtemp[1];
+			}
 		}
-	} else {
-		if (defined($nodes{$attr})) {
-			@rv = @{$nodes{$attr}};
-		} else {
-			@rv = ();
+		else {
+		        $attrname = $attr;
+		        $attrval = "";
 		}
 	}
-	return @rv;
+	else {
+	    $attrname = "";
+	    $attrval = "";
+	}
+	
+	$nodes = Libgenders::genders_getnodes($handle, $attrname, $attrval);
+	if (@$nodes == 0 &&
+	        Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+	        $debug && print "Error, genders_getnodes()\n";
+		return ();
+	}
+	else {
+	        return @$nodes;
+	}
 }
 
 # Get a copy of hash of attributes -> node lists.  
 # 	\%nodes (OUT)  	node hash
 sub get_node_hash
 {
-	my ($nodes) = (@_);
+        my ($nodes) = (@_);
 
-	my ($attr);
+        my (%nodes, $attrs, $attr, $attrnodes);
 
 	if (!$init_called) {
-		init();
+	        init();
+		if (!$init_called) {
+		        %{$nodes} = ();
+		}
 	}
 
+	if ($init_called) {
+	    # must construct hash
+	    $attrs = Libgenders::genders_getattr_all($handle);
+	    if (@$attrs == 0 &&
+		Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+		$debug && print "Error, genders_getattr_all()\n";
+		$nodes = ();
+	    }
+	    elsif (@$attrs == 0) {
+		%nodes = ();
+	    }
+	    else {
+		foreach $attr (@$attrs) {
+		    $attrnodes = Libgenders::genders_getnodes($handle, $attr, "");
+		    if (@$attrnodes == 0 &&
+			Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+			$debug && print "Error, genders_getnodes()\n";
+			%nodes = ();
+			last;
+		    }
+		    else {
+			@{$nodes{$attr}} = @$attrnodes;   
+		    }
+		}
+	    }
+	}
 	%{$nodes} = %nodes;
 }
 
@@ -276,13 +356,26 @@ sub init_clusters
 }
 
 # get a copy of the list of clusters
-#       $rv (RETURN)    "" on failure (from getattrval()), cluster name on success
+#       $rv (RETURN)    "" on failure, cluster name on success
 sub get_clusters
 {
         if (!$init_called) {
  	        init();
+		if (!$init_called) {
+		        return "";
+		}
 	}
-	return (getattrval("cluster"));
+
+        my ($cluster);
+
+	$cluster = Libgenders::genders_getattrval($handle, "", $clusterAttr);
+	if ($cluster eq "" && 
+	    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+	        $debug && print "Error, genders_getattrval()\n";    
+	        return "";
+	} 
+
+	return $cluster;
 }
 
 
@@ -297,12 +390,15 @@ sub gendexp
 {
 	if (!$init_called) {
 		init();
+		if (!$init_called) {
+		    return 0;
+		}
 	}
 
 	my $exp = shift(@_);
 	my $node = (@_) ? shift(@_) : $hname; 
 
-	my ($var, $pro, %vars);
+	my ($var, $pro, %vars, $ret);
 
 	if (!$exp) {
 		return $exp;
@@ -312,7 +408,12 @@ sub gendexp
 	foreach $var (split(/[\!\+\-\*\/(\s\(\&\|)]+/, $exp)) {
 		$var =~ s/\s+//g;
 		next if (!$var || $var =~ /^[0-9]+$/);
-		if (hasattr($var, $node)) {
+		$ret = Libgenders::genders_testattr($handle, $node, $var);
+		if ($ret == -1) {
+	   	        $debug && print "Error, genders_testattr()\n";    
+		        return 0;
+		} 
+		elsif ($ret) {
 			$pro .= "my \$$var = 1; ";
 		} else {
 			$pro .= "my \$$var = 0; ";
@@ -339,6 +440,13 @@ sub gendexp
 # NOTE: names in the input that cannot be converted are preserved in the output
 sub to_altnames
 {
+	if (!$init_called) {
+		init();
+		if (!$init_called) {
+		    return ();
+		}
+	}
+
 	my (@inList) = @_;
 	my (@outList, $altName, $name);
 
@@ -347,7 +455,14 @@ sub to_altnames
 		if ($havePSSP) {
 			$altName = Sdr::nn2ename(Sdr::sname2nn($name));
 		} else {
-			$altName = getattrval($altAttr,$name);
+		    $altName = Libgenders::genders_getattrval($handle, $name, $altAttr);
+		    if ($altName eq "" && 
+			Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS &&
+			Libgenders::genders_errnum($handle) != $GENDERS_ERR_NOTFOUND) {
+			$debug && print "Error, genders_getattrval()\n";    
+			return ();
+		    } 
+
 		}
 		push(@outList, $altName ? $altName : $name);
 	}	
@@ -360,20 +475,42 @@ sub to_altnames
 # NOTE: names in the input that cannot be converted are preserved in the output
 sub to_gendnames
 {
+	if (!$init_called) {
+		init();
+		if (!$init_called) {
+		    return ();
+		}
+	}
+
 	my (@inList) = @_;
-	my (@outList, $altName, $name, $tmp);
+	my (@outList, $altName, $name, $tmp, $nodes, $val);
 
 	foreach $altName (@inList) {
+	        $name = "";
 		($altName) = split(/\./, $altName);	# shorten name
 		if ($havePSSP) {
 			$name = Sdr::nn2sname(Sdr::ename2nn($altName));
 		} else {
-			foreach $tmp (getnode($altAttr)) {
-				if (getattrval($altAttr, $tmp) eq $altName) {
-					$name = $tmp;
-					last;
-				}
+		    $nodes = Libgenders::genders_getnodes($handle, $altAttr, "");
+		    if (@$nodes == 0 &&
+			Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+			$debug && print "Error, genders_getnodes()\n";    
+			return ();
+		    }
+
+		    foreach $tmp (@$nodes) {
+			$val = Libgenders::genders_getattrval($handle, $tmp, $altAttr);
+			if ($val eq "" && 
+			    Libgenders::genders_errnum($handle) != $GENDERS_ERR_SUCCESS) {
+			    $debug && print "Error, genders_getattrval()\n";    
+			    return ();
+			} 
+			
+			if ($val eq $altName) {
+			    $name = $tmp;
+			    last;
 			}
+		    }
 		}
 		push(@outList, $name ? $name : $altName);
 	}	
