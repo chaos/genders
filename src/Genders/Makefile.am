@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.9.4.1.2.1 2004-12-14 18:21:56 achu Exp $
+## $Id: Makefile.am,v 1.9.4.1.2.2 2004-12-14 18:35:44 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -20,7 +20,8 @@ Makefile.pm: Makefile.PL
 	if ! test -a Genders.pm; then \
 		cp $(srcdir)/Genders.pm .; \
 	fi
-	$(PERL) Makefile.PL PREFIX=$(DESTDIR)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`
+	TEMPINSTALLSITEARCH=`perl -e 'use Config; print $$Config{installsitearch}'`; \
+	$(PERL) Makefile.PL PREFIX=$(DESTDIR)/$(prefix) MAKEFILE=Makefile.pm FIRST_MAKEFILE=Makefile.pm INSTALLSITEARCH=$(DESTDIR)/$$TEMPINSTALLSITEARCH
 
 install: Makefile.pm
 	$(MAKE) -f Makefile.pm pure_install
