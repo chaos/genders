@@ -37,7 +37,11 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/share/man/man3/Genders.3pm*
 /usr/share/man/man3/Libgenders.3pm*
 /usr/include/genders.h
+%ifarch ppc64
+/usr/lib64/libgenders.*
+%else
 /usr/lib/libgenders.*
+%endif
 /usr/bin/
 /usr/lib/perl5/
 
