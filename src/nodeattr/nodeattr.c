@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.14 2003-05-08 17:03:24 achu Exp $
+ *  * $Id: nodeattr.c,v 1.15 2003-05-14 23:04:17 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -20,7 +20,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqvlCrf:"
+#define OPTIONS "cnsqvlrf:"
 static struct option longopts[] = {
     { "querycomma", 0, 0, 'c' },
     { "querynl", 0, 0, 'n' },
@@ -58,7 +58,7 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int ropt = 0, lopt = 0, qopt = 0, Copt = 0, vopt = 0, kopt = 0;
+    int ropt = 0, lopt = 0, qopt = 0, vopt = 0, kopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
@@ -87,9 +87,6 @@ main(int argc, char *argv[])
         case 'l':   /* --listattr */
             lopt = 1;
             break;
-        case 'C':   /* --cluster */
-            Copt = 1;
-            break;
         case 'r':   /* --altnames */
             ropt = 1;
             break;
@@ -105,7 +102,7 @@ main(int argc, char *argv[])
         }
     }
 
-    if (optind == argc && !Copt && !lopt && !kopt)
+    if (optind == argc && !lopt && !kopt)
         usage();
 
     /* Initialize genders package. */
@@ -131,7 +128,7 @@ main(int argc, char *argv[])
     if (qopt) {
         char *attr;
 
-        if (vopt || Copt || lopt)
+        if (vopt || lopt)
             usage();
         if (optind != argc - 1)
             usage();
@@ -143,7 +140,7 @@ main(int argc, char *argv[])
     }
 
     /* Usage 2:  does node have attribute? */
-    if (!Copt && !lopt) {
+    if (!lopt) {
         char *node = NULL, *attr = NULL;
         int result;
 
@@ -170,19 +167,6 @@ main(int argc, char *argv[])
             usage();
 
         list_attrs(gp, node);
-    }
-
-    /* Usage 4:  list cluster name */
-    if (Copt) {
-        char *node = NULL;
-
-        if (optind == argc - 1)
-            node = argv[optind++];
-        else if (optind != argc)
-            usage();
-
-        test_attr(gp, node, "cluster", 1);
-        exit(0);
     }
 
     /*NOTREACHED*/

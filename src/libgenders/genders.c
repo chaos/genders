@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.37 2003-05-13 16:24:13 achu Exp $
+ * $Id: genders.c,v 1.38 2003-05-14 23:04:17 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -142,12 +142,14 @@ static void genders_handle_initialize(genders_t handle);
 
 /* genders_readline
  * - read a line from fd, return a buffer pointer in buf
+ * - buffer returned only if read > 0 chars
  * Returns numbers of bytes read on success, -1 on error
  */
 int genders_readline(genders_t handle, int fd, int buflen, char **buf);
 
 /* genders_getline
  * - portable version of getline(3) for genders
+ * - buffer returned only if read > 0 chars
  * - user is responsible for freeing memory
  * - Returns length of line read on success, 0 for EOF, -1 on error 
  */ 
@@ -311,7 +313,7 @@ int genders_handle_destroy(genders_t handle) {
 int genders_load_data(genders_t handle, const char *filename) {
   char *line = NULL;
   char *temp;
-  int fd = -1;
+  int ret,fd = -1;
 
   if (genders_unloaded_handle_err_check(handle) == -1)
     return -1;
@@ -325,12 +327,15 @@ int genders_load_data(genders_t handle, const char *filename) {
   }
 
   /* parse genders file line by line */
-  while (genders_getline(handle, fd, &line) != 0) {
+  while ((ret = genders_getline(handle, fd, &line)) > 0) {
     if (genders_parse_line(handle, line, 0, NULL) == -1)
       goto cleanup;
     free(line);
   }
   line = NULL;
+
+  if (ret == -1) 
+    goto cleanup;
 
   if (gethostname(handle->nodename, MAXHOSTNAMELEN+1) == -1) {
     handle->errnum = GENDERS_ERR_INTERNAL;
@@ -389,7 +394,11 @@ int genders_readline(genders_t handle, int fd, int buflen, char **buf) {
 
   } while (ret == 1 && chr != '\n' && count < buflen);
 
-  *buf = buffer;
+  if (count == 0)
+    free(buffer);
+  else
+    *buf = buffer;
+  
   return count;
 
  cleanup:
@@ -415,6 +424,7 @@ int genders_getline(genders_t handle, int fd, char **buf) {
       return -1;
     }
     buflen += GENDERS_GETLINE_BUFLEN;
+    free(buf);
   }
 
   return retval;
