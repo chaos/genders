@@ -170,16 +170,10 @@ PERL_ARCHIVE =
 
 PERL_ARCHIVE_AFTER = 
 
-TO_INST_PM = Libgenders.pm \
-	foo.pl \
-	test2.pl
+TO_INST_PM = Libgenders.pm
 
 PM_TO_BLIB = Libgenders.pm \
-	$(INST_LIBDIR)/Libgenders.pm \
-	foo.pl \
-	$(INST_LIBDIR)/foo.pl \
-	test2.pl \
-	$(INST_LIBDIR)/test2.pl
+	$(INST_LIBDIR)/Libgenders.pm
 
 
 # --- MakeMaker tool_autosplit section:
@@ -515,7 +509,7 @@ realclean purge ::  clean
 	rm -rf $(INST_AUTODIR) $(INST_ARCHAUTODIR)
 	rm -f $(INST_DYNAMIC) $(INST_BOOT)
 	rm -f $(INST_STATIC)
-	rm -f  $(INST_LIBDIR)/Libgenders.pm $(INST_LIBDIR)/foo.pl $(INST_LIBDIR)/test2.pl
+	rm -f  $(INST_LIBDIR)/Libgenders.pm
 	rm -rf Makefile Makefile.old
 
 

@@ -102,11 +102,11 @@ print "mgmt - ",$ret,"\n";
 $ret = &Libgenders::genders_testattr($handle, "foo");
 print "foo - ",$ret,"\n";
 
-$ret = &Libgenders::genders_testattrval($handle, "resmgr");
+$ret = &Libgenders::genders_testattr($handle, "resmgr");
 print "resmgr - ",$ret,"\n";
-$ret = &Libgenders::genders_testattrval($handle, "mgmt");
+$ret = &Libgenders::genders_testattr($handle, "mgmt");
 print "mgmt - ",$ret,"\n";
-$ret = &Libgenders::genders_testattrval($handle, "foo");
+$ret = &Libgenders::genders_testattr($handle, "foo");
 print "foo - ",$ret,"\n";
 $ret = &Libgenders::genders_testattrval($handle, "resmgr", "rms");
 print "resmgr=rms - ",$ret,"\n";
