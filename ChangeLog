@@ -4,7 +4,8 @@
 	src/libgenders/fd.h, src/libgenders/fd.c: New files.
 
 	* src/libgenders/genders.c: Re-written to use file descriptor and
-	list library code.
+	list library code.  Re-ordered error code return priority in many
+	functions.
 
 	* src/libgenders/genders.c (genders_load_data): Added corner case
 	fix for genders databases with no nodes listed.
