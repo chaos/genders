@@ -63,7 +63,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %files compat
 %defattr(-,root,root)
 %doc doc/TUTORIAL doc/genders.sample doc/clusters.sample doc/Distfile.sample
-/usr/man/man3/gendlib.3.gz
+/usr/man/man3/gendlib*
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
 
