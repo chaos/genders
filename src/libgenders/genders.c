@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.121 2004-11-08 19:09:20 achu Exp $
+ *  $Id: genders.c,v 1.122 2004-12-22 00:01:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -24,21 +24,15 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
-#include <ctype.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <sys/types.h>
+#include <assert.h>
 
 #include "genders.h"
 #include "genders_common.h"
-#include "fd.h"
 #include "list.h"
 #include "hash.h"
-#include "hostlist.h"
 
 /* Error messages */
 static char * errmsg[] = {
@@ -60,181 +54,12 @@ static char * errmsg[] = {
   "error number out of range",
 };
 
-/* Helper Macros */
-
-#define __list_destroy(__list) \
-        if (__list) list_destroy(__list)
-#define __hash_destroy(__hash) \
-        if (__hash) hash_destroy(__hash)
-#define __list_iterator_destroy(__itr) \
-        if (__itr) list_iterator_destroy(__itr)
-
-/* List API Helper Functions */
-
-static int 
-_is_all(void *x, void *key) 
-{
-  return 1;
-}
-
-static int 
-_is_str(void *x, void *key) 
-{
-  if (!strcmp((char *)x, (char *)key))
-    return 1;
-  return 0;
-}
-
-static int 
-_is_node(void *x, void *key) 
-{
-  genders_node_t n = (genders_node_t)x;
-  if (!strcmp(n->name, (char *)key))
-    return 1;
-  return 0;
-}
-
-static int
-_is_attr_in_attrvals(void *x, void *key)
-{
-  genders_attrval_t av = (genders_attrval_t)x;
-  if (!strcmp(av->attr, (char *)key))
-    return 1;
-  return 0;
-}
-
-static int 
-_is_attr_in_attrlist(void *x, void *key) 
-{
-  List attrvals = (List)x;
-  if (list_find_first(attrvals, _is_attr_in_attrvals, key))
-    return 1;
-  return 0;
-}
-
-static void 
-_free_genders_node(void *x) 
-{
-  genders_node_t n = (genders_node_t)x;
-  __list_destroy(n->attrlist);
-  free(n->name);
-  free(n);
-}
-
-static void 
-_free_genders_attrval(void *x) 
-{
-  genders_attrval_t av = (genders_attrval_t)x;
-  free(av->attr);
-  free(av->val);
-  free(av);
-}
-
-static void
-_free_attrvallist(void *x)
-{
-  List attrvals = (List)x;
-  __list_destroy(attrvals);
-}
-
-static int
-_find_attrval_in_attrlist(genders_t handle, List attrlist, const char *attr, 
-                          genders_attrval_t *avptr)
-{
-  ListIterator itr = NULL;
-  List attrvals;
-  int retval = -1;
-  
-  /* Cannot use _is_attr_in_attrlist, because we need to return
-   * the avptr to the user
-   */
-
-  *avptr = NULL;
-
-  if (!(itr = list_iterator_create(attrlist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  while ((attrvals = list_next(itr))) {
-    genders_attrval_t av;
-    
-    if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) {
-      *avptr = av;
-      break;
-    }
-  }
-
-  retval = 0;
- cleanup:
-  __list_iterator_destroy(itr);
-  return retval;  
-}
-
-/* _get_val
- * - Handles substitutions for %n 
- * - Caller responsible that av->val != NULL
- * Returns 1 is substitution occurred, 0 if not 
- */
-static int
-_get_val(genders_t handle, genders_node_t n, genders_attrval_t av)
-{
-  char *val, *node, *valbufptr = handle->valbuf;
-
-  if (!strstr(av->val, "%n") && !strstr(av->val, "%%"))
-    return 0;
-
-  val = av->val;
-  memset(valbufptr, '\0', handle->maxvallen + 1);
-  while (*val != '\0') {
-    if (*val == '%') {
-      if ((*(val + 1)) == '%') {
-        *(valbufptr)++ = '%';
-        val++;
-      }
-      else if ((*(val + 1)) == 'n') {
-        if ((strlen(av->val) - 2 + strlen(n->name)) > 
-            (handle->maxvallen + 1)) {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          return -1;
-        }
-
-        node = n->name;
-        while (*node != '\0')
-          *(valbufptr)++ = *node++;
-        val++;
-      }
-      else
-        *(valbufptr)++ = *val;
-    }
-    else 
-      *(valbufptr)++ = *val;
-
-    val++;
-  }
-
-  return 1;
-}
-
-static void 
-_initialize_handle_info(genders_t handle)
-{
-  handle->magic = GENDERS_MAGIC_NUM;
-  handle->is_loaded = 0;
-  handle->numnodes = 0;
-  handle->numattrs = 0;
-  handle->maxattrs = 0;
-  handle->maxnodelen = 0;
-  handle->maxattrlen = 0;
-  handle->maxvallen = 0;
-  memset(handle->nodename,'\0',MAXHOSTNAMELEN+1);
-}
-
 genders_t 
 genders_handle_create(void) 
 {
   genders_t handle = NULL;
 
+  /* Don't use the wrapper here, no errnum to set */
   if (!(handle = (genders_t)malloc(sizeof(struct genders))))
     goto cleanup;
   
@@ -242,20 +67,10 @@ genders_handle_create(void)
   handle->nodeslist = NULL;
   handle->attrvalslist = NULL;
   handle->attrslist = NULL;
-  handle->valbuf = NULL;
-  handle->node_index = NULL;
-  handle->attr_index = NULL;
-  handle->attrval_index = NULL;
-  handle->attrval_index_attr = NULL;
 
-  if (!(handle->nodeslist = list_create(_free_genders_node)))
-    goto cleanup;
-
-  if (!(handle->attrvalslist = list_create(_free_attrvallist)))
-    goto cleanup;
-
-  if (!(handle->attrslist = list_create(free)))
-    goto cleanup;
+  __list_create(handle->nodeslist, _free_genders_node);
+  __list_create(handle->attrvalslist, _free_attrvallist);
+  __list_create(handle->attrslist, free);
 
   /* node_index and attr_index created in genders_load_data after node
    * and attr counts are determined.  Valbuf created in
@@ -270,8 +85,8 @@ cleanup:
     __list_destroy(handle->nodeslist);
     __list_destroy(handle->attrvalslist);
     __list_destroy(handle->attrslist);
+    free(handle);
   }
-  free(handle);
   return NULL;
 }
 
@@ -298,570 +113,8 @@ genders_handle_destroy(genders_t handle)
   handle->nodeslist = NULL;
   handle->attrvalslist = NULL;
   handle->attrslist = NULL;
-  handle->valbuf = NULL;
-  handle->node_index = NULL;
-  handle->attr_index = NULL;
-  handle->attrval_index = NULL;
-  handle->attrval_index_attr = NULL;
   free(handle);
   return 0;
-}
-
-static int 
-_readline(genders_t handle, int fd, char *buf, int buflen) 
-{
-  int ret; 
-
-  if ((ret = fd_read_line(fd, buf, buflen)) < 0) {
-    handle->errnum = GENDERS_ERR_READ;
-    return -1;
-  }
-  
-  /* buflen - 1 b/c fd_read_line guarantees null termination */
-  if (ret >= (buflen-1)) {
-    handle->errnum = GENDERS_ERR_PARSE;
-    return -1;
-  }
-
-  return ret;
-}
-
-static genders_node_t
-_insert_node(genders_t handle, List nodelist, char *nodename)
-{
-  genders_node_t n = NULL;
-
-  n = list_find_first(nodelist, _is_node, nodename);
-
-  /* must create if node not yet in list */ 
-  if (!n) {
-    if (!(n = (genders_node_t)malloc(sizeof(struct genders_node)))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-    memset(n, '\0', sizeof(struct genders_node));
-
-    if (!(n->name = strdup(nodename))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-    n->attrcount = 0;
-
-    if (!(n->attrlist = list_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
-    if (!list_append(nodelist, n)) {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-  }
-
-  return n;
-
- cleanup:
-  if (n) { 
-    __list_destroy(n->attrlist);
-    free(n);
-  }
-  return NULL;
-}
-
-static int 
-_insert_attrval(genders_t handle, List attrvals, char *attr, char *val) 
-{
-  genders_attrval_t av = NULL;
-
-  if (!(av = (genders_attrval_t)malloc(sizeof(struct genders_attrval)))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-  memset(av, '\0', sizeof(struct genders_attrval));
-
-  if (!(av->attr = strdup(attr))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (val) {
-    if (!(av->val = strdup(val))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-  }
-  else 
-    av->val = NULL; 
-
-  if (!list_append(attrvals, av)) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
-    goto cleanup;
-  }
-
-  return 0;
- cleanup:
-  if (av) {
-    free(av->attr);
-    free(av->val);
-  }
-  free(av);
-  return -1;
-}
-
-static int 
-_insert_ptr(genders_t handle, List ptrlist, void *ptr) 
-{
-  if (!list_append(ptrlist, ptr)) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
-    return -1;
-  }
-  return 0;
-}
-
-static int 
-_insert_attr(genders_t handle, char *attr) 
-{
-  char *attr_new = NULL;
-
-  if (list_find_first(handle->attrslist, _is_str, attr))
-    return 0;
-
-  if (!(attr_new = strdup(attr))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    return -1;
-  }
-
-  if (!list_append(handle->attrslist, attr_new)) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
-    free(attr_new);
-    return -1;
-  }
-
-  return 1;
-}
-
-static int
-_duplicate_attr_check(genders_t handle, List attrlist, List attrvals)
-{
-  ListIterator itr = NULL;
-  genders_attrval_t av = NULL;
-  int retval = -1;
-
-  if (!(itr = list_iterator_create(attrvals))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  while ((av = list_next(itr))) {
-    if (list_find_first(attrlist, _is_attr_in_attrlist, av->attr)) {
-      retval = 1;
-      goto cleanup;
-    }
-  }
-
-  retval = 0;
- cleanup:
-  __list_iterator_destroy(itr);
-  return retval;
-}
-
-/* parse a genders file line
- * - If line_num == 0, parse and store genders data
- * - If line_num > 0, debug genders file, do not store genders data, use
- *   debug lists instead of handle lists for debugging.
- * - Returns -1 on error, 1 if there was a parse error, 0 if no errors
- * - No need to cleanup if line_num == 0, will be done in genders_load_data.
- */
-static int 
-_parse_line(genders_t handle, char *line, int line_num, FILE *stream, 
-            List debugnodeslist, List debugattrvalslist) 
-{
-  char *linebuf, *temp, *attr, *nodenames, *node = NULL;
-  int rv, retval = -1;
-  int max_n_subst_vallen = 0;
-  int line_maxnodelen = 0;
-  List attrvals = NULL;
-  List nodelist = NULL;
-  List attrvalslist = NULL;
-  genders_node_t n;
-  hostlist_t hl = NULL;
-  hostlist_iterator_t hlitr = NULL;
-
-  /* "remove" comments */
-  if ((temp = strchr(line, '#'))) 
-    *temp = '\0';
-
-  /* remove trailing white space, including newline */
-  temp = line + strlen(line);
-  for (--temp; temp >= line; temp--) {
-    if (isspace(*temp))
-      *temp = '\0';
-    else
-      break;
-  }
-
-  /* empty line */
-  if (*line == '\0')
-    return 0;
-
-  /* move forward to node name(s) */
-  while(isspace(*line))  
-    line++;
-
-  /* get node name(s) */
-  if (!(nodenames = strsep(&line, " \t\0")))
-    /* should be impossible to hit this */
-    return 0;
-
-  /* if strsep() sets line == NULL, line has no attributes */
-  if (line) {
-    /* move forward to attributes */
-    while(isspace(*line))  
-      line++;
-
-    /* *line == '\0' means line has no attributes */
-    if (*line != '\0') {
-      if (strchr(line,' ') || strchr(line,'\t')) {
-        if (line_num > 0) {
-          fprintf(stream, "Line %d: white space in attribute list\n", line_num);
-          retval = 1;
-        }
-        handle->errnum = GENDERS_ERR_PARSE;
-        goto cleanup;
-      }
-      
-      if (!(attrvals = list_create(_free_genders_attrval))) {
-        handle->errnum = GENDERS_ERR_OUTMEM;
-        goto cleanup;
-      }
-
-      /* parse attributes */
-      attr = strtok_r(line,",\0",&linebuf);
-      while (attr) {
-        char *val = NULL;
-        int is_new_attr;
-      
-        /* parse value out of attribute */
-        if ((val = strchr(attr,'=')))
-          *val++ = '\0'; 
-
-        if (list_find_first(attrvals, _is_attr_in_attrvals, attr) != NULL) {
-          if (line_num > 0) {
-            fprintf(stream, "Line %d: duplicate attribute \"%s\" listed\n",
-                    line_num, attr);
-          }
-          handle->errnum = GENDERS_ERR_PARSE;
-          goto cleanup;
-        }
-
-        if (_insert_attrval(handle, attrvals, attr, val) < 0)
-          goto cleanup;
-        
-        if (!line_num) { 
-          if ((is_new_attr = _insert_attr(handle, attr)) < 0)
-            goto cleanup;
-          
-          handle->numattrs += is_new_attr;
-          
-          handle->maxattrlen = MAX(strlen(attr), handle->maxattrlen);
-          if (val) {
-            if (strstr(val, "%n"))
-              max_n_subst_vallen = strlen(val);
-            else
-              handle->maxvallen = MAX(strlen(val), handle->maxvallen);
-          }
-        }
-        
-        attr = strtok_r(NULL,",\0",&linebuf);
-      }
-    }
-  }
-
-  if (!line_num) {
-    nodelist = handle->nodeslist;
-    attrvalslist = handle->attrvalslist;
-  }
-  else {
-    nodelist = debugnodeslist;
-    attrvalslist = debugattrvalslist;
-  }
-
-  if (!(hl = hostlist_create(nodenames))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(hlitr = hostlist_iterator_create(hl))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  while ((node = hostlist_next(hlitr))) {
-    if (strlen(node) > MAXHOSTNAMELEN) {
-      if (line_num > 0) {
-        fprintf(stream, "Line %d: hostname too long\n", line_num);
-        retval = 1;
-      }
-      handle->errnum = GENDERS_ERR_PARSE;
-      goto cleanup;
-    }
-    
-    if (strchr(node, '.')) {
-      if (line_num > 0) {
-        fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
-        retval = 1;
-      }
-      handle->errnum = GENDERS_ERR_PARSE;
-      goto cleanup;
-    }
-
-    if (!(n =_insert_node(handle, nodelist, node)))
-      goto cleanup;
-
-    if (attrvals) {
-      if ((rv = _duplicate_attr_check(handle, n->attrlist, attrvals)) < 0)
-        goto cleanup;
-
-      if (rv == 1) {
-        if (line_num > 0) {
-          fprintf(stream, "Line %d: duplicate attribute listed for node \"%s\"\n",
-                  line_num, node);
-          retval = 1;
-        }
-        handle->errnum = GENDERS_ERR_PARSE;
-        goto cleanup;
-      }
-    
-      if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
-        goto cleanup;
-
-      n->attrcount += list_count(attrvals);
-    }
-
-    if (!line_num) {
-      handle->maxattrs = MAX(n->attrcount, handle->maxattrs);
-      handle->maxnodelen = MAX(strlen(node), handle->maxnodelen);
-      line_maxnodelen = MAX(strlen(node), line_maxnodelen);
-    }
-    
-    free(node);
-  }
-  node = NULL;
-
-  /* %n substituation found on this line, update maxvallen */
-  if (max_n_subst_vallen)
-    handle->maxvallen = MAX(max_n_subst_vallen - 2 + line_maxnodelen,
-                            handle->maxvallen);
-
-  /* Append at the very end, so cleanup area cleaner */
-  if (attrvals) {
-    if (_insert_ptr(handle, attrvalslist, attrvals) < 0)
-      goto cleanup;
-    attrvals = NULL;
-  }
-
-  retval = 0;
- cleanup:
-  if (hl) {
-    if (hlitr)
-      hostlist_iterator_destroy(hlitr);
-    hostlist_destroy(hl);
-  }
-  __list_destroy(attrvals);
-  free(node);
-  return retval;
-}
-
-static int
-_index_nodes(genders_t handle)
-{
-  genders_node_t n;
-  ListIterator itr = NULL;
-
-  if (!(handle->node_index = hash_create(handle->numnodes,
-                                         (hash_key_f)hash_key_string,
-                                         (hash_cmp_f)strcmp,
-                                         NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(itr = list_iterator_create(handle->nodeslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-      
-  while ((n = list_next(itr))) {
-    if (!hash_insert(handle->node_index, n->name, n)) {
-      if (errno == ENOMEM)
-        handle->errnum = GENDERS_ERR_OUTMEM;
-      else
-        handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-  }
-
-  return 0;
-
- cleanup:
-  __list_iterator_destroy(itr);
-  __hash_destroy(handle->node_index);
-  handle->node_index = NULL;
-  return -1;
-}
-
-static int
-_index_attrs(genders_t handle)
-{
-  ListIterator attr_itr = NULL;
-  ListIterator node_itr = NULL;
-  List l = NULL;
-  genders_node_t n;
-  genders_attrval_t av;
-  char *attr;
-
-  if (!(handle->attr_index = hash_create(handle->numattrs,
-                                         (hash_key_f)hash_key_string,
-                                         (hash_cmp_f)strcmp,
-                                         (hash_del_f)list_destroy))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(attr_itr = list_iterator_create(handle->attrslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    return -1;
-  }
-
-  if (!(node_itr = list_iterator_create(handle->nodeslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  while ((attr = list_next(attr_itr))) {
-    if (!(l = list_create(NULL))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
-    while ((n = list_next(node_itr))) {
-      if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
-        goto cleanup;
-      if (av) {
-        if (!list_append(l, n)) {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          goto cleanup;
-        }
-      }
-    }
-    list_iterator_reset(node_itr);
-
-    if (!hash_insert(handle->attr_index, attr, l)) {
-      if (errno == ENOMEM)
-        handle->errnum = GENDERS_ERR_OUTMEM;
-      else
-        handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-    l = NULL;
-  }
-
-  __list_iterator_destroy(node_itr);
-  __list_iterator_destroy(attr_itr);
-  handle->errnum = GENDERS_ERR_SUCCESS;
-  return 0;
-
- cleanup:
-  __list_iterator_destroy(attr_itr);
-  __list_iterator_destroy(node_itr);
-  __list_destroy(l);
-  __hash_destroy(handle->attr_index);
-  handle->attr_index = NULL;
-  return -1;
-}
-
-int 
-genders_load_data(genders_t handle, const char *filename) 
-{
-  char *temp;
-  int ret, fd = -1;
-  char buf[GENDERS_READLINE_BUFLEN];
-
-  if (_unloaded_handle_error_check(handle) < 0)
-    goto cleanup;
-
-  if (!filename)
-    filename = GENDERS_DEFAULT_FILE;
-
-  if ((fd = open(filename, O_RDONLY)) < 0) {
-    handle->errnum = GENDERS_ERR_OPEN;
-    goto cleanup;
-  }
-
-  /* parse line by line */
-  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if (_parse_line(handle, buf, 0, NULL, NULL, NULL) < 0)
-      goto cleanup;
-  }
-
-  if (ret < 0)
-    goto cleanup;
-
-  handle->numnodes = list_count(handle->nodeslist);
-
-  /* umm, where are the nodes? */
-  if (!handle->numnodes) {
-    handle->errnum = GENDERS_ERR_PARSE;
-    goto cleanup;
-  }
-
-  if (gethostname(handle->nodename, MAXHOSTNAMELEN+1) < 0) {
-    handle->errnum = GENDERS_ERR_INTERNAL;
-    goto cleanup;
-  }
-  handle->nodename[MAXHOSTNAMELEN]='\0';
-
-  /* shorten hostname if necessary */
-  if ((temp = strchr(handle->nodename,'.')))
-    *temp = '\0';
-  
-  handle->maxnodelen = MAX(strlen(handle->nodename), handle->maxnodelen);
-
-  /* Create a buffer for value substitutions */
-  if (!(handle->valbuf = malloc(handle->maxvallen + 1))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (_index_nodes(handle) < 0)
-    goto cleanup;
-
-  if (_index_attrs(handle) < 0)
-    goto cleanup;
-
-  handle->attrval_buflist = NULL;
-  
-  close(fd);
-
-  handle->is_loaded++;
-  handle->errnum = GENDERS_ERR_SUCCESS;
-  return 0;
-
-cleanup:
-  close(fd);
-  free(handle->valbuf);
-  handle->valbuf = NULL;
-
-  /* Can't pass NULL for key, so pass junk, _is_all() will ensure
-   * everything is deleted
-   */
-  list_delete_all(handle->nodeslist, _is_all, ""); 
-  list_delete_all(handle->attrvalslist, _is_all, ""); 
-  list_delete_all(handle->attrslist, _is_all, ""); 
-  __hash_destroy(handle->node_index);
-  __hash_destroy(handle->attr_index);
-  _initialize_handle_info(handle);
-  return -1;
 }
 
 int 
@@ -962,48 +215,44 @@ genders_getmaxvallen(genders_t handle)
 }
 
 static int 
-_list_create(genders_t handle, char ***list, int len, int buflen) 
+_glist_create(genders_t handle, char ***list, int len, int buflen) 
 {
-  if (len > 0) {
-    char **temp;
-    int i,j;
+  char **templist = NULL;
+  int i,j;
 
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
+
+  if (len > 0) {
     if (!list) {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-    if (!(temp = (char **)malloc(sizeof(char *) * len))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      return -1;
-    }
-
-    for (i = 0; i < len; i++) {
-      if (!(temp[i] = (char *)malloc(buflen))) {
-        for (j = 0; j < i; j++)
-          free(temp[j]);
-        free(temp);
-
-        handle->errnum = GENDERS_ERR_OUTMEM;
-        return -1;
-      }
-      memset(temp[i], '\0', buflen);
-    }
-
-    *list = temp;
+    __xmalloc(templist, char **, sizeof(char *) * len);
+    for (i = 0; i < len; i++)
+      __xmalloc(templist[i], char *, buflen);
+    *list = templist;
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return len;
+ cleanup:
+  if (templist) {
+    for (j = 0; j < i; j++)
+      free(templist[j]);
+    free(templist);
+  }
+  return -1;
 }
 
 static int 
-_list_clear(genders_t handle, char **list, int len, int buflen) 
+_glist_clear(genders_t handle, char **list, int len, int buflen) 
 {
   int i;
 
-  if (len > 0) {
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
 
+  if (len > 0) {
     if (!list) {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
@@ -1023,8 +272,10 @@ _list_clear(genders_t handle, char **list, int len, int buflen)
 }
 
 static int 
-_list_destroy(genders_t handle, char **list, int len) 
+_glist_destroy(genders_t handle, char **list, int len) 
 {
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
+
   if (len > 0) {
     int i;
 
@@ -1048,7 +299,7 @@ genders_nodelist_create(genders_t handle, char ***list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_create(handle, list, handle->numnodes, handle->maxnodelen+1);
+  return _glist_create(handle, list, handle->numnodes, handle->maxnodelen+1);
 }
 
 int 
@@ -1057,7 +308,7 @@ genders_nodelist_clear(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_clear(handle, list, handle->numnodes, handle->maxnodelen+1);
+  return _glist_clear(handle, list, handle->numnodes, handle->maxnodelen+1);
 }
 
 int 
@@ -1066,7 +317,7 @@ genders_nodelist_destroy(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_destroy(handle, list, handle->numnodes);
+  return _glist_destroy(handle, list, handle->numnodes);
 }
 
 int 
@@ -1075,7 +326,7 @@ genders_attrlist_create(genders_t handle, char ***list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_create(handle, list, handle->numattrs, handle->maxattrlen+1);
+  return _glist_create(handle, list, handle->numattrs, handle->maxattrlen+1);
 }
 
 int 
@@ -1084,7 +335,7 @@ genders_attrlist_clear(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_clear(handle, list, handle->numattrs, handle->maxattrlen+1);
+  return _glist_clear(handle, list, handle->numattrs, handle->maxattrlen+1);
 }
 
 int 
@@ -1093,7 +344,7 @@ genders_attrlist_destroy(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
   
-  return _list_destroy(handle, list, handle->numattrs);
+  return _glist_destroy(handle, list, handle->numattrs);
 }
 
 int 
@@ -1102,7 +353,7 @@ genders_vallist_create(genders_t handle, char ***list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_create(handle, list, handle->numattrs, handle->maxvallen+1);
+  return _glist_create(handle, list, handle->numattrs, handle->maxvallen+1);
 }
 
 int 
@@ -1111,7 +362,7 @@ genders_vallist_clear(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_clear(handle, list, handle->numattrs, handle->maxvallen+1);
+  return _glist_clear(handle, list, handle->numattrs, handle->maxvallen+1);
 }
 
 int 
@@ -1120,7 +371,7 @@ genders_vallist_destroy(genders_t handle, char **list)
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  return _list_destroy(handle, list, handle->numattrs);
+  return _glist_destroy(handle, list, handle->numattrs);
 }
 
 int 
@@ -1151,7 +402,7 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
   ListIterator itr = NULL;
   genders_node_t n;
   int index = 0;
-  int rv, retval = -1;
+  int retval = -1;
 
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1173,13 +424,9 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       return 0;
     }
 
-    if (!(itr = list_iterator_create(l))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
+    __list_iterator_create(itr, l);
     while ((n = list_next(itr))) {
-      if (_put_in_list(handle, n->name, nodes, index++, len) < 0)
+      if (_put_in_array(handle, n->name, nodes, index++, len) < 0)
         goto cleanup;
     }
   }
@@ -1192,62 +439,33 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       return 0;
     }
 
-    if (!(itr = list_iterator_create(l))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
+    __list_iterator_create(itr, l);
     while ((n = list_next(itr))) {
-      int save = 0;
-      
-      if (!val)
-        save++;
-      else {
-        genders_attrval_t av;
+      genders_attrval_t av;
 
-        if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
-          goto cleanup;
-        if (av->val) {
-          if ((rv = _get_val(handle, n, av)) < 0)
-            goto cleanup;
-          if ((rv > 0 && !strcmp(handle->valbuf, val)) || !strcmp(av->val, val))
-            save++;
-        }
-      }
+      if (_find_attrval(handle, n, attr, val, &av) < 0)
+	goto cleanup;
 
-      if (save && _put_in_list(handle, n->name, nodes, index++, len) < 0)
+      if (av && _put_in_array(handle, n->name, nodes, index++, len) < 0)
         goto cleanup;
     }
   }
   else {
-    if (!(itr = list_iterator_create(handle->nodeslist))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
+    __list_iterator_create(itr, handle->nodeslist);
     while ((n = list_next(itr))) {
-      genders_attrval_t av;
       int save = 0;
       
       if (!attr)
         save++;
       else {
-        if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
+	genders_attrval_t av;
+        if (_find_attrval(handle, n, attr, val, &av) < 0)
           goto cleanup;
-        if (av) {
-          if (!val)
-            save++;
-          else if (av->val) {
-            if ((rv = _get_val(handle, n, av)) < 0)
-              goto cleanup;
-            if ((rv > 0 && !strcmp(handle->valbuf, val)) || !strcmp(av->val, val))
-              save++;
-          }
-          
-        }
+	if (av)
+	  save++;
       }
       
-      if (save && _put_in_list(handle, n->name, nodes, index++, len) < 0)
+      if (save && _put_in_array(handle, n->name, nodes, index++, len) < 0)
         goto cleanup;
     }
   }
@@ -1268,7 +486,8 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
   List attrvals;
   genders_node_t n;
   int index = 0;
-  int rv, retval = -1;
+  int retval = -1;
+  char *valptr;
 
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1286,29 +505,19 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
     return -1;
   }
 
-  if (!(itr = list_iterator_create(n->attrlist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __list_iterator_create(itr, n->attrlist);
   while ((attrvals = list_next(itr))) {
     genders_attrval_t av;
 
-    if (!(avitr = list_iterator_create(attrvals))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-
+    __list_iterator_create(avitr, attrvals);
     while ((av = list_next(avitr))) {
-      if (_put_in_list(handle, av->attr, attrs, index, len) < 0)
+      if (_put_in_array(handle, av->attr, attrs, index, len) < 0)
         goto cleanup;
       
       if (vals && av->val) {
-        if ((rv = _get_val(handle, n, av)) < 0)
+        if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
           goto cleanup;
-
-        if (_put_in_list(handle, (rv) ? handle->valbuf : av->val, 
-                         vals, index, len) < 0)
+        if (_put_in_array(handle, valptr, vals, index, len) < 0)
           goto cleanup;
       }
       index++;
@@ -1346,13 +555,9 @@ genders_getattr_all(genders_t handle, char *attrs[], int len)
     goto cleanup;
   }
 
-  if (!(itr = list_iterator_create(handle->attrslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __list_iterator_create(itr, handle->attrslist);
   while ((attr = list_next(itr))) {
-    if (_put_in_list(handle, attr, attrs, index++, len) < 0)
+    if (_put_in_array(handle, attr, attrs, index++, len) < 0)
       goto cleanup;
   }
 
@@ -1369,7 +574,8 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
 {
   genders_node_t n;
   genders_attrval_t av;
-  int rv, retval = 0;
+  int retval = 0;
+  char *valptr;
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1387,20 +593,18 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
     return -1;
   }
 
-  if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
+  if (_find_attrval(handle, n, attr, NULL, &av) < 0)
     return -1;
 
   if (av) {
     if (val && av->val) {
-      if ((rv = _get_val(handle, n, av)) < 0)
+      if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
         return -1;
-      
-      if (((rv > 0 && strlen(handle->valbuf) + 1) > len) 
-          || (strlen(av->val) + 1) > len) {
+      if (strlen(valptr + 1) > len) {
         handle->errnum = GENDERS_ERR_OVERFLOW;
         return -1;
       }
-      strcpy(val, (rv) ? handle->valbuf : av->val);
+      strcpy(val, valptr);
     }
     retval = 1;
   }
@@ -1415,7 +619,7 @@ genders_testattrval(genders_t handle, const char *node,
 {
   genders_node_t n;
   genders_attrval_t av;
-  int rv, retval = 0;
+  int retval = 0;
 
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
@@ -1433,22 +637,10 @@ genders_testattrval(genders_t handle, const char *node,
     return -1;
   }
 
-  if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
+  if (_find_attrval(handle, n, attr, val, &av) < 0)
     return -1;
-  
-  if (av) {
-    if (val) {
-      if (av->val) {
-        if ((rv = _get_val(handle, n, av)) < 0)
-          return -1;
-
-        if ((rv > 0 && !strcmp(handle->valbuf, val)) || !strcmp(av->val, val))
-          retval = 1;
-      }
-    }
-    else
-      retval = 1;
-  }
+  if (av)
+    retval = 1;
   
   handle->errnum = GENDERS_ERR_SUCCESS;
   return retval;
@@ -1494,7 +686,7 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   ListIterator itr = NULL;
   genders_node_t n;
   genders_attrval_t av;
-  int rv, retval = -1;
+  int retval = -1;
 
   if (_loaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1517,26 +709,14 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
     return retval;
   }
   else {
-    if (!(itr = list_iterator_create(handle->nodeslist))) {
-      handle->errnum = GENDERS_ERR_OUTMEM;
-      goto cleanup;
-    }
-  
+    __list_iterator_create(itr, handle->nodeslist);
     while ((n = list_next(itr))) {
-      if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0) 
+      if (_find_attrval(handle, n, attr, val, &av) < 0) 
         goto cleanup;
       if (av) {
-        if (av->val) { 
-          if ((rv = _get_val(handle, n, av)) < 0)
-            goto cleanup;
-          
-          if ((rv > 0 && !strcmp(handle->valbuf, val)) 
-              || !strcmp(av->val, val)) {
-            retval = 1;
-            handle->errnum = GENDERS_ERR_SUCCESS;
-            goto cleanup;
-          }
-        }
+	retval = 1;
+	handle->errnum = GENDERS_ERR_SUCCESS;
+	goto cleanup;
       }
     }
   }
@@ -1556,7 +736,7 @@ genders_index_attrvals(genders_t handle, const char *attr)
   List attrval_buflist = NULL;
   genders_node_t n;
   genders_attrval_t av;
-  char *val, *valbuf = NULL;
+  char *valptr, *valbuf = NULL;
   hash_t attrval_index = NULL;
   char *attrval_index_attr = NULL;
 
@@ -1574,60 +754,42 @@ genders_index_attrvals(genders_t handle, const char *attr)
     return 0;
   }
 
-  if (!(node_itr = list_iterator_create(handle->nodeslist))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
   /* Max possible hash size is number of nodes, so pick upper boundary */
-  if (!(attrval_index = hash_create(handle->numnodes,
-                                    (hash_key_f)hash_key_string,
-                                    (hash_cmp_f)strcmp,
-                                    (hash_del_f)list_destroy))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
+  __hash_create(attrval_index, handle->numnodes, (hash_key_f)hash_key_string,
+		(hash_cmp_f)strcmp, (hash_del_f)list_destroy);
 
   /* Create a List to store buffers for later freeing */
-  if (!(attrval_buflist = list_create(free))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
+  __list_create(attrval_buflist, free);
 
+  __list_iterator_create(node_itr, handle->nodeslist);
   while ((n = list_next(node_itr))) {
-    int subst = 0;
-    if (_find_attrval_in_attrlist(handle, n->attrlist, attr, &av) < 0)
+    int subst_occurred = 0;
+    if (_find_attrval(handle, n, attr, NULL, &av) < 0)
       goto cleanup;
     if (av) {
       if (av->val) {
-        if ((subst = _get_val(handle, n, av)) < 0)
+        if (_get_valptr(handle, n, av, &valptr, &subst_occurred) < 0)
           goto cleanup;
-
-        val = (subst) ? handle->valbuf : av->val;
       }
       else
-        val = GENDERS_NOVALUE;
+        valptr = GENDERS_NOVALUE;
 
-      if (!(l = hash_find(attrval_index, val))) {
-        if (!(l = list_create(NULL))) {
-          handle->errnum = GENDERS_ERR_OUTMEM;
-          goto cleanup;
-        }
-        
-        if (subst) {
-          if (!(valbuf = strdup(val))) {
-            handle->errnum = GENDERS_ERR_OUTMEM;
-            goto cleanup;
-          }
-          if (!list_append(attrval_buflist, valbuf)) {
-            handle->errnum = GENDERS_ERR_INTERNAL;
-            goto cleanup;
-          }
-          val = valbuf;
+      if (!(l = hash_find(attrval_index, valptr))) {
+	__list_create(l, NULL);
+
+        /* If a substitution occurred, we cannot use the av->val
+	 * pointer as the key, b/c the key contains some nonsense
+	 * characters.  So we have to copy this buffer and store it
+	 * somewhere to be freed later.
+	 */
+        if (subst_occurred) {
+	  __xstrdup(valbuf, valptr);
+	  __list_append(attrval_buflist, valbuf);
+          valptr = valbuf;
           valbuf = NULL;
         }
 
-        if (!hash_insert(attrval_index, val, l)) {
+        if (!hash_insert(attrval_index, valptr, l)) {
           if (errno == ENOMEM)
             handle->errnum = GENDERS_ERR_OUTMEM;
           else
@@ -1636,19 +798,12 @@ genders_index_attrvals(genders_t handle, const char *attr)
         }
       }
       
-      if (!list_append(l, n)) {
-        handle->errnum = GENDERS_ERR_INTERNAL;
-        goto cleanup;
-      }
-    
+      __list_append(l, n);
       l = NULL;
     }
   }
 
-  if (!(attrval_index_attr = strdup(attr))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
+  __xstrdup(attrval_index_attr, attr);
 
   /* Delete/free previous index */
   __hash_destroy(handle->attrval_index);
@@ -1672,71 +827,7 @@ genders_index_attrvals(genders_t handle, const char *attr)
   __list_destroy(attrval_buflist);
   free(attrval_index_attr);
   free(valbuf);
-
   return -1;
-}
-
-int 
-genders_parse(genders_t handle, const char *filename, FILE *stream) 
-{
-  int line_count = 1;
-  int retval = -1;
-  int errcount = 0;
-  int rv, ret, fd = -1;
-  char buf[GENDERS_READLINE_BUFLEN];
-  List debugnodeslist = NULL;
-  List debugattrvalslist = NULL;
-
-  if (_handle_error_check(handle) < 0)
-    goto cleanup;
-
-  if (!filename)
-    filename = GENDERS_DEFAULT_FILE;
-  
-  if (!stream)
-    stream = stderr;
-
-  if ((fd = open(filename,O_RDONLY)) < 0) {
-    handle->errnum = GENDERS_ERR_OPEN;
-    goto cleanup;
-  }
-
-  if (!(debugnodeslist = list_create(_free_genders_node))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(debugattrvalslist = list_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) {
-    if ((rv = _parse_line(handle, buf, line_count, stream, 
-                          debugnodeslist, debugattrvalslist)) < 0)
-      goto cleanup;
-
-    errcount += rv;
-    line_count++;
-  }
-
-  if (ret < 0 && handle->errnum == GENDERS_ERR_OVERFLOW) {
-    fprintf(stderr, "Line %d: exceeds maximum allowed length\n", line_count);
-    goto cleanup;
-  }
-
-  if (list_count(debugnodeslist) == 0) {
-    fprintf(stderr, "No nodes successfully parsed\n");
-    goto cleanup;
-  }
-
-  retval = errcount;
-  handle->errnum = GENDERS_ERR_SUCCESS;
- cleanup:
-  close(fd);
-  __list_destroy(debugnodeslist);
-  __list_destroy(debugattrvalslist);
-  return retval;
 }
 
 void 

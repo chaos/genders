@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.18 2004-12-20 16:38:04 achu Exp $
+## $Id: Makefile.am,v 1.19 2004-12-22 00:01:13 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -19,8 +19,8 @@ Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
 	cp $(srcdir)/../libgenders/*.h .
 	cp $(srcdir)/../libgenders/*.l .
 	cp $(srcdir)/../libgenders/*.y .
-	if ! test -a genders_parse.c; then \
-		$(LEX) -ogenders_parse.c genders_parse.l; \
+	if ! test -a genders_query_parse.c; then \
+		$(LEX) -ogenders_query_parse.c genders_query_parse.l; \
 	fi
 	if ! test -a genders_query.c; then \
 		$(YACC) -d -ogenders_query.c genders_query.y; \

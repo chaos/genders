@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.16 2004-11-13 19:58:09 achu Exp $
+ *  $Id: genders_query.y,v 1.17 2004-12-22 00:01:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -60,6 +60,7 @@ genders_makenode(char *str, void *left, void *right)
     return NULL;
   }
 
+  /* No wrapper, no handle->errnum */
   if (!(t->str = (char *)strdup(str))) {
     genders_query_err = GENDERS_ERR_OUTMEM;
     return NULL;
@@ -76,17 +77,6 @@ genders_set_complement_flag(void *node)
 {
   struct genders_treenode *t = (struct genders_treenode *)node; 
   t->complement++;
-}
-
-/* for debugging */
-static void
-genders_printtree(struct genders_treenode *t)
-{
-  if (!t)
-    return;
-  genders_printtree(t->left);
-  printf("%s\n", t->str);
-  genders_printtree(t->right);
 }
 
 static void
@@ -186,11 +176,7 @@ _calc_attrval(genders_t handle, struct genders_treenode *t)
   if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
     return NULL;
 
-  if (!(h = hostlist_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __hostlist_create(h, NULL);
   for (i = 0; i < num; i++) {
     if (hostlist_push(h, nodes[i]) == 0) {
       handle->errnum = GENDERS_ERR_INTERNAL;
@@ -203,7 +189,7 @@ _calc_attrval(genders_t handle, struct genders_treenode *t)
   return h;
  cleanup:
   genders_nodelist_destroy(handle, nodes);
-  hostlist_destroy(h);
+  __hostlist_destroy(h);
   return NULL;
 }
 
@@ -211,15 +197,10 @@ static hostlist_t
 _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
 {
   hostlist_t h = NULL;
-  hostlist_iterator_t itr = NULL;
   char buf[HOSTLIST_BUFLEN];
   int rv;
   
-  if (!(h = hostlist_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __hostlist_create(h, NULL);
   memset(buf, '\0', HOSTLIST_BUFLEN);
   if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) {
     handle->errnum = GENDERS_ERR_INTERNAL;
@@ -239,11 +220,9 @@ _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
     hostlist_push(h, buf);
   
   hostlist_uniq(h);
-  hostlist_iterator_destroy(itr);
   return h;
  cleanup:
-  hostlist_iterator_destroy(itr);
-  hostlist_destroy(h);
+  __hostlist_destroy(h);
   return NULL;
 }
             
@@ -254,16 +233,8 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_iterator_t itr = NULL;
   char *node;
   
-  if (!(h = hostlist_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(itr = hostlist_iterator_create(l))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-  
+  __hostlist_create(h, NULL);
+  __hostlist_iterator_create(itr, l);
   while ((node = hostlist_next(itr))) {
     if (hostlist_find(r, node) >= 0) {
       if (hostlist_push_host(h, node) <= 0) {
@@ -276,11 +247,11 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
   }
   
   hostlist_uniq(h);
-  hostlist_iterator_destroy(itr);
+  __hostlist_iterator_destroy(itr);
   return h;
  cleanup:
-  hostlist_iterator_destroy(itr);
-  hostlist_destroy(h);
+  __hostlist_iterator_destroy(itr);
+  __hostlist_destroy(h);
   return NULL;
 }
 
@@ -290,16 +261,9 @@ _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
   char *node;
-      
-  if (!(h = hostlist_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  if (!(itr = hostlist_iterator_create(l))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
+    
+  __hostlist_create(h, NULL);
+  __hostlist_iterator_create(itr, l);
       
   while ((node = hostlist_next(itr))) {
     if (hostlist_find(r, node) < 0) {
@@ -313,11 +277,11 @@ _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
   }
           
   hostlist_uniq(h);
-  hostlist_iterator_destroy(itr);
+  __hostlist_iterator_destroy(itr);
   return h;
  cleanup:
-  hostlist_iterator_destroy(itr);
-  hostlist_destroy(h);
+  __hostlist_iterator_destroy(itr);
+  __hostlist_destroy(h);
   return NULL;
 
 }
@@ -336,11 +300,7 @@ _calc_complement(genders_t handle, hostlist_t h)
   if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0)
     return NULL;
   
-  if (!(ch = hostlist_create(NULL))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __hostlist_create(ch, NULL);
   for (i = 0; i < num; i++) {
     if (hostlist_find(h, nodes[i]) < 0) {
       if (hostlist_push_host(ch, nodes[i]) <= 0) {
@@ -357,7 +317,7 @@ _calc_complement(genders_t handle, hostlist_t h)
   return ch;
  cleanup:
   genders_nodelist_destroy(handle, nodes);
-  hostlist_destroy(ch);
+  __hostlist_destroy(ch);
   return NULL;
 }
 
@@ -395,8 +355,8 @@ _calc_query(genders_t handle, struct genders_treenode *t)
 
     if (!h) {
     cleanup_calc:
-      hostlist_destroy(l);
-      hostlist_destroy(r);
+      __hostlist_destroy(l);
+      __hostlist_destroy(r);
       return NULL;
     }
   }
@@ -404,7 +364,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
   if (t->complement) {
     hostlist_t temp;
     temp = _calc_complement(handle, h);
-    hostlist_destroy(h);
+    __hostlist_destroy(h);
     h = temp;
   }
   return h;
@@ -437,13 +397,9 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   if (!(h = _calc_query(handle, genders_treeroot)))
     goto cleanup;
 
-  if (!(itr = hostlist_iterator_create(h))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
+  __hostlist_iterator_create(itr, h);
   while ((node = hostlist_next(itr))) {
-    if (_put_in_list(handle, node, nodes, index++, len) < 0) {
+    if (_put_in_array(handle, node, nodes, index++, len) < 0) {
       free(node);
       goto cleanup;
     }
@@ -454,8 +410,8 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   handle->errnum = GENDERS_ERR_SUCCESS;
   retval = index;
  cleanup:
-  hostlist_iterator_destroy(itr);
-  hostlist_destroy(h);
+  __hostlist_iterator_destroy(itr);
+  __hostlist_destroy(h);
   if (genders_treeroot)
     genders_freetree(genders_treeroot);
   return retval;

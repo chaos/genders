@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.2 2004-06-08 01:19:05 achu Exp $
+ *  $Id: genders_common.c,v 1.3 2004-12-22 00:01:13 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -27,12 +27,116 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "genders.h"
 #include "genders_common.h"
 #include "list.h"
 #include "hash.h"
 #include "hostlist.h"
+
+int 
+_is_all(void *x, void *key) 
+{
+  assert(x && key);
+  return 1;
+}
+
+int 
+_is_str(void *x, void *key) 
+{
+  assert(x && key);
+  if (!strcmp((char *)x, (char *)key))
+    return 1;
+  return 0;
+}
+
+int 
+_is_node(void *x, void *key) 
+{
+  genders_node_t n;
+
+  assert(x && key);
+
+  n = (genders_node_t)x;
+  if (!strcmp(n->name, (char *)key))
+    return 1;
+  return 0;
+}
+
+int
+_is_attr_in_attrvals(void *x, void *key)
+{
+  genders_attrval_t av;
+
+  assert(x && key);
+
+  av = (genders_attrval_t)x;
+  if (!strcmp(av->attr, (char *)key))
+    return 1;
+  return 0;
+}
+
+void 
+_free_genders_node(void *x) 
+{
+  genders_node_t n;
+
+  assert(x);
+
+  n = (genders_node_t)x;
+  __list_destroy(n->attrlist);
+  free(n->name);
+  free(n);
+}
+
+void 
+_free_genders_attrval(void *x) 
+{
+  genders_attrval_t av;
+
+  assert(x);
+
+  av = (genders_attrval_t)x;
+  free(av->attr);
+  free(av->val);
+  free(av);
+}
+
+void
+_free_attrvallist(void *x)
+{
+  List attrvals;
+
+  assert(x);
+
+  attrvals = (List)x;
+  __list_destroy(attrvals);
+}
+
+void 
+_initialize_handle_info(genders_t handle)
+{
+  assert(handle);
+
+  handle->magic = GENDERS_MAGIC_NUM;
+  handle->is_loaded = 0;
+  handle->numnodes = 0;
+  handle->numattrs = 0;
+  handle->maxattrs = 0;
+  handle->maxnodelen = 0;
+  handle->maxattrlen = 0;
+  handle->maxvallen = 0;
+  memset(handle->nodename,'\0',MAXHOSTNAMELEN+1);
+  handle->valbuf = NULL;
+  handle->node_index = NULL;
+  handle->attr_index = NULL;
+  handle->attrval_index = NULL;
+  handle->attrval_index_attr = NULL;
+  /* Don't initialize the nodeslist, attrvalslist, or attrslist, they
+   * should not be re-initialized on a load_data error.
+   */
+}
 
 int 
 _handle_error_check(genders_t handle) 
@@ -71,8 +175,12 @@ _loaded_handle_error_check(genders_t handle)
 }
 
 int
-_put_in_list(genders_t handle, char *str, char **list, int index, int len)
+_put_in_array(genders_t handle, char *str, char **list, int index, int len)
 {
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(str);
+  assert(list || (!list && !len));
+
   if (index >= len) {
     handle->errnum = GENDERS_ERR_OVERFLOW;
     return -1;
@@ -85,4 +193,109 @@ _put_in_list(genders_t handle, char *str, char **list, int index, int len)
 
   strcpy(list[index], str);
   return 0;
+}
+
+/* _get_valptr
+ * - Return av->val or handle->valbuf, depending on if substitution is
+ * required.
+ */
+int
+_get_valptr(genders_t handle, 
+	    genders_node_t n, 
+	    genders_attrval_t av, 
+	    char **val,
+	    int *subst_occurred)
+{
+  char *valptr, *nodenameptr, *valbufptr;
+
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(n && av && val);
+
+  if (!(av->val_contains_subst)) {
+    if (subst_occurred)
+      *subst_occurred = 0;
+    *val = av->val;
+    return 0;
+  }
+
+  valbufptr = handle->valbuf;
+  valptr = av->val;
+  memset(valbufptr, '\0', handle->maxvallen + 1);
+  while (*valptr != '\0') {
+    if (*valptr == '%') {
+      if ((*(valptr + 1)) == '%') {
+        *(valbufptr)++ = '%';
+        valptr++;
+      }
+      else if ((*(valptr + 1)) == 'n') {
+        if ((strlen(av->val) - 2 + strlen(n->name)) > 
+            (handle->maxvallen + 1)) {
+          handle->errnum = GENDERS_ERR_INTERNAL;
+          return -1;
+        }
+
+        nodenameptr = n->name;
+        while (*nodenameptr != '\0')
+          *(valbufptr)++ = *nodenameptr++;
+        valptr++;
+      }
+      else
+        *(valbufptr)++ = *valptr;
+    }
+    else 
+      *(valbufptr)++ = *valptr;
+
+    valptr++;
+  }
+
+  if (subst_occurred)
+    *subst_occurred = 1;
+  *val = handle->valbuf;
+  return 0;
+}
+
+/* _find_attrval
+ * - Find/Return genders_attrval_t with attr or attr=val in a node
+ */
+int
+_find_attrval(genders_t handle, 
+	      genders_node_t n, 
+	      const char *attr, 
+	      const char *val,
+	      genders_attrval_t *avptr)
+{
+  ListIterator itr = NULL;
+  List attrvals;
+  int retval = -1;
+  
+  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
+  assert(n && attr && avptr);
+
+  *avptr = NULL;
+  __list_iterator_create(itr, n->attrlist);
+  while ((attrvals = list_next(itr))) {
+    genders_attrval_t av;
+    
+    if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) {
+      if (!val) {
+	*avptr = av;
+	break;
+      }
+      else if (av->val) {
+	char *valptr;
+
+	if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+	  goto cleanup;
+	if (!strcmp(valptr, val)) {
+	  *avptr = av;
+	  break;
+	}
+      }
+    }
+  }
+
+  retval = 0;
+ cleanup:
+  __list_iterator_destroy(itr);
+  return retval;  
 }
