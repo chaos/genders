@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.39 2003-05-21 00:37:45 achu Exp $
+ * $Id: genders.c,v 1.40 2003-05-21 21:54:15 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -14,7 +14,6 @@
 #include <sys/types.h>
 
 #include "genders.h"
-#include "genders_local.h"
 
 /******************
  * defines        *
@@ -1509,11 +1508,6 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream) {
 
   return -1;
 }
-
-
-/********************************
- * genders_local functions      *
- ********************************/
 
 void genders_set_errnum(genders_t handle, int errnum) {
 

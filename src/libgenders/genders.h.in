@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h.in,v 1.9 2003-05-12 20:52:24 achu Exp $
+ * $Id: genders.h.in,v 1.10 2003-05-21 21:54:15 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h.in,v $
  */
 
@@ -237,5 +237,10 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val);
  * Returns the number of parse errors (0 if no parse errors), -1 on error
  */
 int genders_parse(genders_t handle, const char *filename, FILE *stream);
+
+/* Set the errnum for a genders handle
+ * - used for development of local genders libraries 
+ */      
+void genders_set_errnum(genders_t handle, int errnum);
 
 #endif /* _GENDERS_H */
