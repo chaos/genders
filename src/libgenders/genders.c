@@ -1,5 +1,5 @@
 /*
- * $Id: genders.c,v 1.65 2003-11-03 17:36:39 achu Exp $
+ * $Id: genders.c,v 1.66 2003-11-03 19:29:27 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.c,v $
  */
 
@@ -544,12 +544,13 @@ int genders_getmaxvallen(genders_t handle) {
 }
 
 static int _list_create(genders_t handle, char ***list, int len, int buflen) {
-  if (list == NULL) {
-    handle->errnum = GENDERS_ERR_PARAMETERS;
-    return -1;
-  }
-
   if (len > 0) {
+
+    if (list == NULL) {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
+      return -1;
+    }
+
     char **temp;
     int i,j;
 
@@ -580,17 +581,20 @@ static int _list_create(genders_t handle, char ***list, int len, int buflen) {
 static int _list_clear(genders_t handle, char **list, int len, int buflen) {
   int i;
 
-  if (list == NULL) {
-    handle->errnum = GENDERS_ERR_PARAMETERS;
-    return -1;
-  }
+  if (len > 0) {
 
-  for (i = 0; i < len; i++) {
-    if (list[i] == NULL) {
-      handle->errnum = GENDERS_ERR_NULLPTR;
+    if (list == NULL) {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
-    memset(list[i], '\0', buflen);
+    
+    for (i = 0; i < len; i++) {
+      if (list[i] == NULL) {
+        handle->errnum = GENDERS_ERR_NULLPTR;
+        return -1;
+      }
+      memset(list[i], '\0', buflen);
+    }
   }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -598,12 +602,12 @@ static int _list_clear(genders_t handle, char **list, int len, int buflen) {
 }
 
 static int _list_destroy(genders_t handle, char **list, int len) {
-  if (list == NULL) {
-    handle->errnum = GENDERS_ERR_PARAMETERS;
-    return -1;
-  }
-
   if (len > 0) {
+    if (list == NULL) {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
+      return -1;
+    }
+
     int i;
     for (i = 0; i < len; i++)
       free(list[i]);
@@ -722,7 +726,7 @@ int genders_getnodes(genders_t handle, char *nodes[], int len,
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (nodes == NULL || len < 0) {
+  if ((nodes == NULL && len > 0) || len < 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -761,7 +765,7 @@ int genders_getattr(genders_t handle, char *attrs[], char *vals[],
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (attrs == NULL || len < 0) {
+  if ((attrs == NULL && len > 0) || len < 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
@@ -803,7 +807,7 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len) {
   if (_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (attrs == NULL || len < 0) {
+  if ((attrs == NULL && len > 0) || len < 0) {
     handle->errnum = GENDERS_ERR_PARAMETERS;
     return -1;
   }
