@@ -1,5 +1,4 @@
 Changes while living on linux:
-
 	Removed herolib.pl stuff temporarily.  It needs to be merged back in.
 
 	If not PSSP, assume /usr/bin/rdist is USC rdist, and default rsh is OK.
@@ -32,7 +31,6 @@ Changes while living on linux:
 	Removed jmd stuff (hostlist.pl).
 
 genders-0.1
-	
 	Added genders.spec, DISCLAIMER.
 	Removed dist_passwd.
 
@@ -52,5 +50,9 @@ genders-0.1
 	Remove "require 5.003" lines; instead require perl in spec file.
 
 genders-0.2
-
 	RPM target in Makefile
+
+genders-0.2-2
+	Updated to Chris's latest RPM rules.
+
+	Added updatefstab and updateservice scripts.

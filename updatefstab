@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+#
+# $Id: updatefstab,v 1.1 2001-12-10 19:50:28 garlick Exp $
+# $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/updatefstab,v $
+#
+# Author: Jim Garlick <garlick@llnl.gov>
+#
+# Update NFS entries in /etc/fstab from /etc/fstab.net
+#
+
+$path_fstab = "/etc/fstab";
+$path_fstab_bak = "/etc/fstab~";
+$path_fstab_net = "/etc/fstab.net";
+
+# open a file to backup fstab
+if (! open(BAKFILE, "> $path_fstab_bak")) {
+	printf STDERR ("failed to open $path_fstab_bak\n");
+	exit(1);
+}
+
+# collect the non-NFS entries from fstab into @fstab
+# XXX hash-prefixed comments are thrown away
+if (open(INFILE, "< $path_fstab")) {
+	while (<INFILE>) {
+		chomp;
+		$line = $_;
+		printf BAKFILE ("$line\n");
+		s/^\#.*//;
+		# /dev/sda1 / ext2    defaults        1 1
+		($x, $x, $fstype, $x) = split();
+		next if ($fstype eq "" || $fstype eq "nfs");
+		push(@fstab, $line);
+	}
+	close(INFILE);
+} else {
+	printf STDERR ("failed to open $path_fstab\n");
+	exit(1);
+}
+close(BAKFILE);
+
+# now append fstab.net to @fstab
+# hash-prefixed comments are preserved
+if (open(INFILE, "< $path_fstab_net")) {
+	while (<INFILE>) {
+		chomp;
+		$line = $_;
+		push(@fstab, $line);
+		s/\#.*//;
+		($x, $dir, $x) = split();
+		next if ($dir eq "");
+		if (-l $dir || ! -d $dir) {
+			unlink($dir);
+			printf("making mount point for %s\n", $dir);
+			mkdir($dir, 0755);
+		}
+	}
+	close(INFILE);
+} else {
+	printf STDERR ("failed to open $path_fstab_net\n");
+	exit(1);
+}
+
+# now overwrite fstab 
+if (open(OUTFILE, ">$path_fstab")) {
+	foreach $line (@fstab) {
+		printf OUTFILE ("$line\n");
+	}
+} else {
+	printf STDERR ("failed to open $path_fstab for writing\n");
+	exit(1);
+}
+close(OUTFILE);
+exit(0);
