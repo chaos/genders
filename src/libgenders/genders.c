@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.103 2004-04-27 21:50:02 achu Exp $
+ *  $Id: genders.c,v 1.104 2004-04-27 22:24:33 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -801,8 +801,6 @@ genders_load_data(genders_t handle, const char *filename)
   char *temp;
   int ret, fd = -1;
   char buf[GENDERS_READLINE_BUFLEN];
-  genders_node_t n;
-  ListIterator itr = NULL;
 
   if (_unloaded_handle_error_check(handle) < 0)
     goto cleanup;
@@ -844,8 +842,47 @@ genders_load_data(genders_t handle, const char *filename)
   
   handle->maxnodelen = MAX(strlen(handle->nodename), handle->maxnodelen);
 
-  /* Create indexes for quick searches. */
+  /* Create a buffer for value substitutions */
+  if (!(handle->valbuf = malloc(handle->maxvallen + 1))) {
+    handle->errnum = GENDERS_ERR_OUTMEM;
+    goto cleanup;
+  }
 
+  close(fd);
+
+  handle->is_loaded++;
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return 0;
+
+cleanup:
+  close(fd);
+  free(handle->valbuf);
+  handle->valbuf = NULL;
+
+  /* Can't pass NULL for key, so pass junk, _is_all() will ensure
+   * everything is deleted
+   */
+  list_delete_all(handle->nodeslist, _is_all, ""); 
+  list_delete_all(handle->attrvalslist, _is_all, ""); 
+  list_delete_all(handle->attrslist, _is_all, ""); 
+  _initialize_handle_info(handle);
+  return -1;
+}
+
+int
+genders_compute_indexes(genders_t handle)
+{
+  genders_node_t n;
+  ListIterator itr = NULL;
+
+  if (_loaded_handle_error_check(handle) < 0)
+    return -1;
+
+  if (handle->node_index) {
+    handle->errnum = GENDERS_ERR_ISINDEXED;
+    return -1;
+  }
+  
   if (!(handle->node_index = hash_create(handle->numnodes,
                                          (hash_key_f)hash_key_string,
                                          (hash_cmp_f)strcmp,
@@ -853,8 +890,6 @@ genders_load_data(genders_t handle, const char *filename)
     handle->errnum = GENDERS_ERR_OUTMEM;
     goto cleanup;
   }
-
-  /* Build node index here b/c amortizing it doesn't make any sense */
 
   if (!(itr = list_iterator_create(handle->nodeslist))) {
     handle->errnum = GENDERS_ERR_OUTMEM;
@@ -871,37 +906,16 @@ genders_load_data(genders_t handle, const char *filename)
     }
   }
 
-  /* Create a buffer for value substitutions */
-  if (!(handle->valbuf = malloc(handle->maxvallen + 1))) {
-    handle->errnum = GENDERS_ERR_OUTMEM;
-    goto cleanup;
-  }
-
-  close(fd);
-  list_iterator_destroy(itr);
-
-  handle->is_loaded++;
   handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 
-cleanup:
-  close(fd);
+ cleanup:
   if (itr)
     list_iterator_destroy(itr);
   if (handle->node_index) {
     hash_destroy(handle->node_index);
     handle->node_index = NULL;
   }
-  free(handle->valbuf);
-  handle->valbuf = NULL;
-
-  /* Can't pass NULL for key, so pass junk, _is_all() will ensure
-   * everything is deleted
-   */
-  list_delete_all(handle->nodeslist, _is_all, ""); 
-  list_delete_all(handle->attrvalslist, _is_all, ""); 
-  list_delete_all(handle->attrslist, _is_all, ""); 
-  _initialize_handle_info(handle);
   return -1;
 }
 
@@ -1258,6 +1272,18 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
   return retval;
 }
 
+genders_node_t
+_get_genders_node(genders_t handle, const char *node)
+{
+  genders_node_t n;
+
+  if (handle->node_index)
+    n = hash_find(handle->node_index, node);
+  else
+    n = list_find_first(handle->nodeslist, _is_node, (char *)node);
+  return n;
+}
+
 int 
 genders_getattr(genders_t handle, char *attrs[], char *vals[], 
                 int len, const char *node) 
@@ -1279,8 +1305,8 @@ genders_getattr(genders_t handle, char *attrs[], char *vals[],
 
   if (!node)
     node = handle->nodename;
-
-  if ((n = hash_find(handle->node_index, node)) == NULL) {
+  
+  if (!(n = _get_genders_node(handle, node))) {
     handle->errnum = GENDERS_ERR_NOTFOUND;
     return -1;
   }
@@ -1384,7 +1410,7 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
   if (!node)
     node = handle->nodename;
 
-  if ((n = hash_find(handle->node_index, node)) == NULL) {
+  if (!(n = _get_genders_node(handle, node))) {
     handle->errnum = GENDERS_ERR_NOTFOUND;
     return -1;
   }
@@ -1430,7 +1456,7 @@ genders_testattrval(genders_t handle, const char *node,
   if (!node)
     node = handle->nodename;
 
-  if ((n = hash_find(handle->node_index, node)) == NULL) {
+  if (!(n = _get_genders_node(handle, node))) {
     handle->errnum = GENDERS_ERR_NOTFOUND;
     return -1;
   }
@@ -1467,7 +1493,7 @@ genders_isnode(genders_t handle, const char *node)
   if (!node)
     node = handle->nodename;
 
-  n = hash_find(handle->node_index, node);
+  n = _get_genders_node(handle, node);
   handle->errnum = GENDERS_ERR_SUCCESS;
   return ((n) ? 1 : 0);
 }

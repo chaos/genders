@@ -6,6 +6,8 @@
 
 	* Cleanup node indexing code.
 
+	* Re-worked code around new genders_compute_indexes function.
+
 2004-04-26  Albert Chu  <chu11@llnl.gov>
 
 	* Fixed build issues with Libgenders.
