@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.25 2003-12-30 21:47:13 achu Exp $
+ *  $Id: nodeattr.c,v 1.26 2004-01-14 23:01:34 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -196,7 +196,8 @@ main(int argc, char *argv[])
     exit(0);
 }
 
-static void list_nodes(genders_t gp, char *attr, fmt_t qfmt)
+static void 
+list_nodes(genders_t gp, char *attr, fmt_t qfmt)
 {
     char **nodes;
     int i, count;
@@ -231,7 +232,8 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt)
     hostlist_destroy(hl);
 }
 
-static int test_attr(genders_t gp, char *node, char *attr, int vopt)
+static int 
+test_attr(genders_t gp, char *node, char *attr, int vopt)
 {
     char *val = NULL;
     char *wantval;
@@ -257,7 +259,8 @@ static int test_attr(genders_t gp, char *node, char *attr, int vopt)
     return res;
 }
 
-static void list_attrs(genders_t gp, char *node)
+static void 
+list_attrs(genders_t gp, char *node)
 {
     char **attrs, **vals;
     int len, vlen, count, i;
@@ -280,7 +283,8 @@ static void list_attrs(genders_t gp, char *node)
     genders_vallist_destroy(gp, vals);
 }
 
-static void usage(void)
+static void 
+usage(void)
 {
     fprintf(stderr,
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] attr[=val]\n"
@@ -294,14 +298,16 @@ static void usage(void)
  ** Utility functions
  **/
 
-static int _gend_error_exit(genders_t gp, char *msg)
+static int 
+_gend_error_exit(genders_t gp, char *msg)
 {
     fprintf(stderr, "nodeattr: %s: %s\n", 
         msg, genders_strerror(genders_errnum(gp)));
     exit(1);
 }
 
-static void *_safe_malloc(size_t size)
+static void *
+_safe_malloc(size_t size)
 {
     void *obj = (void *)malloc(size);
 
@@ -314,7 +320,8 @@ static void *_safe_malloc(size_t size)
 }
 
 /* Create a host range string.  Caller must free result. */
-static void *_rangestr(hostlist_t hl, fmt_t qfmt)
+static void *
+_rangestr(hostlist_t hl, fmt_t qfmt)
 {
     int size = 65536;
     char *str = _safe_malloc(size);
@@ -346,7 +353,8 @@ static void *_rangestr(hostlist_t hl, fmt_t qfmt)
 }
 
 /* Create a value string.  Caller must free result. */
-static char *_val_create(genders_t gp)
+static char *
+_val_create(genders_t gp)
 {
     int maxvallen;
     char *val;
@@ -360,7 +368,8 @@ static char *_val_create(genders_t gp)
 
 #if 0
 /* Create a node string.  Caller must free result. */
-static char *_node_create(genders_t gp)
+static char *
+_node_create(genders_t gp)
 {
     int maxnodelen;
     char *node;
@@ -372,7 +381,8 @@ static char *_node_create(genders_t gp)
 }
 
 /* Create an attribute string.  Caller must free result. */
-static char *_attr_create(genders_t gp)
+static char *
+_attr_create(genders_t gp)
 {
     int maxattrlen;
     char *attr;
@@ -384,7 +394,8 @@ static char *_attr_create(genders_t gp)
 }
 
 /* Convert "altname" to "gendname". Caller must free result. */
-static char *_to_gendname(genders_t gp, char *val)
+static char *
+_to_gendname(genders_t gp, char *val)
 {
     char **nodes;
     int count;

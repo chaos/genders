@@ -1,3 +1,8 @@
+2004-01-14  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/nodeattr.c: Modify code style to fit GNU coding
+	standards more closely
+
 2003-12-31  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/Makefile.am, src/Genders/Genders.pm: Began
