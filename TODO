@@ -28,3 +28,5 @@
     - must be based on current perl install
   - genders-compat
 - Add perl requirement to spec
+- and perl versioning
+- and linking to new libgenders?
