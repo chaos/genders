@@ -1,3 +1,9 @@
+2003-08-13  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/MANFIEST: Remove pointless files from file list.
+
+	* src/Libgenders/README: Removed File.
+
 2003-08-12  Albert Chu  <chu11@llnl.gov>
 
 	* genders.sample: Added "all" and "cluster=test" to each node in
