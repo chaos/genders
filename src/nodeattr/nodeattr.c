@@ -1,5 +1,5 @@
 /*
- *  * $Id: nodeattr.c,v 1.17 2003-05-15 23:58:51 achu Exp $
+ *  * $Id: nodeattr.c,v 1.18 2003-05-16 15:25:48 achu Exp $
  *  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/nodeattr/nodeattr.c,v $
  *    
  */
@@ -14,13 +14,20 @@
 
 #define HAVE_GETOPT_LONG 1
 
+#define NODEATTR_TRANSITION 1
+
 #if HAVE_GETOPT_LONG
 #define GETOPT(ac,av,opt,lopt) getopt_long(ac,av,opt,lopt,NULL)
 #else
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqvlrf:"
+#if NODEATTR_TRANSITION
+#define OPTIONS "cnsqvlCrf:"
+#else
+#define OPTIONS "cnsqvlf:"
+#endif
+
 static struct option longopts[] = {
     { "querycomma", 0, 0, 'c' },
     { "querynl", 0, 0, 'n' },
@@ -28,16 +35,23 @@ static struct option longopts[] = {
     { "query", 0, 0, 'q' },
     { "value", 0, 0, 'v' },
     { "listattr", 0, 0, 'l' },
-    { "altnames", 0, 0, 'r' },
     { "filename", 1, 0, 'f' },
     { "check", 0, 0, 'k'},
+#if NODEATTR_TRANSITION
+    { "altnames", 0, 0, 'r' },
+    { "cluster", 0, 0, 'C' },
+#endif
     { 0,0,0,0 },
 };
 
 typedef enum { FMT_COMMA, FMT_NL, FMT_SPACE, FMT_HOSTLIST } fmt_t;
 
 static int test_attr(genders_t gp, char *node, char *attr, int vopt);
+#if NODEATTR_TRANSITION
 static void list_nodes(genders_t gp, char *attr, fmt_t fmt, int ropt);
+#else
+static void list_nodes(genders_t gp, char *attr, fmt_t fmt);
+#endif
 static void list_attrs(genders_t gp, char *node);
 static void usage(void);
 
@@ -46,7 +60,9 @@ static int _gend_error_exit(genders_t gp, char *msg);
 static void *_safe_malloc(size_t size);
 static void *_rangestr(hostlist_t hl, fmt_t fmt);
 static char *_val_create(genders_t gp);
+#if NODEATTR_TRANSITION
 static char *_to_altname(genders_t gp, char *node);
+#endif
 #if 0
 static char *_to_gendname(genders_t gp, char *val);
 static char *_node_create(genders_t gp);
@@ -57,7 +73,11 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int ropt = 0, lopt = 0, qopt = 0, vopt = 0, kopt = 0;
+#if NODEATTR_TRANSITION
+    int ropt = 0, lopt = 0, qopt = 0, Copt = 0, vopt = 0, kopt = 0;    
+#else
+    int lopt = 0, qopt = 0, vopt = 0, kopt = 0;
+#endif
     char *filename = GENDERS_DEFAULT_FILE;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
@@ -86,22 +106,31 @@ main(int argc, char *argv[])
         case 'l':   /* --listattr */
             lopt = 1;
             break;
-        case 'r':   /* --altnames */
-            ropt = 1;
-            break;
         case 'f':   /* --filename */
             filename = optarg;
             break;
         case 'k':   /* --check */ 
             kopt = 1;
             break;
+#if NODEATTR_TRANSITION
+        case 'r':   /* --altnames */
+            ropt = 1;
+            break;
+        case 'C':   /* --cluster */
+            Copt = 1;
+            break;
+#endif
         default:
             usage();
             break;
         }
     }
 
+#if NODEATTR_TRANSITION
+    if (optind == argc && !Copt && !lopt && !kopt)
+#else
     if (optind == argc && !lopt && !kopt)
+#endif
         usage();
 
     /* Initialize genders package. */
@@ -127,19 +156,31 @@ main(int argc, char *argv[])
     if (qopt) {
         char *attr;
 
+#if NODEATTR_TRANSITION
+        if (vopt || Copt || lopt)
+#else
         if (vopt || lopt)
+#endif
             usage();
         if (optind != argc - 1)
             usage();
 
         attr = argv[optind++];
+#if NODEATTR_TRANSITION
         list_nodes(gp, attr, qfmt, ropt);
+#else
+        list_nodes(gp, attr, qfmt);
+#endif
 
         exit(0);
     }
 
     /* Usage 2:  does node have attribute? */
+#if NODEATTR_TRANSITION
+    if (!Copt && !lopt) {
+#else
     if (!lopt) {
+#endif
         char *node = NULL, *attr = NULL;
         int result;
 
@@ -168,11 +209,30 @@ main(int argc, char *argv[])
         list_attrs(gp, node);
     }
 
+#if NODEATTR_TRANSITION
+    /* Usage 4:  list cluster name */
+    if (Copt) {
+        char *node = NULL;
+ 
+        if (optind == argc - 1)
+            node = argv[optind++];
+        else if (optind != argc)
+            usage();
+ 
+        test_attr(gp, node, "cluster", 1);
+        exit(0);
+    }
+#endif 
+
     /*NOTREACHED*/
     exit(0);
 }
 
+#if NODEATTR_TRANSITION
 static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
+#else
+static void list_nodes(genders_t gp, char *attr, fmt_t qfmt)
+#endif
 {
     char **nodes;
     int i, count;
@@ -196,6 +256,7 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
         char *node = nodes[i];
         char *altnode = NULL;
 
+#if NODEATTR_TRANSITION
         /* The -r option just expresses a preference for alternate names, so
          * if the lookup fails, use the primary name.  Making this a hard
          * failure breaks older versions of pdsh that call nodeattr rather
@@ -208,6 +269,8 @@ static void list_nodes(genders_t gp, char *attr, fmt_t qfmt, int ropt)
                 altnode = NULL;
             }
         } 
+#endif
+
         if (hostlist_push(hl, altnode ? altnode : node) == 0) {
             fprintf(stderr, "nodeattr: hostlist_push failed\n");
             exit(1);
@@ -279,6 +342,9 @@ static void usage(void)
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-r] attr[=val]\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
+#if NODEATTR_TRANSITION
+        "or     nodeattr [-f genders] -C [node]\n"
+#endif
         "or     nodeattr [-f genders] --check\n");
     exit(1);
 }
@@ -351,6 +417,7 @@ static char *_val_create(genders_t gp)
     return val;
 }
 
+#if NODEATTR_TRANSITION
 /* Convert "altname" to "gendname".  Caller must free result.  */
 /* Returns zero length string on lookup failure */
 static char *_to_altname(genders_t gp, char *node)
@@ -361,7 +428,7 @@ static char *_to_altname(genders_t gp, char *node)
         _gend_error_exit(gp, "genders_testattr");
     return val;
 }
-
+#endif
 
 #if 0
 /* Create a node string.  Caller must free result. */
