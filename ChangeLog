@@ -1,3 +1,7 @@
+2004-04-22  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (genders_load_data): Fixed corner case.
+	
 2004-04-20  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (_parse_line): Made parse error output
