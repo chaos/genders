@@ -11,9 +11,9 @@ RELEASE=	2
 all: inst
 
 install:
-	install -m 555 -o root -g root pdsh 	$prefix/bin/pdsh
+	install -m 555 -o root -g root inst /usr/local/bin
 
 clean:
-	rm -f inst a.out core
+	rm -f inst a.out core *.rpm *.tgz
 
 include Make-rpm.mk
