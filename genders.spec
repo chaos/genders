@@ -136,7 +136,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/man/man3/libgenders.3.gz 
 /usr/man/man3/Libgenders.3.gz 
 /usr/include/genders.h
-/usr/lib/
+/usr/lib/libgenders.*
 /usr/lib/perl5/
 
 %files compat
@@ -146,8 +146,10 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 /usr/lib/genders/gendlib.pl
 /usr/lib/genders/hostlist.pl
 
-%files dist
+%files llnl
 %defattr(-,root,root)
+/usr/include/gendersllnl.h
+/usr/lib/libgendersllnl.*
 /usr/man/man1/dist2.1.gz
 /usr/man/man1/dist_all.1.gz
 /usr/man/man1/dist_cmp.1.gz
