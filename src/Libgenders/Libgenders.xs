@@ -464,3 +464,10 @@ genders_parse(handle, filename=NULL)
         RETVAL = genders_parse(handle, filename, NULL);
     OUTPUT:
         RETVAL
+
+int
+genders_set_errnum(handle, errnum)
+    genders_t handle
+    int errnum
+    CODE:
+        genders_set_errnum(handle, errnum);
