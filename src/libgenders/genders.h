@@ -1,5 +1,5 @@
 /*
- * $Id: genders.h,v 1.10 2003-03-14 22:36:52 achu Exp $
+ * $Id: genders.h,v 1.11 2003-03-17 21:14:07 achu Exp $
  * $Source: /g/g0/achu/temp/genders-cvsbackup-full/genders/src/libgenders/genders.h,v $
  */
 
@@ -192,7 +192,7 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len);
 
 /* Tests whether node has attr.
  * If node is NULL, tests the current node.
- * If val is non-NULL, stores the attribute values in it.
+ * If val is non-NULL, stores the attribute value in it.
  * Returns: 1=true , 0=false, -1=failure.
  */
 int genders_testattr(genders_t handle, char *node, char *attr, char *val);
