@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.126 2004-12-29 22:07:51 achu Exp $
+ *  $Id: genders.c,v 1.127 2004-12-29 22:16:50 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -153,8 +153,8 @@ genders_load_data(genders_t handle, const char *filename)
     goto cleanup;
 
   if (_open_and_parse(handle, filename, 
-		      handle->nodeslist, handle->attrvalslist,
-		      0, NULL) < 0)
+                      handle->nodeslist, handle->attrvalslist,
+                      0, NULL) < 0)
     goto cleanup;
 
   handle->numnodes = list_count(handle->nodeslist);
@@ -674,17 +674,17 @@ genders_testattr(genders_t handle, const char *node, const char *attr,
   if (av) {
     if (val) {
       if (av->val) {
-	char *valptr;
-	if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
-	  return -1;
-	if (strlen(valptr + 1) > len) {
-	  handle->errnum = GENDERS_ERR_OVERFLOW;
-	  return -1;
-	}
-	strcpy(val, valptr);
+        char *valptr;
+        if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+          return -1;
+        if (strlen(valptr + 1) > len) {
+          handle->errnum = GENDERS_ERR_OVERFLOW;
+          return -1;
+        }
+        strcpy(val, valptr);
       }
       else
-	memset(val, '\0', len);
+        memset(val, '\0', len);
     }
   }
   
@@ -923,8 +923,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   __list_create(debugattrvalslist, NULL);
 
   if ((errcount = _open_and_parse(handle, filename,
-				  debugnodeslist, debugattrvalslist,
-				  1, stream)) < 0)
+                                  debugnodeslist, debugattrvalslist,
+                                  1, stream)) < 0)
     goto cleanup;
 
   retval = errcount;
