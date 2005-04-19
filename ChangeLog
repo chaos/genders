@@ -1,3 +1,7 @@
+2005-04-19  Albert Chu  <chu11@llnl.gov>
+
+	* Autoconf, Makefile, Built cleanup.
+	
 2005-01-25  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/nodeattr.c (_gend_error_exit): Output info on

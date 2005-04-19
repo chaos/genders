@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.31 2005-01-10 16:45:35 achu Exp $
+## $Id: configure.ac,v 1.32 2005-04-19 23:47:27 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -46,54 +46,6 @@ PERLGENDERS_MINOR=01
 PERLGENDERS_VERSION=$PERLGENDERS_MAJOR.$PERLGENDERS_MINOR
 AC_SUBST([PERLGENDERS_VERSION])
 
-# option for default genders file
-AC_MSG_CHECKING(for --with-genders-file )
-AC_ARG_WITH(genders-file,
-    AC_HELP_STRING([--with-genders-file=file], [define default genders file]),
-    [ case "$withval" in
-    yes)
-        withgendersfile=yes
-        ;;
-    no)
-        ;;
-    *)
-        withgendersfile=yes
-        GENDERS_DEFAULT_FILE="\"$withval\""
-        ;;
-    esac ]
-)
-AC_MSG_RESULT(${withgendersfile=no})
-if test -z "$GENDERS_DEFAULT_FILE"; then
-   GENDERS_DEFAULT_FILE="\"/etc/genders\""
-fi
-AC_SUBST(GENDERS_DEFAULT_FILE)
-
-# Perl Install Destdir
-# - Used almost exclusively so perl install works with rpm builds
-AC_MSG_CHECKING(for --with-perl-install-destdir )
-AC_ARG_WITH(perl-install-destdir,
-    AC_HELP_STRING([--with-perl-install-destdir=path], [define perl modules install prefix]),
-    [ case "$withval" in
-    yes)
-        withperllinstalldestdir=yes
-        ;;
-    no)
-        ;;
-    *)
-        withperllinstalldestdir=yes
-        PERL_INSTALL_DESTDIR="$withval"
-        ;;
-    esac ]
-)
-AC_MSG_RESULT(${withperllinstalldestdir=no})
-if test -z "$PERL_INSTALL_DESTDIR"; then
-   PERL_INSTALL_PREFIX='${prefix}'
-else
-   PERL_INSTALL_PREFIX='${PERL_INSTALL_DESTDIR}${prefix}'
-fi
-AC_SUBST(PERL_INSTALL_DESTDIR)
-AC_SUBST(PERL_INSTALL_PREFIX)
-
 ##
 # Checks for programs.
 ##
@@ -104,6 +56,7 @@ AM_PROG_LEX
 AC_PROG_YACC
 AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG(PERL, perl)
+AC_DEBUG
 
 ##
 # Checks for header files.
@@ -120,6 +73,16 @@ AC_CHECK_HEADERS( \
   stat.h \
   types.h \
 )
+
+#
+# Check for default paths
+#
+AC_GENDERS_FILE
+
+#
+# Check for perl install destdir
+#
+AC_PERL_INSTALL_DESTDIR
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
@@ -142,10 +105,6 @@ AC_CHECK_FUNCS( \
   strtok_r \
   getopt_long \
 )
-
-# Do this last, you could add compile options which can make
-# function checks fail
-AC_DEBUG
 
 ##
 # Epilogue.

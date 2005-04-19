@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.20 2005-01-10 16:45:35 achu Exp $
+## $Id: Makefile.am,v 1.21 2005-04-19 23:47:27 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -11,23 +11,21 @@
 # make time, so this is our work around
 PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
 
-MAKEMAKERFLAGS = INSTALLDIRS=site SITEPREFIX=$(PERL_INSTALL_PREFIX) \
-                 MAKEFILE=Makefile.xs FIRST_MAKEFILE=Makefile.xs
+PERL_INC = "-I../../config -I$(srcdir)/../libgenders"
+
+PERL_LIBS = "-L../libgenders/.libs -lgenders"
+
+MAKEMAKERFLAGS = INSTALLDIRS=site \
+		 SITEPREFIX=$(PERL_INSTALL_PREFIX) \
+		 INC=$(PERL_INC) \
+		 LIBS=$(PERL_LIBS) \
+                 MAKEFILE=Makefile.xs \
+		 FIRST_MAKEFILE=Makefile.xs
 
 all: Makefile.xs
 	$(MAKE) -f Makefile.xs
 
 Makefile.xs: Makefile.PL Libgenders.xs Libgenders.pm
-	cp $(srcdir)/../libgenders/*.c .
-	cp $(srcdir)/../libgenders/*.h .
-	cp $(srcdir)/../libgenders/*.l .
-	cp $(srcdir)/../libgenders/*.y .
-	if ! test -a genders_query_parse.c; then \
-		$(LEX) -ogenders_query_parse.c genders_query_parse.l; \
-	fi
-	if ! test -a genders_query.c; then \
-		$(YACC) -d -ogenders_query.c genders_query.y; \
-	fi
 # Hacks to make distcheck work
 	if ! test -a Makefile.PL; then \
 		cp $(srcdir)/Makefile.PL .; \
