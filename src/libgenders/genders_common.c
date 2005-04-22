@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.4 2004-12-22 18:10:13 achu Exp $
+ *  $Id: genders_common.c,v 1.5 2005-04-22 22:32:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -26,7 +26,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#if STDC_HEADERS
 #include <string.h>
+#endif /* STDC_HEADERS */
 #include <assert.h>
 
 #include "genders.h"

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.6 2004-12-29 22:07:53 achu Exp $
+ *  $Id: genders_parsing.c,v 1.7 2005-04-22 22:32:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -24,13 +24,18 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
-#include <ctype.h>
+#include <stdio.h>
 #include <stdlib.h>
+#if STDC_HEADERS
+#include <ctype.h>
 #include <string.h>
+#endif /* STDC_HEADERS */
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if HAVE_FCNTL_H
 #include <fcntl.h>
+#endif /* HAVE_FCNTL_H */
 #include <assert.h>
 
 #include "genders.h"

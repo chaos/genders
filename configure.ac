@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.32 2005-04-19 23:47:27 achu Exp $
+## $Id: configure.ac,v 1.33 2005-04-22 22:32:23 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -63,15 +63,9 @@ AC_DEBUG
 ##
 AC_HEADER_STDC
 AC_CHECK_HEADERS( \
-  errno.h \
   fcntl.h \
-  stdio.h \
-  stdlib.h \
-  string.h \
   unistd.h \
   getopt.h \
-  stat.h \
-  types.h \
 )
 
 #

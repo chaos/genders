@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.128 2005-01-03 17:31:20 achu Exp $
+ *  $Id: genders.c,v 1.129 2005-04-22 22:32:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -24,10 +24,15 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
+#include <stdio.h>
 #include <stdlib.h>
+#if STDC_HEADERS
 #include <string.h>
-#include <errno.h>
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
 #include <unistd.h>
+#endif /* HAVE_UNISTD_H */
+#include <errno.h>
 #include <assert.h>
 
 #include "genders.h"
