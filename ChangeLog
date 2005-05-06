@@ -1,6 +1,8 @@
 2005-05-06  Albert Chu  <chu11@llnl.gov>
 
-	* Manpage reorg.
+	* Reorganize manpages.
+
+	* Add config.h inclusion on .c files.
 	
 2005-04-22  Albert Chu  <chu11@llnl.gov>
 	 

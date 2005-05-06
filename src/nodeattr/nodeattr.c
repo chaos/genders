@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.29 2005-01-25 17:21:56 achu Exp $
+ *  $Id: nodeattr.c,v 1.30 2005-05-06 23:09:32 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -26,16 +26,20 @@
 
 #if HAVE_CONFIG_H
 #include <config.h>
-#endif
+#endif /* HAVE_CONFIG_H */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#if STDC_HEADERS
 #include <string.h>
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
 #include <unistd.h>
+#endif /* HAVE_UNISTD_H */
 #if HAVE_GETOPT_H 
 #include <getopt.h>
-#endif
+#endif /* HAVE_GETOPT_H */
 
 #include "genders.h"
 #include "hostlist.h"
