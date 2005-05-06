@@ -3,6 +3,10 @@
 	* Reorganize manpages.
 
 	* Add config.h inclusion on .c files.
+
+	* Move to GNU style code style for libgenders.
+
+	* Cleanup code in general.
 	
 2005-04-22  Albert Chu  <chu11@llnl.gov>
 	 

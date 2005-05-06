@@ -4,8 +4,6 @@
   o possibly add functionality to genders_parse()  
 - Genders comparison of two files.  Via nodeattr??  
   - Via new function in genders?\
-- Somehow make distcheck work with perlxs.  Or is this even possible b/c
-  uninstall is not supported by perlxs, sigh :-(
 - Allow attribute values to be overwritten instead of causing errors
   by some flag option of some sort.
   o i.e. 
@@ -18,7 +16,6 @@
   mcr[1-50/2] would be mcr1,3,5,7,...
   mcr[1-50/3] would be mcr1,4,7,10,...
   - think about format, do through hostlist.[ch]??
-- Cleanup malloc-buffering in list/hash since its not necessary for genders.
 - genders_query allow really odd-ball parsing like
   - "attr-&-|"  
 - For multilib, repackage everything
@@ -27,9 +24,8 @@
   - genders-perl
     - must be based on current perl install
   - genders-compat
-- and perl versioning
-- and linking to new libgenders?
 - nodeattr --diff option
    - but how would the output look like? sigh ...
-- GNU style code
 - cleanup code in general
+- comments
+- no asserts in a library

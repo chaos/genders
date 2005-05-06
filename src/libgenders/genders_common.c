@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.6 2005-05-06 23:09:32 achu Exp $
+ *  $Id: genders_common.c,v 1.7 2005-05-06 23:55:34 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -134,10 +134,11 @@ _unloaded_handle_error_check(genders_t handle)
   if (_handle_error_check(handle) < 0)
     return -1;
 
-  if (handle->is_loaded) {
-    handle->errnum = GENDERS_ERR_ISLOADED;
-    return -1;
-  }
+  if (handle->is_loaded) 
+    {
+      handle->errnum = GENDERS_ERR_ISLOADED;
+      return -1;
+    }
   
   return 0;
 }
@@ -148,10 +149,11 @@ _loaded_handle_error_check(genders_t handle)
   if (_handle_error_check(handle) < 0)
     return -1;
 
-  if (!handle->is_loaded) {
-    handle->errnum = GENDERS_ERR_NOTLOADED;
-    return -1;
-  }
+  if (!handle->is_loaded) 
+    {
+      handle->errnum = GENDERS_ERR_NOTLOADED;
+      return -1;
+    }
   
   return 0;
 }
@@ -163,15 +165,17 @@ _put_in_array(genders_t handle, char *str, char **list, int index, int len)
   assert(str);
   assert(list || (!list && !len));
 
-  if (index >= len) {
-    handle->errnum = GENDERS_ERR_OVERFLOW;
-    return -1;
-  }
+  if (index >= len) 
+    {
+      handle->errnum = GENDERS_ERR_OVERFLOW;
+      return -1;
+    }
 
-  if (!list[index]) {
-    handle->errnum = GENDERS_ERR_NULLPTR;
-    return -1;
-  }
+  if (!list[index]) 
+    {
+      handle->errnum = GENDERS_ERR_NULLPTR;
+      return -1;
+    }
 
   strcpy(list[index], str);
   return 0;
@@ -194,42 +198,48 @@ _get_valptr(genders_t handle,
   assert(n && av && val);
   assert(!(!av->val && av->val_contains_subst));
 
-  if (!(av->val_contains_subst)) {
-    if (subst_occurred)
-      *subst_occurred = 0;
-    *val = av->val;
-    return 0;
-  }
+  if (!(av->val_contains_subst)) 
+    {
+      if (subst_occurred)
+	*subst_occurred = 0;
+      *val = av->val;
+      return 0;
+    }
 
   valbufptr = handle->valbuf;
   valptr = av->val;
   memset(valbufptr, '\0', handle->maxvallen + 1);
-  while (*valptr != '\0') {
-    if (*valptr == '%') {
-      if ((*(valptr + 1)) == '%') {
-        *(valbufptr)++ = '%';
-        valptr++;
-      }
-      else if ((*(valptr + 1)) == 'n') {
-        if ((strlen(av->val) - 2 + strlen(n->name)) > 
-            (handle->maxvallen + 1)) {
-          handle->errnum = GENDERS_ERR_INTERNAL;
-          return -1;
-        }
+  while (*valptr != '\0') 
+    {
+      if (*valptr == '%') 
+	{
+	  if ((*(valptr + 1)) == '%') 
+	    {
+	      *(valbufptr)++ = '%';
+	      valptr++;
+	    }
+	  else if ((*(valptr + 1)) == 'n') 
+	    {
+	      if ((strlen(av->val) - 2 + strlen(n->name)) > 
+		  (handle->maxvallen + 1)) 
+		{
+		  handle->errnum = GENDERS_ERR_INTERNAL;
+		  return -1;
+		}
 
-        nodenameptr = n->name;
-        while (*nodenameptr != '\0')
-          *(valbufptr)++ = *nodenameptr++;
-        valptr++;
-      }
-      else
-        *(valbufptr)++ = *valptr;
+	      nodenameptr = n->name;
+	      while (*nodenameptr != '\0')
+		*(valbufptr)++ = *nodenameptr++;
+	      valptr++;
+	    }
+	  else
+	    *(valbufptr)++ = *valptr;
+	}
+      else 
+	*(valbufptr)++ = *valptr;
+      
+      valptr++;
     }
-    else 
-      *(valbufptr)++ = *valptr;
-
-    valptr++;
-  }
 
   if (subst_occurred)
     *subst_occurred = 1;
@@ -256,27 +266,33 @@ _find_attrval(genders_t handle,
 
   *avptr = NULL;
   __list_iterator_create(itr, n->attrlist);
-  while ((attrvals = list_next(itr))) {
-    genders_attrval_t av;
-    
-    if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) {
-      if (!val) {
-        *avptr = av;
-        break;
-      }
-      else if (av->val) {
-        char *valptr;
+  while ((attrvals = list_next(itr))) 
+    {
+      genders_attrval_t av;
+      
+      if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) 
+	{
+	  if (!val) 
+	    {
+	      *avptr = av;
+	      break;
+	    }
+	  else if (av->val) 
+	    {
+	      char *valptr;
+	      
+	      if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+		goto cleanup;
 
-        if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
-          goto cleanup;
-        if (!strcmp(valptr, val)) {
-          *avptr = av;
-          break;
-        }
-      }
+	      if (!strcmp(valptr, val)) 
+		{
+		  *avptr = av;
+		  break;
+		}
+	    }
+	}
     }
-  }
-
+  
   retval = 0;
  cleanup:
   __list_iterator_destroy(itr);
