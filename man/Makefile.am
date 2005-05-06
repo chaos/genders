@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.11 2004-11-04 18:49:51 achu Exp $
+## $Id: Makefile.am,v 1.12 2005-05-06 23:02:13 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -35,16 +35,12 @@ man3_MANS = \
         genders_strerror.3 \
         genders_testattr.3 \
         genders_testattrval.3 \
-        genders_is.3 \
         genders_isnode.3 \
         genders_isattr.3 \
         genders_isattrval.3 \
         genders_vallist_clear.3 \
         genders_vallist_create.3 \
         genders_vallist_destroy.3 \
-        genders_list.3 \
-        genders_stats.3 \
-        genders_errors.3 \
         genders_parse.3 \
 	genders_index_attrvals.3 \
 	genders_query.3 \
@@ -78,16 +74,12 @@ EXTRA_DIST = \
         genders_strerror.3 \
         genders_testattr.3 \
         genders_testattrval.3 \
-        genders_is.3 \
         genders_isnode.3 \
         genders_isattr.3 \
         genders_isattrval.3 \
         genders_vallist_clear.3 \
         genders_vallist_create.3 \
         genders_vallist_destroy.3 \
-        genders_list.3 \
-        genders_stats.3 \
-        genders_errors.3 \
         genders_parse.3 \
 	genders_index_attrvals.3 \
 	genders_query.3 \

@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: genders_isnode.3,v 1.2 2003-12-30 21:47:13 achu Exp $
+\."  $Id: genders_isnode.3,v 1.3 2005-05-06 23:02:13 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -23,4 +23,68 @@
 \."  with Genders; if not, write to the Free Software Foundation, Inc.,
 \."  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \."############################################################################
-.so man3/genders_is.3
+.TH GENDERS_ISNODE 3 "August 2003" "LLNL" "LIBGENDERS"
+.SH NAME
+genders_isnode, genders_isattr, genders_isattrval \- node, attribute, value check routines
+.SH SYNOPSIS
+.B #include <genders.h>
+.sp
+.BI "int genders_isnode(genders_t handle, const char *node);"
+.sp
+.BI "int genders_isattr(genders_t handle, const char *attr);"
+.sp
+.BI "int genders_isattrval(genders_t handle, const char *attr, const char *val);"
+.br
+.SH DESCRIPTION
+\fBgenders_isnode()\fR tests if the node pointed to by \fInode\fR is
+listed in the genders file.  If \fInode\fR is NULL, the current node
+is tested.
+
+\fBgenders_isattr()\fR tests if the attribute pointed to by \fIattr\fR
+is listed for some node in the genders file.
+
+\fBgenders_isattrval()\fR tests if the attribute pointed to by
+\fIattr\fR is equal to the value pointed to by \fIval\fR for some node
+in the genders file.
+.br
+.SH RETURN VALUES
+For \fBgenders_isnode()\fR, if \fInode\fR is listed in the genders
+file, 1 is returned.  If it is not listed, 0 is returned.
+
+For \fBgenders_isattr()\fR, if \fIattr\fR is listed in the genders
+file, 1 is returned.  If it is not listed, 0 is returned.
+
+For \fBgenders_isattrval()\fR, if \fIattr\fR=\fIval\fR is listed in
+the genders file, 1 is returned.  If it is not listed, 0 is returned.
+
+On error, all three return -1 and an error code is returned in
+\fIhandle\fR.  The error code can be retrieved via
+.BR genders_errnum (3)
+, and a description of the error code can be retrieved via 
+.BR genders_strerror (3).  
+Error codes are defined in genders.h.
+.br
+.SH ERRORS
+.TP
+.B GENDERS_ERR_NULLHANDLE
+The \fIhandle\fR parameter is NULL.  The genders handle must be
+created with
+.BR genders_handle_create (3).
+.TP
+.B GENDERS_ERR_NOTLOADED
+.BR genders_load_data (3)
+has not been called to load genders data.
+.TP
+.B GENDERS_ERR_PARAMETERS
+An incorrect parameter has been passed in.  
+.TP
+.B GENDERS_ERR_MAGIC 
+\fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
+point to a genders handle or \fIhandle\fR has been destroyed by
+.BR genders_handle_destroy (3).
+.br
+.SH FILES
+/usr/include/genders.h
+.SH SEE ALSO
+libgenders(3), genders_handle_create(3), genders_load_data(3),
+genders_errnum(3), genders_strerror(3)
