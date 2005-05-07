@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.13 2005-05-07 16:49:40 achu Exp $
+ *  $Id: genders_parsing.c,v 1.14 2005-05-07 16:59:33 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -212,7 +212,7 @@ _duplicate_attr_in_node_check(genders_t handle,
   __list_iterator_create(attrvals_itr, attrvals);
   while ((av = list_next(attrvals_itr))) 
     {
-      if (_find_attrval(handle, n, av->attr, NULL, &av_ret) < 0)
+      if (_genders_find_attrval(handle, n, av->attr, NULL, &av_ret) < 0)
 	goto cleanup;
 
       if (av_ret) 

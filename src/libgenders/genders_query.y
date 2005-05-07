@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.24 2005-05-07 16:49:40 achu Exp $
+ *  $Id: genders_query.y,v 1.25 2005-05-07 16:59:33 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -71,6 +71,7 @@ static int genders_query_err = 0;
 static struct genders_treenode *genders_treeroot = NULL;
 
 extern int yylex();
+extern int yyparse(void);
 
 /* 
  * _genders_makenode
@@ -178,8 +179,6 @@ yywrap()
 {
   return 1;
 }
-
-extern int yyparse(void);
 
 /* 
  * _parse_query
