@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm.in,v 1.2 2005-05-07 18:19:53 achu Exp $
+#  $Id: Genders.pm.in,v 1.3 2005-05-07 18:23:13 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -60,7 +60,7 @@ sub new {
     my $filename = shift;
     my $self = {};
     my $handle;
-    my $ret;
+    my $rv;
     
     $self->{$debugkey} = 0;
     
@@ -72,8 +72,8 @@ sub new {
 
     $self->{$handlekey} = $handle;
 
-    $ret = $self->{$handlekey}->genders_load_data($filename);
-    if ($ret == -1) {
+    $rv = $self->{$handlekey}->genders_load_data($filename);
+    if ($rv < 0) {
         _errormsg($self, "genders_load_data()");
         return undef;
     } 
@@ -193,7 +193,7 @@ sub testattr {
 
     if (ref($self)) {
         $rv = $self->{$handlekey}->genders_testattr($attr, $node);
-        if ($rv == -1) {
+        if ($rv < 0) {
             _errormsg($self, "genders_testattr()");
             return 0;
         }
@@ -213,7 +213,7 @@ sub testattrval {
 
     if (ref($self)) {
         $rv = $self->{$handlekey}->genders_testattrval($attr, $val, $node);
-        if ($rv == -1) {
+        if ($rv < 0) {
             _errormsg($self, "genders_testattrval()");
             return 0;
         }
@@ -231,7 +231,7 @@ sub isnode {
 
     if (ref($self)) {
         $rv = $self->{$handlekey}->genders_isnode($node);
-        if ($rv == -1) {
+        if ($rv < 0) {
             _errormsg($self, "genders_isnode()");
             return 0;
         }
@@ -249,7 +249,7 @@ sub isattr{
 
     if (ref($self)) {
         $rv = $self->{$handlekey}->genders_isattr($attr);
-        if ($rv == -1) {
+        if ($rv < 0) {
             _errormsg($self, "genders_isattr()");
             return 0;
         }
@@ -268,7 +268,7 @@ sub isattrval {
 
     if (ref($self)) {
         $rv = $self->{$handlekey}->genders_isattrval($attr, $val);
-        if ($rv == -1) {
+        if ($rv < 0) {
             _errormsg($self, "genders_isattrval()");
             return 0;
         }
