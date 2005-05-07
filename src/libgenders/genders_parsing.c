@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.11 2005-05-07 15:30:42 achu Exp $
+ *  $Id: genders_parsing.c,v 1.12 2005-05-07 16:10:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -538,10 +538,6 @@ genders_open_and_parse(genders_t handle,
   int retval = -1;
   int parsed_nodes = 0;
   char buf[GENDERS_BUFLEN];
-
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(nodeslist && attrvalslist);
-  assert(!debug || (debug && stream));
 
   if (!filename)
     filename = GENDERS_DEFAULT_FILE;

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.133 2005-05-07 15:30:42 achu Exp $
+ *  $Id: genders.c,v 1.134 2005-05-07 16:10:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,7 +37,6 @@
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
 #include <errno.h>
-#include <assert.h>
 
 #include "genders.h"
 #include "genders_api.h"
@@ -80,8 +79,6 @@ static char * genders_errmsg[] =
 static void 
 _initialize_handle_info(genders_t handle)
 {
-  assert(handle);
-
   handle->magic = GENDERS_MAGIC_NUM;
   handle->is_loaded = 0;
   handle->numnodes = 0;
@@ -339,8 +336,6 @@ _genders_list_create(genders_t handle, char ***list, int len, int buflen)
   char **templist = NULL;
   int i = 0;
 
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
-
   if (len > 0) 
     {
       if (!list) 
@@ -379,8 +374,6 @@ _genders_list_create(genders_t handle, char ***list, int len, int buflen)
 static int 
 _genders_list_clear(genders_t handle, char **list, int len, int buflen) 
 {
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
-
   if (len > 0) 
     {
       int i;
@@ -416,8 +409,6 @@ _genders_list_clear(genders_t handle, char **list, int len, int buflen)
 static int 
 _genders_list_destroy(genders_t handle, char **list, int len) 
 {
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM); 
-
   if (len > 0) 
     {
       int i;

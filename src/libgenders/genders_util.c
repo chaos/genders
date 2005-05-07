@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.1 2005-05-07 15:30:42 achu Exp $
+ *  $Id: genders_util.c,v 1.2 2005-05-07 16:10:32 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -33,7 +33,6 @@
 #if STDC_HEADERS
 #include <string.h>
 #endif /* STDC_HEADERS */
-#include <assert.h>
 
 #include "genders.h"
 #include "genders_api.h"
@@ -45,14 +44,12 @@
 int 
 _is_all(void *x, void *key) 
 {
-  assert(x && key);
   return 1;
 }
 
 int 
 _is_str(void *x, void *key) 
 {
-  assert(x && key);
   if (!strcmp((char *)x, (char *)key))
     return 1;
   return 0;
@@ -62,8 +59,6 @@ int
 _is_node(void *x, void *key) 
 {
   genders_node_t n;
-
-  assert(x && key);
 
   n = (genders_node_t)x;
   if (!strcmp(n->name, (char *)key))
@@ -76,8 +71,6 @@ _is_attr_in_attrvals(void *x, void *key)
 {
   genders_attrval_t av;
 
-  assert(x && key);
-
   av = (genders_attrval_t)x;
   if (!strcmp(av->attr, (char *)key))
     return 1;
@@ -88,8 +81,6 @@ void
 _free_genders_node(void *x) 
 {
   genders_node_t n;
-
-  assert(x);
 
   n = (genders_node_t)x;
   __list_destroy(n->attrlist);
@@ -102,8 +93,6 @@ _free_genders_attrval(void *x)
 {
   genders_attrval_t av;
 
-  assert(x);
-
   av = (genders_attrval_t)x;
   free(av->attr);
   free(av->val);
@@ -114,8 +103,6 @@ void
 _free_attrvallist(void *x)
 {
   List attrvals;
-
-  assert(x);
 
   attrvals = (List)x;
   __list_destroy(attrvals);
@@ -162,10 +149,6 @@ _loaded_handle_error_check(genders_t handle)
 int
 _put_in_array(genders_t handle, char *str, char **list, int index, int len)
 {
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(str);
-  assert(list || (!list && !len));
-
   if (index >= len) 
     {
       handle->errnum = GENDERS_ERR_OVERFLOW;
@@ -194,10 +177,6 @@ _get_valptr(genders_t handle,
             int *subst_occurred)
 {
   char *valptr, *nodenameptr, *valbufptr;
-
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(n && av && val);
-  assert(!(!av->val && av->val_contains_subst));
 
   if (!(av->val_contains_subst)) 
     {
@@ -262,9 +241,6 @@ _find_attrval(genders_t handle,
   List attrvals;
   int retval = -1;
   
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(n && attr && avptr);
-
   *avptr = NULL;
   __list_iterator_create(itr, n->attrlist);
   while ((attrvals = list_next(itr))) 

@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.22 2005-05-07 15:30:42 achu Exp $
+ *  $Id: genders_query.y,v 1.23 2005-05-07 16:10:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -179,6 +179,8 @@ yywrap()
   return 1;
 }
 
+extern int yyparse(void);
+
 /* 
  * _parse_query
  *
@@ -192,16 +194,6 @@ _parse_query(genders_t handle, char *query)
 {
   extern FILE *yyin, *yyout; 
   int fds[2];
-
-  /* use handle check */
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return -1;
- 
-  if (!query)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      return -1;
-    }
 
   genders_query_err = GENDERS_ERR_SUCCESS;
   genders_treeroot = NULL;
@@ -272,15 +264,6 @@ _calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
   int i, len, num;
   char *attr, *val;
     
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
-
-  if (!t)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
   attr = t->str; 
   if ((val = strchr(attr, '=')))
     *val++ = '\0';
@@ -324,15 +307,6 @@ _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
   char buf[GENDERS_BUFLEN];
   int rv;
   
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
-
-  if (!l || !r)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
   __hostlist_create(h, NULL);
   memset(buf, '\0', GENDERS_BUFLEN);
   if ((rv = hostlist_ranged_string(l, GENDERS_BUFLEN, buf)) < 0) 
@@ -375,15 +349,6 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_iterator_t itr = NULL;
   char *node = NULL;
   
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
-
-  if (!l || !r)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
   while ((node = hostlist_next(itr))) 
@@ -424,15 +389,6 @@ _calc_set_difference(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_iterator_t itr = NULL;
   char *node = NULL;
     
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
-
-  if (!l || !r)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
       
@@ -476,15 +432,6 @@ _calc_complement(genders_t handle, hostlist_t h)
   char *node = NULL;
   int i, len, num;
     
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
-
-  if (!h)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
   if ((len = genders_nodelist_create(handle, &nodes)) < 0)
     return NULL;
 
@@ -527,9 +474,6 @@ static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
   hostlist_t h = NULL;
-
-  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
-    return NULL;
 
   if (!t)
     {
