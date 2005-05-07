@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.37 2004-11-08 19:09:20 achu Exp $
+ *  $Id: Libgenders.xs,v 1.38 2005-05-07 18:19:23 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -24,13 +24,19 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
 
+#if STDC_HEADERS
 #include <string.h>
+#endif /* STDC_HEADERS */
 
-#include "genders.h"
+#include <genders.h>
 
 MODULE = Libgenders             PACKAGE = Libgenders            
 
@@ -250,15 +256,15 @@ genders_getnodename(handle)
         int len;
         char *buf = NULL;
     CODE:
-        if ((len = genders_getmaxnodelen(handle)) == -1) 
+        if ((len = genders_getmaxnodelen(handle)) < 0) 
             goto handle_error;
 
-        if ((buf = (char *)malloc(len+1)) == NULL) 
+        if (!(buf = (char *)malloc(len+1))) 
             goto handle_error;
 
         memset(buf, '\0', len+1);
 
-        if (genders_getnodename(handle, buf, len+1) == -1) 
+        if (genders_getnodename(handle, buf, len+1) < 0) 
             goto handle_error;
 
         RETVAL = newSVpv(buf, 0);
@@ -280,31 +286,31 @@ genders_getnodes(handle, attr=NULL, val=NULL)
     char *attr
     char *val
     PREINIT:
-        int num, ret, temp, i;
+        int len, num, errnum, i;
         char **nlist = NULL; 
     CODE:
-        if ((num = genders_nodelist_create(handle, &nlist)) == -1) 
+        if ((len = genders_nodelist_create(handle, &nlist)) < 0) 
             goto handle_error;
 
-        if ((ret = genders_getnodes(handle, nlist, num, attr, val)) == -1)
+        if ((num = genders_getnodes(handle, nlist, len, attr, val)) < 0)
             goto handle_error;
 
         RETVAL = newAV();
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(nlist[i], 0));
         
-        if (genders_nodelist_destroy(handle, nlist) == -1)
+        if (genders_nodelist_destroy(handle, nlist) < 0)
             goto handle_error;
 
         goto the_end;
 
         handle_error:
 
-            temp = genders_errnum(handle);
+            errnum = genders_errnum(handle);
 
             (void)genders_nodelist_destroy(handle, nlist);
 
-            genders_set_errnum(handle, temp);
+            genders_set_errnum(handle, errnum);
 
             XSRETURN_UNDEF;
 
@@ -317,49 +323,49 @@ genders_getattr(handle, node=NULL)
     genders_t handle
     char *node
     PREINIT:
-        int num, ret, temp, i;
+        int len, num, errnum, i;
         char **alist = NULL; 
         char **vlist = NULL; 
         AV *attrs;
         AV *vals;
     CODE:
-        if ((num = genders_attrlist_create(handle, &alist)) == -1) 
+        if ((len = genders_attrlist_create(handle, &alist)) < 0) 
             goto handle_error;
 
-        if ((num = genders_vallist_create(handle, &vlist)) == -1) 
+        if ((len = genders_vallist_create(handle, &vlist)) < 0) 
             goto handle_error;
 
-        if ((ret = genders_getattr(handle, alist, vlist, num, node)) == -1)
+        if ((num = genders_getattr(handle, alist, vlist, len, node)) < 0)
             goto handle_error;
 
         attrs = newAV();
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < num; i++)
             av_push(attrs, newSVpv(alist[i], 0));
 
         vals = newAV();
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < num; i++)
             av_push(vals, newSVpv(vlist[i], 0));
         
         RETVAL = newAV();
         av_push(RETVAL, newRV_noinc((SV *)attrs));
         av_push(RETVAL, newRV_noinc((SV *)vals));
     
-        if (genders_attrlist_destroy(handle, alist) == -1)
+        if (genders_attrlist_destroy(handle, alist) < 0)
             goto handle_error;
 
-        if (genders_vallist_destroy(handle, vlist) == -1)
+        if (genders_vallist_destroy(handle, vlist) < 0)
             goto handle_error;
 
         goto the_end;
 
         handle_error:
 
-            temp = genders_errnum(handle);
+            errnum = genders_errnum(handle);
 
             (void)genders_attrlist_destroy(handle, alist);
             (void)genders_vallist_destroy(handle, vlist);
 
-            genders_set_errnum(handle, temp);
+            genders_set_errnum(handle, errnum);
            
             XSRETURN_UNDEF;
 
@@ -371,31 +377,31 @@ AV *
 genders_getattr_all(handle)
     genders_t handle
     PREINIT:
-        int num, ret, temp, i;
+        int len, num, errnum, i;
         char **alist = NULL; 
     CODE:
-        if ((num = genders_attrlist_create(handle, &alist)) == -1) 
+        if ((len = genders_attrlist_create(handle, &alist)) < 0) 
             goto handle_error;
 
-        if ((ret = genders_getattr_all(handle, alist, num)) == -1)
+        if ((num = genders_getattr_all(handle, alist, len)) < 0)
             goto handle_error;
 
         RETVAL = newAV();
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(alist[i], 0));
         
-        if (genders_attrlist_destroy(handle, alist) == -1)
+        if (genders_attrlist_destroy(handle, alist) < 0)
             goto handle_error;
 
         goto the_end;
                     
         handle_error:
 
-            temp = genders_errnum(handle);
+            errnum = genders_errnum(handle);
         
             (void)genders_attrlist_destroy(handle, alist);
 
-            genders_set_errnum(handle, temp);
+            genders_set_errnum(handle, errnum);
 
             XSRETURN_UNDEF;
 
@@ -409,22 +415,22 @@ genders_getattrval(handle, attr, node=NULL)
     char *attr
     char *node
     PREINIT:
-        int ret, len;
+        int rv, len;
         char *buf = NULL;
     CODE:
 
-        if ((len = genders_getmaxvallen(handle)) == -1) 
+        if ((len = genders_getmaxvallen(handle)) < 0) 
             goto handle_error;
 
-        if ((buf = (char *)malloc(len+1)) == NULL) 
+        if (!(buf = (char *)malloc(len+1))) 
             goto handle_error;
 
         memset(buf, '\0', len+1);
 
-        if ((ret = genders_testattr(handle, node, attr, buf, len+1)) == -1)
+        if ((rv = genders_testattr(handle, node, attr, buf, len+1)) < 0)
             goto handle_error;
 
-        if (ret == 1 && strlen(buf) > 0) 
+        if (rv == 1 && strlen(buf) > 0) 
             RETVAL = newSVpv(buf, 0);
         else 
             RETVAL = newSVpv("", 0);
@@ -504,31 +510,31 @@ genders_query(handle, query)
     genders_t handle
     char *query
     PREINIT:
-        int num, ret, temp, i;
+        int len, num, errnum, i;
         char **nlist = NULL; 
     CODE:
-        if ((num = genders_nodelist_create(handle, &nlist)) == -1) 
+        if ((len = genders_nodelist_create(handle, &nlist)) < 0) 
             goto handle_error;
 
-        if ((ret = genders_query(handle, nlist, num, query)) == -1)
+        if ((num = genders_query(handle, nlist, len, query)) < 0)
             goto handle_error;
 
         RETVAL = newAV();
-        for (i = 0; i < ret; i++)
+        for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(nlist[i], 0));
         
-        if (genders_nodelist_destroy(handle, nlist) == -1)
+        if (genders_nodelist_destroy(handle, nlist) < 0)
             goto handle_error;
 
         goto the_end;
 
         handle_error:
 
-            temp = genders_errnum(handle);
+            errnum = genders_errnum(handle);
 
             (void)genders_nodelist_destroy(handle, nlist);
 
-            genders_set_errnum(handle, temp);
+            genders_set_errnum(handle, errnum);
 
             XSRETURN_UNDEF;
 
