@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm.in,v 1.1 2005-01-10 16:45:35 achu Exp $
+#  $Id: Genders.pm.in,v 1.2 2005-05-07 18:19:53 achu Exp $
 #############################################################################
 #  Copyright (C) 2001-2003 The Regents of the University of California.
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -189,15 +189,15 @@ sub testattr {
     my $self = shift;
     my $attr = shift;
     my $node = shift;
-    my $retval;
+    my $rv;
 
     if (ref($self)) {
-        $retval = $self->{$handlekey}->genders_testattr($attr, $node);
-        if ($retval == -1) {
+        $rv = $self->{$handlekey}->genders_testattr($attr, $node);
+        if ($rv == -1) {
             _errormsg($self, "genders_testattr()");
             return 0;
         }
-        return $retval; 
+        return $rv; 
     }
     else {
         return 0;
@@ -209,15 +209,15 @@ sub testattrval {
     my $attr = shift;
     my $val = shift;
     my $node = shift;
-    my $retval;
+    my $rv;
 
     if (ref($self)) {
-        $retval = $self->{$handlekey}->genders_testattrval($attr, $val, $node);
-        if ($retval == -1) {
+        $rv = $self->{$handlekey}->genders_testattrval($attr, $val, $node);
+        if ($rv == -1) {
             _errormsg($self, "genders_testattrval()");
             return 0;
         }
-        return $retval; 
+        return $rv; 
     }
     else {
         return 0;
@@ -227,15 +227,15 @@ sub testattrval {
 sub isnode {
     my $self = shift;
     my $node = shift;
-    my $retval;
+    my $rv;
 
     if (ref($self)) {
-        $retval = $self->{$handlekey}->genders_isnode($node);
-        if ($retval == -1) {
+        $rv = $self->{$handlekey}->genders_isnode($node);
+        if ($rv == -1) {
             _errormsg($self, "genders_isnode()");
             return 0;
         }
-        return $retval; 
+        return $rv; 
     }
     else {
         return 0;
@@ -245,15 +245,15 @@ sub isnode {
 sub isattr{
     my $self = shift;
     my $attr = shift;
-    my $retval;
+    my $rv;
 
     if (ref($self)) {
-        $retval = $self->{$handlekey}->genders_isattr($attr);
-        if ($retval == -1) {
+        $rv = $self->{$handlekey}->genders_isattr($attr);
+        if ($rv == -1) {
             _errormsg($self, "genders_isattr()");
             return 0;
         }
-        return $retval;
+        return $rv;
     }
     else {
         return 0;
@@ -264,15 +264,15 @@ sub isattrval {
     my $self = shift;
     my $attr = shift;
     my $val = shift;
-    my $retval;
+    my $rv;
 
     if (ref($self)) {
-        $retval = $self->{$handlekey}->genders_isattrval($attr, $val);
-        if ($retval == -1) {
+        $rv = $self->{$handlekey}->genders_isattrval($attr, $val);
+        if ($rv == -1) {
             _errormsg($self, "genders_isattrval()");
             return 0;
         }
-        return $retval;
+        return $rv;
     }
     else {
         return 0;
