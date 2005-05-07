@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.8 2005-05-07 06:47:15 achu Exp $
+ *  $Id: genders_util.c,v 1.1 2005-05-07 15:30:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,10 +37,10 @@
 
 #include "genders.h"
 #include "genders_api.h"
-#include "genders_common.h"
-#include "list.h"
+#include "genders_util.h"
 #include "hash.h"
 #include "hostlist.h"
+#include "list.h"
 
 int 
 _is_all(void *x, void *key) 

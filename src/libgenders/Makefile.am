@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.25 2005-05-07 06:47:15 achu Exp $
+## $Id: Makefile.am,v 1.26 2005-05-07 15:30:42 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -12,9 +12,9 @@ endif
 BUILT_SOURCES         = genders_query_parse.c genders_query.c
 include_HEADERS       = genders.h
 noinst_HEADERS        = genders_api.h \
-			genders_common.h \
 			genders_constants.h \
 			genders_parsing.h \
+			genders_util.h \
 			fd.h \
 			hash.h \
                         hostlist.h \
@@ -22,9 +22,16 @@ noinst_HEADERS        = genders_api.h \
 			thread.h
 lib_LTLIBRARIES       = libgenders.la
 libgenders_la_CFLAGS  = -D_REENTRANT
-libgenders_la_SOURCES = genders.c genders_common.c genders_parsing.c \
-                        genders_query_parse.c genders_query.c \
-	                fd.c list.c hash.c thread.c hostlist.c
+libgenders_la_SOURCES = genders.c \
+			genders_parsing.c \
+                        genders_query_parse.c \
+			genders_query.c \
+			genders_util.c \
+	                fd.c \
+			hash.c \
+			hostlist.c \
+			list.c \
+			thread.c 
 libgenders_la_LDFLAGS = -version-info @LIBGENDERS_VERSION_INFO@ $(OTHER_FLAGS)
 
 genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l

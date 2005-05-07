@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.21 2005-05-07 06:47:15 achu Exp $
+ *  $Id: genders_query.y,v 1.22 2005-05-07 15:30:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -41,8 +41,8 @@
 
 #include "genders.h"
 #include "genders_api.h"
-#include "genders_common.h"
 #include "genders_constants.h"
+#include "genders_util.h"
 
 /* 
  * struct genders_treenode
@@ -411,14 +411,14 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
 }
 
 /* 
- * _calc_difference
+ * _calc_set_difference
  *
- * Determine the difference of two hostlists.
+ * Determine the set difference between two hostlists.
  *
  * Returns resulting hostlist on success, NULL on error
  */
 static hostlist_t
-_calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
+_calc_set_difference(genders_t handle, hostlist_t l, hostlist_t r)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
@@ -564,7 +564,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
     else if (strcmp(t->str, "&&") == 0) 
       h = _calc_intersection(handle, l, r);
     else if (strcmp(t->str, "--") == 0) 
-      h = _calc_difference(handle, l, r);
+      h = _calc_set_difference(handle, l, r);
     else {
       handle->errnum = GENDERS_ERR_INTERNAL;
       goto cleanup_calc;

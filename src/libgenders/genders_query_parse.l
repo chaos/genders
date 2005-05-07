@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query_parse.l,v 1.2 2005-01-03 17:31:20 achu Exp $
+ *  $Id: genders_query_parse.l,v 1.3 2005-05-07 15:30:42 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -32,11 +32,11 @@
 
 /* Regex notes:
 
-  - Special chars "-", "|", "&", by themselves must be followed by a
-    alphanumeric character, otherwise we can't tell what is an
-    attribute and what is a set operation.  For example, the query parser
-    may get confused with an attribute "attr1&" in a query such as
-    "attr1&&&attr2".
+  Special chars "-", "|", "&", by themselves must be followed by a
+  alphanumeric character, otherwise we can't tell what is an
+  attribute and what is a set operation.  For example, the query parser
+  may get confused with an attribute "attr1&" in a query such as
+  "attr1&&&attr2".
  */
 
 %}
