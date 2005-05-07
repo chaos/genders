@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.2 2005-05-07 16:10:32 achu Exp $
+ *  $Id: genders_util.c,v 1.3 2005-05-07 16:49:40 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -42,13 +42,13 @@
 #include "list.h"
 
 int 
-_is_all(void *x, void *key) 
+_genders_list_is_all(void *x, void *key) 
 {
   return 1;
 }
 
 int 
-_is_str(void *x, void *key) 
+_genders_list_is_str(void *x, void *key) 
 {
   if (!strcmp((char *)x, (char *)key))
     return 1;
@@ -56,7 +56,7 @@ _is_str(void *x, void *key)
 }
 
 int 
-_is_node(void *x, void *key) 
+_genders_list_is_node(void *x, void *key) 
 {
   genders_node_t n;
 
@@ -67,7 +67,7 @@ _is_node(void *x, void *key)
 }
 
 int
-_is_attr_in_attrvals(void *x, void *key)
+_genders_list_is_attr_in_attrvals(void *x, void *key)
 {
   genders_attrval_t av;
 
@@ -78,7 +78,7 @@ _is_attr_in_attrvals(void *x, void *key)
 }
 
 void 
-_free_genders_node(void *x) 
+_genders_list_free_genders_node(void *x) 
 {
   genders_node_t n;
 
@@ -89,7 +89,7 @@ _free_genders_node(void *x)
 }
 
 void 
-_free_genders_attrval(void *x) 
+_genders_list_free_genders_attrval(void *x) 
 {
   genders_attrval_t av;
 
@@ -100,7 +100,7 @@ _free_genders_attrval(void *x)
 }
 
 void
-_free_attrvallist(void *x)
+_genders_list_free_attrvallist(void *x)
 {
   List attrvals;
 
@@ -109,7 +109,7 @@ _free_attrvallist(void *x)
 }
 
 int 
-_handle_error_check(genders_t handle) 
+_genders_handle_error_check(genders_t handle) 
 {
   if (!handle || handle->magic != GENDERS_MAGIC_NUM)
     return -1;
@@ -117,9 +117,9 @@ _handle_error_check(genders_t handle)
 }
 
 int 
-_unloaded_handle_error_check(genders_t handle) 
+_genders_unloaded_handle_error_check(genders_t handle) 
 {
-  if (_handle_error_check(handle) < 0)
+  if (_genders_handle_error_check(handle) < 0)
     return -1;
 
   if (handle->is_loaded) 
@@ -132,9 +132,9 @@ _unloaded_handle_error_check(genders_t handle)
 }
 
 int 
-_loaded_handle_error_check(genders_t handle) 
+_genders_loaded_handle_error_check(genders_t handle) 
 {
-  if (_handle_error_check(handle) < 0)
+  if (_genders_handle_error_check(handle) < 0)
     return -1;
 
   if (!handle->is_loaded) 
@@ -147,7 +147,11 @@ _loaded_handle_error_check(genders_t handle)
 }
 
 int
-_put_in_array(genders_t handle, char *str, char **list, int index, int len)
+_genders_put_in_array(genders_t handle, 
+		      char *str, 
+		      char **list, 
+		      int index, 
+		      int len)
 {
   if (index >= len) 
     {
@@ -165,16 +169,12 @@ _put_in_array(genders_t handle, char *str, char **list, int index, int len)
   return 0;
 }
 
-/* _get_valptr
- * - Return av->val or handle->valbuf, depending on if substitution is
- * required.
- */
 int
-_get_valptr(genders_t handle, 
-            genders_node_t n, 
-            genders_attrval_t av, 
-            char **val,
-            int *subst_occurred)
+_genders_get_valptr(genders_t handle, 
+		    genders_node_t n, 
+		    genders_attrval_t av, 
+		    char **val,
+		    int *subst_occurred)
 {
   char *valptr, *nodenameptr, *valbufptr;
 
@@ -227,15 +227,12 @@ _get_valptr(genders_t handle,
   return 0;
 }
 
-/* _find_attrval
- * - Find/Return genders_attrval_t with attr or attr=val in a node
- */
 int
-_find_attrval(genders_t handle, 
-              genders_node_t n, 
-              const char *attr, 
-              const char *val,
-              genders_attrval_t *avptr)
+_genders_find_attrval(genders_t handle, 
+		      genders_node_t n, 
+		      const char *attr, 
+		      const char *val,
+		      genders_attrval_t *avptr)
 {
   ListIterator itr = NULL;
   List attrvals;
@@ -247,7 +244,9 @@ _find_attrval(genders_t handle,
     {
       genders_attrval_t av;
       
-      if ((av = list_find_first(attrvals, _is_attr_in_attrvals, (char *)attr))) 
+      if ((av = list_find_first(attrvals, 
+				_genders_list_is_attr_in_attrvals, 
+				(char *)attr))) 
 	{
 	  if (!val) 
 	    {

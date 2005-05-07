@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.h,v 1.3 2005-05-07 15:30:42 achu Exp $
+ *  $Id: genders_parsing.h,v 1.4 2005-05-07 16:49:40 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -34,36 +34,36 @@
 #include "list.h"
 
 /* 
- * genders_open_and_parse
+ * _genders_open_and_parse
  *
  * Common file open and file parsing function for genders_load_data
  * and genders_parse.
  *
  * Returns 0 on success, -1 on error
  */
-int genders_open_and_parse(genders_t handle,
-			   const char *filename,
-			   List nodeslist,
-			   List attrvalslist,
-			   int debug,
-			   FILE *stream);
+int _genders_open_and_parse(genders_t handle,
+			    const char *filename,
+			    List nodeslist,
+			    List attrvalslist,
+			    int debug,
+			    FILE *stream);
 
 /* 
- * genders_index_nodes
+ * _genders_index_nodes
  *
  * Create and populate node index
  *
  * Returns 0 on success, -1 on error
  */
-int genders_index_nodes(genders_t handle);
+int _genders_index_nodes(genders_t handle);
 
 /* 
- * genders_index_attrs
+ * _genders_index_attrs
  *
  * Create and populate node index
  *
  * Returns 0 on success, -1 on error
  */
-int genders_index_attrs(genders_t handle);
+int _genders_index_attrs(genders_t handle);
 
 #endif /* _GENDERS_PARSING_H */

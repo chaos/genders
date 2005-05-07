@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.23 2005-05-07 16:10:31 achu Exp $
+ *  $Id: genders_query.y,v 1.24 2005-05-07 16:49:40 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -277,7 +277,7 @@ _calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
   __hostlist_create(h, NULL);
   for (i = 0; i < num; i++) 
     {
-      if (hostlist_push(h, nodes[i]) == 0) 
+      if (!hostlist_push(h, nodes[i])) 
 	{
 	  handle->errnum = GENDERS_ERR_INTERNAL;
 	  goto cleanup;
@@ -503,11 +503,11 @@ _calc_query(genders_t handle, struct genders_treenode *t)
      * -- is Set Difference
      */
     
-    if (strcmp(t->str, "||") == 0)
+    if (!strcmp(t->str, "||"))
       h = _calc_union(handle, l, r);
-    else if (strcmp(t->str, "&&") == 0) 
+    else if (!strcmp(t->str, "&&")) 
       h = _calc_intersection(handle, l, r);
-    else if (strcmp(t->str, "--") == 0) 
+    else if (!strcmp(t->str, "--")) 
       h = _calc_set_difference(handle, l, r);
     else {
       handle->errnum = GENDERS_ERR_INTERNAL;
@@ -539,10 +539,9 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;
   char *node = NULL;
-  int retval = -1;
-  int index = 0;
+  int index = 0, rv = -1;
 
-  if (_loaded_handle_error_check(handle) < 0)
+  if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
   if ((!nodes && len > 0) || len < 0) 
@@ -570,7 +569,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
     }
   node = NULL;
 
-  retval = index;
+  rv = index;
   handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
   __hostlist_iterator_destroy(itr);
@@ -581,7 +580,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   /* reset */
   genders_treeroot = NULL;
   genders_query_err = 0;
-  return retval;
+  return rv;
 }
 %}
 
