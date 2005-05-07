@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.25 2005-05-07 16:59:33 achu Exp $
+ *  $Id: genders_query.y,v 1.26 2005-05-07 17:24:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -562,7 +562,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   __hostlist_iterator_create(itr, h);
   while ((node = hostlist_next(itr))) 
     {
-      if (_put_in_array(handle, node, nodes, index++, len) < 0)
+      if (_genders_put_in_array(handle, node, nodes, index++, len) < 0)
 	goto cleanup;
       free(node);
     }

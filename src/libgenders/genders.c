@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.135 2005-05-07 16:49:40 achu Exp $
+ *  $Id: genders.c,v 1.136 2005-05-07 17:24:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -1049,7 +1049,7 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   List debugnodeslist = NULL;
   List debugattrvalslist = NULL;
 
-  if (_handle_error_check(handle) < 0)
+  if (_genders_handle_error_check(handle) < 0)
     goto cleanup;
 
   if (!stream)
@@ -1077,7 +1077,7 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 void 
 genders_set_errnum(genders_t handle, int errnum) 
 {
-  if (_handle_error_check(handle) < 0)
+  if (_genders_handle_error_check(handle) < 0)
     return;
 
   handle->errnum = errnum;

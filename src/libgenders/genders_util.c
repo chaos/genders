@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.3 2005-05-07 16:49:40 achu Exp $
+ *  $Id: genders_util.c,v 1.4 2005-05-07 17:24:31 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -257,7 +257,7 @@ _genders_find_attrval(genders_t handle,
 	    {
 	      char *valptr;
 	      
-	      if (_get_valptr(handle, n, av, &valptr, NULL) < 0)
+	      if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
 		goto cleanup;
 
 	      if (!strcmp(valptr, val)) 
