@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.20 2005-05-06 23:55:34 achu Exp $
+ *  $Id: genders_query.y,v 1.21 2005-05-07 06:47:15 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -25,16 +25,30 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
 #include <stdio.h>
 #include <stdlib.h>
+#if STDC_HEADERS
 #include <string.h>
+#endif /* STDC_HEADERS */
+#if HAVE_UNISTD_H
 #include <unistd.h>
+#endif /* HAVE_UNISTD_H */
 #include <paths.h>
-#include <assert.h>
 
 #include "genders.h"
+#include "genders_api.h"
 #include "genders_common.h"
+#include "genders_constants.h"
 
+/* 
+ * struct genders_treenode
+ *
+ * stores query parse information
+ */
 struct genders_treenode {
   char *str;
   struct genders_treenode *left;
@@ -42,22 +56,42 @@ struct genders_treenode {
   int complement;
 };
 
-int genders_query_err = 0; 
-struct genders_treenode *genders_treeroot = NULL;
+/* 
+ * genders_query_err
+ *
+ * Used to store errnum until handle errnum can be set
+ */ 
+static int genders_query_err = 0; 
 
-#define HOSTLIST_BUFLEN 32768
+/* 
+ * genders_treeroot
+ *
+ * To store the parse tree
+ */ 
+static struct genders_treenode *genders_treeroot = NULL;
 
 extern int yylex();
 
+/* 
+ * _genders_makenode
+ *
+ * Make a genders treenode
+ *
+ * Returns pointer to new node on success, NULL on error
+ */ 
 static struct genders_treenode *
-genders_makenode(char *str, void *left, void *right)
+_genders_makenode(char *str, void *left, void *right)
 {
   struct genders_treenode *t; 
 
-  assert(str && ((!left && !right) || (left && right)));
-
-  if (genders_query_err)
+  if (genders_query_err != GENDERS_ERR_SUCCESS)
     return NULL;
+
+  if (!str || !((!left && !right) || (left && right)))
+    {
+      genders_query_err = GENDERS_ERR_INTERNAL;
+      return NULL;
+    }
 
   if (!(t = (struct genders_treenode *)malloc(sizeof(struct genders_treenode)))) 
     {
@@ -78,31 +112,55 @@ genders_makenode(char *str, void *left, void *right)
   return t;
 } 
 
+/* 
+ * _genders_set_complement_flag
+ *
+ * set the complement flag on a node
+ */ 
 static void
-genders_set_complement_flag(void *node)
+_genders_set_complement_flag(void *node)
 {
   struct genders_treenode *t;
 
-  assert(node);
+  if (genders_query_err != GENDERS_ERR_SUCCESS)
+    return;
+
+  if (!node)
+    {
+      genders_query_err = GENDERS_ERR_INTERNAL;
+      return;
+    }
 
   t = (struct genders_treenode *)node; 
-  t->complement = !(t->complement); /* doing this instead of ++ allows double negation */
+
+  /* do ! instead of ++ so double negation is allowed */
+  t->complement = !(t->complement); 
 }
 
+/* 
+ * _genders_free_treenode
+ *
+ * Free a genders_treenode
+ */
 static void
-genders_freetree(struct genders_treenode *t)
+_genders_free_treenode(struct genders_treenode *t)
 {
   if (!t)
     return;
 
-  genders_freetree(t->left);
-  genders_freetree(t->right);
+  _genders_free_treenode(t->left);
+  _genders_free_treenode(t->right);
   free(t->str);
   free(t);
 
   return;
 }
 
+/* 
+ * yyerror
+ *
+ * Override yacc default, set genders query error to syntax error
+ */
 void 
 yyerror(const char *str) 
 {
@@ -110,20 +168,40 @@ yyerror(const char *str)
     genders_query_err = GENDERS_ERR_SYNTAX;
 }
   
+/* 
+ * yywrap
+ *
+ * Override yacc default, Returns 1 to inform yacc we're done parsing.
+ */
 int 
 yywrap()
 {
   return 1;
 }
 
+/* 
+ * _parse_query
+ *
+ * Parse the genders query.  Sets up pipes appropriately to work with
+ * yacc.
+ * 
+ * Returns 0 on success, -1 on error
+ */
 static int 
 _parse_query(genders_t handle, char *query)
 {
   extern FILE *yyin, *yyout; 
   int fds[2];
 
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(query);
+  /* use handle check */
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return -1;
+ 
+  if (!query)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      return -1;
+    }
 
   genders_query_err = GENDERS_ERR_SUCCESS;
   genders_treeroot = NULL;
@@ -178,16 +256,30 @@ _parse_query(genders_t handle, char *query)
   return 0;
 }
 
+/* 
+ * _calc_attrval_nodes
+ *
+ * Determines the nodes containing this treenode's attr and
+ * value.
+ *
+ * Returns hostlist on success, NULL on error
+ */
 static hostlist_t
-_calc_attrval(genders_t handle, struct genders_treenode *t)
+_calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
 {
   hostlist_t h = NULL;
   char **nodes = NULL;
   int i, len, num;
   char *attr, *val;
     
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(t);
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!t)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   attr = t->str; 
   if ((val = strchr(attr, '=')))
@@ -218,19 +310,32 @@ _calc_attrval(genders_t handle, struct genders_treenode *t)
   return NULL;
 }
 
+/* 
+ * _calc_union
+ *
+ * Determine the union of two hostlists.
+ *
+ * Returns resulting hostlist on success, NULL on error
+ */
 static hostlist_t
 _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
 {
   hostlist_t h = NULL;
-  char buf[HOSTLIST_BUFLEN];
+  char buf[GENDERS_BUFLEN];
   int rv;
   
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(l && r);
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!l || !r)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   __hostlist_create(h, NULL);
-  memset(buf, '\0', HOSTLIST_BUFLEN);
-  if ((rv = hostlist_ranged_string(l, HOSTLIST_BUFLEN, buf)) < 0) 
+  memset(buf, '\0', GENDERS_BUFLEN);
+  if ((rv = hostlist_ranged_string(l, GENDERS_BUFLEN, buf)) < 0) 
     {
       handle->errnum = GENDERS_ERR_INTERNAL;
       goto cleanup;
@@ -239,8 +344,8 @@ _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
   if (rv > 0)
     hostlist_push(h, buf);
   
-  memset(buf, '\0', HOSTLIST_BUFLEN);
-  if ((rv = hostlist_ranged_string(r, HOSTLIST_BUFLEN, buf)) < 0) 
+  memset(buf, '\0', GENDERS_BUFLEN);
+  if ((rv = hostlist_ranged_string(r, GENDERS_BUFLEN, buf)) < 0) 
     {
       handle->errnum = GENDERS_ERR_INTERNAL;
       goto cleanup;
@@ -256,6 +361,13 @@ _calc_union(genders_t handle, hostlist_t l, hostlist_t r)
   return NULL;
 }
             
+/* 
+ * _calc_intersection
+ *
+ * Determine the intersection of two hostlists.
+ *
+ * Returns resulting hostlist on success, NULL on error
+ */
 static hostlist_t
 _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
 {
@@ -263,8 +375,14 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_iterator_t itr = NULL;
   char *node = NULL;
   
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(l && r);
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!l || !r)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
@@ -292,6 +410,13 @@ _calc_intersection(genders_t handle, hostlist_t l, hostlist_t r)
   return NULL;
 }
 
+/* 
+ * _calc_difference
+ *
+ * Determine the difference of two hostlists.
+ *
+ * Returns resulting hostlist on success, NULL on error
+ */
 static hostlist_t
 _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
 {
@@ -299,8 +424,14 @@ _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
   hostlist_iterator_t itr = NULL;
   char *node = NULL;
     
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(l && r);
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!l || !r)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   __hostlist_create(h, NULL);
   __hostlist_iterator_create(itr, l);
@@ -330,6 +461,13 @@ _calc_difference(genders_t handle, hostlist_t l, hostlist_t r)
 
 }
 
+/* 
+ * _calc_complement
+ *
+ * Determine the complement of a hostlist.
+ *
+ * Returns resulting hostlist on success, NULL on error
+ */
 static hostlist_t
 _calc_complement(genders_t handle, hostlist_t h)
 {
@@ -338,8 +476,14 @@ _calc_complement(genders_t handle, hostlist_t h)
   char *node = NULL;
   int i, len, num;
     
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(h);
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!h)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   if ((len = genders_nodelist_create(handle, &nodes)) < 0)
     return NULL;
@@ -372,17 +516,35 @@ _calc_complement(genders_t handle, hostlist_t h)
   return NULL;
 }
 
+/* 
+ * _calc_query
+ *
+ * Determine the nodes for the query rooted at 't'.
+ *
+ * Returns resulting hostlist on success, NULL on error
+ */
 static hostlist_t
 _calc_query(genders_t handle, struct genders_treenode *t)
 {
   hostlist_t h = NULL;
 
-  assert(handle && handle->magic == GENDERS_MAGIC_NUM);
-  assert(t);
-  assert((!t->left && !t->right) || (t->left && t->right));
+  if (!handle || handle->magic != GENDERS_MAGIC_NUM)
+    return NULL;
+
+  if (!t)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      return NULL;;
+    }
+
+  if (!t || !((!t->left && !t->right) || (t->left && t->right)))
+    {
+      genders_query_err = GENDERS_ERR_INTERNAL;
+      return NULL;
+    }
 
   if (!t->left && !t->right)
-    h = _calc_attrval(handle, t);
+    h = _calc_attrval_nodes(handle, t);
   else {
     hostlist_t l = NULL;
     hostlist_t r = NULL;
@@ -470,7 +632,7 @@ genders_query(genders_t handle, char *nodes[], int len, char *query)
   __hostlist_iterator_destroy(itr);
   __hostlist_destroy(h);
   if (genders_treeroot)
-    genders_freetree(genders_treeroot);
+    _genders_free_treenode(genders_treeroot);
   free(node);
   /* reset */
   genders_treeroot = NULL;
@@ -499,21 +661,21 @@ input: query
 query: term {$$ = $1;}
        | query UNIONTOK term 
            {
-             $$ = genders_makenode("||", $1, $3);
+             $$ = _genders_makenode("||", $1, $3);
            }
        | query INTERSECTIONTOK term 
            {
-             $$ = genders_makenode("&&", $1, $3);
+             $$ = _genders_makenode("&&", $1, $3);
            }
        | query DIFFERENCETOK term 
            {
-             $$ = genders_makenode("--", $1, $3);
+             $$ = _genders_makenode("--", $1, $3);
            }
        ;
 
 term: ATTRTOK 
            {
-             $$ = genders_makenode($1, NULL, NULL);
+             $$ = _genders_makenode($1, NULL, NULL);
            }
        | LPARENTOK query RPARENTOK 
            {
@@ -521,7 +683,7 @@ term: ATTRTOK
            }
        | COMPLEMENTTOK term
            {
-             genders_set_complement_flag($2);
+             _genders_set_complement_flag($2);
              $$ = $2;
            }
 %%

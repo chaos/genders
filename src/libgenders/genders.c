@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.131 2005-05-06 23:55:34 achu Exp $
+ *  $Id: genders.c,v 1.132 2005-05-07 06:47:15 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -40,7 +40,9 @@
 #include <assert.h>
 
 #include "genders.h"
+#include "genders_api.h"
 #include "genders_common.h"
+#include "genders_constants.h"
 #include "genders_parsing.h"
 #include "list.h"
 #include "hash.h"
@@ -88,7 +90,7 @@ _initialize_handle_info(genders_t handle)
   handle->maxnodelen = 0;
   handle->maxattrlen = 0;
   handle->maxvallen = 0;
-  memset(handle->nodename,'\0',MAXHOSTNAMELEN+1);
+  memset(handle->nodename,'\0',GENDERS_MAXHOSTNAMELEN+1);
   handle->valbuf = NULL;
   handle->node_index = NULL;
   handle->attr_index = NULL;
@@ -180,18 +182,18 @@ genders_load_data(genders_t handle, const char *filename)
 
   handle->numnodes = list_count(handle->nodeslist);
 
-  if (gethostname(handle->nodename, MAXHOSTNAMELEN+1) < 0) 
+  if (gethostname(handle->nodename, GENDERS_MAXHOSTNAMELEN+1) < 0) 
     {
       handle->errnum = GENDERS_ERR_INTERNAL;
       goto cleanup;
     }
-  handle->nodename[MAXHOSTNAMELEN]='\0';
+  handle->nodename[GENDERS_MAXHOSTNAMELEN]='\0';
 
   /* shorten hostname if necessary */
   if ((temp = strchr(handle->nodename,'.')))
     *temp = '\0';
   
-  handle->maxnodelen = MAX(strlen(handle->nodename), handle->maxnodelen);
+  handle->maxnodelen = GENDERS_MAX(strlen(handle->nodename), handle->maxnodelen);
 
   /* Create a buffer for value substitutions */
   __xmalloc(handle->valbuf, char *, handle->maxvallen + 1);

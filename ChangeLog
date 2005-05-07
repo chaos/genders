@@ -1,3 +1,11 @@
+2005-05-07  Albert Chu  <chu11@llnl.gov>
+
+	* Remove use of asserts from libgenders.
+
+	* Re-org header files.
+
+	* Code cleanup.
+	
 2005-05-06  Albert Chu  <chu11@llnl.gov>
 
 	* Reorganize manpages.

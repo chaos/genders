@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.9 2005-05-06 23:55:34 achu Exp $
+ *  $Id: genders_parsing.c,v 1.10 2005-05-07 06:47:15 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -43,7 +43,9 @@
 #include <assert.h>
 
 #include "genders.h"
+#include "genders_api.h"
 #include "genders_common.h"
+#include "genders_constants.h"
 #include "fd.h"
 #include "list.h"
 #include "hash.h"
@@ -265,7 +267,7 @@ _nodename_check(genders_t handle,
   assert(nodename);
   assert(!line_num || (line_num && stream));
 
-  if (strlen(nodename) > MAXHOSTNAMELEN) 
+  if (strlen(nodename) > GENDERS_MAXHOSTNAMELEN) 
     {
       if (line_num > 0) 
 	{
@@ -581,7 +583,7 @@ _open_and_parse(genders_t handle,
   int ret, rv, fd = -1;
   int retval = -1;
   int parsed_nodes = 0;
-  char buf[GENDERS_READLINE_BUFLEN];
+  char buf[GENDERS_BUFLEN];
 
   assert(handle && handle->magic == GENDERS_MAGIC_NUM);
   assert(nodeslist && attrvalslist);
@@ -597,7 +599,7 @@ _open_and_parse(genders_t handle,
     }
 
   /* parse line by line */
-  while ((ret = _readline(handle, fd, buf, GENDERS_READLINE_BUFLEN)) > 0) 
+  while ((ret = _readline(handle, fd, buf, GENDERS_BUFLEN)) > 0) 
     {
       if ((rv = _parse_line(handle, nodeslist, attrvalslist, buf, 
 			    (debug) ? line_count : 0, stream, &parsed_nodes)) < 0)

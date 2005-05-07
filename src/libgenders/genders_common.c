@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_common.c,v 1.7 2005-05-06 23:55:34 achu Exp $
+ *  $Id: genders_common.c,v 1.8 2005-05-07 06:47:15 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -36,6 +36,7 @@
 #include <assert.h>
 
 #include "genders.h"
+#include "genders_api.h"
 #include "genders_common.h"
 #include "list.h"
 #include "hash.h"
