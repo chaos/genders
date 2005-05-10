@@ -1,3 +1,7 @@
+2005-05-10  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Update library versions.
+	
 2005-05-07  Albert Chu  <chu11@llnl.gov>
 
 	* Remove use of asserts from libgenders.

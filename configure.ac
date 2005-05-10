@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.33 2005-04-22 22:32:23 achu Exp $
+## $Id: configure.ac,v 1.34 2005-05-10 15:59:58 achu Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -34,15 +34,15 @@ AM_MAINTAINER_MODE
 #
 # If any interfaces have been removed, set age = 0
 #
-LIBGENDERS_CURRENT=0
+LIBGENDERS_CURRENT=1
 LIBGENDERS_REVISION=0
-LIBGENDERS_AGE=0
+LIBGENDERS_AGE=1
 LIBGENDERS_VERSION_INFO=$LIBGENDERS_CURRENT:$LIBGENDERS_REVISION:$LIBGENDERS_AGE
 AC_SUBST([LIBGENDERS_VERSION_INFO])
 
 # Libgenders and Genders versioning
 PERLGENDERS_MAJOR=0
-PERLGENDERS_MINOR=01
+PERLGENDERS_MINOR=02
 PERLGENDERS_VERSION=$PERLGENDERS_MAJOR.$PERLGENDERS_MINOR
 AC_SUBST([PERLGENDERS_VERSION])
 
