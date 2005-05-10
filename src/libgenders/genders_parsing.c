@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.14 2005-05-07 16:59:33 achu Exp $
+ *  $Id: genders_parsing.c,v 1.15 2005-05-10 16:10:55 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -342,10 +342,12 @@ _parse_line(genders_t handle,
 	      
 	      if (!line_num) 
 		{
-		  if ((rv = _insert_attr(handle, attr)) < 0)
+                  int insert_count;
+                  
+		  if ((insert_count = _insert_attr(handle, attr)) < 0)
 		    goto cleanup;
 		  
-		  handle->numattrs += rv;
+		  handle->numattrs += insert_count;
 		  handle->maxattrlen = GENDERS_MAX(strlen(attr), handle->maxattrlen);
 
 		  if (val) 

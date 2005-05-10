@@ -1,6 +1,8 @@
 2005-05-10  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac: Update library versions.
+
+	* src/libgenders/genders_parsing.c (_parse_line): Fix regression bug.
 	
 2005-05-07  Albert Chu  <chu11@llnl.gov>
 
