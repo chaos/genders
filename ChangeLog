@@ -1,34 +1,16 @@
 2005-05-10  Albert Chu  <chu11@llnl.gov>
 
-	* configure.ac: Update library versions.
+	* configure.ac: Updated library versions.
 
 	* src/libgenders/genders_parsing.c (_parse_line): Fix regression bug.
 	
 2005-05-07  Albert Chu  <chu11@llnl.gov>
 
-	* Remove use of asserts from libgenders.
+	* Various code cleanup and header file re-organization.
 
-	* Re-org header files.
-
-	* Code cleanup.
-	
-2005-05-06  Albert Chu  <chu11@llnl.gov>
-
-	* Reorganize manpages.
-
-	* Add config.h inclusion on .c files.
-
-	* Move to GNU style code style for libgenders.
-
-	* Cleanup code in general.
-	
 2005-04-22  Albert Chu  <chu11@llnl.gov>
 	 
-        * Minor code cleanup.
-	
-2005-04-19  Albert Chu  <chu11@llnl.gov>
-
-	* Autoconf, Makefile, Built cleanup.
+        * Various code, autoconf, and makefile cleanup.
 	
 2005-01-25  Albert Chu  <chu11@llnl.gov>
 
