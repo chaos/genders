@@ -1,6 +1,8 @@
 2005-05-12  Albert Chu  <chu11@llnl.gov>
 
-	* src/Genders/Makefile.am: x86_64 build fix
+	* src/Genders/Makefile.am: Cleanup and fix build.
+
+	* src/Genders/Makefile.PL: Removed file.
 
 	* tagged genders-1-4-0-pre1
 	
