@@ -5,6 +5,8 @@
 	* src/Genders/Makefile.PL: Removed file.
 
 	* configure.ac: Add search for pod2man.
+
+	* tagged genders-1-4-0-pre1
 	
 2005-05-10  Albert Chu  <chu11@llnl.gov>
 
