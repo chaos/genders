@@ -1,10 +1,10 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.25 2005-05-13 23:20:31 achu Exp $
+## $Id: Makefile.am,v 1.26 2005-05-13 23:25:13 achu Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-INSTALLSITEARCH=`perl -e 'use Config; $$T=$$Config{installsitearch}; $$T=~/\/usr\/(lib|lib64)\/(.*)/; print $$1;'`
+INSTALLSITEARCH=`perl -e 'use Config; $$T=$$Config{installsitearch}; $$T=~/\/usr\/(lib|lib64)\/(.*)/; print $$2;'`
 
 GENDERSPMFILES = Genders.pm
 GENDERSPMFILESdir = $(libdir)/$(INSTALLSITEARCH)
