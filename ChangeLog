@@ -1,5 +1,7 @@
 2005-05-12  Albert Chu  <chu11@llnl.gov>
 
+	* src/Genders/Makefile.am: x86_64 build fix
+
 	* tagged genders-1-4-0-pre1
 	
 2005-05-10  Albert Chu  <chu11@llnl.gov>
