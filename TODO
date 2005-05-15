@@ -2,8 +2,9 @@
   file that works with nodeattr --check option
   o i.e. nodeattr --check all
   o possibly add functionality to genders_parse()  
-- Genders comparison of two files.  Via nodeattr??  
+- Genders comparison of two files.  Via nodeattr?? --diff options?? 
   - Via new function in genders?\
+  - but how would the output look like? sigh ...
 - Allow attribute values to be overwritten instead of causing errors
   by some flag option of some sort.
   o i.e. 
@@ -24,8 +25,3 @@
   - genders-perl
     - must be based on current perl install
   - genders-compat
-- nodeattr --diff option
-   - but how would the output look like? sigh ...
-- cleanup code in general
-- comments
-- no asserts in a library
