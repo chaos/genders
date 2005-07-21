@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.11 2005-01-03 17:31:20 achu Exp $
+\."  $Id: nodeattr.1,v 1.12 2005-07-21 19:59:56 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -111,15 +111,15 @@ nodeattr -c cpus=4
 .LP
 Retrieve a comma separated list of all login and management nodes:
 .IP
-nodeattr -c "login|mgmt"
+nodeattr -c "login||mgmt"
 .LP
 Retrieve a comma separated list of all login nodes with 4 cpus:
 .IP
-nodeattr -c "login&cpus=4"
+nodeattr -c "login&&cpus=4"
 .LP
 Retrieve a comma separated list of all nodes that are not login or management nodes:
 .IP
-nodeattr -c "~(login|mgmt)"
+nodeattr -c "~(login||mgmt)"
 .LP
 To use nodeattr with pdsh to run a command on all fddi nodes:
 .IP

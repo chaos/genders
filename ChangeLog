@@ -1,3 +1,7 @@
+2005-07-21  Albert Chu  <chu11@llnl.gov>
+
+	* man/nodeattr.1: Fixed EXAMPLES.
+	
 2005-07-18  Albert Chu  <chu11@llnl.gov>
 
 	* config/ac_genders_file.m4: Cleaned up.
