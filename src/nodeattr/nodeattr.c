@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.30 2005-05-06 23:09:32 achu Exp $
+ *  $Id: nodeattr.c,v 1.31 2005-09-02 20:19:40 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqvlkf:"
+#define OPTIONS "cnsqvlf:kd:"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -62,6 +62,7 @@ static struct option longopts[] = {
     { "listattr", 0, 0, 'l' },
     { "filename", 1, 0, 'f' },
     { "parse-check", 0, 0, 'k'},
+    { "diff", 1, 0, 'd'},
     { 0,0,0,0 },
 };
 #endif
@@ -72,6 +73,7 @@ static int test_attr(genders_t gp, char *node, char *attr, int vopt);
 static void list_nodes(genders_t gp, char *attr, fmt_t fmt);
 static void list_attrs(genders_t gp, char *node);
 static void usage(void);
+static void diff_genders(char *db1, char *db2);
 
 /* Utility functions */
 static int _gend_error_exit(genders_t gp, char *msg);
@@ -88,8 +90,9 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int lopt = 0, qopt = 0, vopt = 0, kopt = 0;
+    int lopt = 0, qopt = 0, vopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
+    char *dfilename = NULL;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
 
@@ -123,14 +126,24 @@ main(int argc, char *argv[])
         case 'k':   /* --check */ 
             kopt = 1;
             break;
+        case 'd':   /* --diff */
+            dopt = 1;
+            dfilename = optarg;
+            break;
         default:
             usage();
             break;
         }
     }
 
-    if (optind == argc && !lopt && !kopt)
+    if (optind == argc && !lopt && !kopt && !dopt)
         usage();
+
+    /* genders database diff */
+    if (dopt) {
+        diff_genders(filename, dfilename);
+        exit(0);
+    }
 
     /* Initialize genders package. */
     gp = genders_handle_create();
@@ -142,9 +155,8 @@ main(int argc, char *argv[])
     /* parse check */
     if (kopt) {
         errors = genders_parse(gp, filename, NULL);
-        if (errors == -1 && genders_errnum(gp) != GENDERS_ERR_PARSE) {
+        if (errors == -1 && genders_errnum(gp) != GENDERS_ERR_PARSE)
             _gend_error_exit(gp, "genders_parse");
-        }
         if (errors >= 0)
             fprintf(stderr, "nodeattr: %d parse errors discovered\n", errors);
         exit(errors);
@@ -294,13 +306,141 @@ usage(void)
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
-#if HAVE_GETOPT_LONG
-        "or     nodeattr [-f genders] --parse-check\n"    
-#else
         "or     nodeattr [-f genders] -k\n"
-#endif
+        "or     nodeattr [-f genders] -d genders\n"    
             );
     exit(1);
+}
+
+static int
+_diff(genders_t gh1, genders_t gh2, char *db1, char *db2)
+{
+    char **nodes1 = NULL, **attrs1 = NULL, **vals1 = NULL, *val2buf = NULL;
+    int maxnodes1, maxattrs1, maxvals1;
+    int numnodes1, numattrs1;
+    int maxvallen2;
+    int i, j, rv, errcount = 0;
+
+    if ((maxnodes1 = genders_nodelist_create(gh1, &nodes1)) < 0)
+        _gend_error_exit(gh1, "genders_nodelist_create");
+      
+    if ((maxattrs1 = genders_attrlist_create(gh1, &attrs1)) < 0)
+        _gend_error_exit(gh1, "genders_attrlist_create");
+
+    if ((maxvals1 = genders_vallist_create(gh1, &vals1)) < 0)
+        _gend_error_exit(gh1, "genders_vallist_create");
+
+    if ((numnodes1 = genders_getnodes(gh1, nodes1, maxnodes1, NULL, NULL)) < 0)
+        _gend_error_exit(gh1, "genders_getnodes");
+
+    if ((maxvallen2 = genders_getmaxvallen(gh2)) < 0)
+        _gend_error_exit(gh2, "genders_maxvallen");
+
+    if (!(val2buf = malloc(maxvallen2 + 1))) {
+        fprintf(stderr, "nodeattr: out of memory\n");
+        exit(1);
+    }
+
+    for (i = 0; i < numnodes1; i++) {
+
+        if ((rv = genders_isnode(gh2, nodes1[i])) < 0)
+            _gend_error_exit(gh2, "genders_isnode");
+
+        if (!rv) {
+            fprintf(stderr, "%s: Node \"%s\" missing\n", db2, nodes1[i]);
+            errcount++;
+            continue;
+        }
+
+        if (genders_attrlist_clear(gh1, attrs1) < 0)
+            _gend_error_exit(gh1, "genders_attrlist_clear");
+
+        if (genders_vallist_clear(gh1, vals1) < 0)
+            _gend_error_exit(gh1, "genders_vallist_clear");
+
+        if ((numattrs1 = genders_getattr(gh1, 
+                                         attrs1, 
+                                         vals1, 
+                                         maxattrs1, 
+                                         nodes1[i])) < 0)
+            _gend_error_exit(gh1, "genders_getattr");
+
+        for (j = 0; j < numattrs1; j++) {
+            memset(val2buf, '\0', maxvallen2 + 1);
+
+            if ((rv = genders_testattr(gh2, 
+                                       nodes1[i], 
+                                       attrs1[j], 
+                                       val2buf, 
+                                       maxvallen2 + 1)) < 0)
+                _gend_error_exit(gh1, "genders_getattr");
+
+            if (!rv) {
+                fprintf(stderr, "%s: Node \"%s\" does not "
+                        "contain attribute \"%s\"\n", 
+                        db2, nodes1[i], attrs1[j]);
+                errcount++;
+                continue;
+            }
+
+            if (!strlen(vals1[j])) {
+                if (strlen(val2buf)) {
+                    if (!rv) {
+                        fprintf(stderr, "%s: Node \"%s\" attribute \"%s\" "
+                                "has a value\n",
+                                db2, nodes1[i], attrs1[j]);
+                        errcount++;
+                        continue;
+                    }
+                }
+            }
+            else {
+                if (strcmp(vals1[j], val2buf)) {
+                  fprintf(stderr, "%s: Node \"%s\", attribute \"%s\" has a "
+                          "different value\n",
+                          db2, nodes1[i], attrs1[j]);
+                  errcount++;
+                  continue;
+                }
+            }
+        }
+    }
+
+    (void)genders_nodelist_destroy(gh1, nodes1);
+    (void)genders_attrlist_destroy(gh1, attrs1);
+    (void)genders_vallist_destroy(gh1, vals1);
+    free(val2buf);
+    return errcount;
+}
+
+static void 
+diff_genders(char *db1, char *db2)
+{
+    genders_t gh1, gh2;
+
+    gh1 = genders_handle_create();
+    if (!gh1) {
+        fprintf(stderr, "nodeattr: out of memory\n");
+        exit(1);
+    }
+
+    gh2 = genders_handle_create();
+    if (!gh2) {
+        fprintf(stderr, "nodeattr: out of memory\n");
+        exit(1);
+    }
+    
+    if (genders_load_data(gh1, db1) < 0)
+        _gend_error_exit(gh1, db1);
+    
+    if (genders_load_data(gh2, db2) < 0)
+        _gend_error_exit(gh2, db2);
+
+    if (_diff(gh1, gh2, db1, db2) != 0)
+        return;
+
+    if (_diff(gh2, gh1, db2, db1) != 0)
+        return;
 }
 
 /**

@@ -3,6 +3,9 @@
 	* src/testsuite/libgenders/genders_test_corner_case.c
 	(_genders_list_clear_corner_case,
 	_genders_list_destroy_corner_case): Fix compiler warnings.
+
+	* src/nodeattr/nodeattr.c, man/nodeattr.1: Added support for -d
+	option.
 	
 2005-08-18  Albert Chu  <chu11@llnl.gov>
 

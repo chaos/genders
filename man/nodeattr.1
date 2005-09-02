@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.12 2005-07-21 19:59:56 achu Exp $
+\."  $Id: nodeattr.1,v 1.13 2005-09-02 20:19:40 achu Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -42,6 +42,9 @@ nodeattr \- query genders file
 .br
 .B nodeattr
 .I "[-f genders] -k"
+.br
+.B nodeattr
+.I "[-f genders] -d genders
 .br
 .SH DESCRIPTION
 When invoked with the 
@@ -89,6 +92,14 @@ will always check the default genders file, but a different genders
 file can be specified with the
 .I "-f"
 option.  
+.LP
+The
+.I "-d"
+option allows the specified genders database to be compared to the
+filename indicated by the
+.I -f
+option or the default genders database.  Differences between the
+databases will be output to standard error.
 .LP
 Attribute names may optionally appear in the genders file with an
 equal sign followed by a value.
