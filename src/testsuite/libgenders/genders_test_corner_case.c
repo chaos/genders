@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.3 2005-01-03 17:31:21 achu Exp $
+ *  $Id: genders_test_corner_case.c,v 1.4 2005-09-02 16:35:06 achu Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -611,7 +611,8 @@ _genders_list_clear_corner_case(GendersListCreateFunc funccreate,
 				int expected_errnum,
 				int verbose)
 {
-  genders_t gh, handle;
+  genders_t gh = NULL;
+  genders_t handle;
   char **list;
   int return_value, errnum, err;
 
@@ -666,7 +667,8 @@ _genders_list_destroy_corner_case(GendersListCreateFunc funccreate,
 				  int expected_errnum,
 				  int verbose)
 {
-  genders_t gh, handle;
+  genders_t gh = NULL;
+  genders_t handle;
   char **list;
   int return_value, errnum, err;
 
