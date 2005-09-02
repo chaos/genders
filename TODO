@@ -17,8 +17,6 @@
   mcr[1-50/2] would be mcr1,3,5,7,...
   mcr[1-50/3] would be mcr1,4,7,10,...
   - think about format, do through hostlist.[ch]??
-- genders_query allow really odd-ball parsing like
-  - "attr-&-|"  
 - For multilib, repackage everything
   - genders
   - genders-lib
