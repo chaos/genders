@@ -1,3 +1,9 @@
+2005-09-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/testsuite/libgenders/genders_test_corner_case.c
+	(_genders_list_clear_corner_case,
+	_genders_list_destroy_corner_case): Fix compiler warnings.
+	
 2005-08-18  Albert Chu  <chu11@llnl.gov>
 
 	* tagged genders-1-4-1

@@ -1,7 +1,3 @@
-- Allow attributes or attributes=value checking for each line of the genders
-  file that works with nodeattr --check option
-  o i.e. nodeattr --check all
-  o possibly add functionality to genders_parse()  
 - Genders comparison of two files.  Via nodeattr?? --diff options?? 
   - Via new function in genders?\
   - but how would the output look like? sigh ...
