@@ -15,3 +15,5 @@
   - genders-perl
     - must be based on current perl install
   - genders-compat
+- feed in genders file to nodeattr via stdin
+  - '-' option?
