@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.35 2005-05-13 23:04:05 achu Exp $
+## $Id: configure.ac,v 1.36 2006-03-25 00:41:27 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -89,7 +89,6 @@ AC_TYPE_UID_T
 ##
 # Checks for library functions.
 ##
-AC_FUNC_MALLOC
 AC_CHECK_FUNCS( \
   strcmp \
   strlen \
