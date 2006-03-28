@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.36 2006-03-25 00:41:27 chu11 Exp $
+## $Id: configure.ac,v 1.37 2006-03-28 02:27:22 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -7,7 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders])
+AC_INIT([genders], [1.4])
 AC_META
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
@@ -16,7 +16,7 @@ AC_CANONICAL_SYSTEM
 ##
 # Automake support.
 ##
-AM_INIT_AUTOMAKE($PROJECT, $VERSION)
+AM_INIT_AUTOMAKE(tar-ustar)
 AM_CONFIG_HEADER([config/config.h])
 AM_MAINTAINER_MODE
 
@@ -114,6 +114,7 @@ AC_CONFIG_FILES( \
   src/Genders/Makefile \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
+  src/testsuite/libgenders/testdatabases/Makefile \
   compat/Makefile \
   man/Makefile \
   man/compat/Makefile \

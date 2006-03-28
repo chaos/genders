@@ -1,5 +1,11 @@
 2006-03-27  Albert Chu  <chu11@llnl.gov>
 
+	* configure.ac, src/testsuite/libgenders/Makefile.am,
+	src/testsuite/libgenders/testdatabases/Makefile.am: Fixes so 'make
+	dist' includes test databases files.
+	
+2006-03-27  Albert Chu  <chu11@llnl.gov>
+
 	Apply AIX patches from Py Watson (watson30 at llnl dot gov)
 
 	* src/testsuite/libgenders/genders_test.c: Fix getopt.h

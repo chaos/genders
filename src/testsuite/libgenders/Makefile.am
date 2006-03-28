@@ -1,9 +1,10 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.2 2005-01-03 17:31:21 achu Exp $
+## $Id: Makefile.am,v 1.3 2006-03-28 02:27:22 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
+SUBDIRS              = testdatabases
 noinst_PROGRAMS      = genders_test
 noinst_HEADERS       = genders_test_corner_case.h \
 	               genders_test_database.h \

@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: ac_meta.m4,v 1.1 2003-09-11 15:55:47 achu Exp $
+## $Id: ac_meta.m4,v 1.2 2006-03-28 02:27:22 chu11 Exp $
 ##*****************************************************************************
 #  AUTHOR:
 #    Chris Dunlap <cdunlap@llnl.gov>
@@ -13,8 +13,6 @@
 
 AC_DEFUN([AC_META],
 [
-  AC_MSG_CHECKING([metadata])
-
   PROJECT="`perl -ne 'print,exit if s/^\s*NAME:\s*(\S*).*/\1/i' $srcdir/META`"
   AC_DEFINE_UNQUOTED([PROJECT], ["$PROJECT"], [Define the project name.])
   AC_SUBST([PROJECT])
@@ -26,6 +24,4 @@ AC_DEFUN([AC_META],
   RELEASE="`perl -ne 'print,exit if s/^\s*RELEASE:\s*(\S*).*/\1/i' $srcdir/META`"
   AC_DEFINE_UNQUOTED([RELEASE], ["$RELEASE"], [Define the project's release.])
   AC_SUBST([RELEASE])
-
-  AC_MSG_RESULT([yes])
 ])
