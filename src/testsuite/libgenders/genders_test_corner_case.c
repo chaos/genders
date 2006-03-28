@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.4 2005-09-02 16:35:06 achu Exp $
+ *  $Id: genders_test_corner_case.c,v 1.5 2006-03-28 02:21:09 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -34,6 +34,7 @@
 #include <sys/stat.h>       	/* stat() */
 #include <errno.h>
 #include <assert.h>
+#include <fcntl.h>       	/* O_APPEND */
 
 #include "genders.h"
 #include "genders_testlib.h"
@@ -334,13 +335,14 @@ genders_perror_corner_case(int verbose)
 {
   int i = 0;
   int errcount = 0;
-  FILE *stderr_save;
-  FILE *dev_null;
+  int stderr_save;
+  int dev_null;
   genders_perror_corner_case_t *tests = &genders_perror_corner_case_tests[0];
 
-  stderr_save = stderr;
-  if (!(dev_null = fopen(_PATH_DEVNULL, "r+")))
-    genders_err_exit("fopen: %s: %s", _PATH_DEVNULL, strerror(errno));
+  if ((stderr_save = dup(STDERR_FILENO)) < 0)
+    genders_err_exit("dup: %s", strerror(errno));
+  if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
+    genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
   
   while (!(tests[i].num < 0)) 
     {
@@ -349,9 +351,11 @@ genders_perror_corner_case(int verbose)
 
       /* Must route stderr somewhere else during call to genders_perror() */
       handle = genders_handle_get(tests[i].param1);
-      stderr = dev_null;
+      if ((dup2(dev_null, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       genders_perror(handle, tests[i].param2);
-      stderr = stderr_save;
+      if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       errnum = genders_errnum(handle);
 
       err = genders_errnum_check("genders_errnum",
@@ -366,7 +370,7 @@ genders_perror_corner_case(int verbose)
       i++;
     }
 
-  fclose(dev_null);
+  close(dev_null);
   return errcount;
 }
 
@@ -1401,8 +1405,8 @@ genders_parse_corner_case(int verbose)
   int i = 0;
   int errcount = 0;
   genders_parse_corner_case_t *tests = &genders_parse_corner_case_tests[0];
-  FILE *stderr_save;
-  FILE *dev_null;
+  int stderr_save;
+  int dev_null;
 
   /* Special case for tests 6,7,18,19.  It depends on if the default
    * genders file exists on the system and the tester has access to
@@ -1424,9 +1428,10 @@ genders_parse_corner_case(int verbose)
       }
   }
 
-  stderr_save = stderr;
-  if (!(dev_null = fopen(_PATH_DEVNULL, "r+")))
-    genders_err_exit("fopen: %s: %s", _PATH_DEVNULL, strerror(errno));
+  if ((stderr_save = dup(STDERR_FILENO)) < 0)
+    genders_err_exit("dup: %s", strerror(errno));
+  if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
+    genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
 
   while (!(tests[i].num < 0)) 
     {
@@ -1439,9 +1444,11 @@ genders_parse_corner_case(int verbose)
       filename = genders_filename_get(tests[i].param2);
       streamptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : stderr;
       /* Must route stderr somewhere else during call to genders_parse() */
-      stderr = dev_null;
+      if ((dup2(dev_null, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       return_value = genders_parse(handle, filename, streamptr);
-      stderr = stderr_save;
+      if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       errnum = genders_errnum(handle);
 
       errcount += genders_return_value_errnum_check("genders_parse",
@@ -1457,7 +1464,7 @@ genders_parse_corner_case(int verbose)
       i++;
     }
 
-  fclose(dev_null);
+  close(dev_null);
   return errcount;
 }
 

@@ -1,3 +1,14 @@
+2006-03-27  Albert Chu  <chu11@llnl.gov>
+
+	Apply AIX patches from Py Watson (watson30 at llnl dot gov)
+
+	* src/testsuite/libgenders/genders_test.c: Fix getopt.h
+	portability bug.
+
+	* src/testsuite/libgenders/genders_test_corner_case.c,
+	src/testsuite/libgenders/genders_test_functionality.c: Fix stderr
+	re-routing to /dev/null bug.
+	
 2006-03-24  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac: Remove AC_FUNC_MALLOC check for portability to

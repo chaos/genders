@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test.c,v 1.4 2005-01-03 17:31:21 achu Exp $
+ *  $Id: genders_test.c,v 1.5 2006-03-28 02:21:09 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -24,11 +24,17 @@
  *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
+#if HAVE_CONFIG_H
+#include <config.h>
+#endif /* HAVE_CONFIG_H */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#if HAVE_GETOPT_H
 #include <getopt.h>
+#endif /* HAVE_GETOPT_H */
 
 #include "genders.h"
 #include "genders_testlib.h"

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.3 2005-01-03 17:31:21 achu Exp $
+ *  $Id: genders_test_functionality.c,v 1.4 2006-03-28 02:21:09 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -34,6 +34,7 @@
 #include <sys/stat.h>       	/* stat() */
 #include <errno.h>
 #include <assert.h>
+#include <fcntl.h>       	/* O_APPEND */
 
 #include "genders.h"
 #include "genders_testlib.h"
@@ -333,12 +334,13 @@ int
 genders_perror_functionality(int verbose)
 {
   genders_t handle;
-  FILE *stderr_save;
+  int stderr_save;
   int errcount = 0;
   int num = 0;
   int i = 0;
 
-  stderr_save = stderr;
+  if ((stderr_save = dup(STDERR_FILENO)) < 0)
+    genders_err_exit("dup: %s", strerror(errno));
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
@@ -353,29 +355,24 @@ genders_perror_functionality(int verbose)
       char string_buf[GENDERS_ERR_BUFLEN];
       int len, err;
       int fds[2];
-      FILE *in, *out;
 
       if (pipe(fds) < 0)
 	genders_err_exit("pipe: %s", strerror(errno));
       
-      if (!(in = fdopen(fds[0], "r")))
-	genders_err_exit("fdopen: %s", strerror(errno));
-      
-      if (!(out = fdopen(fds[1], "w")))
-	genders_err_exit("fdopen2: %s", strerror(errno));
-
       genders_set_errnum(handle, i);
       expected_string = genders_strerror(i);
 
-      stderr = out;
+      if ((dup2(fds[1], STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       genders_perror(handle, NULL);
-      stderr = stderr_save;
-      fclose(out);		/* so read won't block */
+      if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
+      close(fds[1]);		/* so read won't block */
 
       if ((len = read(fds[0], string_buf, GENDERS_ERR_BUFLEN)) < 0)
 	genders_err_exit("read: %s", strerror(errno));
       string_buf[len] = '\0';
-      fclose(in);
+      close(fds[0]);
 
       strcpy(expected_string_buf, expected_string);
       strcat(expected_string_buf, "\n");
@@ -399,29 +396,24 @@ genders_perror_functionality(int verbose)
       char string_buf[GENDERS_ERR_BUFLEN];
       int len, err;
       int fds[2];
-      FILE *in, *out;
 
       if (pipe(fds) < 0)
 	genders_err_exit("pipe: %s", strerror(errno));
       
-      if (!(in = fdopen(fds[0], "r")))
-	genders_err_exit("fdopen: %s", strerror(errno));
-      
-      if (!(out = fdopen(fds[1], "w")))
-	genders_err_exit("fdopen2: %s", strerror(errno));
-
       genders_set_errnum(handle, i);
       expected_string = genders_strerror(i);
 
-      stderr = out;
+      if ((dup2(fds[1], STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
       genders_perror(handle, msg);
-      stderr = stderr_save;
-      fclose(out);		/* so read won't block */
+      if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	genders_err_exit("dup2: %s", strerror(errno));
+      close(fds[1]);		/* so read won't block */
 
       if ((len = read(fds[0], string_buf, GENDERS_ERR_BUFLEN)) < 0)
 	genders_err_exit("read: %s", strerror(errno));
       string_buf[len] = '\0';
-      fclose(in);
+      close(fds[0]);
 
       strcpy(expected_string_buf, msg);
       strcat(expected_string_buf, ": ");
@@ -2244,12 +2236,13 @@ genders_parse_functionality(int verbose)
 {
   int errcount = 0;
   int num = 0;
-  FILE *stderr_save;
-  FILE *dev_null;
+  int stderr_save;
+  int dev_null;
 
-  stderr_save = stderr;
-  if (!(dev_null = fopen(_PATH_DEVNULL, "r+")))
-    genders_err_exit("fopen: %s: %s", _PATH_DEVNULL, strerror(errno));
+  if ((stderr_save = dup(STDERR_FILENO)) < 0)
+    genders_err_exit("dup: %s", strerror(errno));
+  if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
+    genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
   
   /* Part A: Successfully find parse errors */
   {
@@ -2265,9 +2258,11 @@ genders_parse_functionality(int verbose)
 	  genders_err_exit("genders_handle_create");
 
 	/* Route stderr somewhere else during call to genders_parse() */
-	stderr = dev_null;
+	if ((dup2(dev_null, STDERR_FILENO)) < 0)
+	  genders_err_exit("dup2: %s", strerror(errno));
 	return_value = genders_parse(handle, databases[i].filename, NULL);
-	stderr = stderr_save;
+	if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	  genders_err_exit("dup2: %s", strerror(errno));
 	errnum = genders_errnum(handle);
 
 	err = genders_return_value_errnum_check("genders_parse",
@@ -2302,9 +2297,11 @@ genders_parse_functionality(int verbose)
 	  genders_err_exit("genders_handle_create");
 
 	/* Route stderr somewhere else during call to genders_parse() */
-	stderr = dev_null;
+	if ((dup2(dev_null, STDERR_FILENO)) < 0)
+	  genders_err_exit("dup2: %s", strerror(errno));
 	return_value = genders_parse(handle, databases[i]->filename, NULL);
-	stderr = stderr_save;
+	if ((dup2(stderr_save, STDERR_FILENO)) < 0)
+	  genders_err_exit("dup2: %s", strerror(errno));
 	errnum = genders_errnum(handle);
 
 	err = genders_return_value_errnum_check("genders_parse",
@@ -2325,7 +2322,7 @@ genders_parse_functionality(int verbose)
       }
   }
 
-  fclose(dev_null);
+  close(dev_null);
   return errcount;
 }
 
