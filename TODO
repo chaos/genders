@@ -17,3 +17,4 @@
   - genders-compat
 - feed in genders file to nodeattr via stdin
   - '-' option?
+- Tool to output all attrs and vals for multiple genders files
