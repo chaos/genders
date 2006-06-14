@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.15 2005-05-10 16:10:55 achu Exp $
+ *  $Id: genders_parsing.c,v 1.16 2006-06-14 21:11:16 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -219,8 +219,8 @@ _duplicate_attr_in_node_check(genders_t handle,
 	{
 	  if (line_num > 0) 
 	    {
-	      fprintf(stream, "Line %d: duplicate attribute listed for node \"%s\"\n",
-		      line_num, n->name);
+	      fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
+		      line_num, av->attr, n->name);
 	      rv = 1;
 	    }
 	  handle->errnum = GENDERS_ERR_PARSE;

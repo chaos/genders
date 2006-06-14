@@ -1,3 +1,9 @@
+2006-06-13  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_parsing.c
+	(_duplicate_attr_in_node_check): Output duplicate attribute in
+	error output.
+	
 2006-03-27  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac, src/testsuite/libgenders/Makefile.am,
