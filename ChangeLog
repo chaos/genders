@@ -1,3 +1,7 @@
+2006-06-16  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.h.in: Fix comment typo.
+	
 2006-06-13  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c
