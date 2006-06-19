@@ -1,3 +1,11 @@
+2006-06-19  Albert Chu  <chu11@llnl.gov>
+
+	* src/libcommon: New directory of common files.
+
+	* src/nodeattr, src/libgenders: Adjust Makefiles and remove appropriate files.
+
+	* src/libcommon/hostlist.c: Update to latest library.
+	
 2006-06-16  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.h.in: Fix comment typo.

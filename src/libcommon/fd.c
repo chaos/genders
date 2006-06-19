@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: fd.c,v 1.4 2004-01-15 20:12:40 achu Exp $
+ *  $Id: fd.c,v 1.1 2006-06-19 21:25:41 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).

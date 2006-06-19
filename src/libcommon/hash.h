@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: hash.h,v 1.2 2005-01-18 20:23:03 achu Exp $
+ *  $Id: hash.h,v 1.1 2006-06-19 21:25:41 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2003-2005 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).

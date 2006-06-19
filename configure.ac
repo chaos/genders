@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.37 2006-03-28 02:27:22 chu11 Exp $
+## $Id: configure.ac,v 1.38 2006-06-19 21:25:41 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -107,6 +107,7 @@ AC_CONFIG_FILES( \
   genders.spec \
   Makefile \
   src/Makefile \
+  src/libcommon/Makefile \
   src/libgenders/Makefile \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \

@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: thread.c,v 1.3 2004-04-27 16:14:39 achu Exp $
+ *  $Id: thread.c,v 1.1 2006-06-19 21:25:42 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
