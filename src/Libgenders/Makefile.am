@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.21 2005-04-19 23:47:27 achu Exp $
+## $Id: Makefile.am,v 1.22 2006-07-17 22:06:43 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -8,15 +8,18 @@
 # into the correct location
 
 # DESTDIR is usually set during make install time, not configure or
-# make time, so this is our work around
-PERL_INSTALL_PREFIX = @PERL_INSTALL_PREFIX@
+# make time, so we work around it with the --with-perl-destdir
+# autoconf option.
+
+PERL_DESTDIR = @PERL_DESTDIR@
 
 PERL_INC = "-I../../config -I$(srcdir)/../libgenders"
 
 PERL_LIBS = "-L../libgenders/.libs -lgenders"
 
 MAKEMAKERFLAGS = INSTALLDIRS=site \
-		 SITEPREFIX=$(PERL_INSTALL_PREFIX) \
+		 DESTDIR=$(PERL_DESTDIR) \
+		 SITEPREFIX=$(prefix) \
 		 INC=$(PERL_INC) \
 		 LIBS=$(PERL_LIBS) \
                  MAKEFILE=Makefile.xs \

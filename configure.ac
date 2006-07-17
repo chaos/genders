@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.38 2006-06-19 21:25:41 chu11 Exp $
+## $Id: configure.ac,v 1.39 2006-07-17 22:06:43 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -75,9 +75,9 @@ AC_CHECK_HEADERS( \
 AC_GENDERS_FILE
 
 #
-# Check for perl install destdir
+# Check for perl destdir
 #
-AC_PERL_INSTALL_DESTDIR
+AC_PERL_DESTDIR
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.

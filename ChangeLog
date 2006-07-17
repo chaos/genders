@@ -1,3 +1,18 @@
+2006-07-17  Albert Chu  <chu11@llnl.gov>
+
+	Changes to make perl extensions build correctly on FC5.
+
+	* config/ac_perl_install_destdir.m4: Removed file.
+
+	* config/ac_perl_destdir.m4: New file.
+
+	* configure.ac: Adjust to use new macro.
+
+	* genders.spec.in: Adjust to use new configure option.
+	
+	* src/Libgenders/Makefile.am: Adjust makemaker flags
+	appropriately.
+	
 2006-06-19  Albert Chu  <chu11@llnl.gov>
 
 	* src/libcommon: New directory of common files.
