@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.38 2005-05-07 18:19:23 achu Exp $
+ *  $Id: Libgenders.xs,v 1.39 2006-08-01 18:13:35 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -506,7 +506,7 @@ genders_index_attrvals(handle, attr)
         RETVAL    
 
 AV *
-genders_query(handle, query)
+genders_query(handle, query=NULL)
     genders_t handle
     char *query
     PREINIT:

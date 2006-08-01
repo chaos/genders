@@ -1,3 +1,11 @@
+2006-07-30  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/Libgenders.pm.in, src/Genders/Genders.pm.in: Fix
+	description of genders_query functions.
+
+	* src/Libgenders/Libgenders.xs (genders_query): Default query to
+	NULL if one is not specified.
+	
 2006-07-17  Albert Chu  <chu11@llnl.gov>
 
 	Changes to make perl extensions build correctly on FC5.
