@@ -43,9 +43,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $T=~/(.*)\\/site_perl.*/; print $1;')
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
-%{_mandir}/man3/libgenders.3* 
-%{_mandir}/man3/Genders.3pm*
-%{_mandir}/man3/Libgenders.3pm*
+%{_mandir}/man3/libgenders* 
+%{_mandir}/man3/Genders*
+%{_mandir}/man3/Libgenders*
 %{_includedir}/*
 %{_bindir}/*
 %{_libdir}/libgenders.*
