@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.31 2005-09-02 20:19:40 achu Exp $
+ *  $Id: nodeattr.c,v 1.32 2006-09-26 21:45:16 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqvlf:kd:"
+#define OPTIONS "cnsqX:vlf:kd:"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -58,6 +58,7 @@ static struct option longopts[] = {
     { "querynl", 0, 0, 'n' },
     { "queryspace", 0, 0, 'n' },
     { "query", 0, 0, 'q' },
+    { "excludequery", 1, 0, 'X'},
     { "value", 0, 0, 'v' },
     { "listattr", 0, 0, 'l' },
     { "filename", 1, 0, 'f' },
@@ -70,7 +71,7 @@ static struct option longopts[] = {
 typedef enum { FMT_COMMA, FMT_NL, FMT_SPACE, FMT_HOSTLIST } fmt_t;
 
 static int test_attr(genders_t gp, char *node, char *attr, int vopt);
-static void list_nodes(genders_t gp, char *attr, fmt_t fmt);
+static void list_nodes(genders_t gp, char *attr, char *excludequery, fmt_t fmt);
 static void list_attrs(genders_t gp, char *node);
 static void usage(void);
 static void diff_genders(char *db1, char *db2);
@@ -93,6 +94,7 @@ main(int argc, char *argv[])
     int lopt = 0, qopt = 0, vopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
+    char *excludequery = NULL;
     fmt_t qfmt = FMT_HOSTLIST;
     genders_t gp;
 
@@ -113,6 +115,9 @@ main(int argc, char *argv[])
         case 'q':   /* --query */
             qfmt = FMT_HOSTLIST;
             qopt = 1;
+            break;
+        case 'X':   /* --excludequery */
+            excludequery = optarg;
             break;
         case 'v':   /* --value */
             vopt = 1;
@@ -175,7 +180,7 @@ main(int argc, char *argv[])
             usage();
 
         query = argv[optind++];
-        list_nodes(gp, query, qfmt);
+        list_nodes(gp, query, excludequery, qfmt);
 
         exit(0);
     }
@@ -215,7 +220,7 @@ main(int argc, char *argv[])
 }
 
 static void 
-list_nodes(genders_t gp, char *query, fmt_t qfmt)
+list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
 {
     char **nodes;
     int i, count;
@@ -238,6 +243,21 @@ list_nodes(genders_t gp, char *query, fmt_t qfmt)
             exit(1);
         }
     }
+
+    if (excludequery) {
+        genders_nodelist_clear(gp, nodes);
+      
+        if ((count = genders_query(gp, nodes, len, excludequery)) < 0)
+            _gend_error_exit(gp, excludequery);
+    
+        for (i = 0; i < count; i++) {
+            if (hostlist_delete(hl, nodes[i]) == 0) {
+                fprintf(stderr, "nodeattr: hostlist_delete failed\n");
+                exit(1);
+            }
+        }
+    }
+
     genders_nodelist_destroy(gp, nodes);
 
     hostlist_sort(hl);
@@ -303,7 +323,7 @@ static void
 usage(void)
 {
     fprintf(stderr,
-        "Usage: nodeattr [-f genders] [-q|-c|-n|-s] query\n"
+        "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-X exclude_query] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"

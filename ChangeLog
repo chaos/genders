@@ -1,3 +1,12 @@
+2006-09-26  Albert Chu  <chu11@llnl.gov>
+
+	* man/nodeattr.1, src/nodeattr/nodeattr.c (main, list_nodes):
+	Support new -X option.
+	
+2006-08-28  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Modification for possible Suse corner case.
+	
 2006-07-30  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Libgenders.pm.in, src/Genders/Genders.pm.in: Fix

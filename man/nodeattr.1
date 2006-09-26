@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.13 2005-09-02 20:19:40 achu Exp $
+\."  $Id: nodeattr.1,v 1.14 2006-09-26 21:45:16 chu11 Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -32,7 +32,7 @@
 nodeattr \- query genders file
 .SH SYNOPSIS
 .B nodeattr
-.I "[-f genders] [-q | -c | -n | -s] query
+.I "[-f genders] [-q | -c | -n | -s] [-X exclude_query] query
 .br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
@@ -66,6 +66,10 @@ attributes and values.  The set operation union is represented by two
 pipe symbols ('||'), intersection by two ampersand symbols ('&&'),
 difference by two minus symbols ('--'), and complement by a tilde
 ('~').  Parentheses may be used to change the order of operations.
+The 
+.I "-X"
+argument and query can be used to exclude nodes from the resulting
+output.
 .LP
 When called with a node name (optional) and attribute name,
 .B nodeattr
