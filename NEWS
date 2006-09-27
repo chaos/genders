@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.5-2
+========================
+ -- Alter nodeattr --diff output. 
+
 Changes in genders-1.5-1
 ========================
  -- Added nodeattr --diff to compare genders databases.
@@ -50,4 +54,4 @@ Changes in genders-1.2-pre1
     as well as compress back to this same form.
  -- started NEWS file.
 
-$Id: NEWS,v 1.20 2006-09-27 00:30:26 chu11 Exp $
+$Id: NEWS,v 1.21 2006-09-27 21:01:41 chu11 Exp $
