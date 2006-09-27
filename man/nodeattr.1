@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.14 2006-09-26 21:45:16 chu11 Exp $
+\."  $Id: nodeattr.1,v 1.15 2006-09-27 00:26:46 chu11 Exp $
 \."############################################################################
 \."  Copyright (C) 2001-2003 The Regents of the University of California.
 \."  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -138,11 +138,11 @@ nodeattr -c "~(login||mgmt)"
 .LP
 To use nodeattr with pdsh to run a command on all fddi nodes:
 .IP
-pdsh -w`nodeattr -c fddi` command
+pdsh -w\`nodeattr -c fddi\` command
 .LP
 To use nodeattr in a ksh script to collect a list of users on login nodes:
 .IP
-for i in `nodeattr -n login`; do rsh $i who; done
+for i in \`nodeattr -n login\`; do rsh $i who; done
 .LP
 To verify whether or not this node is a head node:
 .IP

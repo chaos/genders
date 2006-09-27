@@ -1,5 +1,10 @@
 2006-09-26  Albert Chu  <chu11@llnl.gov>
 
+	* man/nodeattr.1: Apply backtick manpage fixes from Py Watson
+	(watson30 at llnl dot gov).
+
+2006-09-26  Albert Chu  <chu11@llnl.gov>
+
 	* man/nodeattr.1, src/nodeattr/nodeattr.c (main, list_nodes):
 	Support new -X option.
 	
