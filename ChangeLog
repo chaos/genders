@@ -1,3 +1,10 @@
+2006-09-27  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr.c (diff_genders, _diff): Alter way that diff output
+	is output and generated.
+
+	* tagged genders-1-5-2
+	
 2006-09-26  Albert Chu  <chu11@llnl.gov>
 
 	* man/nodeattr.1: Apply backtick manpage fixes from Py Watson

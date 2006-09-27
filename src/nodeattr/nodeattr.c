@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.32 2006-09-26 21:45:16 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.33 2006-09-27 21:00:27 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -333,133 +333,265 @@ usage(void)
 }
 
 static int
-_diff(genders_t gh1, genders_t gh2, char *db1, char *db2)
+_diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
 {
-    char **nodes1 = NULL, **attrs1 = NULL, **vals1 = NULL, *val2buf = NULL;
-    int maxnodes1, maxattrs1, maxvals1;
-    int numnodes1, numattrs1;
-    int maxvallen2;
+    char **nodes = NULL, **dnodes = NULL;
+    int maxnodes, dmaxnodes, numnodes, dnumnodes;
+    char **attrs = NULL, **dattrs = NULL;
+    int maxattrs, dmaxattrs, numattrs, dnumattrs;
+    char **vals = NULL, **dvals = NULL, *dvalbuf = NULL;
+    int maxvals, dmaxvals, dmaxvallen;
     int i, j, rv, errcount = 0;
 
-    if ((maxnodes1 = genders_nodelist_create(gh1, &nodes1)) < 0)
-        _gend_error_exit(gh1, "genders_nodelist_create");
-      
-    if ((maxattrs1 = genders_attrlist_create(gh1, &attrs1)) < 0)
-        _gend_error_exit(gh1, "genders_attrlist_create");
+    /* Test #1: Determine if nodes match */
 
-    if ((maxvals1 = genders_vallist_create(gh1, &vals1)) < 0)
-        _gend_error_exit(gh1, "genders_vallist_create");
+    if ((maxnodes = genders_nodelist_create(gh, &nodes)) < 0)
+        _gend_error_exit(gh, "genders_nodelist_create");
 
-    if ((numnodes1 = genders_getnodes(gh1, nodes1, maxnodes1, NULL, NULL)) < 0)
-        _gend_error_exit(gh1, "genders_getnodes");
+    if ((numnodes = genders_getnodes(gh, nodes, maxnodes, NULL, NULL)) < 0)
+        _gend_error_exit(gh, "genders_getnodes");
 
-    if ((maxvallen2 = genders_getmaxvallen(gh2)) < 0)
-        _gend_error_exit(gh2, "genders_maxvallen");
+    if ((dmaxnodes = genders_nodelist_create(dgh, &dnodes)) < 0)
+        _gend_error_exit(gh, "genders_nodelist_create");
 
-    if (!(val2buf = malloc(maxvallen2 + 1))) {
+    if ((dnumnodes = genders_getnodes(dgh, dnodes, dmaxnodes, NULL, NULL)) < 0)
+        _gend_error_exit(dgh, "genders_getnodes");
+
+    for (i = 0; i < numnodes; i++) {
+        if ((rv = genders_isnode(dgh, nodes[i])) < 0)
+            _gend_error_exit(dgh, "genders_isnode");
+
+        if (!rv) {
+            fprintf(stderr, "%s: Node \"%s\" does not exist\n", dfilename, nodes[i]);
+            errcount++;
+        }
+    }
+
+    for (i = 0; i < dnumnodes; i++) {
+        if ((rv = genders_isnode(gh, dnodes[i])) < 0)
+            _gend_error_exit(gh, "genders_isnode");
+
+        if (!rv) {
+            fprintf(stderr, "%s: Contains additional node \"%s\"\n", dfilename, dnodes[i]);
+            errcount++;
+        }
+    }
+
+    /* Test #2: Determine if attributes match */
+
+    if ((maxattrs = genders_attrlist_create(gh, &attrs)) < 0)
+        _gend_error_exit(gh, "genders_attrlist_create");
+
+    if ((dmaxattrs = genders_attrlist_create(dgh, &dattrs)) < 0)
+        _gend_error_exit(dgh, "genders_attrlist_create");
+
+    if ((numattrs = genders_getattr_all(gh, attrs, maxattrs)) < 0)
+        _gend_error_exit(gh, "genders_getattr_all");
+
+    if ((dnumattrs = genders_getattr_all(dgh, dattrs, dmaxattrs)) < 0)
+        _gend_error_exit(dgh, "genders_getattr_all");
+
+    for (i = 0; i < numattrs; i++) {
+        if ((rv = genders_isattr(dgh, attrs[i])) < 0)
+            _gend_error_exit(dgh, "genders_isattr");
+
+        if (!rv) {
+            fprintf(stderr, "%s: Attribute \"%s\" does not exist\n", dfilename, attrs[i]);
+            errcount++;
+        }
+    }
+
+    for (i = 0; i < dnumattrs; i++) {
+        if ((rv = genders_isattr(gh, dattrs[i])) < 0)
+            _gend_error_exit(gh, "genders_isattr");
+
+        if (!rv) {
+            fprintf(stderr, "%s: Contains additional attribute \"%s\"\n", dfilename, dattrs[i]);
+            errcount++;
+        }
+    }
+    
+    /* Test #3: For each node, are the attributes and values identical */
+
+    if ((maxvals = genders_vallist_create(gh, &vals)) < 0)
+        _gend_error_exit(gh, "genders_vallist_create");
+
+    if ((dmaxvals = genders_vallist_create(dgh, &dvals)) < 0)
+        _gend_error_exit(dgh, "genders_vallist_create");
+
+    if ((dmaxvallen = genders_getmaxvallen(dgh)) < 0)
+        _gend_error_exit(dgh, "genders_maxvallen");
+
+    if (!(dvalbuf = malloc(dmaxvallen + 1))) {
         fprintf(stderr, "nodeattr: out of memory\n");
         exit(1);
     }
 
-    for (i = 0; i < numnodes1; i++) {
+    for (i = 0; i < numnodes; i++) {
 
-        if ((rv = genders_isnode(gh2, nodes1[i])) < 0)
-            _gend_error_exit(gh2, "genders_isnode");
+        /* Don't bother if the node doesn't exist, this issue has been
+         * output already 
+         */
+        if ((rv = genders_isnode(dgh, nodes[i])) < 0)
+            _gend_error_exit(dgh, "genders_isnode");
 
-        if (!rv) {
-            fprintf(stderr, "%s: Node \"%s\" missing\n", db2, nodes1[i]);
-            errcount++;
+        if (!rv)
             continue;
-        }
 
-        if (genders_attrlist_clear(gh1, attrs1) < 0)
-            _gend_error_exit(gh1, "genders_attrlist_clear");
+        if (genders_attrlist_clear(gh, attrs) < 0)
+            _gend_error_exit(gh, "genders_attrlist_clear");
 
-        if (genders_vallist_clear(gh1, vals1) < 0)
-            _gend_error_exit(gh1, "genders_vallist_clear");
+        if (genders_vallist_clear(gh, vals) < 0)
+            _gend_error_exit(gh, "genders_vallist_clear");
 
-        if ((numattrs1 = genders_getattr(gh1, 
-                                         attrs1, 
-                                         vals1, 
-                                         maxattrs1, 
-                                         nodes1[i])) < 0)
-            _gend_error_exit(gh1, "genders_getattr");
+        if (genders_attrlist_clear(dgh, dattrs) < 0)
+            _gend_error_exit(dgh, "genders_attrlist_clear");
 
-        for (j = 0; j < numattrs1; j++) {
-            memset(val2buf, '\0', maxvallen2 + 1);
+        if (genders_vallist_clear(dgh, dvals) < 0)
+            _gend_error_exit(dgh, "genders_vallist_clear");
 
-            if ((rv = genders_testattr(gh2, 
-                                       nodes1[i], 
-                                       attrs1[j], 
-                                       val2buf, 
-                                       maxvallen2 + 1)) < 0)
-                _gend_error_exit(gh1, "genders_getattr");
+        if ((numattrs = genders_getattr(gh, 
+                                        attrs, 
+                                        vals, 
+                                        maxattrs, 
+                                        nodes[i])) < 0)
+          _gend_error_exit(gh, "genders_getattr");
+        
+        for (j = 0; j < numattrs; j++) {
+          
+            /* Don't bother if the attribute doesn't exist, this issue
+             * has been output already
+             */
+            if ((rv = genders_isattr(dgh, attrs[j])) < 0)
+                _gend_error_exit(dgh, "genders_isattr");
+
+            if (!rv)
+                continue;
+
+            memset(dvalbuf, '\0', dmaxvallen + 1);
+          
+            if ((rv = genders_testattr(dgh, 
+                                       nodes[i], 
+                                       attrs[j], 
+                                       dvalbuf, 
+                                       dmaxvallen + 1)) < 0)
+                _gend_error_exit(dgh, "genders_getattr");
 
             if (!rv) {
                 fprintf(stderr, "%s: Node \"%s\" does not "
                         "contain attribute \"%s\"\n", 
-                        db2, nodes1[i], attrs1[j]);
+                        dfilename, nodes[i], attrs[j]);
                 errcount++;
                 continue;
             }
 
-            if (!strlen(vals1[j])) {
-                if (strlen(val2buf)) {
-                    if (!rv) {
-                        fprintf(stderr, "%s: Node \"%s\" attribute \"%s\" "
-                                "has a value\n",
-                                db2, nodes1[i], attrs1[j]);
-                        errcount++;
-                        continue;
+            if (strlen(vals[j])) {
+                if (strcmp(vals[j], dvalbuf)) {
+                    if (strlen(dvalbuf)) {
+                        fprintf(stderr, "%s: Node \"%s\", attribute \"%s\" has "
+                                "a different value \"%s\"\n",
+                                dfilename, nodes[i], attrs[j], dvalbuf);
                     }
+                    else {
+                        fprintf(stderr, "%s: Node \"%s\", attribute \"%s\" does "
+                                "not have a value\n",
+                                dfilename, nodes[i], attrs[j]);
+                    }
+                    errcount++;
+                    continue;
                 }
             }
             else {
-                if (strcmp(vals1[j], val2buf)) {
-                  fprintf(stderr, "%s: Node \"%s\", attribute \"%s\" has a "
-                          "different value\n",
-                          db2, nodes1[i], attrs1[j]);
-                  errcount++;
-                  continue;
+                if (strlen(dvalbuf)) {
+                    fprintf(stderr, "%s: Node \"%s\", attribute \"%s\" has "
+                            "a value \"%s\"\n",
+                            dfilename, nodes[i], attrs[j], dvalbuf);
+                    errcount++;
+                    continue;
                 }
+            }
+        }
+
+        /* There is no need to compare attribute values for the reverse
+         * case.  Only for existence of attributes.
+         */
+
+        if ((dnumattrs = genders_getattr(dgh, 
+                                         dattrs, 
+                                         dvals, 
+                                         dmaxattrs, 
+                                         nodes[i])) < 0)
+          _gend_error_exit(dgh, "genders_getattr");
+        
+        for (j = 0; j < dnumattrs; j++) {
+
+            /* Don't bother if the attribute doesn't exist, this issue
+             * has been output already
+             */
+            if ((rv = genders_isattr(gh, dattrs[j])) < 0)
+                _gend_error_exit(dgh, "genders_isattr");
+
+            if (!rv)
+                continue;
+
+            if ((rv = genders_testattr(gh, 
+                                       nodes[i], 
+                                       dattrs[j], 
+                                       NULL,
+                                       0)) < 0)
+                _gend_error_exit(gh, "genders_getattr");
+            
+            if (!rv) {
+                if (strlen(dvals[j])) {
+                    fprintf(stderr, "%s: Node \"%s\" contains "
+                            "an additional attribute value pair \"%s=%s\"\n", 
+                            dfilename, nodes[i], dattrs[j], dvals[j]);
+                }
+                else {
+                    fprintf(stderr, "%s: Node \"%s\" contains "
+                            "an additional attribute \"%s\"\n", 
+                            dfilename, nodes[i], dattrs[j]);
+                }
+                errcount++;
+                continue;
             }
         }
     }
 
-    (void)genders_nodelist_destroy(gh1, nodes1);
-    (void)genders_attrlist_destroy(gh1, attrs1);
-    (void)genders_vallist_destroy(gh1, vals1);
-    free(val2buf);
+    (void)genders_nodelist_destroy(gh, nodes);
+    (void)genders_nodelist_destroy(dgh, dnodes);
+    (void)genders_attrlist_destroy(gh, attrs);
+    (void)genders_attrlist_destroy(dgh, dattrs);
+    (void)genders_vallist_destroy(gh, vals);
+    (void)genders_vallist_destroy(dgh, dvals);
+    free(dvalbuf);
     return errcount;
 }
 
 static void 
-diff_genders(char *db1, char *db2)
+diff_genders(char *filename, char *dfilename)
 {
-    genders_t gh1, gh2;
+    genders_t gh, dgh;
 
-    gh1 = genders_handle_create();
-    if (!gh1) {
+    gh = genders_handle_create();
+    if (!gh) {
         fprintf(stderr, "nodeattr: out of memory\n");
         exit(1);
     }
 
-    gh2 = genders_handle_create();
-    if (!gh2) {
+    dgh = genders_handle_create();
+    if (!dgh) {
         fprintf(stderr, "nodeattr: out of memory\n");
         exit(1);
     }
     
-    if (genders_load_data(gh1, db1) < 0)
-        _gend_error_exit(gh1, db1);
+    if (genders_load_data(gh, filename) < 0)
+        _gend_error_exit(gh, filename);
     
-    if (genders_load_data(gh2, db2) < 0)
-        _gend_error_exit(gh2, db2);
+    if (genders_load_data(dgh, dfilename) < 0)
+        _gend_error_exit(dgh, dfilename);
 
-    if (_diff(gh1, gh2, db1, db2) != 0)
-        return;
-
-    if (_diff(gh2, gh1, db2, db1) != 0)
+    if (_diff(gh, dgh, filename, dfilename) != 0)
         return;
 }
 
