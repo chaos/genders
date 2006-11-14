@@ -1,3 +1,8 @@
+2006-11-14  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_parsing.c (_parse_line): Remove
+	unnecessary code.
+	
 2006-09-27  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr.c (diff_genders, _diff): Alter way that diff output

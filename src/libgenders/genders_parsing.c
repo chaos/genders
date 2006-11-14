@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.16 2006-06-14 21:11:16 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.17 2006-11-14 18:51:57 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -394,18 +394,6 @@ _parse_line(genders_t handle,
 	  goto cleanup;
 	}
   
-      /* Check again due to potential "hidden" period */
-      if (strchr(node, '.')) 
-	{
-	  if (line_num > 0) 
-	    {
-	      fprintf(stream, "Line %d: node not a shortened hostname\n", line_num);
-	      rv = 1;
-	    }
-	  handle->errnum = GENDERS_ERR_PARSE;
-	  goto cleanup;
-	}
-      
       if (!(n =_insert_node(handle, nodeslist, node)))
 	goto cleanup;
       
