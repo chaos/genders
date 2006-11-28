@@ -1,3 +1,8 @@
+2006-11-28  Albert Chu  <chu11@llnl.gov>
+
+	* man/libgenders.3: Fix typo found by Py Watson (watson30 at llnl
+	dot gov).
+	
 2006-11-14  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_parse_line): Remove
