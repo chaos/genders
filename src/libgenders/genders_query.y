@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.26 2005-05-07 17:24:31 achu Exp $
+ *  $Id: genders_query.y,v 1.27 2006-12-18 21:34:05 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -37,7 +37,9 @@
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
+#if HAVE_PATHS_H
 #include <paths.h>
+#endif /* HAVE_PATHS_H */
 
 #include "genders.h"
 #include "genders_api.h"
@@ -69,6 +71,10 @@ static int genders_query_err = 0;
  * To store the parse tree
  */ 
 static struct genders_treenode *genders_treeroot = NULL;
+
+#ifndef _PATH_DEVNULL
+#define _PATH_DEVNULL "/dev/null"
+#endif /* _PATH_DEVNULL */
 
 extern int yylex();
 extern int yyparse(void);
