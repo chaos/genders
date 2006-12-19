@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.17 2006-11-14 18:51:57 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.18 2006-12-19 00:49:12 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -233,6 +233,58 @@ _duplicate_attr_in_node_check(genders_t handle,
   __list_iterator_destroy(attrvals_itr);
   return rv;
 }
+
+#ifndef HAVE_STRSEP
+/* 
+ * strsep for those systems that do not define it.
+ *
+ * Taken straight from glibc
+ */
+static char *
+strsep (char **stringp, const char *delim)
+{
+  char *begin, *end;
+
+  begin = *stringp;
+  if (begin == NULL)
+    return NULL;
+
+  /* A frequent case is when the delimiter string contains only one
+     character.  Here we don't need to call the expensive `strpbrk'
+     function and instead work using `strchr'.  */
+  if (delim[0] == '\0' || delim[1] == '\0')
+    {
+      char ch = delim[0];
+
+      if (ch == '\0')
+        end = NULL;
+      else
+        {
+          if (*begin == ch)
+            end = begin;
+          else if (*begin == '\0')
+            end = NULL;
+          else
+            end = strchr (begin + 1, ch);
+        }
+    }
+  else
+    /* Find the end of the token.  */
+    end = strpbrk (begin, delim);
+
+  if (end)
+    {
+      /* Terminate the token and set *STRINGP past NUL character.  */
+      *end++ = '\0';
+      *stringp = end;
+    }
+  else
+    /* No more delimiters; this is the last token.  */
+    *stringp = NULL;
+
+  return begin;
+}
+#endif /* HAVE_STRSEP */
 
 /*
  * _parse_line

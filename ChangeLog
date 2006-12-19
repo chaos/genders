@@ -2,6 +2,9 @@
 
 	* configure.ac, src/libgenders/genders_query.y: Check for paths.h
 	and add Solaris build fix for _PATH_DEVNULL define.
+
+	* src/libgenders/genders_parsing.c (strsep): New function for
+	those machines that don't include it.
 	
 2006-11-28  Albert Chu  <chu11@llnl.gov>
 
