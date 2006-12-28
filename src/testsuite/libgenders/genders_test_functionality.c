@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.4 2006-03-28 02:21:09 chu11 Exp $
+ *  $Id: genders_test_functionality.c,v 1.5 2006-12-28 21:20:54 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -26,7 +26,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <paths.h>		/* _PATH_DEVNULL */
 #include <unistd.h>		/* gethostname */
 #include <sys/param.h>		/* MAXHOSTNAMELEN */
 #include <string.h>
@@ -35,12 +34,19 @@
 #include <errno.h>
 #include <assert.h>
 #include <fcntl.h>       	/* O_APPEND */
+#if HAVE_PATHS_H
+#include <paths.h>		/* _PATH_DEVNULL */
+#endif /* HAVE_PATHS_H */
 
 #include "genders.h"
 #include "genders_testlib.h"
 #include "genders_test_functionality.h"
 #include "genders_test_database.h"
 #include "genders_test_query_tests.h"
+
+#ifndef _PATH_DEVNULL
+#define _PATH_DEVNULL "/dev/null"
+#endif /* _PATH_DEVNULL */
 
 int
 genders_handle_create_functionality(int verbose)
