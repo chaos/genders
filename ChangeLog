@@ -3,6 +3,8 @@
 	* src/testsuite/libgenders/genders_test_corner_case.c,
 	src/testsuite/libgenders/genders_test_functionality.c: Check for
 	paths.h and add Solaris build fix for _PATH_DEVNULL define.
+
+	* configure.ac: Search for pod2man in /usr/perl5/bin for Solaris.
 	
 2006-12-18  Albert Chu  <chu11@llnl.gov>
 
