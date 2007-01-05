@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.6 2006-12-28 21:20:54 chu11 Exp $
+ *  $Id: genders_test_corner_case.c,v 1.7 2007-01-05 23:04:52 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -46,6 +46,10 @@
 #ifndef _PATH_DEVNULL
 #define _PATH_DEVNULL "/dev/null"
 #endif /* _PATH_DEVNULL */
+
+#ifndef MAXHOSTNAMELEN
+#define MAXHOSTNAMELEN    64
+#endif /* MAXHOSTNAMELEN */
 
 static genders_t 
 genders_unloaded_handle(void) 
