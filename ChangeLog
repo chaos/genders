@@ -1,3 +1,31 @@
+2007-01-09  Albert Chu  <chu11@llnl.gov>
+
+        * tagged pre_aix_patches.
+	
+	Apply AIX port patches by Py Watson (watson30 at llnl dot gov)
+
+	* configure.ac, src/Genders/Makefile.am: Determine and use correct
+	extension for Perl's section-3 man pages.
+
+	* src/Genders/Makefile.am: Correct calculation of where perl
+	expects to put site architecture specific files.  As part of this,
+	make the perl install directory consistent with what is used for
+	Libgenders.  Use $PERL instead of perl, so that correct perl
+	version is used.
+
+	* src/Libgenders/Makefile.am: Override the install location for
+	the Libgenders man page, since the perl default is not based off
+	of the install prefix.
+
+	* src/Libgenders/Makefile.PL, src/Libgenders/Makefile.am: On AIX,
+	set the compiled-in library path for dynamic libraries to the path
+	where the C library is installed plus the default library
+	path. Otherwise, the library path contains an entry for the
+	genders library in the source directory.
+
+	* Makefile.am: Replace --with-perl-install-destdir with
+	--with-perl-destdir.
+	
 2007-01-05  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/libgenders/genders_test_corner_case.c,

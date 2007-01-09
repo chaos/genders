@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.22 2006-07-17 22:06:43 chu11 Exp $
+## $Id: Makefile.am,v 1.23 2007-01-09 17:21:20 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -20,9 +20,11 @@ PERL_LIBS = "-L../libgenders/.libs -lgenders"
 MAKEMAKERFLAGS = INSTALLDIRS=site \
 		 DESTDIR=$(PERL_DESTDIR) \
 		 SITEPREFIX=$(prefix) \
+		 INSTALLSITEMAN3DIR=$(mandir)/man3 \
 		 INC=$(PERL_INC) \
 		 LIBS=$(PERL_LIBS) \
-                 MAKEFILE=Makefile.xs \
+		 GENDERS_LIBDIR=$(libdir) \
+		 MAKEFILE=Makefile.xs \
 		 FIRST_MAKEFILE=Makefile.xs
 
 all: Makefile.xs

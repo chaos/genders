@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.42 2006-12-28 23:13:59 chu11 Exp $
+## $Id: configure.ac,v 1.43 2007-01-09 17:21:19 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -79,6 +79,12 @@ AC_GENDERS_FILE
 # Check for perl destdir
 #
 AC_PERL_DESTDIR
+
+#
+# Determine Perl section-3 man page extension
+#
+PERLMAN3EXT=`$PERL -MConfig -e 'print $Config{man3ext}'`
+AC_SUBST([PERLMAN3EXT])
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
