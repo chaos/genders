@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_query_tests.c,v 1.1 2005-01-03 17:31:21 achu Exp $
+ *  $Id: genders_test_query_tests.c,v 1.2 2007-01-09 18:09:56 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -2477,6 +2477,11 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
 	1,
       },
       {
+	"attr:colon",
+	{"node1", NULL},
+	1,
+      },
+      {
 	"attr%foo%percent",
 	{"node2", NULL},
 	1,
@@ -2494,6 +2499,36 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
       {
 	"attr-foo-minus",
 	{"node2", NULL},
+	1,
+      },
+      {
+	"attr:foo:colon",
+	{"node2", NULL},
+	1,
+      },
+      {
+	"attr1=attr1%percent",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr2=attr2|pipe",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr3=attr3&ampersand",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr4=attr4-minus",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr5=attr5:colon",
+	{"node3", NULL},
 	1,
       },
       {
