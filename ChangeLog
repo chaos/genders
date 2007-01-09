@@ -26,6 +26,8 @@
 	* Makefile.am: Replace --with-perl-install-destdir with
 	--with-perl-destdir.
 	
+        * tagged post_aix_patches.
+
 2007-01-05  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/libgenders/genders_test_corner_case.c,
