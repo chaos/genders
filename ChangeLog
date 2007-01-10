@@ -7,6 +7,8 @@
 	src/testsuite/libgenders/testdatabases/genders.query_special_chars:
 	Added slash parsing tests.
 
+	* tagged genders-1-6-1
+
 2007-01-09  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query_parse.l: Added colons.
