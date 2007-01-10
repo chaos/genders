@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_query_tests.c,v 1.2 2007-01-09 18:09:56 chu11 Exp $
+ *  $Id: genders_test_query_tests.c,v 1.3 2007-01-10 18:27:10 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -2482,6 +2482,16 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
 	1,
       },
       {
+	"attr\\backslash",
+	{"node1", NULL},
+	1,
+      },
+      {
+	"attr/forwardslash",
+	{"node1", NULL},
+	1,
+      },
+      {
 	"attr%foo%percent",
 	{"node2", NULL},
 	1,
@@ -2507,6 +2517,16 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
 	1,
       },
       {
+	"attr\\foo\\backslash",
+	{"node2", NULL},
+	1,
+      },
+      {
+	"attr/foo/forwardslash",
+	{"node2", NULL},
+	1,
+      },
+      {
 	"attr1=attr1%percent",
 	{"node3", NULL},
 	1,
@@ -2528,6 +2548,16 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
       },
       {
 	"attr5=attr5:colon",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr6=attr6\\backslash",
+	{"node3", NULL},
+	1,
+      },
+      {
+	"attr7=attr7/forwardslash",
 	{"node3", NULL},
 	1,
       },

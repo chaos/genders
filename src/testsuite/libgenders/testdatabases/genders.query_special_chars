@@ -1,4 +1,4 @@
-node1 attr%percent,attr|pipe,attr&ampersand,attr-minus,attr:colon
-node2 attr%foo%percent,attr|foo|pipe,attr&foo&ampersand,attr-foo-minus,attr:foo:colon
-node3 attr1=attr1%percent,attr2=attr2|pipe,attr3=attr3&ampersand,attr4=attr4-minus,attr5=attr5:colon
+node1 attr%percent,attr|pipe,attr&ampersand,attr-minus,attr:colon,attr\backslash,attr/forwardslash
+node2 attr%foo%percent,attr|foo|pipe,attr&foo&ampersand,attr-foo-minus,attr:foo:colon,attr\foo\backslash,attr/foo/forwardslash
+node3 attr1=attr1%percent,attr2=attr2|pipe,attr3=attr3&ampersand,attr4=attr4-minus,attr5=attr5:colon,attr6=attr6\backslash,attr7=attr7/forwardslash
 
