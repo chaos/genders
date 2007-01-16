@@ -1,7 +1,3 @@
-2007-01-15  Albert Chu  <chu11@llnl.gov>
-
-	* genders.sample: Remove 'all' attribute.
-	
 2007-01-10  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query_parse.l: Added backslash and
