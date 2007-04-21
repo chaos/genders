@@ -4,9 +4,9 @@ Release: @RELEASE@
 Summary: Static cluster configuration database.
 Group: System Environment/Base
 License: GPL
-Source: %{name}-%{version}-%{release}.tgz
+Source: %{name}-%{version}.tar.gz
 Prereq: perl
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}
+BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
 Genders is a static cluster configuration database used for cluster
@@ -25,7 +25,7 @@ Group: System Environment/Base
 genders API that is compatible with earlier releases of genders
 
 %prep
-%setup  -q -n %{name}-%{version}-%{release}
+%setup  -q -n %{name}-%{version}
 
 %build
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} --with-perl-destdir="$RPM_BUILD_ROOT"
