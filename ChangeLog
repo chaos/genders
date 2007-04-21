@@ -1,3 +1,11 @@
+2007-04-21  Albert Chu  <chu11@llnl.gov>
+
+	* config/Make-rpm.mk: Remove localism.
+
+	* genders.spec.in: Fix build.
+
+	* Makefile.am: Add genders.spec to dist.  Remove localism.
+	
 2007-01-10  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query_parse.l: Added backslash and
