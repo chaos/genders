@@ -1,3 +1,8 @@
+2007-07-26  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Change "Prereq" perl requirement to "Requires".
+	Add "byacc" and "flex" build requirements.
+	
 2007-04-21  Albert Chu  <chu11@llnl.gov>
 
 	* config/Make-rpm.mk: Remove localism.

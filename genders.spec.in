@@ -5,7 +5,8 @@ Summary: Static cluster configuration database.
 Group: System Environment/Base
 License: GPL
 Source: %{name}-%{version}.tar.gz
-Prereq: perl
+Requires: perl
+BuildRequires: byacc flex
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
