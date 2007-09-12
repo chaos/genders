@@ -1,3 +1,9 @@
+2007-09-12  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/nodeattr.c (list_nodes): Fix -X usage corner case.
+
+	* src/nodeattr/nodeattr.c (_diff): Fix error message typos.
+	
 2007-09-11  Albert Chu  <chu11@llnl.gov>
 
 	* META: Update for release.

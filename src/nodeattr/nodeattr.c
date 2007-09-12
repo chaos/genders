@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.34 2007-09-05 17:42:42 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.35 2007-09-12 18:11:55 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -250,12 +250,9 @@ list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
         if ((count = genders_query(gp, nodes, len, excludequery)) < 0)
             _gend_error_exit(gp, excludequery);
     
-        for (i = 0; i < count; i++) {
-            if (hostlist_delete(hl, nodes[i]) == 0) {
-                fprintf(stderr, "nodeattr: hostlist_delete failed\n");
-                exit(1);
-            }
-        }
+        /* Do not check return code for == 0, node may not exist in hostlist */
+        for (i = 0; i < count; i++)
+            hostlist_delete(hl, nodes[i]);
     }
 
     genders_nodelist_destroy(gp, nodes);
@@ -475,7 +472,7 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
                                        attrs[j], 
                                        dvalbuf, 
                                        dmaxvallen + 1)) < 0)
-                _gend_error_exit(dgh, "genders_getattr");
+                _gend_error_exit(dgh, "genders_testattr");
 
             if (!rv) {
                 fprintf(stderr, "%s: Node \"%s\" does not "
@@ -539,7 +536,7 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
                                        dattrs[j], 
                                        NULL,
                                        0)) < 0)
-                _gend_error_exit(gh, "genders_getattr");
+                _gend_error_exit(gh, "genders_testattr");
             
             if (!rv) {
                 if (strlen(dvals[j])) {
