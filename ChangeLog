@@ -4,7 +4,7 @@
 
 	* src/nodeattr/nodeattr.c (_diff): Fix error message typos.
 	
-	* META: Update for release.
+	* META, NEWS: Update for release.
 
 	* tagged genders-1-7-1
 
