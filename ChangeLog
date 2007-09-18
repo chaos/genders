@@ -1,3 +1,9 @@
+2007-09-18  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Update for release.
+
+	* tagged genders-1-7-1
+	
 2007-09-12  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/nodeattr.c (list_nodes): Fix -X usage corner case.
@@ -5,8 +11,6 @@
 	* src/nodeattr/nodeattr.c (_diff): Fix error message typos.
 	
 	* META, NEWS: Update for release.
-
-	* tagged genders-1-7-1
 
 2007-09-11  Albert Chu  <chu11@llnl.gov>
 
