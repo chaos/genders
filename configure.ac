@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.45 2007-09-18 21:54:13 chu11 Exp $
+## $Id: configure.ac,v 1.46 2007-10-03 20:20:13 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -124,6 +124,8 @@ AC_CONFIG_FILES( \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \
   compat/Makefile \
+  contrib/Makefile \
+  contrib/php/Makefile \
   man/Makefile \
   man/compat/Makefile \
   src/Libgenders/Libgenders.pm \

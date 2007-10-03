@@ -1,3 +1,12 @@
+2007-10-03  Albert Chu  <chu11@llnl.gov>
+
+	* contrib/: Add new contrib directory.
+
+	* Makefile.am, configure.ac: Update for new contrib directory.
+
+	* contrib/php/: Add PHP Bindings support from Jeff Cunningham
+	(cunningham24 at llnl dot gov).
+	
 2007-09-18  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac: Update for release.

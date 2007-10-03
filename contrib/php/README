@@ -1,0 +1,66 @@
+PHP Bindings for Genders
+
+INSTALLATION
+
+  ->  mkdir <php root>/php/include/php/ext/genders
+  ->  cp config.m4 genders.c php_genders.h <php root>/php/include/php/ext/genders
+  ->  cd <php root>/php/include/php/ext/genders
+  ->  phpize 
+  ->  ./configure --with-genders=<path to genders> --with-php-config=<path to file "php-config">
+
+  example:  ./configure --with-genders=/usr/local/genders --with-php-config=/usr/local/php/bin/php-config
+
+  ->  make
+  ->  make install
+
+USAGE
+
+  Four functions from the genders library are implemented.  They are genders_getnumattrs(),
+  genders_getattr(), genders_getattr_all(), and genders_getnodes(), and all work similarly
+  as their libgenders(3) counterparts:
+
+  genders_getnumattrs() takes a genders file name (string) as an input, and returns the
+  number of attributes listed in the genders file.
+
+  genders_getattr() takes a genders file name (string), node name (string), and return type
+  (boolean) as inputs, and returns an array of attributes or values.  If the return type is
+  0, attributes are returned.  Otherwise, values are returned.
+
+  genders_getnodes() takes a genders file name (string), attribute name (string), and value
+  name (string) as inputs, and returns an array of nodes.  If the input value string is NULL,
+  then values are not considered when determining the node list.
+
+  genders_getattr_all() takes a genders file name (string) as an input, and returns an array
+  of attributes.
+
+  In any of the above functions, if the file name string is set to NULL, libgenders will
+  look in default locations for the genders file.
+
+EXAMPLES
+
+<?php
+  $num = genders_getnumattrs("/etc/genders");
+  printf("Num: %d<P>\n", $num);
+  $attrs = genders_getattr(NULL, "node1", 0);
+  $vals = genders_getattr(NULL, "node1", 1);
+  $k = sizeof($attrs);
+  for($i=0;$i<$k;$i++)
+  {
+    printf("%s -> %s<br>", $attrs[$i], $vals[$i]);
+  }
+  printf("<P>\n");
+  $nodes = genders_getnodes(NULL,"compute",NULL);
+  $k = sizeof($nodes);
+  for($i=0;$i<$k;$i++)
+  {
+    printf("%s<br>", $nodes[$i]);
+  }
+
+  printf("<P>\n");
+  $attrs=genders_getattr_all("/etc/genders");
+  $k = sizeof($attrs);
+  for($i=0;$i<$k;$i++)
+  {
+    printf("%s<br>", $attrs[$i]);
+  }
+?>

@@ -1,15 +1,7 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.13 2007-10-03 20:20:13 chu11 Exp $
+## $Id: Makefile.am,v 1.1 2007-10-03 20:20:13 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-DISTCHECK_CONFIGURE_FLAGS = --with-perl-destdir=$$dc_install_base
-
-SUBDIRS = \
-        src \
-        compat \
-	contrib \
-        man
-
-EXTRA_DIST = META DISCLAIMER TUTORIAL genders.sample genders.spec
+SUBDIRS = php
