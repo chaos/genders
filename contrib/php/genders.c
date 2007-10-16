@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.1 2007-10-03 20:20:14 chu11 Exp $
+ *  $Id: genders.c,v 1.2 2007-10-16 18:35:48 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2001-2003 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -144,8 +144,15 @@ PHP_FUNCTION(genders_getattr)
     num = genders_getattr(ghandle, attrlist, vallist, len, node->value.str.val);
     if(num < 0)
     {
-      php_error(E_WARNING, genders_strerror(genders_errnum(ghandle)));
-      RETURN_FALSE;
+      if(genders_errnum(ghandle) == GENDERS_ERR_NOTFOUND)
+      {
+        RETURN_FALSE;
+      }
+      else
+      {
+        php_error(E_WARNING, genders_strerror(genders_errnum(ghandle)));
+        RETURN_FALSE;
+      }
     }
 
     array_init(return_value);

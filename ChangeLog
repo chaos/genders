@@ -1,3 +1,8 @@
+2007-10-16  Jeff Cunningham <cunningham24@llnl. gov>
+
+	* contrib/php/genders.c (PHP_FUNCTION): Reduce excessive error
+	output.
+	
 2007-10-03  Albert Chu  <chu11@llnl.gov>
 
 	* contrib/: Add new contrib directory.
