@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.13 2007-10-03 20:20:13 chu11 Exp $
+## $Id: Makefile.am,v 1.14 2007-10-17 17:31:14 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -12,4 +12,4 @@ SUBDIRS = \
 	contrib \
         man
 
-EXTRA_DIST = META DISCLAIMER TUTORIAL genders.sample genders.spec
+EXTRA_DIST = META DISCLAIMER DISCLAIMER.UC TUTORIAL genders.sample genders.spec
