@@ -1,7 +1,8 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.h,v 1.5 2007-09-05 17:42:41 chu11 Exp $
+ *  $Id: genders_parsing.h,v 1.6 2007-10-17 17:30:49 chu11 Exp $
  *****************************************************************************
- *  Copyright (C) 2001-2003 The Regents of the University of California.
+ *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
+ *  Copyright (C) 2001-2007 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
  *  UCRL-CODE-2003-004.
@@ -20,8 +21,7 @@
  *  details.
  *
  *  You should have received a copy of the GNU General Public License along
- *  with Genders; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
+ *  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 \*****************************************************************************/
 
 #ifndef _GENDERS_PARSING_H
