@@ -8,7 +8,7 @@
 
 	* Makefile.am, genders.spec.in: Add DISCLAIMER.UC.
 
-2007-10-16  Jeff Cunningham <cunningham24@llnl. gov>
+2007-10-16  Jeff Cunningham <cunningham24@llnl.gov>
 
 	* contrib/php/genders.c (PHP_FUNCTION): Reduce excessive error
 	output.
