@@ -9,6 +9,12 @@
   mcr[1-50/2] would be mcr1,3,5,7,...
   mcr[1-50/3] would be mcr1,4,7,10,...
   - think about format, do through hostlist.[ch]??
+- Aliases for nodesets
+  o i.e.
+    @NODESET1    a,b,c,d,e
+    @NODESET2    f,g,h
+    @NODESET1,@NODESET2  attr1,attr2
+    @NODESET1            attr3
 - For multilib, repackage everything
   - genders
   - genders-lib
