@@ -23,6 +23,7 @@
   - genders-compat
 - feed in genders file to nodeattr via stdin
   - '-' option?
+- Support empty genders file
 - Tool to output all attrs and vals for multiple genders files
 - Genders query equivalent of testattr?
 - genders_getnodes return a hostlist range rather than a list
