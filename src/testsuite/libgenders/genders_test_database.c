@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_database.c,v 1.4 2007-10-17 17:30:51 chu11 Exp $
+ *  $Id: genders_test_database.c,v 1.5 2007-12-20 00:16:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -31,8 +31,12 @@
 
 genders_parse_error_database_t genders_parse_error_databases[] = 
   {
+#if 0
+    /* No longer a parse error */
     {"testdatabases/genders.parse_error_empty_file", 1},
+    /* No longer a parse error */
     {"testdatabases/genders.parse_error_comments_only", 1},
+#endif
     {"testdatabases/genders.parse_error_hostname_not_shortened", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_comma", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_hostrange", 1},
@@ -897,6 +901,49 @@ genders_database_t genders_database_test_3 =
     &genders_database_data_test_3,
   };
 
+genders_database_data_t genders_database_data_empty = 
+  {
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    {NULL},
+    0,
+    {NULL},
+    0,
+    {NULL},
+    0,
+    {
+      {
+	{NULL},
+	{NULL},
+	{NULL}
+      }
+    },
+    0,
+    {
+      {
+	NULL,
+	NULL,
+	{NULL},
+	0,
+      },
+    },
+    0,
+  };
+
+genders_database_t genders_database_empty =
+  {
+    "testdatabases/genders.empty_file",
+    &genders_database_data_empty,
+  };
+
 genders_database_data_t genders_database_data_nodes_only_one = 
   {
     "node1",
@@ -1407,6 +1454,7 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_test_2_comma,
     &genders_database_test_2_hostrange,
     &genders_database_test_3,
+    &genders_database_empty,
     &genders_database_nodes_only_one,
     &genders_database_nodes_only_many,
     &genders_database_nodes_and_attrs_only,

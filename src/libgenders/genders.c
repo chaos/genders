@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.138 2007-10-17 17:30:49 chu11 Exp $
+ *  $Id: genders.c,v 1.139 2007-12-20 00:16:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -600,6 +600,13 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       /* Case B: atleast the attr was input, so use attr_index */
       List l;
       
+      if (!handle->attr_index)
+        {
+	  /* No attributes, so no nodes have this attr */
+	  handle->errnum = GENDERS_ERR_SUCCESS;
+	  return 0;
+        }
+
       if (!(l = hash_find(handle->attr_index, attr))) 
 	{
 	  /* No nodes have this attr */
@@ -663,6 +670,12 @@ genders_getattr(genders_t handle,
   if (!node)
     node = handle->nodename;
   
+  if (!handle->node_index)
+    {
+      handle->errnum = GENDERS_ERR_NOTFOUND;
+      return -1;
+    }
+
   if (!(n = hash_find(handle->node_index, node))) 
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
@@ -760,6 +773,12 @@ genders_testattr(genders_t handle,
   if (!node)
     node = handle->nodename;
 
+  if (!handle->node_index)
+    {
+      handle->errnum = GENDERS_ERR_NOTFOUND;
+      return -1;
+    }
+
   if (!(n = hash_find(handle->node_index, node))) 
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
@@ -815,6 +834,12 @@ genders_testattrval(genders_t handle,
   if (!node)
     node = handle->nodename;
 
+  if (!handle->node_index)
+    {
+      handle->errnum = GENDERS_ERR_NOTFOUND;
+      return -1;
+    }
+
   if (!(n = hash_find(handle->node_index, node))) 
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
@@ -839,6 +864,13 @@ genders_isnode(genders_t handle, const char *node)
   if (!node)
     node = handle->nodename;
 
+  if (!handle->node_index)
+    {
+      /* No nodes, so node not found */
+      handle->errnum = GENDERS_ERR_SUCCESS;
+      return 0;
+    }
+
   n = hash_find(handle->node_index, node);
   handle->errnum = GENDERS_ERR_SUCCESS;
   return ((n) ? 1 : 0);
@@ -856,6 +888,13 @@ genders_isattr(genders_t handle, const char *attr)
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
+    }
+
+  if (!handle->attr_index)
+    {
+      /* No attributes, so attr not found */
+      handle->errnum = GENDERS_ERR_SUCCESS;
+      return 0;
     }
 
   ptr = hash_find(handle->attr_index, attr);
@@ -950,6 +989,13 @@ genders_index_attrvals(genders_t handle, const char *attr)
 
   /* check if index already created */
   if (handle->attrval_index && !strcmp(handle->attrval_index_attr, attr)) 
+    {
+      handle->errnum = GENDERS_ERR_SUCCESS;
+      return 0;
+    }
+
+  /* Nothing to index if there are no nodes */
+  if (!handle->numnodes)
     {
       handle->errnum = GENDERS_ERR_SUCCESS;
       return 0;

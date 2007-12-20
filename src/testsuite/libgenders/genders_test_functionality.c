@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.8 2007-10-17 17:30:51 chu11 Exp $
+ *  $Id: genders_test_functionality.c,v 1.9 2007-12-20 00:16:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -1483,8 +1483,8 @@ genders_testattr_functionality(int verbose)
       
       err = genders_return_value_errnum_check("genders_testattr",
 					      num,
-					      0,
-					      GENDERS_ERR_SUCCESS,
+                                              (databases[i]->data->node) ? 0 : -1,
+                                              (databases[i]->data->node) ? GENDERS_ERR_SUCCESS : GENDERS_ERR_NOTFOUND,
 					      return_value,
 					      errnum,
 					      databases[i]->filename,

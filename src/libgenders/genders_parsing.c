@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.20 2007-10-17 17:30:49 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.21 2007-12-20 00:16:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -295,6 +295,10 @@ strsep (char **stringp, const char *delim)
  *
  * Returns -1 on error, 1 if there was a parse error, 0 if no errors
  */
+/* achu: 'parsed_nodes' is no longer needed, but leave it here if we
+ * change our minds later concerning whether and empty genders file
+ * is acceptable.
+ */
 static int 
 _parse_line(genders_t handle, 
 	    List nodeslist, 
@@ -500,6 +504,9 @@ _genders_index_nodes(genders_t handle)
   genders_node_t n;
   ListIterator nodeslist_itr = NULL;
 
+  if (!handle->numnodes)
+    return 0;
+
   __hash_create(handle->node_index, 
                 handle->numnodes,
                 (hash_key_f)hash_key_string, 
@@ -529,6 +536,9 @@ _genders_index_attrs(genders_t handle)
   genders_attrval_t av;
   char *attr;
 
+  if (!handle->numattrs)
+    return 0;
+
   __hash_create(handle->attr_index, 
                 handle->numattrs,
                 (hash_key_f)hash_key_string, 
@@ -557,7 +567,6 @@ _genders_index_attrs(genders_t handle)
   
   __list_iterator_destroy(nodeslist_itr);
   __list_iterator_destroy(attrslist_itr);
-  handle->errnum = GENDERS_ERR_SUCCESS;
   return 0;
 
  cleanup:
@@ -577,6 +586,10 @@ _genders_open_and_parse(genders_t handle,
 			int debug,
 			FILE *stream)
 {
+  /* achu: 'parsed_nodes' is no longer needed, but leave it here if we
+   * change our minds later concerning whether and empty genders file
+   * is acceptable.
+   */
   int len, errcount = 0, fd = -1, rv = -1, line_count = 1, parsed_nodes = 0;
   char buf[GENDERS_BUFLEN];
 
@@ -622,6 +635,13 @@ _genders_open_and_parse(genders_t handle,
       goto cleanup;
     }
   
+#if 0
+
+  /* achu: Later discussions lead several developers to conclude an
+   * empty genders file should be acceptable.  I'll leave this code
+   * here for legacy documentation.
+   */
+
   if (list_count(nodeslist) == 0) 
     {
       if (debug) 
@@ -638,6 +658,7 @@ _genders_open_and_parse(genders_t handle,
       handle->errnum = GENDERS_ERR_PARSE;
       goto cleanup;
     }
+#endif
   
   rv = (debug) ? errcount : 0;
  cleanup:
