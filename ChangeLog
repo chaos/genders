@@ -1,3 +1,11 @@
+2007-12-21  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Update for release.
+
+	* NEWS: Update for release.
+
+	* tagged genders-1-8-1
+
 2007-12-19  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders: Support empty genders files as an acceptable
