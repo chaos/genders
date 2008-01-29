@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: hostlist.h,v 1.2 2007-09-05 17:42:40 chu11 Exp $
+ *  $Id: hostlist.h,v 1.3 2008-01-29 19:09:05 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -21,7 +21,7 @@
  *  
  *  You should have received a copy of the GNU General Public License along
  *  with SLURM; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA.
+ *  59 Temple Place, Suite 330, Boston, MA  02111-1307  USA.
 \*****************************************************************************/
 
 #ifndef _HOSTLIST_H
@@ -276,7 +276,8 @@ void hostlist_uniq(hostlist_t hl);
  * hostlist_ranged_string() will write a bracketed hostlist representation
  * where possible.
  */
-size_t hostlist_ranged_string(hostlist_t hl, size_t n, char *buf);
+ssize_t hostlist_ranged_string(hostlist_t hl, size_t n, char *buf);
+ssize_t hostset_ranged_string(hostset_t hs, size_t n, char *buf);
 
 /* hostlist_deranged_string():
  *
@@ -287,7 +288,8 @@ size_t hostlist_ranged_string(hostlist_t hl, size_t n, char *buf);
  * hostlist_deranged_string() will not attempt to write a bracketed
  * hostlist representation. Every hostname will be explicitly written.
  */
-size_t hostlist_deranged_string(hostlist_t hl, size_t n, char *buf);
+ssize_t hostlist_deranged_string(hostlist_t hl, size_t n, char *buf);
+ssize_t hostset_deranged_string(hostset_t hs, size_t n, char *buf);
 
 
 /* ----[ hostlist utility functions ]---- */
