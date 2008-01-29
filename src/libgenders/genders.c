@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.139 2007-12-20 00:16:21 chu11 Exp $
+ *  $Id: genders.c,v 1.140 2008-01-29 05:43:06 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -922,9 +922,7 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   if (handle->attrval_index 
       && !strcmp(handle->attrval_index_attr, attr)) 
     {
-      List l;
-      
-      if (!(l = hash_find(handle->attrval_index, val)))
+      if (!hash_find(handle->attrval_index, val))
 	rv = 0;
       else
 	rv = 1;

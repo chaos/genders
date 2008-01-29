@@ -1,3 +1,10 @@
+2008-01-28  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/Libgenders.xs (genders_getattr): Fix corner case.
+
+	* src/libgenders/genders_query.y (_genders_makenode, _calc_attrval_nodes,
+	_calc_complement): Fix potential mem-leak.
+	
 2007-12-21  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac: Update for release.

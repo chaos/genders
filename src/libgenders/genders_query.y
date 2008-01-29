@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.29 2007-10-17 17:30:50 chu11 Exp $
+ *  $Id: genders_query.y,v 1.30 2008-01-29 05:43:06 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -110,6 +110,7 @@ _genders_makenode(char *str, void *left, void *right)
   if (!(t->str = (char *)strdup(str))) 
     {
       genders_query_err = GENDERS_ERR_OUTMEM;
+      free(t);
       return NULL;
     }
 
@@ -277,7 +278,7 @@ _calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
     return NULL;
 
   if ((num = genders_getnodes(handle, nodes, len, attr, val)) < 0)
-    return NULL;
+    goto cleanup;
 
   __hostlist_create(h, NULL);
   for (i = 0; i < num; i++) 
@@ -440,8 +441,8 @@ _calc_complement(genders_t handle, hostlist_t h)
   if ((len = genders_nodelist_create(handle, &nodes)) < 0)
     return NULL;
 
-  if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0)
-    return NULL;
+  if ((num = genders_getnodes(handle, nodes, len, NULL, NULL)) < 0) 
+    goto cleanup;
   
   __hostlist_create(ch, NULL);
   for (i = 0; i < num; i++) 

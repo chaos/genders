@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.41 2007-10-17 17:30:49 chu11 Exp $
+ *  $Id: Libgenders.xs,v 1.42 2008-01-29 05:43:06 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -352,9 +352,11 @@ genders_getattr(handle, node=NULL)
     
         if (genders_attrlist_destroy(handle, alist) < 0)
             goto handle_error;
+	alist = NULL;
 
         if (genders_vallist_destroy(handle, vlist) < 0)
             goto handle_error;
+	vlist = NULL;
 
         goto the_end;
 
