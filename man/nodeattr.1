@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.18 2007-10-17 17:30:48 chu11 Exp $
+\."  $Id: nodeattr.1,v 1.19 2008-02-15 00:39:26 chu11 Exp $
 \."############################################################################
 \."  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
 \."  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -59,13 +59,14 @@ arguments,
 .B nodeattr
 reads the genders file and outputs a list of nodes that match the
 specified query.  The nodes are listed in hostlist format, comma
-separated lists, newline separated lists, or space separated lists.
-Genders queries will query the genders database for a set of nodes
-based on the union, intersection, difference, or complement of genders
-attributes and values.  The set operation union is represented by two
-pipe symbols ('||'), intersection by two ampersand symbols ('&&'),
-difference by two minus symbols ('--'), and complement by a tilde
-('~').  Parentheses may be used to change the order of operations.
+separated lists, newline separated lists, or space separated lists
+respectively.  Genders queries will query the genders database for a
+set of nodes based on the union, intersection, difference, or
+complement of genders attributes and values.  The set operation union
+is represented by two pipe symbols ('||'), intersection by two
+ampersand symbols ('&&'), difference by two minus symbols ('--'), and
+complement by a tilde ('~').  Parentheses may be used to change the
+order of operations.
 The 
 .I "-X"
 argument and query can be used to exclude nodes from the resulting
@@ -119,6 +120,10 @@ match.
 Retrieve a comma separated list of all login nodes:
 .IP
 nodeattr -c login
+.LP
+Retrieve a hostlist formatted list of all login nodes:
+.IP
+nodeattr -q login
 .LP
 Retrieve a comma separated list of nodes with 4 cpus:
 .IP

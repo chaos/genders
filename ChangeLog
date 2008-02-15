@@ -1,3 +1,7 @@
+2008-02-14  Albert Chu  <chu11@llnl.gov>
+
+	* man/nodeattr.1: Add some text to highlight -q option.
+	
 2008-01-29  Albert Chu  <chu11@llnl.gov>
 
 	* src/libcommon/hostlist.h, src/libcommon/hostlist.c: Update to
