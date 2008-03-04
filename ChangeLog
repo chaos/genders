@@ -1,3 +1,10 @@
+2008-03-04  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/nodeattr.c: Support new -V and -U options.  Add
+	error checks for all list creation calls.
+
+	* man/nodeattr.1: Update documentation for -V and -U options.
+	
 2008-02-14  Albert Chu  <chu11@llnl.gov>
 
 	* man/nodeattr.1: Add some text to highlight -q option.

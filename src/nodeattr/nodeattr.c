@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.36 2007-10-17 17:30:50 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.37 2008-03-04 17:05:15 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqX:vlf:kd:"
+#define OPTIONS "cnsqX:vVUlf:kd:"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -60,6 +60,8 @@ static struct option longopts[] = {
     { "query", 0, 0, 'q' },
     { "excludequery", 1, 0, 'X'},
     { "value", 0, 0, 'v' },
+    { "values", 0, 0, 'V' },
+    { "unique", 0, 0, 'U' },
     { "listattr", 0, 0, 'l' },
     { "filename", 1, 0, 'f' },
     { "parse-check", 0, 0, 'k'},
@@ -71,6 +73,7 @@ static struct option longopts[] = {
 typedef enum { FMT_COMMA, FMT_NL, FMT_SPACE, FMT_HOSTLIST } fmt_t;
 
 static int test_attr(genders_t gp, char *node, char *attr, int vopt);
+static void list_attr_val(genders_t gp, char *attr, int Uopt);
 static void list_nodes(genders_t gp, char *attr, char *excludequery, fmt_t fmt);
 static void list_attrs(genders_t gp, char *node);
 static void usage(void);
@@ -91,7 +94,7 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int lopt = 0, qopt = 0, vopt = 0, kopt = 0, dopt = 0;
+    int lopt = 0, qopt = 0, vopt = 0, Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -121,6 +124,12 @@ main(int argc, char *argv[])
             break;
         case 'v':   /* --value */
             vopt = 1;
+            break;
+        case 'V':   /* --values */
+            Vopt = 1;
+            break;
+        case 'U':   /* --unique */
+            Uopt = 1;
             break;
         case 'l':   /* --listattr */
             lopt = 1;
@@ -174,7 +183,7 @@ main(int argc, char *argv[])
     if (qopt) {
         char *query;
 
-        if (vopt || lopt)
+        if (vopt || Vopt || Uopt || lopt)
             usage();
         if (optind != argc - 1)
             usage();
@@ -186,9 +195,12 @@ main(int argc, char *argv[])
     }
 
     /* Usage 2:  does node have attribute? */
-    if (!lopt) {
+    if (!lopt && !Vopt) {
         char *node = NULL, *attr = NULL;
         int result;
+
+        if (Uopt)
+            usage();
 
         if (optind == argc - 2) {
             node = argv[optind++];
@@ -203,7 +215,22 @@ main(int argc, char *argv[])
         exit(result ? 0 : 1);
     }
 
-    /* Usage 3:  list attributes */
+    /* Usage 3:  output all attribute values */
+    if (!lopt && Vopt) {
+        char *attr = NULL;
+
+        if (optind == argc - 1) {
+            attr = argv[optind++];
+        } else
+            usage();
+
+        if (strchr(attr, '='))  /* attr cannot be "attr=val" */
+            usage();
+
+        list_attr_val(gp, attr, Uopt);
+    }
+
+    /* Usage 4:  list attributes */
     if (lopt) {
         char *node = NULL;
 
@@ -224,9 +251,12 @@ list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
 {
     char **nodes;
     int i, count;
-    int len = genders_nodelist_create(gp, &nodes);
+    int len;
     hostlist_t hl;
     char *str;
+
+    if ((len = genders_nodelist_create(gp, &nodes)) < 0)
+        _gend_error_exit(gp, "genders_nodelist_create");
 
     if ((count = genders_query(gp, nodes, len, query)) < 0)
         _gend_error_exit(gp, query);
@@ -292,14 +322,84 @@ test_attr(genders_t gp, char *node, char *attr, int vopt)
     return res;
 }
 
+static void
+list_attr_val(genders_t gp, char *attr, int Uopt)
+{
+    char **nodes, **myvallist;
+    char *val;
+    int maxvallen, nlen, ncount, i, ret;
+    unsigned int val_count = 0;
+    
+    /* achu: There is currently no library operation that offers
+     * anything to easily access this information.  So we have to
+     * iterate to do it.
+     */
+
+    if ((nlen = genders_nodelist_create(gp, &nodes)) < 0)
+        _gend_error_exit(gp, "genders_getnodelist_create");
+
+    if ((ncount = genders_getnodes(gp, nodes, nlen, attr, NULL)) < 0)
+        _gend_error_exit(gp, "genders_getnodes");
+
+    myvallist = (char **)_safe_malloc(ncount * sizeof(char **));
+    for (i = 0; i < ncount; i++)
+        myvallist[i] = _val_create(gp);
+
+    val = _val_create(gp); /* full of nulls initially */
+
+    if ((maxvallen = genders_getmaxvallen(gp)) < 0)
+        _gend_error_exit(gp, "genders_getmaxvallen");
+
+    for (i = 0; i < ncount; i++) {
+        memset(val, '\0', maxvallen + 1);
+        if ((ret = genders_testattr(gp, 
+                                    nodes[i],
+                                    attr, 
+                                    val, 
+                                    maxvallen + 1)) < 0)
+            _gend_error_exit(gp, "genders_testattr");
+        if (ret && strlen(val)) {
+            int j, store = 0;
+            if (Uopt) {
+                /* achu: I know this is inefficient.  I don't have
+                   good data structures around to make things
+                   better/easier.
+                 */
+                for (j = 0; j < val_count; j++) {
+                    if (!strcmp(val, myvallist[j])) {
+                        store++;
+                        break;
+                    }
+                }
+            }
+            if (!store) {
+                strcpy(myvallist[val_count], val);
+                val_count++;
+            }
+        }
+    }
+    
+    for (i = 0; i < val_count; i++) {
+        printf("%s\n", myvallist[i]);
+    }
+
+    genders_nodelist_destroy(gp, nodes);
+    for (i = 0; i < ncount; i++)
+        free(myvallist[i]);
+    free(myvallist);
+    free(val);
+}
+
 static void 
 list_attrs(genders_t gp, char *node)
 {
     char **attrs, **vals;
     int len, vlen, count, i;
 
-    len = genders_attrlist_create(gp, &attrs);
-    vlen = genders_vallist_create(gp, &vals);
+    if ((len = genders_attrlist_create(gp, &attrs)) < 0)
+        _gend_error_exit(gp, "genders_attrlist_create");
+    if ((vlen = genders_vallist_create(gp, &vals)) < 0)
+        _gend_error_exit(gp, "genders_vallist_create");
     if (node) {
         if ((count = genders_getattr(gp, attrs, vals, len, node)) < 0)
             _gend_error_exit(gp, "genders_getattr");
@@ -322,6 +422,7 @@ usage(void)
     fprintf(stderr,
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-X exclude_query] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
+        "or     nodeattr [-f genders] -V attr\n"   
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"
         "or     nodeattr [-f genders] -d genders\n"    
@@ -704,8 +805,11 @@ _to_gendname(genders_t gp, char *val)
 {
     char **nodes;
     int count;
-    int len = genders_nodelist_create(gp, &nodes);
+    int len;
     char *node = NULL;
+
+    if ((len = genders_nodelist_create(gp, &nodes)) < 0) 
+        _gend_error_exit(gp, "genders_nodelist_create");
 
     if ((count = genders_getnodes(gp, nodes, len, "altname", val)) < 0) {
         genders_nodelist_destroy(gp, nodes);

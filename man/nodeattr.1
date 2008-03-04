@@ -1,5 +1,5 @@
 \."############################################################################
-\."  $Id: nodeattr.1,v 1.19 2008-02-15 00:39:26 chu11 Exp $
+\."  $Id: nodeattr.1,v 1.20 2008-03-04 17:05:15 chu11 Exp $
 \."############################################################################
 \."  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
 \."  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -36,6 +36,9 @@ nodeattr \- query genders file
 .br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
+.br
+.B nodeattr
+.I "[-f genders] -V [-U] attr
 .br
 .B nodeattr
 .I "[-f genders] -l [node]"
@@ -78,6 +81,19 @@ returns \fI0\fR to the environment if the node has the attribute; else
 \fI1\fR.  If \fI-v\fR is present, the attribute name and any value
 (see below) is printed on the standard output.  If a node name is not
 specified, the local host is assumed.
+.LP
+The
+.I "-V"
+option causes
+.B nodeattr
+to print all of the values that exist for a particular attribute.
+Also specifing
+.I "-U"
+with 
+.I "-V"
+causes 
+.B nodeattr
+to print out only unique values for the particular attribute.
 .LP
 The 
 .I "-l"
