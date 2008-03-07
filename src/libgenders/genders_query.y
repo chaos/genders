@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.30 2008-01-29 05:43:06 chu11 Exp $
+ *  $Id: genders_query.y,v 1.31 2008-03-07 18:50:16 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -220,7 +220,11 @@ _parse_query(genders_t handle, char *query)
       genders_query_err = GENDERS_ERR_INTERNAL;
       goto cleanup;
     }
-  close(fds[1]);
+  if (close(fds[1]) < 0)
+    {
+      genders_query_err = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
 
   if (!(yyin = fdopen(fds[0], "r"))) 
     {
