@@ -1,3 +1,7 @@
+2008-03-28  Albert Chu  <chu11@llnl.gov>
+
+	* man/: Fix nroff syntax errors.
+	
 2008-03-07  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query.y (_parse_query): Fix potential
