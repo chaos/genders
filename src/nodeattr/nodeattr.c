@@ -1,7 +1,7 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.37 2008-03-04 17:05:15 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.38 2008-03-28 16:56:32 chu11 Exp $
  *****************************************************************************
- *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
+ *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.

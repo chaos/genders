@@ -1,7 +1,7 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.6 2007-10-17 17:30:50 chu11 Exp $
+ *  $Id: genders_util.c,v 1.7 2008-03-28 16:56:31 chu11 Exp $
  *****************************************************************************
- *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
+ *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
