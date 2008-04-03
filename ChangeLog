@@ -1,3 +1,11 @@
+2008-04-03  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Update for release.
+
+	* NEWS: Update for release.
+
+	* tagged genders-1-9-1
+
 2008-03-28  Albert Chu  <chu11@llnl.gov>
 
 	* man/: Fix nroff syntax errors.

@@ -2,6 +2,11 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.9-1
+========================
+ -- Support -V and -U options in nodeattr.
+ -- Minor bug fixes.
+
 Changes in genders-1.8-1
 ========================
  -- Support empty genders file as degenerate case.
@@ -68,4 +73,4 @@ Changes in genders-1.2-pre1
     as well as compress back to this same form.
  -- started NEWS file.
 
-$Id: NEWS,v 1.24 2007-12-21 17:20:24 chu11 Exp $
+$Id: NEWS,v 1.25 2008-04-03 17:58:37 chu11 Exp $
