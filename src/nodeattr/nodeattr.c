@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.38 2008-03-28 16:56:32 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.39 2008-04-11 21:11:15 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -422,7 +422,7 @@ usage(void)
     fprintf(stderr,
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-X exclude_query] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
-        "or     nodeattr [-f genders] -V attr\n"   
+        "or     nodeattr [-f genders] -V [-U] attr\n"   
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"
         "or     nodeattr [-f genders] -d genders\n"    
