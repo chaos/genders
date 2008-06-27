@@ -1,3 +1,9 @@
+2008-06-27  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Update for release.
+
+	* tagged genders-1-9-2
+
 2008-04-11  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/nodeattr.c (usage): Add missing -U option to usage.
