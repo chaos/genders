@@ -9,7 +9,8 @@
 	* src/testsuite/libgenders/: Add tests for bugzilla 414 (LLNL
 	CHAOS bug).
 
-	
+	* src/libcommon/hostlist.c: Updated to new version.  Fixes
+	bugzilla 414.
 	
 2008-06-28  Albert Chu  <chu11@llnl.gov>
 
