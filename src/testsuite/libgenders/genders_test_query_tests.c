@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_query_tests.c,v 1.6 2008-03-28 16:56:41 chu11 Exp $
+ *  $Id: genders_test_query_tests.c,v 1.7 2008-07-11 22:35:35 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -2575,6 +2575,131 @@ genders_query_functionality_tests_t genders_query_functionality_tests_query_spec
     &genders_query_functionality_tests_query_special_chars_tests,
   };
 
+genders_query_tests_t genders_query_functionality_tests_bugzilla414_1_tests =
+  {
+    {
+      /* 
+       * Simple tests 
+       */
+      {
+	"a&&b",
+	{"tst", NULL},
+	1,
+      },
+      {
+	NULL,
+	{NULL},
+	0
+      },
+    }
+  };
+
+genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla414_1 =
+  {
+    "testdatabases/genders.bugzilla414_1",
+    &genders_query_functionality_tests_bugzilla414_1_tests,
+  };
+
+genders_query_tests_t genders_query_functionality_tests_bugzilla414_2_tests =
+  {
+    {
+      /* 
+       * Simple tests 
+       */
+      {
+	"~b",
+	{"tst0", NULL},
+	1,
+      },
+      {
+	NULL,
+	{NULL},
+	0
+      },
+    }
+  };
+
+genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla414_2 =
+  {
+    "testdatabases/genders.bugzilla414_2",
+    &genders_query_functionality_tests_bugzilla414_2_tests,
+  };
+
+genders_query_tests_t genders_query_functionality_tests_bugzilla414_3_tests =
+  {
+    {
+      /* 
+       * Simple tests 
+       */
+      {
+	"~b",
+	{"tst0", NULL},
+	1,
+      },
+      {
+	NULL,
+	{NULL},
+	0
+      },
+    }
+  };
+
+genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla414_3 =
+  {
+    "testdatabases/genders.bugzilla414_3",
+    &genders_query_functionality_tests_bugzilla414_3_tests,
+  };
+
+genders_query_tests_t genders_query_functionality_tests_bugzilla414_4_tests =
+  {
+    {
+      /* 
+       * Simple tests 
+       */
+      {
+	"a&&b",
+	{"tst", NULL},
+	1,
+      },
+      {
+	NULL,
+	{NULL},
+	0
+      },
+    }
+  };
+
+genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla414_4 =
+  {
+    "testdatabases/genders.bugzilla414_4",
+    &genders_query_functionality_tests_bugzilla414_4_tests,
+  };
+
+genders_query_tests_t genders_query_functionality_tests_bugzilla414_5_tests =
+  {
+    {
+      /* 
+       * Simple tests 
+       */
+      {
+	"a&&b",
+	{"tst", NULL},
+	1,
+      },
+      {
+	NULL,
+	{NULL},
+	0
+      },
+    }
+  };
+
+genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla414_5 =
+  {
+    "testdatabases/genders.bugzilla414_5",
+    &genders_query_functionality_tests_bugzilla414_5_tests,
+  };
+
 genders_query_functionality_tests_t *genders_query_functionality_tests[] =
   {
     &genders_query_functionality_tests_query_1,
@@ -2584,5 +2709,10 @@ genders_query_functionality_tests_t *genders_query_functionality_tests[] =
     &genders_query_functionality_tests_query_2_comma,
     &genders_query_functionality_tests_query_2_hostrange,
     &genders_query_functionality_tests_query_special_chars,
+    &genders_query_functionality_tests_bugzilla414_1,
+    &genders_query_functionality_tests_bugzilla414_2,
+    &genders_query_functionality_tests_bugzilla414_3,
+    &genders_query_functionality_tests_bugzilla414_4,
+    &genders_query_functionality_tests_bugzilla414_5,
     NULL
   };

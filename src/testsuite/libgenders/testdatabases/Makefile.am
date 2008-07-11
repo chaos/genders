@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.2 2007-12-20 00:16:21 chu11 Exp $
+## $Id: Makefile.am,v 1.3 2008-07-11 22:35:36 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -100,4 +100,9 @@ EXTRA_DIST = \
 	genders.test_3 \
 	genders.whitespace_after_nodes_nodes_only \
 	genders.whitespace_before_and_after_nodes_nodes_only \
-	genders.whitespace_before_nodes_nodes_only
+	genders.whitespace_before_nodes_nodes_only \
+	genders.bugzilla414_1 \
+	genders.bugzilla414_2 \
+	genders.bugzilla414_3 \
+	genders.bugzilla414_4 \
+	genders.bugzilla414_5
