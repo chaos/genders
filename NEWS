@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.11-1
+=========================
+ -- Fix hostrange calculation corner cases.
+
 Changes in genders-1.10-1
 =========================
  -- Minor documentation and bug fixes.
@@ -77,4 +81,4 @@ Changes in genders-1.2-pre1
     as well as compress back to this same form.
  -- started NEWS file.
 
-$Id: NEWS,v 1.26 2008-06-28 18:02:17 chu11 Exp $
+$Id: NEWS,v 1.27 2008-07-11 22:44:37 chu11 Exp $

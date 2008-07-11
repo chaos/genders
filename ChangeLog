@@ -1,4 +1,14 @@
 2008-07-11  Albert Chu  <chu11@llnl.gov>
+	
+	* configure.ac: Update for release.
+
+	* NEWS: Update for release.
+
+	* META: Update for release.
+
+	* tagged genders-1-11-1
+
+2008-07-11  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/libgenders/testdatabases/genders.bugzilla414_1,
 	src/testsuite/libgenders/testdatabases/genders.bugzilla414_2,
