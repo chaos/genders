@@ -30,3 +30,4 @@
 - do genders query isolated to a specific node
   - in libgenders and rest
   - in nodeattr
+- genders -> netgroups and netgroups -> genders converter
