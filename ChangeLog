@@ -1,6 +1,8 @@
 2008-07-21  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_query.y: Remove compiler warning.
+
+	* src/libgenders/Makefile.am: Fix porting issue.
 	
 2008-07-11  Albert Chu  <chu11@llnl.gov>
 	

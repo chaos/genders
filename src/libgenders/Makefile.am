@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.27 2006-06-19 21:25:42 chu11 Exp $
+## $Id: Makefile.am,v 1.28 2008-07-21 17:15:26 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -29,8 +29,9 @@ libgenders_la_LIBADD = ../libcommon/libcommon.la
 
 libgenders_la_LDFLAGS = -version-info @LIBGENDERS_VERSION_INFO@ $(OTHER_FLAGS)
 
+# achu: -o option in lex/flex is not portable, use -t and write to stdout
 genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l
-	$(LEX) -ogenders_query_parse.c $(srcdir)/genders_query_parse.l
+	$(LEX) -t $(srcdir)/genders_query_parse.l > $(srcdir)/genders_query_parse.c
 
 genders_query.c: $(srcdir)/genders_query.y
 	$(YACC) -d -o genders_query.c $(srcdir)/genders_query.y
