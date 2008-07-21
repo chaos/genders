@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.29 2008-07-21 21:13:19 chu11 Exp $
+## $Id: Makefile.am,v 1.30 2008-07-21 21:14:13 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -37,9 +37,9 @@ genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l
 genders_query.c: $(srcdir)/genders_query.y
 	$(YACC) -d -b genders_query $(srcdir)/genders_query.y
 
-CLEANFILES = genders_query_parse.c genders_query.c genders_query.h
+CLEANFILES = genders_query_parse.c genders_query.tab.c genders_query.tab.h
 
-EXTRA_DIST = genders.map genders_query.h genders_query_parse.l genders_query.y
+EXTRA_DIST = genders.map genders_query_parse.l genders_query.y
 
 ../libcommon/libcommon.la: force-dependency-check
 	@cd `dirname $@` && make `basename $@`
