@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query_parse.l,v 1.8 2008-07-21 21:13:19 chu11 Exp $
+ *  $Id: genders_query_parse.l,v 1.9 2008-07-21 22:51:28 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -49,5 +49,5 @@
 &&                                                                   return INTERSECTIONTOK;
 --                                                                   return DIFFERENCETOK;
 ~                                                                    return COMPLEMENTTOK;
-[ \t\n]+                                                             /* ignore whitespace */
+[ \t\n]+                                                             ; /* ignore whitespace */
 %%
