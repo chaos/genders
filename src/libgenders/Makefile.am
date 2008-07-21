@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.28 2008-07-21 17:15:26 chu11 Exp $
+## $Id: Makefile.am,v 1.29 2008-07-21 21:13:19 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -9,7 +9,7 @@ VERSION_SCRIPT = $(srcdir)/genders.map
 OTHER_FLAGS = -Wl,--version-script=$(VERSION_SCRIPT)
 endif
 
-BUILT_SOURCES         = genders_query_parse.c genders_query.c
+BUILT_SOURCES         = genders_query_parse.c genders_query.tab.c
 include_HEADERS       = genders.h
 noinst_HEADERS        = genders_api.h \
 			genders_constants.h \
@@ -22,7 +22,7 @@ libgenders_la_CFLAGS  = -D_REENTRANT \
 libgenders_la_SOURCES = genders.c \
 			genders_parsing.c \
                         genders_query_parse.c \
-			genders_query.c \
+			genders_query.tab.c \
 			genders_util.c
 
 libgenders_la_LIBADD = ../libcommon/libcommon.la
@@ -33,8 +33,9 @@ libgenders_la_LDFLAGS = -version-info @LIBGENDERS_VERSION_INFO@ $(OTHER_FLAGS)
 genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l
 	$(LEX) -t $(srcdir)/genders_query_parse.l > $(srcdir)/genders_query_parse.c
 
+# achu: -o option in yacc/bison is not portable, use -b instead
 genders_query.c: $(srcdir)/genders_query.y
-	$(YACC) -d -o genders_query.c $(srcdir)/genders_query.y
+	$(YACC) -d -b genders_query $(srcdir)/genders_query.y
 
 CLEANFILES = genders_query_parse.c genders_query.c genders_query.h
 

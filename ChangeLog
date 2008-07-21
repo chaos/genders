@@ -2,7 +2,9 @@
 
 	* src/libgenders/genders_query.y: Remove compiler warning.
 
-	* src/libgenders/Makefile.am: Fix porting issue.
+	* src/libgenders/Makefile.am,
+	src/libgenders/genders_query_parsing.l: Fix porting issues for
+	Solaris.
 	
 2008-07-11  Albert Chu  <chu11@llnl.gov>
 	

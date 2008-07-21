@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query_parse.l,v 1.7 2007-10-17 17:30:50 chu11 Exp $
+ *  $Id: genders_query_parse.l,v 1.8 2008-07-21 21:13:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "genders_query.h"
+#include "genders_query.tab.h"
 
 /* Regex notes:
 
