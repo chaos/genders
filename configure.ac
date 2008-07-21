@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.50 2008-07-11 22:44:38 chu11 Exp $
+## $Id: configure.ac,v 1.51 2008-07-21 21:54:11 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -58,6 +58,33 @@ AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG([PERL], [perl])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
 AC_DEBUG
+
+##
+## achu: Solaris 10 (and maybe some other earlier Solarises) bison has
+## a bug which segfaults.  So we use the below to force yacc usage
+## when we need to .
+##
+AC_MSG_CHECKING(for --with-force-yacc )
+AC_ARG_WITH(force-yacc,
+   AC_HELP_STRING([--with-force-yacc],
+                  [force yacc to be used]),
+   [ case "$withval" in
+   yes)
+       ac_force_yacc=yes
+       ;;
+   no)
+       ac_force_yacc=no
+       ;;
+   *)
+       ac_force_yacc=no
+       ;;
+   esac ]
+) 
+AC_MSG_RESULT(${ac_force_yacc=no})
+if test "$ac_force_yacc" = yes; then
+  YACC=yacc
+  AC_SUBST(FORCE_YACC)
+fi
 
 ##
 # Checks for header files.

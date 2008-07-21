@@ -5,6 +5,8 @@
 	* src/libgenders/Makefile.am,
 	src/libgenders/genders_query_parsing.l: Fix porting issues for
 	Solaris.
+
+	* configure.ac: Support --with-force-yacc build option.
 	
 2008-07-11  Albert Chu  <chu11@llnl.gov>
 	
