@@ -1,3 +1,7 @@
+2008-07-21  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_query.y: Remove compiler warning.
+	
 2008-07-11  Albert Chu  <chu11@llnl.gov>
 	
 	* configure.ac: Update for release.
