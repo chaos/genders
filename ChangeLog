@@ -1,3 +1,8 @@
+2008-09-02  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Change build requires from byacc to bison for
+	portability.
+
 2008-07-22  Albert Chu  <chu11@llnl.gov>
 	
 	* META: Update for release.

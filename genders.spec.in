@@ -6,7 +6,7 @@ Group: System Environment/Base
 License: GPL
 Source: %{name}-%{version}.tar.gz
 Requires: perl
-BuildRequires: byacc flex
+BuildRequires: bison flex
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
