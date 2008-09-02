@@ -3,6 +3,10 @@
 	* genders.spec.in: Change build requires from byacc to bison for
 	portability.
 
+	* META: Update for release.
+
+	* tagged genders-1-11-3
+
 2008-07-22  Albert Chu  <chu11@llnl.gov>
 	
 	* META: Update for release.
