@@ -41,7 +41,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
 # packaging must work off whatever Perl is installed.  
-%define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $T=~/(.*)\\/site_perl.*/; print $1;')
+%define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $T=~/(.*)\/site_perl.*/; print $1;')
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
 %{_mandir}/man3/libgenders* 
