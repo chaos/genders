@@ -31,3 +31,14 @@
   - in libgenders and rest
   - in nodeattr
 - genders -> netgroups and netgroups -> genders converter
+- a %r type expression?
+  - node[1-15]   ip=192.168.1.[2-16]
+  - with math?
+    node[0-255] 192.168.1.%r
+    node[256-511] 192.168.2.%r
+    node[512-767] 192.168.3.%r
+    <etc>
+
+    to
+
+    node[0-2047] 192.168.{%r/256 + 1}.{%r % 256}
