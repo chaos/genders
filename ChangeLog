@@ -1,5 +1,13 @@
 2009-02-18  Albert Chu  <chu11@llnl.gov>
 
+	* config/ac_perl_extensions.m4: New file.
+	
+	* configure.ac, src/Libgenders/Makefile.am,
+	src/Genders/Makefile.am: Support capability to not build perl
+	extensions libs.
+
+2009-02-18  Albert Chu  <chu11@llnl.gov>
+
 	* genders.spec.in: Revert sles10 fix from 2008-10-28, issue is
 	something else in Suse.
 

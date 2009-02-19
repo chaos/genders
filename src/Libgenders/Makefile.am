@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.23 2007-01-09 17:21:20 chu11 Exp $
+## $Id: Makefile.am,v 1.24 2009-02-19 00:50:17 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -27,6 +27,7 @@ MAKEMAKERFLAGS = INSTALLDIRS=site \
 		 MAKEFILE=Makefile.xs \
 		 FIRST_MAKEFILE=Makefile.xs
 
+if WITH_PERL_EXTENSIONS
 all: Makefile.xs
 	$(MAKE) -f Makefile.xs
 
@@ -72,5 +73,6 @@ clean:
 	rm -f *.o
 	rm -f Makefile.xs
 	rm -f Makefile.xs.old
+endif
 
 EXTRA_DIST = Libgenders.pm Libgenders.xs Makefile.PL typemap

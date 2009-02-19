@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: configure.ac,v 1.51 2008-07-21 21:54:11 chu11 Exp $
+## $Id: configure.ac,v 1.52 2009-02-19 00:50:16 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with autoconf to produce a configure script.
 ##*****************************************************************************
@@ -103,9 +103,11 @@ AC_CHECK_HEADERS( \
 AC_GENDERS_FILE
 
 #
-# Check for perl destdir
+# Check for perl stuff
 #
 AC_PERL_DESTDIR
+AC_PERL_EXTENSIONS
+AM_CONDITIONAL(WITH_PERL_EXTENSIONS, [test "$ac_with_perl_extensions" = "yes"])
 
 #
 # Determine Perl section-3 man page extension
