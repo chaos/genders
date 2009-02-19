@@ -1,3 +1,8 @@
+2009-02-18  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Revert sles10 fix from 2008-10-28, issue is
+	something else in Suse.
+
 2008-10-28  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in: Fix sles10 rpmbuild issue.
