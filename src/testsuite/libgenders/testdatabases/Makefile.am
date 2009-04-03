@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.3 2008-07-11 22:35:36 chu11 Exp $
+## $Id: Makefile.am,v 1.4 2009-04-03 23:24:32 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -37,6 +37,8 @@ EXTRA_DIST = \
 	genders.base_whitespace_between_nodes_and_attrs \
 	genders.corner_case \
 	genders.empty_file \
+	genders.equal_sign_in_value_1 \
+	genders.equal_sign_in_value_2 \
 	genders.large_attr \
 	genders.large_val \
 	genders.nodes_and_attrs_only \
