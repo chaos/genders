@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_database.c,v 1.6 2008-03-28 16:56:37 chu11 Exp $
+ *  $Id: genders_test_database.c,v 1.7 2009-04-03 23:35:31 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -37,6 +37,8 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     /* No longer a parse error */
     {"testdatabases/genders.parse_error_comments_only", 1},
 #endif
+    {"testdatabases/genders.parse_error_equal_sign_in_value_1", 1},
+    {"testdatabases/genders.parse_error_equal_sign_in_value_2", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_comma", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_hostrange", 1},

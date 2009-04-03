@@ -1,3 +1,14 @@
+2009-04-03  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_parsing.c (_parse_line): Check for
+	equal-signs in values.
+
+	* src/testsuite/libgenders/testdatabases/genders.parse_error_equal_sign_in_value_1,
+	src/testsuite/libgenders/testdatabases/genders.parse_error_equal_sign_in_value_2: New files.
+
+	* testsuite/libgenders/genders_test_database.c: Add tests for
+	equal-sign parse errors.
+	
 2009-02-19  Albert Chu  <chu11@llnl.gov>
 
 	* META: Update for release.

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.22 2008-03-28 16:56:31 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.23 2009-04-03 23:35:31 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -377,7 +377,18 @@ _parse_line(genders_t handle,
 	      
 	      /* parse value out of attribute */
 	      if ((val = strchr(attr,'=')))
-		*val++ = '\0'; 
+		*val++ = '\0';
+
+              if (val && strchr(val,'='))
+                {
+                  if (line_num > 0)
+                    {
+                      fprintf(stream, "Line %d: value contains equal sign\n", line_num);
+                      rv = 1;
+                    }
+		  handle->errnum = GENDERS_ERR_PARSE;
+		  goto cleanup;
+                }
 	      
 	      if (list_find_first(attrvals, 
 				  _genders_list_is_attr_in_attrvals, 
