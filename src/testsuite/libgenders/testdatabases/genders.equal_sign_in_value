@@ -1,0 +1,2 @@
+node1  attr1=foo=bar
+node2  attr1=foo=baz,attr2

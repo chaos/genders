@@ -1,3 +1,13 @@
+2009-04-06  Albert Chu  <chu11@llnl.gov>
+	
+	* src/libgenders/genders_parsing.c (_parse_line): Revert check for
+	equal sign in value, allow it.
+
+	* src/testsuite/libgenders/testdatabases/genders.equal_sign_in_value: New file.
+
+	* testsuite/libgenders/genders_test_database.c: Add test to check
+	for supported equal sign in value.  Remove test for equal sign in value as error.
+	
 2009-04-03  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_parse_line): Check for

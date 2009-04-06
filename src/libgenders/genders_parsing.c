@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.23 2009-04-03 23:35:31 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.24 2009-04-06 18:13:14 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -379,6 +379,8 @@ _parse_line(genders_t handle,
 	      if ((val = strchr(attr,'=')))
 		*val++ = '\0';
 
+#if 0
+              /* Remove this check, we will leave this as a "feature" */
               if (val && strchr(val,'='))
                 {
                   if (line_num > 0)
@@ -389,6 +391,7 @@ _parse_line(genders_t handle,
 		  handle->errnum = GENDERS_ERR_PARSE;
 		  goto cleanup;
                 }
+#endif
 	      
 	      if (list_find_first(attrvals, 
 				  _genders_list_is_attr_in_attrvals, 

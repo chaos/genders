@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.10 2008-03-28 16:56:40 chu11 Exp $
+ *  $Id: genders_test_functionality.c,v 1.11 2009-04-06 18:13:14 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -1561,6 +1561,8 @@ genders_testattrval_functionality(int verbose)
 						  errnum,
 						  databases[i]->filename,
 						  verbose);
+              if (err)
+                printf("%s:%d\n", __FUNCTION__, __LINE__);
 	  errcount += err;
 	}
 

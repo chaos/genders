@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_database.c,v 1.7 2009-04-03 23:35:31 chu11 Exp $
+ *  $Id: genders_test_database.c,v 1.8 2009-04-06 18:13:14 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -36,9 +36,11 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     {"testdatabases/genders.parse_error_empty_file", 1},
     /* No longer a parse error */
     {"testdatabases/genders.parse_error_comments_only", 1},
-#endif
+    /* we are leaving this as a "feature" */
     {"testdatabases/genders.parse_error_equal_sign_in_value_1", 1},
+    /* we are leaving this as a "feature" */
     {"testdatabases/genders.parse_error_equal_sign_in_value_2", 1},
+#endif
     {"testdatabases/genders.parse_error_hostname_not_shortened", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_comma", 1},
     {"testdatabases/genders.parse_error_hostname_not_shortened_hostrange", 1},
@@ -946,6 +948,82 @@ genders_database_t genders_database_empty =
     &genders_database_data_empty,
   };
 
+genders_database_data_t genders_database_data_equal_sign_in_value = 
+  {
+    "node1",
+    "attr2",
+    "attr1",
+    "foo=bar",
+    2,
+    2,
+    2,
+    5,
+    5,
+    7,
+    {"node1", "node2"},
+    2,
+    {"attr1", "attr2"},
+    2,
+    {"foo=bar", NULL},
+    2,
+    {
+      {
+	{"attr1", NULL},
+	{"foo=bar", NULL}, 
+	{NULL, NULL}, 
+	1,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"foo=baz", "", NULL}, 
+	{"foo=baz", NULL, NULL}, 
+	2,
+      },
+    },
+    2,
+    {
+
+      {
+	NULL,
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"attr1",
+	"foo=bar",
+	{"node1", NULL},
+	1,
+      },
+
+      {
+	"attr1",
+	"foo=baz",
+	{"node2", NULL},
+	1,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node2", NULL},
+	1,
+      },
+    },
+    5,
+  };
+
+genders_database_t genders_database_equal_sign_in_value =
+  {
+    "testdatabases/genders.equal_sign_in_value",
+    &genders_database_data_equal_sign_in_value,
+  };
+
 genders_database_data_t genders_database_data_nodes_only_one = 
   {
     "node1",
@@ -1457,6 +1535,7 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_test_2_hostrange,
     &genders_database_test_3,
     &genders_database_empty,
+    &genders_database_equal_sign_in_value,
     &genders_database_nodes_only_one,
     &genders_database_nodes_only_many,
     &genders_database_nodes_and_attrs_only,
