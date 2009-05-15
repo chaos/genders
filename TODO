@@ -43,3 +43,4 @@
 
     node[0-2047] 192.168.{%r/256 + 1}.{%r % 256}
 - genders value shouldn't have '=' in them.
+- make genders_load_data() way faster
