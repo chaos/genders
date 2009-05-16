@@ -1,3 +1,7 @@
+2009-05-15  Albert Chu  <chu11@llnl.gov>
+
+	* Add comments for clarification.
+	
 2009-04-06  Albert Chu  <chu11@llnl.gov>
 	
 	* src/libgenders/genders_parsing.c (_parse_line): Revert check for

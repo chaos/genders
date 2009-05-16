@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.10 2008-03-28 16:56:33 chu11 Exp $
+ *  $Id: genders_test_corner_case.c,v 1.11 2009-05-16 01:01:45 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -380,6 +380,7 @@ genders_perror_corner_case(int verbose)
       i++;
     }
 
+  /* ignore potential error, don't need it */
   close(dev_null);
   return errcount;
 }
@@ -1474,6 +1475,7 @@ genders_parse_corner_case(int verbose)
       i++;
     }
 
+  /* ignore potential error, don't need it */
   close(dev_null);
   return errcount;
 }

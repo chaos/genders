@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.24 2009-04-06 18:13:14 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.25 2009-05-16 01:01:45 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -676,6 +676,7 @@ _genders_open_and_parse(genders_t handle,
   
   rv = (debug) ? errcount : 0;
  cleanup:
+  /* ignore potential error, don't need it */
   close(fd);
   return rv;
 }
