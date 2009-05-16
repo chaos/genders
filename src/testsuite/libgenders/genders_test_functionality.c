@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.12 2009-05-16 01:01:45 chu11 Exp $
+ *  $Id: genders_test_functionality.c,v 1.13 2009-05-16 01:15:28 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -377,13 +377,11 @@ genders_perror_functionality(int verbose)
       genders_perror(handle, NULL);
       if ((dup2(stderr_save, STDERR_FILENO)) < 0)
 	genders_err_exit("dup2: %s", strerror(errno));
-      /* ignore potential error, don't need it */
       close(fds[1]);		/* so read won't block */
 
       if ((len = read(fds[0], string_buf, GENDERS_ERR_BUFLEN)) < 0)
 	genders_err_exit("read: %s", strerror(errno));
       string_buf[len] = '\0';
-      /* ignore potential error, don't need it */
       close(fds[0]);
 
       strcpy(expected_string_buf, expected_string);
@@ -420,13 +418,11 @@ genders_perror_functionality(int verbose)
       genders_perror(handle, msg);
       if ((dup2(stderr_save, STDERR_FILENO)) < 0)
 	genders_err_exit("dup2: %s", strerror(errno));
-      /* ignore potential error, don't need it */
       close(fds[1]);		/* so read won't block */
 
       if ((len = read(fds[0], string_buf, GENDERS_ERR_BUFLEN)) < 0)
 	genders_err_exit("read: %s", strerror(errno));
       string_buf[len] = '\0';
-      /* ignore potential error, don't need it */
       close(fds[0]);
 
       strcpy(expected_string_buf, msg);
@@ -2338,7 +2334,6 @@ genders_parse_functionality(int verbose)
       }
   }
 
-  /* ignore potential error, don't need it */
   close(dev_null);
   return errcount;
 }
