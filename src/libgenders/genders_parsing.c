@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.26 2009-05-16 01:15:28 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.27 2009-05-19 18:21:54 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -464,13 +464,13 @@ _parse_line(genders_t handle,
 	  goto cleanup;
 	}
   
-      if (!(n =_insert_node(handle, nodeslist, node)))
+      if (!(n = _insert_node(handle, nodeslist, node)))
 	goto cleanup;
       
       if (attrvals) 
 	{
 	  if ((rv = _duplicate_attr_in_node_check(handle, n, attrvals, 
-						      line_num, stream)) != 0)
+                                                  line_num, stream)) != 0)
 	    goto cleanup;
 	  
 	  if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
