@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_api.h,v 1.4 2008-03-28 16:56:30 chu11 Exp $
+ *  $Id: genders_api.h,v 1.5 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -32,10 +32,12 @@
 #include "hash.h"
 #include "hostlist.h"
 
-#define GENDERS_MAGIC_NUM         0xdeadbeef
+#define GENDERS_MAGIC_NUM              0xdeadbeef
 
 /* Impossible to have a genders value with spaces */
-#define GENDERS_NOVALUE           "  NOVAL  "   
+#define GENDERS_NOVALUE                "  NOVAL  "   
+
+#define GENDERS_NODE_INDEX_INIT_SIZE   2048
 
 /* 
  * struct genders_node
@@ -136,6 +138,7 @@ struct genders {
   List attrslist;                           /* List of unique attribute strings */
   char *valbuf;                             /* Buffer for value substitution */
   hash_t node_index;                        /* Index table for quicker node access */
+  int node_index_size;                      /* Index size for node_index */
   hash_t attr_index;                        /* Index table for quicker search times */
   hash_t attrval_index;                     /* Index table for quicker search times */
   char *attrval_index_attr;                 /* Current indexed attr in attrval_index */

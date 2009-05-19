@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.h,v 1.7 2008-03-28 16:56:31 chu11 Exp $
+ *  $Id: genders_parsing.h,v 1.8 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -31,6 +31,7 @@
 
 #include "genders.h"
 #include "genders_util.h"
+#include "hash.h"
 #include "list.h"
 
 /* 
@@ -45,17 +46,10 @@ int _genders_open_and_parse(genders_t handle,
 			    const char *filename,
 			    List nodeslist,
 			    List attrvalslist,
+                            hash_t *node_index,
+                            int *node_index_size,
 			    int debug,
 			    FILE *stream);
-
-/* 
- * _genders_index_nodes
- *
- * Create and populate node index
- *
- * Returns 0 on success, -1 on error
- */
-int _genders_index_nodes(genders_t handle);
 
 /* 
  * _genders_index_attrs

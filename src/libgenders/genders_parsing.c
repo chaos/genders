@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.27 2009-05-19 18:21:54 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.28 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -86,19 +86,30 @@ _readline(genders_t handle, int fd, char *buf, int buflen)
  * Returns 0 on success, -1 on error
  */
 static genders_node_t
-_insert_node(genders_t handle, List nodelist, char *nodename)
+_insert_node(genders_t handle,
+             List nodelist,
+             hash_t *node_index,
+             int *node_index_size,
+             char *nodename)
 {
   genders_node_t n = NULL;
 
-  /* must create node if node doesn't exist in the nodelist */ 
-  if (!(n = list_find_first(nodelist, _genders_list_is_node, nodename))) 
+  /* must create node if node doesn't exist */ 
+  if (!(n = hash_find((*node_index), nodename)))
     {
+      if (hash_count((*node_index)) > ((*node_index_size) * 2))
+        {
+          if (_genders_rehash(handle, node_index, node_index_size) < 0)
+            goto cleanup;
+        }
+
       __xmalloc(n, genders_node_t, sizeof(struct genders_node));
       __xstrdup(n->name, nodename);
       n->attrcount = 0;
       
       __list_create(n->attrlist, NULL);
       __list_append(nodelist, n);
+      __hash_insert((*node_index), n->name, n);
     }
   return n;
   
@@ -303,6 +314,8 @@ static int
 _parse_line(genders_t handle, 
 	    List nodeslist, 
 	    List attrvalslist, 
+            hash_t *node_index,
+            int *node_index_size,
             char *line, 
 	    int line_num, 
 	    FILE *stream, 
@@ -464,7 +477,11 @@ _parse_line(genders_t handle,
 	  goto cleanup;
 	}
   
-      if (!(n = _insert_node(handle, nodeslist, node)))
+      if (!(n = _insert_node(handle,
+                             nodeslist,
+                             node_index,
+                             node_index_size,
+                             node)))
 	goto cleanup;
       
       if (attrvals) 
@@ -510,34 +527,6 @@ _parse_line(genders_t handle,
   __list_destroy(attrvals);
   free(node);
   return rv;
-}
-
-int
-_genders_index_nodes(genders_t handle)
-{
-  genders_node_t n;
-  ListIterator nodeslist_itr = NULL;
-
-  if (!handle->numnodes)
-    return 0;
-
-  __hash_create(handle->node_index, 
-                handle->numnodes,
-                (hash_key_f)hash_key_string, 
-                (hash_cmp_f)strcmp, 
-                NULL);
-
-  __list_iterator_create(nodeslist_itr, handle->nodeslist);
-
-  while ((n = list_next(nodeslist_itr)))
-    __hash_insert(handle->node_index, n->name, n);
-
-  return 0;
- cleanup:
-  __list_iterator_destroy(nodeslist_itr);
-  __hash_destroy(handle->node_index);
-  handle->node_index = NULL;
-  return -1;
 }
 
 int
@@ -597,6 +586,8 @@ _genders_open_and_parse(genders_t handle,
 			const char *filename,
 			List nodeslist,
 			List attrvalslist,
+                        hash_t *node_index,
+                        int *node_index_size,
 			int debug,
 			FILE *stream)
 {
@@ -624,6 +615,8 @@ _genders_open_and_parse(genders_t handle,
       if ((bug_count = _parse_line(handle, 
 				   nodeslist, 
 				   attrvalslist, 
+                                   node_index,
+                                   node_index_size,
 				   buf, 
 				   (debug) ? line_count : 0, 
 				   stream, 

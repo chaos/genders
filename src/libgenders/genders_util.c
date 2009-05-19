@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.7 2008-03-28 16:56:31 chu11 Exp $
+ *  $Id: genders_util.c,v 1.8 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -51,17 +51,6 @@ int
 _genders_list_is_str(void *x, void *key) 
 {
   if (!strcmp((char *)x, (char *)key))
-    return 1;
-  return 0;
-}
-
-int 
-_genders_list_is_node(void *x, void *key) 
-{
-  genders_node_t n;
-
-  n = (genders_node_t)x;
-  if (!strcmp(n->name, (char *)key))
     return 1;
   return 0;
 }
@@ -273,4 +262,63 @@ _genders_find_attrval(genders_t handle,
  cleanup:
   __list_iterator_destroy(itr);
   return retval;  
+}
+
+static int
+_hash_reinsert(void *data, const void *key, void *arg)
+{
+  hash_t newhash;
+
+  newhash = *((hash_t *)arg);
+  
+  /* return -1 will result in GENDERS_ERR_INTERNAL in caller */
+  if (hash_insert(newhash, key, data) < 0)
+    return -1;
+
+  return 1;
+}
+
+static int
+_hash_removeall(void *data, const void *key, void *arg)
+{
+  return 1;
+}
+
+int
+_genders_rehash(genders_t handle,
+                hash_t *hash_ptr,
+                int *hash_size)
+{
+  hash_t new_hash = NULL;
+  int hash_num;
+  int retval = -1;
+
+  (*hash_size) *= 2;
+  __hash_create(new_hash,
+                (*hash_size),
+                (hash_key_f)hash_key_string,
+                (hash_cmp_f)strcmp,
+                NULL);
+
+  hash_num = hash_count(*hash_ptr);
+
+  if (hash_for_each(*hash_ptr, _hash_reinsert, &new_hash) != hash_num)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
+
+  if (hash_remove_if(*hash_ptr, _hash_removeall, NULL) != hash_num)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
+
+  __hash_destroy(*hash_ptr);
+  *hash_ptr = new_hash;
+  retval = 0;
+ cleanup:
+  if (retval < 0)
+    __hash_destroy(new_hash);
+  return retval;
 }

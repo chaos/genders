@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: hash.h,v 1.2 2007-09-05 17:42:40 chu11 Exp $
+ *  $Id: hash.h,v 1.3 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2003-2005 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -148,6 +148,16 @@ void * hash_remove (hash_t h, const void *key);
  *  Returns a ptr to the removed item's data on success.
  *    Returns NULL with errno=0 if no matching item is found.
  *    Returns NULL with errno=EINVAL if [key] is not specified.
+ */
+
+int hash_remove_if (hash_t h, hash_arg_f argf, void *arg);
+/*
+ *  Conditionally removes items from hash table [h].
+ *  The [argf] function is invoked once for each item in the hash, with
+ *    [arg] being passed in as an argument.  Items for which [argf] returns
+ *    greater-than-zero are deleted.
+ *  Returns the number of items removed.
+ *    Returns -1 with errno=EINVAL if [argf] is not specified.
  */
 
 int hash_delete_if (hash_t h, hash_arg_f argf, void *arg);

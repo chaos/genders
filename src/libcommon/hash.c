@@ -1,5 +1,5 @@
 /*****************************************************************************
- *  $Id: hash.c,v 1.4 2008-03-28 16:56:28 chu11 Exp $
+ *  $Id: hash.c,v 1.5 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -331,6 +331,37 @@ hash_remove (hash_t h, const void *key)
     return (data);
 }
 
+int
+hash_remove_if (hash_t h, hash_arg_f arg_f, void *arg)
+{
+  int i;
+  struct hash_node **pp;
+  struct hash_node *p;
+  int n = 0;
+
+  if (!h || !arg_f) {
+    errno = EINVAL;
+    return (-1);
+  }
+  lsd_mutex_lock (&h->mutex);
+  assert (h->magic == HASH_MAGIC);
+  for (i = 0; i < h->size; i++) {
+    pp = &(h->table[i]);
+    while ((p = *pp) != NULL) {
+      if (arg_f (p->data, p->hkey, arg) > 0) {
+        *pp = p->next;
+        hash_node_free (p);
+        h->count--;
+        n++;
+      }
+      else {
+        pp = &(p->next);
+      }
+    }
+  }
+  lsd_mutex_unlock (&h->mutex);
+  return (n);
+}
 
 int
 hash_delete_if (hash_t h, hash_arg_f arg_f, void *arg)

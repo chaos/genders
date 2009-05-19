@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.h,v 1.5 2008-03-28 16:56:31 chu11 Exp $
+ *  $Id: genders_util.h,v 1.6 2009-05-19 22:02:19 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -148,15 +148,6 @@ int _genders_list_is_all(void *x, void *key);
 int _genders_list_is_str(void *x, void *key); 
 
 /* 
- * _genders_list_is_node
- *
- * x points to a genders_node_t
- *
- * Returns 1 if node in 'x' is equal to key, 0 otherwise
- */
-int _genders_list_is_node(void *x, void *key); 
-
-/* 
  * _genders_list_is_attr_in_attrvals
  *
  * x points to a genders_attrval_t
@@ -255,5 +246,17 @@ int _genders_find_attrval(genders_t handle,
 			  const char *attr, 
 			  const char *val,
 			  genders_attrval_t *avptr);
+
+/* 
+ * _genders_rehash
+ *
+ * Rehash the specified hash into a larger hash.  Both hash_ptr and
+ * size are in/out parameters.
+ *
+ * Returns 0 on success, -1 on error
+ */
+int _genders_rehash(genders_t handle,
+                    hash_t *hash_ptr,
+                    int *hash_size);
 
 #endif /* _GENDERS_COMMON_H */

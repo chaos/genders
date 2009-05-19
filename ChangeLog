@@ -1,3 +1,24 @@
+2009-05-18  Albert Chu  <chu11@llnl.gov>
+
+	* src/libcommon/hash.h, src/libcommon/hash.c (hash_remove_if): New
+	function.
+
+	* src/libgenders/genders_util.h, src/libgenders/genders_util.c
+	(_genders_list_is_node): Removed function.
+
+	* src/libgenders/genders_util.h, src/libgenders/genders_util.c
+	(_genders_rehash): New function.
+
+	* src/libgenders/genders_parsing.h,
+	src/libgenders/genders_parsing.c (_genders_index_nodes): Removed
+	function.
+
+	* src/libgenders/genders.c, src/libgenders/genders_parsing.c,
+	src/libgenders/genders_api.h: Rework parsing code so that
+	node_index is built as the database is parsed, instead of at the
+	very end.  Should greatly improve performance of database
+	parsing/loading time.
+	
 2009-05-15  Albert Chu  <chu11@llnl.gov>
 
 	* Add comments for clarification.
