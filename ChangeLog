@@ -1,3 +1,8 @@
+2009-05-19  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c (genders_isattrval): Improve
+	performance by using specific index.
+	
 2009-05-18  Albert Chu  <chu11@llnl.gov>
 
 	* src/libcommon/hash.h, src/libcommon/hash.c (hash_remove_if): New

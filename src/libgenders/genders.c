@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.143 2009-05-20 00:19:44 chu11 Exp $
+ *  $Id: genders.c,v 1.144 2009-05-20 23:03:52 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -947,7 +947,12 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
     }
   else 
     {
-      __list_iterator_create(nodeslist_itr, handle->nodeslist);
+      List l;
+
+      if (!(l = hash_find(handle->attr_index, attr)))
+        goto out;
+
+      __list_iterator_create(nodeslist_itr, l);
       while ((n = list_next(nodeslist_itr))) 
 	{
 	  if (_genders_find_attrval(handle, n, attr, val, &av) < 0) 
@@ -961,6 +966,7 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
 	}
     }
 
+ out:
   rv = 0;
   handle->errnum = GENDERS_ERR_SUCCESS;
  cleanup:
