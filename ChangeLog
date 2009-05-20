@@ -3,12 +3,11 @@
 	* src/libgenders/genders.c (genders_isattrval): Improve
 	performance by using specific index.
 	
-	* src/libgenders/genders.c, src/libgenders/genders_parsing.c,
-	src/libgenders/genders_api.h, src/libgenders/genders_util.c:
-	Rework parsing code and searching code so that the lists stored in
-	each gender's node's attrlist is index via a hash. Should greatly
-	improve performance of database parsing/loading time and many
-	libgenders functions.
+	* src/libgenders/genders_parsing.c, src/libgenders/genders_api.h,
+	src/libgenders/genders_util.c: Rework parsing code and searching
+	code so that the lists stored in each gender's node's attrlist is
+	index via a hash. Should greatly improve performance of database
+	parsing/loading time and many libgenders functions.
 
 2009-05-18  Albert Chu  <chu11@llnl.gov>
 
