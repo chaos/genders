@@ -10,14 +10,14 @@
 	(_genders_rehash): New function.
 
 	* src/libgenders/genders_parsing.h,
-	src/libgenders/genders_parsing.c (_genders_index_nodes): Removed
-	function.
+	src/libgenders/genders_parsing.c (_genders_index_nodes,
+	_genders_index_attrs): Removed functions.
 
 	* src/libgenders/genders.c, src/libgenders/genders_parsing.c,
 	src/libgenders/genders_api.h: Rework parsing code so that
-	node_index is built as the database is parsed, instead of at the
-	very end.  Should greatly improve performance of database
-	parsing/loading time.
+	node_index and attr_index are built as the database is parsed,
+	instead of at the very end.  Should greatly improve performance of
+	database parsing/loading time.
 	
 2009-05-15  Albert Chu  <chu11@llnl.gov>
 

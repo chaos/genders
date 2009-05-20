@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.142 2009-05-19 22:02:19 chu11 Exp $
+ *  $Id: genders.c,v 1.143 2009-05-20 00:19:44 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -92,6 +92,7 @@ _initialize_handle_info(genders_t handle)
   handle->node_index = NULL;
   handle->node_index_size = 0;
   handle->attr_index = NULL;
+  handle->attr_index_size = 0;
   handle->attrval_index = NULL;
   handle->attrval_index_attr = NULL;
 
@@ -119,8 +120,7 @@ genders_handle_create(void)
   __list_create(handle->attrvalslist, _genders_list_free_attrvallist);
   __list_create(handle->attrslist, free);
 
-  /* node_index created in genders_load_data.  attr_index created in
-   * genders_load_data after attr counts are determined.  Valbuf
+  /* node_index, attr_index created in genders_load_data.  Valbuf
    * created in genders_load_data after maxvallen is calculated
    */
   
@@ -181,12 +181,22 @@ genders_load_data(genders_t handle, const char *filename)
                 (hash_cmp_f)strcmp, 
                 NULL);
   
+  handle->attr_index_size = GENDERS_ATTR_INDEX_INIT_SIZE;
+  
+  __hash_create(handle->attr_index,
+                handle->attr_index_size,
+                (hash_key_f)hash_key_string,
+                (hash_cmp_f)strcmp, 
+                (hash_del_f)list_destroy);
+
   if (_genders_open_and_parse(handle, 
 			      filename, 
 			      handle->nodeslist, 
 			      handle->attrvalslist,
                               &(handle->node_index),
                               &(handle->node_index_size),
+                              &(handle->attr_index),
+                              &(handle->attr_index_size),
 			      0, 
 			      NULL) < 0)
     goto cleanup;
@@ -208,9 +218,6 @@ genders_load_data(genders_t handle, const char *filename)
 
   /* Create a buffer for value substitutions */
   __xmalloc(handle->valbuf, char *, handle->maxvallen + 1);
-
-  if (_genders_index_attrs(handle) < 0)
-    goto cleanup;
 
   handle->is_loaded++;
   handle->errnum = GENDERS_ERR_SUCCESS;
@@ -1102,6 +1109,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   List debugattrvalslist = NULL;
   hash_t debugnode_index = NULL;
   int debugnode_index_size = GENDERS_NODE_INDEX_INIT_SIZE;
+  hash_t debugattr_index = NULL;
+  int debugattr_index_size = GENDERS_ATTR_INDEX_INIT_SIZE;
 
   if (_genders_handle_error_check(handle) < 0)
     goto cleanup;
@@ -1116,6 +1125,11 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
                 (hash_key_f)hash_key_string,
                 (hash_cmp_f)strcmp, 
                 NULL);
+  __hash_create(debugattr_index,
+                debugattr_index_size,
+                (hash_key_f)hash_key_string,
+                (hash_cmp_f)strcmp, 
+                (hash_del_f)list_destroy);
 
   if ((errcount = _genders_open_and_parse(handle, 
 					  filename,
@@ -1123,6 +1137,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 					  debugattrvalslist,
                                           &(debugnode_index),
                                           &(debugnode_index_size),
+                                          &(debugattr_index),
+                                          &(debugattr_index_size),
 					  1, 
 					  stream)) < 0)
     goto cleanup;
@@ -1132,6 +1148,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
  cleanup:
   __list_destroy(debugnodeslist);
   __list_destroy(debugattrvalslist);
+  __hash_destroy(debugnode_index);
+  __hash_destroy(debugattr_index);
   return rv;
 }
 

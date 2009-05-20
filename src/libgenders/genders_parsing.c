@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.28 2009-05-19 22:02:19 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.29 2009-05-20 00:19:44 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -184,17 +184,32 @@ _insert_ptr(genders_t handle, List ptrlist, void *ptr)
  * Returns 0 on success, -1 on error
  */
 static int 
-_insert_attr(genders_t handle, char *attr) 
+_insert_attr(genders_t handle,
+             hash_t *attr_index,
+             int *attr_index_size,
+             char *attr) 
 {
+  List l = NULL;
   char *attr_new = NULL;
 
-  if (list_find_first(handle->attrslist, _genders_list_is_str, attr))
+  if (hash_find((*attr_index), attr))
     return 0;
+
+  if (hash_count((*attr_index)) > ((*attr_index_size) * 2))
+    {
+      if (_genders_rehash(handle, attr_index, attr_index_size) < 0)
+        goto cleanup;
+    }
 
   __xstrdup(attr_new, attr);
   __list_append(handle->attrslist, attr_new);
+
+  __list_create(l, NULL);
+  __hash_insert((*attr_index), attr_new, l);
+
   return 1;
  cleanup:
+  __list_destroy(l);
   free(attr_new);
   return -1;
 }
@@ -202,7 +217,8 @@ _insert_attr(genders_t handle, char *attr)
 /* 
  * _duplicate_attr_in_node_check
  *
- * Determine if an attr in the attrvals list already exists for the node
+ * Determine if an attr in the attrvals list already exists for the
+ * node.  If not insert into the attr_index.
  *
  * If line_num > 0, returns 1 if a duplicate exists, 0 if not, -1 on error
  *
@@ -212,6 +228,7 @@ static int
 _duplicate_attr_in_node_check(genders_t handle, 
 			      genders_node_t n, 
 			      List attrvals,
+                              hash_t *attr_index,
 			      int line_num,
 			      FILE *stream)
 {
@@ -223,6 +240,8 @@ _duplicate_attr_in_node_check(genders_t handle,
   __list_iterator_create(attrvals_itr, attrvals);
   while ((av = list_next(attrvals_itr))) 
     {
+      List l = NULL;
+
       if (_genders_find_attrval(handle, n, av->attr, NULL, &av_ret) < 0)
 	goto cleanup;
 
@@ -237,6 +256,18 @@ _duplicate_attr_in_node_check(genders_t handle,
 	  handle->errnum = GENDERS_ERR_PARSE;
 	  goto cleanup;
 	}
+
+      /* attribute should already be in the hash */
+      if (!(l = hash_find((*attr_index), av->attr)))
+        {
+          printf("foo\n");
+          printf("count = %d\n", hash_count((*attr_index)));
+          printf("node = %s\n", n->name);
+          handle->errnum = GENDERS_ERR_INTERNAL;
+          goto cleanup;
+        }
+
+      __list_append(l, n);
     }
   
   rv = 0;
@@ -316,6 +347,8 @@ _parse_line(genders_t handle,
 	    List attrvalslist, 
             hash_t *node_index,
             int *node_index_size,
+            hash_t *attr_index,
+            int *attr_index_size,
             char *line, 
 	    int line_num, 
 	    FILE *stream, 
@@ -368,6 +401,7 @@ _parse_line(genders_t handle,
       /* *line == '\0' means line has no attributes */
       if (*line != '\0') 
 	{
+          int insert_count;
 
 	  if (strchr(line,' ') || strchr(line,'\t')) 
 	    {
@@ -423,13 +457,14 @@ _parse_line(genders_t handle,
 	      if (_insert_attrval(handle, attrvals, attr, val) < 0)
 		goto cleanup;
 	      
+              if ((insert_count = _insert_attr(handle,
+                                               attr_index,
+                                               attr_index_size,
+                                               attr)) < 0)
+                goto cleanup;
+		  
 	      if (!line_num) 
 		{
-                  int insert_count;
-                  
-		  if ((insert_count = _insert_attr(handle, attr)) < 0)
-		    goto cleanup;
-		  
 		  handle->numattrs += insert_count;
 		  handle->maxattrlen = GENDERS_MAX(strlen(attr), handle->maxattrlen);
 
@@ -486,8 +521,14 @@ _parse_line(genders_t handle,
       
       if (attrvals) 
 	{
-	  if ((rv = _duplicate_attr_in_node_check(handle, n, attrvals, 
-                                                  line_num, stream)) != 0)
+          List l;
+
+	  if ((rv = _duplicate_attr_in_node_check(handle,
+                                                  n,
+                                                  attrvals,
+                                                  attr_index,
+                                                  line_num,
+                                                  stream)) != 0)
 	    goto cleanup;
 	  
 	  if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
@@ -530,64 +571,14 @@ _parse_line(genders_t handle,
 }
 
 int
-_genders_index_attrs(genders_t handle)
-{
-  ListIterator attrslist_itr = NULL;
-  ListIterator nodeslist_itr = NULL;
-  List l = NULL;
-  genders_node_t n;
-  genders_attrval_t av;
-  char *attr;
-
-  if (!handle->numattrs)
-    return 0;
-
-  __hash_create(handle->attr_index, 
-                handle->numattrs,
-                (hash_key_f)hash_key_string, 
-                (hash_cmp_f)strcmp, 
-                (hash_del_f)list_destroy);
-
-  __list_iterator_create(attrslist_itr, handle->attrslist);
-  __list_iterator_create(nodeslist_itr, handle->nodeslist);
-
-  while ((attr = list_next(attrslist_itr))) 
-    {
-      __list_create(l, NULL);
-      
-      while ((n = list_next(nodeslist_itr))) 
-	{
-	  if (_genders_find_attrval(handle, n, attr, NULL, &av) < 0)
-	    goto cleanup;
-	  if (av)
-	    __list_append(l, n);
-	}
-      list_iterator_reset(nodeslist_itr);
-      
-      __hash_insert(handle->attr_index, attr, l);
-      l = NULL;
-    }
-  
-  __list_iterator_destroy(nodeslist_itr);
-  __list_iterator_destroy(attrslist_itr);
-  return 0;
-
- cleanup:
-  __list_iterator_destroy(attrslist_itr);
-  __list_iterator_destroy(nodeslist_itr);
-  __list_destroy(l);
-  __hash_destroy(handle->attr_index);
-  handle->attr_index = NULL;
-  return -1;
-}
-
-int
 _genders_open_and_parse(genders_t handle,
 			const char *filename,
 			List nodeslist,
 			List attrvalslist,
                         hash_t *node_index,
                         int *node_index_size,
+                        hash_t *attr_index,
+                        int *attr_index_size,
 			int debug,
 			FILE *stream)
 {
@@ -617,6 +608,8 @@ _genders_open_and_parse(genders_t handle,
 				   attrvalslist, 
                                    node_index,
                                    node_index_size,
+                                   attr_index,
+                                   attr_index_size,
 				   buf, 
 				   (debug) ? line_count : 0, 
 				   stream, 
