@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_api.h,v 1.6 2009-05-20 00:19:44 chu11 Exp $
+ *  $Id: genders_api.h,v 1.7 2009-05-20 23:38:46 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -32,14 +32,16 @@
 #include "hash.h"
 #include "hostlist.h"
 
-#define GENDERS_MAGIC_NUM              0xdeadbeef
+#define GENDERS_MAGIC_NUM                0xdeadbeef
 
 /* Impossible to have a genders value with spaces */
-#define GENDERS_NOVALUE                "  NOVAL  "   
+#define GENDERS_NOVALUE                  "  NOVAL  "   
 
-#define GENDERS_NODE_INDEX_INIT_SIZE   2048
+#define GENDERS_NODE_INDEX_INIT_SIZE     2048
 
-#define GENDERS_ATTR_INDEX_INIT_SIZE   128
+#define GENDERS_ATTR_INDEX_INIT_SIZE     128
+
+#define GENDERS_ATTRLIST_INDEX_INIT_SIZE 128
 
 /* 
  * struct genders_node
@@ -47,12 +49,15 @@
  * stores node name and a list of pointers to attrval lists containing
  * the attributes and values of this node.  The pointers point to
  * lists stored within the attrvalslist parameter of the genders
- * handle.
+ * handle.  The attrlist_index is hash that enables faster lookups
+ * into the attrlist.
  */
 struct genders_node {
   char *name;
   List attrlist;
   int attrcount;
+  hash_t attrlist_index;
+  int attrlist_index_size;
 };
 typedef struct genders_node *genders_node_t;
 
@@ -94,8 +99,19 @@ typedef struct genders_attrval *genders_attrval_t;
  * nodename = localhost
  * nodeslist = node1 -> node2 -> node3 -> \0
  *    node1.name = nodename1, node1.attrlist = listptr1 -> listptr2 -> \0
+ *    node1.attrlist_index = hash table with
+ *          KEY(attr1): listptr1
+ *          KEY(attr2): listptr1
+ *          KEY(attr3): listptr2
+ *          KEY(attr4): listptr2
  *    node2.name = nodename2, node2.attrlist = listptr1 -> listptr3 -> \0
+ *    node2.attrlist_index = hash table with
+ *          KEY(attr1): listptr1
+ *          KEY(attr2): listptr1
+ *          KEY(attr5): listptr3
  *    node3.name = nodename3, node3.attrlist = listptr4 -> \0
+ *    node3.attrlist_index = hash table with
+ *          KEY(attr6): listptr4
  * attrvalslist = listptr1 -> listptr2 -> listptr3 -> listptr4 -> \0
  *    listptr1 = attr1 -> attr2 -> \0
  *    listptr2 = attr3 -> attr4 -> \0

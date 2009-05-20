@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_util.c,v 1.8 2009-05-19 22:02:19 chu11 Exp $
+ *  $Id: genders_util.c,v 1.9 2009-05-20 23:38:46 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -73,6 +73,7 @@ _genders_list_free_genders_node(void *x)
 
   n = (genders_node_t)x;
   __list_destroy(n->attrlist);
+  __hash_destroy(n->attrlist_index);
   free(n->name);
   free(n);
 }
@@ -223,13 +224,12 @@ _genders_find_attrval(genders_t handle,
 		      const char *val,
 		      genders_attrval_t *avptr)
 {
-  ListIterator itr = NULL;
   List attrvals;
   int retval = -1;
   
   *avptr = NULL;
-  __list_iterator_create(itr, n->attrlist);
-  while ((attrvals = list_next(itr))) 
+
+  if ((attrvals = hash_find(n->attrlist_index, attr)))
     {
       genders_attrval_t av;
       
@@ -240,7 +240,7 @@ _genders_find_attrval(genders_t handle,
 	  if (!val) 
 	    {
 	      *avptr = av;
-	      break;
+              goto out;
 	    }
 	  else if (av->val) 
 	    {
@@ -252,15 +252,15 @@ _genders_find_attrval(genders_t handle,
 	      if (!strcmp(valptr, val)) 
 		{
 		  *avptr = av;
-		  break;
+                  goto out;
 		}
 	    }
 	}
     }
-  
+
+ out:  
   retval = 0;
  cleanup:
-  __list_iterator_destroy(itr);
   return retval;  
 }
 

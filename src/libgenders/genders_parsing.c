@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.29 2009-05-20 00:19:44 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.30 2009-05-20 23:38:46 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -105,10 +105,18 @@ _insert_node(genders_t handle,
 
       __xmalloc(n, genders_node_t, sizeof(struct genders_node));
       __xstrdup(n->name, nodename);
-      n->attrcount = 0;
-      
       __list_create(n->attrlist, NULL);
+      n->attrcount = 0;
+      n->attrlist_index_size = GENDERS_ATTRLIST_INDEX_INIT_SIZE;
+      __hash_create(n->attrlist_index,
+                    n->attrlist_index_size,
+                    (hash_key_f)hash_key_string,
+                    (hash_cmp_f)strcmp,
+                    NULL);
+      
       __list_append(nodelist, n);
+
+      /* insert into node_index too */
       __hash_insert((*node_index), n->name, n);
     }
   return n;
@@ -204,6 +212,7 @@ _insert_attr(genders_t handle,
   __xstrdup(attr_new, attr);
   __list_append(handle->attrslist, attr_new);
 
+  /* insert into attr_index too */
   __list_create(l, NULL);
   __hash_insert((*attr_index), attr_new, l);
 
@@ -257,17 +266,25 @@ _duplicate_attr_in_node_check(genders_t handle,
 	  goto cleanup;
 	}
 
+      /* add node to attr_index */
       /* attribute should already be in the hash */
       if (!(l = hash_find((*attr_index), av->attr)))
         {
-          printf("foo\n");
-          printf("count = %d\n", hash_count((*attr_index)));
-          printf("node = %s\n", n->name);
           handle->errnum = GENDERS_ERR_INTERNAL;
           goto cleanup;
         }
-
       __list_append(l, n);
+
+      /* add attr to attrlist_index */
+      if (hash_count(n->attrlist_index) > (n->attrlist_index_size * 2))
+        {
+          if (_genders_rehash(handle, &(n->attrlist_index), &(n->attrlist_index_size)) < 0)
+            goto cleanup;
+        }
+      
+      __hash_insert(n->attrlist_index,
+                    av->attr,
+                    attrvals);
     }
   
   rv = 0;
