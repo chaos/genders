@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.31 2009-05-21 16:59:03 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.32 2009-05-21 17:03:39 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -165,22 +165,6 @@ _insert_attrval(genders_t handle, List attrvals, char *attr, char *val)
       free(av->val);
     }
   free(av);
-  return -1;
-}
-
-/* 
- * _insert_ptr
- *
- * Insert a ptr into the ptrlist
- *
- * Returns 0 on success, -1 on error
- */
-static int 
-_insert_ptr(genders_t handle, List ptrlist, void *ptr) 
-{
-  __list_append(ptrlist, ptr);
-  return 0;
- cleanup:
   return -1;
 }
 
@@ -538,9 +522,7 @@ _parse_line(genders_t handle,
                                                   stream)) != 0)
 	    goto cleanup;
 	  
-	  if (_insert_ptr(handle, n->attrlist, attrvals) < 0)
-	    goto cleanup;
-	  
+          __list_append(n->attrlist, attrvals);
 	  n->attrcount += list_count(attrvals);
 	}
       
@@ -559,15 +541,14 @@ _parse_line(genders_t handle,
   if (!line_num && max_n_subst_vallen)
     handle->maxvallen = GENDERS_MAX(max_n_subst_vallen - 2 + line_maxnodelen,
 				    handle->maxvallen);
-
+  
   /* Append at the very end, so cleanup area cleaner */
   if (attrvals) 
     {
-      if (_insert_ptr(handle, attrvalslist, attrvals) < 0)
-	goto cleanup;
+      __list_append(attrvalslist, attrvals);
       attrvals = NULL;
     }
-
+  
   rv = 0;
  cleanup:
   __hostlist_iterator_destroy(hlitr);

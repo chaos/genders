@@ -3,6 +3,11 @@
 	* src/libgenders/genders_parsing.c (_parse_line): Remove
 	unnecessary error check that is now handled through new parsing
 	architecture.
+
+	* src/libgenders/genders_parsing.c (_insert_ptr): Removed function.
+
+	* src/libgenders/genders_parsing.c (_parse_line): Adjust code
+	appropriately given function removal.
 	
 2009-05-19  Albert Chu  <chu11@llnl.gov>
 
