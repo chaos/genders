@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.34 2009-05-21 17:11:30 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.35 2009-05-21 17:27:30 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -229,7 +229,6 @@ _attr_node_processsing(genders_t handle,
 {
   ListIterator attrvals_itr = NULL;
   genders_attrval_t av = NULL;
-  genders_attrval_t av_ret = NULL;
   int rv = -1;
 
   __list_iterator_create(attrvals_itr, attrvals);
@@ -237,10 +236,12 @@ _attr_node_processsing(genders_t handle,
     {
       List l = NULL;
 
-      if (_genders_find_attrval(handle, n, av->attr, NULL, &av_ret) < 0)
-	goto cleanup;
-
-      if (av_ret) 
+      /* do not use _genders_find_attrval().  If the attrval already
+       * exists within the node, we don't need the actual entry.  We
+       * just want to know if it's there or not.  We avoid some list
+       * iteration by not using it.
+       */
+      if (hash_find(n->attrlist_index, av->attr))
 	{
 	  if (line_num > 0) 
 	    {
