@@ -29,8 +29,9 @@
 	* src/libgenders/genders_parsing.c, src/libgenders/genders_api.h,
 	src/libgenders/genders_util.c: Rework parsing code and searching
 	code so that the lists stored in each gender's node's attrlist is
-	index via a hash. Should greatly improve performance of database
-	parsing/loading time and many libgenders functions.
+	index via a hash.  Utilize the index during search functions.
+	Should greatly improve performance of database parsing/loading
+	time and many libgenders functions.
 
 2009-05-18  Albert Chu  <chu11@llnl.gov>
 
@@ -50,8 +51,9 @@
 	* src/libgenders/genders.c, src/libgenders/genders_parsing.c,
 	src/libgenders/genders_api.h: Rework parsing code so that
 	node_index and attr_index are built as the database is parsed,
-	instead of at the very end.  Should greatly improve performance of
-	database parsing/loading time.
+	instead of at the very end.  Utilize the indexes during parsing.
+	Should greatly improve performance of database parsing/loading
+	time.
 	
 2009-05-15  Albert Chu  <chu11@llnl.gov>
 
