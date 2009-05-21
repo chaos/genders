@@ -16,6 +16,10 @@
 	* src/libgenders/genders_parsing.c (_attr_node_processsing): Use
 	hash_find instead of _genders_find_attrval() to avoid a few extra
 	list iterations.
+
+	* src/libgenders/genders.c: node_index and attr_index cannot be
+	NULL after genders_load_data(), so check numnodes and numattrs
+	variables instead.
 	
 2009-05-19  Albert Chu  <chu11@llnl.gov>
 

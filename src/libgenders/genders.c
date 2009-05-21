@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.c,v 1.144 2009-05-20 23:03:52 chu11 Exp $
+ *  $Id: genders.c,v 1.145 2009-05-21 17:52:50 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -615,7 +615,7 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       /* Case B: atleast the attr was input, so use attr_index */
       List l;
       
-      if (!handle->attr_index)
+      if (!handle->numattrs)
         {
 	  /* No attributes, so no nodes have this attr */
 	  handle->errnum = GENDERS_ERR_SUCCESS;
@@ -685,7 +685,7 @@ genders_getattr(genders_t handle,
   if (!node)
     node = handle->nodename;
   
-  if (!handle->node_index)
+  if (!handle->numnodes)
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
       return -1;
@@ -788,7 +788,7 @@ genders_testattr(genders_t handle,
   if (!node)
     node = handle->nodename;
 
-  if (!handle->node_index)
+  if (!handle->numnodes)
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
       return -1;
@@ -849,7 +849,7 @@ genders_testattrval(genders_t handle,
   if (!node)
     node = handle->nodename;
 
-  if (!handle->node_index)
+  if (!handle->numnodes)
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
       return -1;
@@ -879,7 +879,7 @@ genders_isnode(genders_t handle, const char *node)
   if (!node)
     node = handle->nodename;
 
-  if (!handle->node_index)
+  if (!handle->numnodes)
     {
       /* No nodes, so node not found */
       handle->errnum = GENDERS_ERR_SUCCESS;
@@ -905,7 +905,7 @@ genders_isattr(genders_t handle, const char *attr)
       return -1;
     }
 
-  if (!handle->attr_index)
+  if (!handle->numattrs)
     {
       /* No attributes, so attr not found */
       handle->errnum = GENDERS_ERR_SUCCESS;
@@ -948,6 +948,9 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   else 
     {
       List l;
+
+      if (!handle->numattrs)
+        goto out;
 
       if (!(l = hash_find(handle->attr_index, attr)))
         goto out;
