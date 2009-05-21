@@ -1,3 +1,9 @@
+2009-05-20  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_parsing.c (_parse_line): Remove
+	unnecessary error check that is now handled through new parsing
+	architecture.
+	
 2009-05-19  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_isattrval): Improve

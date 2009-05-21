@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.30 2009-05-20 23:38:46 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.31 2009-05-21 16:59:03 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -430,7 +430,7 @@ _parse_line(genders_t handle,
 	      handle->errnum = GENDERS_ERR_PARSE;
 	      goto cleanup;
 	    }
-      
+
 	  __list_create(attrvals, _genders_list_free_genders_attrval);
 	  
 	  /* parse attributes */
@@ -456,21 +456,13 @@ _parse_line(genders_t handle,
 		  goto cleanup;
                 }
 #endif
-	      
-	      if (list_find_first(attrvals, 
-				  _genders_list_is_attr_in_attrvals, 
-				  attr)) 
-		{
-		  if (line_num > 0) 
-		    {
-		      fprintf(stream, "Line %d: duplicate attribute \"%s\" listed\n",
-			      line_num, attr);
-		      rv = 1;
-		    }
-		  handle->errnum = GENDERS_ERR_PARSE;
-		  goto cleanup;
-		}
-	      
+	
+              /* achu: No need to check if there are duplicate
+               * attributes within this line of the file.  Will be
+               * caught during duplicate attribute checks within each
+               * node below.
+               */
+      
 	      if (_insert_attrval(handle, attrvals, attr, val) < 0)
 		goto cleanup;
 	      
@@ -538,8 +530,6 @@ _parse_line(genders_t handle,
       
       if (attrvals) 
 	{
-          List l;
-
 	  if ((rv = _duplicate_attr_in_node_check(handle,
                                                   n,
                                                   attrvals,
