@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.35 2009-05-21 17:27:30 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.36 2009-05-21 17:45:44 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -97,12 +97,6 @@ _insert_node(genders_t handle,
   /* must create node if node doesn't exist */ 
   if (!(n = hash_find((*node_index), nodename)))
     {
-      if (hash_count((*node_index)) > ((*node_index_size) * 2))
-        {
-          if (_genders_rehash(handle, node_index, node_index_size) < 0)
-            goto cleanup;
-        }
-
       /* insert into nodelist */
       __xmalloc(n, genders_node_t, sizeof(struct genders_node));
       __xstrdup(n->name, nodename);
@@ -118,6 +112,13 @@ _insert_node(genders_t handle,
       __list_append(nodelist, n);
 
       /* insert into node_index */
+
+      if (hash_count((*node_index)) > ((*node_index_size) * 2))
+        {
+          if (_genders_rehash(handle, node_index, node_index_size) < 0)
+            goto cleanup;
+        }
+
       __hash_insert((*node_index), n->name, n);
     }
   return n;
@@ -188,17 +189,18 @@ _insert_attr(genders_t handle,
   if (hash_find((*attr_index), attr))
     return 0;
 
+  /* insert into attrlist */
+  __xstrdup(attr_new, attr);
+  __list_append(handle->attrslist, attr_new);
+
+  /* insert into attr_index */
+
   if (hash_count((*attr_index)) > ((*attr_index_size) * 2))
     {
       if (_genders_rehash(handle, attr_index, attr_index_size) < 0)
         goto cleanup;
     }
 
-  /* insert into attrlist */
-  __xstrdup(attr_new, attr);
-  __list_append(handle->attrslist, attr_new);
-
-  /* insert into attr_index */
   __list_create(l, NULL);
   __hash_insert((*attr_index), attr_new, l);
 
