@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.32 2009-05-21 17:03:39 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.33 2009-05-21 17:09:04 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -81,7 +81,7 @@ _readline(genders_t handle, int fd, char *buf, int buflen)
 /* 
  * _insert_node
  *
- * Insert a node into the nodelist
+ * Insert a node into the nodelist and node index.
  *
  * Returns 0 on success, -1 on error
  */
@@ -103,6 +103,7 @@ _insert_node(genders_t handle,
             goto cleanup;
         }
 
+      /* insert into nodelist */
       __xmalloc(n, genders_node_t, sizeof(struct genders_node));
       __xstrdup(n->name, nodename);
       __list_create(n->attrlist, NULL);
@@ -116,7 +117,7 @@ _insert_node(genders_t handle,
       
       __list_append(nodelist, n);
 
-      /* insert into node_index too */
+      /* insert into node_index */
       __hash_insert((*node_index), n->name, n);
     }
   return n;
@@ -171,7 +172,7 @@ _insert_attrval(genders_t handle, List attrvals, char *attr, char *val)
 /* 
  * _insert_attr
  *
- * Insert an attr into the attrlist
+ * Insert an attr into the attrlist and attr_index
  *
  * Returns 0 on success, -1 on error
  */
@@ -193,10 +194,11 @@ _insert_attr(genders_t handle,
         goto cleanup;
     }
 
+  /* insert into attrlist */
   __xstrdup(attr_new, attr);
   __list_append(handle->attrslist, attr_new);
 
-  /* insert into attr_index too */
+  /* insert into attr_index */
   __list_create(l, NULL);
   __hash_insert((*attr_index), attr_new, l);
 
@@ -211,7 +213,7 @@ _insert_attr(genders_t handle,
  * _duplicate_attr_in_node_check
  *
  * Determine if an attr in the attrvals list already exists for the
- * node.  If not insert into the attr_index.
+ * node.  If not insert into the attr_index and node attrlist_index.
  *
  * If line_num > 0, returns 1 if a duplicate exists, 0 if not, -1 on error
  *
