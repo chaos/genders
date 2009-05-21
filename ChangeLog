@@ -8,6 +8,10 @@
 
 	* src/libgenders/genders_parsing.c (_parse_line): Adjust code
 	appropriately given function removal.
+
+	* src/libgenders/genders_parsing.c
+	(_duplicate_attr_in_node_check): Renamed _attr_node_processsing
+	due to functional changes.
 	
 2009-05-19  Albert Chu  <chu11@llnl.gov>
 

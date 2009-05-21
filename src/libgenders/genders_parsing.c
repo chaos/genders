@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_parsing.c,v 1.33 2009-05-21 17:09:04 chu11 Exp $
+ *  $Id: genders_parsing.c,v 1.34 2009-05-21 17:11:30 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -210,7 +210,7 @@ _insert_attr(genders_t handle,
 }
 
 /* 
- * _duplicate_attr_in_node_check
+ * _attr_node_processsing
  *
  * Determine if an attr in the attrvals list already exists for the
  * node.  If not insert into the attr_index and node attrlist_index.
@@ -220,12 +220,12 @@ _insert_attr(genders_t handle,
  * If line_num == 0, returns 0 on success, -1 on error
  */
 static int
-_duplicate_attr_in_node_check(genders_t handle, 
-			      genders_node_t n, 
-			      List attrvals,
-                              hash_t *attr_index,
-			      int line_num,
-			      FILE *stream)
+_attr_node_processsing(genders_t handle, 
+                       genders_node_t n, 
+                       List attrvals,
+                       hash_t *attr_index,
+                       int line_num,
+                       FILE *stream)
 {
   ListIterator attrvals_itr = NULL;
   genders_attrval_t av = NULL;
@@ -516,12 +516,12 @@ _parse_line(genders_t handle,
       
       if (attrvals) 
 	{
-	  if ((rv = _duplicate_attr_in_node_check(handle,
-                                                  n,
-                                                  attrvals,
-                                                  attr_index,
-                                                  line_num,
-                                                  stream)) != 0)
+	  if ((rv = _attr_node_processsing(handle,
+                                           n,
+                                           attrvals,
+                                           attr_index,
+                                           line_num,
+                                           stream)) != 0)
 	    goto cleanup;
 	  
           __list_append(n->attrlist, attrvals);
