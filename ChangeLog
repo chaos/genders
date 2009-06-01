@@ -2,6 +2,8 @@
 
 	* src/libgenders/genders.h.in, src/libgenders/genders_query.y
 	(_parse_query, genders_query): Make query parameter a const.
+
+	* src/libgenders/genders.h.in: Add additonal comments.
 	
 2009-05-20  Albert Chu  <chu11@llnl.gov>
 

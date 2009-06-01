@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.35 2009-06-01 20:59:13 chu11 Exp $
+ *  $Id: genders.h.in,v 1.36 2009-06-01 21:51:38 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2003 The Regents of the University of California.
@@ -372,7 +372,8 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  * values. Signify union with '||', intersection with '&&',
  * difCference with '--', and complement with '~'.  Operations are
  * performed left to right. Parentheses can be used to change the
- * order of operations.
+ * order of operations.  If 'query' is NULL, get all nodes.  This
+ * function is not threadsafe.
  *
  * Return number matches on success, -1 on error
  */ 
