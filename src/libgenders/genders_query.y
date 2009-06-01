@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.32 2008-07-21 16:45:34 chu11 Exp $
+ *  $Id: genders_query.y,v 1.33 2009-06-01 20:59:13 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -196,7 +196,7 @@ yywrap()
  * Returns 0 on success, -1 on error
  */
 static int 
-_parse_query(genders_t handle, char *query)
+_parse_query(genders_t handle, const char *query)
 {
   extern FILE *yyin, *yyout; 
   int fds[2];
@@ -544,7 +544,7 @@ _calc_query(genders_t handle, struct genders_treenode *t)
 }
 
 int
-genders_query(genders_t handle, char *nodes[], int len, char *query)
+genders_query(genders_t handle, char *nodes[], int len, const char *query)
 {
   hostlist_t h = NULL;
   hostlist_iterator_t itr = NULL;

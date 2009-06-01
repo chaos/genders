@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.34 2008-03-28 16:56:29 chu11 Exp $
+ *  $Id: genders.h.in,v 1.35 2009-06-01 20:59:13 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2003 The Regents of the University of California.
@@ -376,7 +376,7 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  *
  * Return number matches on success, -1 on error
  */ 
-int genders_query(genders_t handle, char *nodes[], int len, char *query);
+int genders_query(genders_t handle, char *nodes[], int len, const char *query);
 
 /* 
  * genders_parse

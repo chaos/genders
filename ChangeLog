@@ -1,3 +1,8 @@
+2009-06-01  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.h.in, src/libgenders/genders_query.y
+	(_parse_query, genders_query): Make query parameter a const.
+	
 2009-05-20  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_parse_line): Remove
