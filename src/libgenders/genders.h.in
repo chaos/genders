@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.37 2009-06-02 18:05:21 chu11 Exp $
+ *  $Id: genders.h.in,v 1.38 2009-06-02 18:29:33 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2003 The Regents of the University of California.
@@ -370,7 +370,7 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  * Query the genders database for a set of nodes based on union,
  * intersection, difference, or complement of genders attributes and
  * values. Signify union with '||', intersection with '&&',
- * difCference with '--', and complement with '~'.  Operations are
+ * difference with '--', and complement with '~'.  Operations are
  * performed left to right. Parentheses can be used to change the
  * order of operations.  If 'query' is NULL, get all nodes.  This
  * function is not threadsafe.
@@ -383,8 +383,12 @@ int genders_query(genders_t handle, char *nodes[], int len, const char *query);
  * genders_testquery
  *
  * Tests whether a node meets the conditions specified in the query.
- * If 'node' is NULL, tests the current node.  This function is not
- * threadsafe.
+ * If 'node' is NULL, tests the current node.  Queries are based on
+ * the union, intersection, difference, or complement of genders
+ * attributes and values. Signify union with '||', intersection with
+ * '&&', difference with '--', and complement with '~'.  Operations
+ * are performed left to right. Parentheses can be used to change the
+ * order of operations. This function is not threadsafe.
  *
  * Returns 1=true, 0=false, -1=failure
  */
