@@ -1,5 +1,5 @@
 .\"############################################################################
-.\"  $Id: nodeattr.1,v 1.22 2008-03-28 17:06:03 chu11 Exp $
+.\"  $Id: nodeattr.1,v 1.23 2009-06-02 22:45:21 chu11 Exp $
 .\"############################################################################
 .\"  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
 .\"  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -36,6 +36,9 @@ nodeattr \- query genders file
 .br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
+.br
+.B nodeattr
+.I "[-f genders] -Q [node] query
 .br
 .B nodeattr
 .I "[-f genders] -V [-U] attr
@@ -80,6 +83,17 @@ When called with a node name (optional) and attribute name,
 returns \fI0\fR to the environment if the node has the attribute; else
 \fI1\fR.  If \fI-v\fR is present, the attribute name and any value
 (see below) is printed on the standard output.  If a node name is not
+specified, the local host is assumed.
+.LP
+When called with the
+.I "-Q"
+argument,
+.B nodeattr
+will check if the node name (optional) is met by the attribute and
+value conditions specified in the query.  If the conditions are met,
+.B nodeattr
+returns \fI0\fR to the environment; else \fI1\fR.  The query format is
+identical to the format listed above.  If a node name is not
 specified, the local host is assumed.
 .LP
 The
@@ -168,6 +182,10 @@ for i in \`nodeattr -n login\`; do rsh $i who; done
 To verify whether or not this node is a head node:
 .IP
 nodeattr head && echo yes
+.LP
+To verify whether or not this node is a head node and ntpserver:
+.IP
+nodeattr -Q "head&&ntpserver" && echo yes
 .LP
 .SH "FILES"
 /etc/genders

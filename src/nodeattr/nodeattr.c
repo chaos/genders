@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.40 2009-06-02 22:24:12 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.41 2009-06-02 22:45:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqX:vVUlf:kd:"
+#define OPTIONS "cnsqX:vQVUlf:kd:"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -60,6 +60,7 @@ static struct option longopts[] = {
     { "query", 0, 0, 'q' },
     { "excludequery", 1, 0, 'X'},
     { "value", 0, 0, 'v' },
+    { "testquery", 0, 0, 'Q' },
     { "values", 0, 0, 'V' },
     { "unique", 0, 0, 'U' },
     { "listattr", 0, 0, 'l' },
@@ -73,6 +74,7 @@ static struct option longopts[] = {
 typedef enum { FMT_COMMA, FMT_NL, FMT_SPACE, FMT_HOSTLIST } fmt_t;
 
 static int test_attr(genders_t gp, char *node, char *attr, int vopt);
+static int test_query(genders_t gp, char *node, char *query);
 static void list_attr_val(genders_t gp, char *attr, int Uopt);
 static void list_nodes(genders_t gp, char *attr, char *excludequery, fmt_t fmt);
 static void list_attrs(genders_t gp, char *node);
@@ -94,7 +96,8 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
+    int lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
+      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -126,6 +129,9 @@ main(int argc, char *argv[])
         case 'v':   /* --value */
             vopt = 1;
             break;
+        case 'Q':   /* --testquery */
+            Qopt = 1;
+            break;
         case 'V':   /* --values */
             Vopt = 1;
             break;
@@ -154,10 +160,10 @@ main(int argc, char *argv[])
     /* check parameter inputs */
 
     /* specify correct option combinations */
-    if ((qopt + Vopt + lopt + kopt + dopt) > 1)
+    if ((qopt + Qopt + Vopt + lopt + kopt + dopt) > 1)
         usage();
 
-    if ((qopt || Vopt || lopt || kopt || dopt) && vopt)
+    if ((qopt || Qopt || Vopt || lopt || kopt || dopt) && vopt)
         usage();
 
     if (!qopt && Xopt)
@@ -169,11 +175,13 @@ main(int argc, char *argv[])
     /* specified correctly number of arguments */
     if ((qopt && optind != (argc - 1))
         || (!qopt
+            && !Qopt
             && !Vopt
             && !lopt
             && !kopt
             && !dopt
             && (optind != (argc - 1) && optind != (argc - 2)))
+        || (Qopt && (optind != (argc - 1) && optind != (argc - 2)))
         || (Vopt && optind != (argc - 1))
         || (lopt && (optind != argc && optind != (argc - 1)))
         || (kopt && optind != argc)
@@ -217,7 +225,7 @@ main(int argc, char *argv[])
     }
 
     /* Usage 2:  does node have attribute? */
-    if (!qopt && !Vopt && !lopt && !kopt && !dopt) {
+    if (!qopt && !Qopt && !Vopt && !lopt && !kopt && !dopt) {
         char *node = NULL, *attr = NULL;
         int result;
 
@@ -233,7 +241,24 @@ main(int argc, char *argv[])
         exit(result ? 0 : 1);
     }
 
-    /* Usage 3:  output all attribute values */
+    /* Usage 3:  does node meet query conditions */
+    if (Qopt) {
+        char *node = NULL, *query = NULL;
+        int result;
+
+        if (optind == argc - 2) {
+            node = argv[optind++];
+            query = argv[optind++];
+        } else {
+            node = NULL;
+            query = argv[optind++];
+        }
+
+        result = test_query(gp, node, query);
+        exit(result ? 0 : 1);
+    }
+
+    /* Usage 4:  output all attribute values */
     if (Vopt) {
         char *attr = NULL;
 
@@ -245,7 +270,7 @@ main(int argc, char *argv[])
         list_attr_val(gp, attr, Uopt);
     }
 
-    /* Usage 4:  list attributes */
+    /* Usage 5:  list attributes */
     if (lopt) {
         char *node = NULL;
 
@@ -332,6 +357,17 @@ test_attr(genders_t gp, char *node, char *attr, int vopt)
         res = 0;
     if (vopt || wantval)
         free(val);
+    return res;
+}
+
+static int 
+test_query(genders_t gp, char *node, char *query)
+{
+    int res;
+
+    if ((res = genders_testquery(gp, node, query)) < 0)
+        _gend_error_exit(gp, "genders_testquery");
+
     return res;
 }
 
@@ -435,6 +471,7 @@ usage(void)
     fprintf(stderr,
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-X exclude_query] query\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
+        "or     nodeattr [-f genders] -Q [node] query\n"
         "or     nodeattr [-f genders] -V [-U] attr\n"   
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"

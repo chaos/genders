@@ -14,6 +14,9 @@
 	* src/nodeattr/nodeattr.c (main): Rework command line option error
 	checking to be more logical and easier to understand.
 
+	* src/nodeattr/nodeattr.c, man/nodeattr.1: Support new -Q option
+	in nodeattr.
+
 2009-06-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/Genders/Genders.pm.in, src/Libgenders/Libgenders.pm.in,
