@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: nodeattr.c,v 1.39 2008-04-11 21:11:15 chu11 Exp $
+ *  $Id: nodeattr.c,v 1.40 2009-06-02 22:24:12 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -94,7 +94,7 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int lopt = 0, qopt = 0, vopt = 0, Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
+    int lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -121,6 +121,7 @@ main(int argc, char *argv[])
             break;
         case 'X':   /* --excludequery */
             excludequery = optarg;
+            Xopt = 1;
             break;
         case 'v':   /* --value */
             vopt = 1;
@@ -150,8 +151,34 @@ main(int argc, char *argv[])
         }
     }
 
-    if (optind == argc && !lopt && !kopt && !dopt)
+    /* check parameter inputs */
+
+    /* specify correct option combinations */
+    if ((qopt + Vopt + lopt + kopt + dopt) > 1)
         usage();
+
+    if ((qopt || Vopt || lopt || kopt || dopt) && vopt)
+        usage();
+
+    if (!qopt && Xopt)
+      usage();
+
+    if (!Vopt && Uopt)
+      usage();
+
+    /* specified correctly number of arguments */
+    if ((qopt && optind != (argc - 1))
+        || (!qopt
+            && !Vopt
+            && !lopt
+            && !kopt
+            && !dopt
+            && (optind != (argc - 1) && optind != (argc - 2)))
+        || (Vopt && optind != (argc - 1))
+        || (lopt && (optind != argc && optind != (argc - 1)))
+        || (kopt && optind != argc)
+        || (dopt && optind != argc))
+      usage();
 
     /* genders database diff */
     if (dopt) {
@@ -183,11 +210,6 @@ main(int argc, char *argv[])
     if (qopt) {
         char *query;
 
-        if (vopt || Vopt || Uopt || lopt)
-            usage();
-        if (optind != argc - 1)
-            usage();
-
         query = argv[optind++];
         list_nodes(gp, query, excludequery, qfmt);
 
@@ -195,34 +217,27 @@ main(int argc, char *argv[])
     }
 
     /* Usage 2:  does node have attribute? */
-    if (!lopt && !Vopt) {
+    if (!qopt && !Vopt && !lopt && !kopt && !dopt) {
         char *node = NULL, *attr = NULL;
         int result;
-
-        if (Uopt)
-            usage();
 
         if (optind == argc - 2) {
             node = argv[optind++];
             attr = argv[optind++];
-        } else if (optind == argc - 1) {
+        } else {
             node = NULL;
             attr = argv[optind++];
-        } else
-            usage();
+        }
 
         result = test_attr(gp, node, attr, vopt);
         exit(result ? 0 : 1);
     }
 
     /* Usage 3:  output all attribute values */
-    if (!lopt && Vopt) {
+    if (Vopt) {
         char *attr = NULL;
 
-        if (optind == argc - 1) {
-            attr = argv[optind++];
-        } else
-            usage();
+        attr = argv[optind++];
 
         if (strchr(attr, '='))  /* attr cannot be "attr=val" */
             usage();
@@ -236,8 +251,6 @@ main(int argc, char *argv[])
 
         if (optind == argc - 1)
             node = argv[optind++];
-        else if (optind != argc)
-            usage();
 
         list_attrs(gp, node);
     }

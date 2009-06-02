@@ -11,6 +11,9 @@
 
 	* man/libgenders.3: Add genders_testquery().
 
+	* src/nodeattr/nodeattr.c (main): Rework command line option error
+	checking to be more logical and easier to understand.
+
 2009-06-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/Genders/Genders.pm.in, src/Libgenders/Libgenders.pm.in,
