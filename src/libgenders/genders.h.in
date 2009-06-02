@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders.h.in,v 1.36 2009-06-01 21:51:38 chu11 Exp $
+ *  $Id: genders.h.in,v 1.37 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2003 The Regents of the University of California.
@@ -378,6 +378,19 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  * Return number matches on success, -1 on error
  */ 
 int genders_query(genders_t handle, char *nodes[], int len, const char *query);
+
+/*
+ * genders_testquery
+ *
+ * Tests whether a node meets the conditions specified in the query.
+ * If 'node' is NULL, tests the current node.  This function is not
+ * threadsafe.
+ *
+ * Returns 1=true, 0=false, -1=failure
+ */
+int genders_testquery(genders_t handle, 
+		      const char *node,
+                      const char *query);
 
 /* 
  * genders_parse

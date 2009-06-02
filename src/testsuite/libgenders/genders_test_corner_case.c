@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.c,v 1.12 2009-05-16 01:15:28 chu11 Exp $
+ *  $Id: genders_test_corner_case.c,v 1.13 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -1405,6 +1405,41 @@ genders_query_corner_case(int verbose)
     genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(gh));
   if (genders_handle_destroy(gh) < 0)
     genders_err_exit("genders_handle_destroy: %s", genders_errormsg(gh));
+
+  return errcount;
+}
+
+int
+genders_testquery_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_testquery_corner_case_t *tests = &genders_testquery_corner_case_tests[0];
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      char *nodeptr, *queryptr;
+      int return_value, errnum;
+
+      handle = genders_handle_get(tests[i].param1);
+      nodeptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->node;
+      queryptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+      return_value = genders_testquery(handle, nodeptr, queryptr);
+      errnum = genders_errnum(handle);
+
+      errcount += genders_return_value_errnum_check("genders_testquery",
+						    tests[i].num,
+						    tests[i].expected_return_value,
+						    tests[i].expected_errnum,
+						    return_value,
+						    errnum,
+						    NULL,
+						    verbose);
+
+      genders_handle_cleanup(handle);
+      i++;
+    }
 
   return errcount;
 }

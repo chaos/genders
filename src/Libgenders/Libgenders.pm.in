@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Libgenders.pm.in,v 1.5 2008-03-28 16:56:26 chu11 Exp $
+#  $Id: Libgenders.pm.in,v 1.6 2009-06-02 18:05:21 chu11 Exp $
 #############################################################################
 #  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
 #  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -97,6 +97,7 @@ Libgenders - Perl extension for libgenders
  $handle->genders_index_attrvals($attr)
 
  $handle->genders_query($query)
+ $handle->genders_testquery($query, [$node])
  
  $handle->genders_parse([$filename]);
 
@@ -255,6 +256,12 @@ example, the following query would retrieve all nodes other than
 management or login nodes: "all-(mgmt+login)".  If $query is not
 specified, all nodes listed in the genders file are returned. Returns
 undef on error.
+
+=item B<$handle-E<gt>genders_testquery($query, [$node])>
+
+Tests if a node meets the conditions specified in the query.  If $node
+is not specified, local node is used.  Returns 1 if the node is
+contained within the query, 0 if not, -1 on error.
 
 =item B<$handle-E<gt>genders_parse([$filename])>
 

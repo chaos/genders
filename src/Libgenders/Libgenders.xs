@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: Libgenders.xs,v 1.42 2008-01-29 05:43:06 chu11 Exp $
+ *  $Id: Libgenders.xs,v 1.43 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -543,6 +543,16 @@ genders_query(handle, query=NULL)
         the_end:
     OUTPUT:
         RETVAL    
+
+int
+genders_testquery(handle, query, node=NULL)
+    genders_t handle
+    char *node
+    char *query
+    CODE:
+        RETVAL = genders_testquery(handle, node, query);
+    OUTPUT:
+        RETVAL      
 
 int
 genders_parse(handle, filename=NULL)

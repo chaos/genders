@@ -1,3 +1,12 @@
+2009-06-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/Genders/Genders.pm.in, src/Libgenders/Libgenders.pm.in,
+	src/Libgenders/Libgenders.xs, src/libgenders/genders.h.in,
+	src/libgenders/genders_query.y: Add support for new function
+	genders_testquery().
+
+	* src/testsuite/libgenders/: Add tests for genders_testquery().
+	
 2009-06-01  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.h.in, src/libgenders/genders_query.y

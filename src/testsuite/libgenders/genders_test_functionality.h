@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.h,v 1.5 2008-03-28 16:56:41 chu11 Exp $
+ *  $Id: genders_test_functionality.h,v 1.6 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -65,6 +65,7 @@ int genders_isattr_functionality(int verbose);
 int genders_isattrval_functionality(int verbose);
 int genders_index_attrvals_functionality(int verbose);
 int genders_query_functionality(int verbose);
+int genders_testquery_functionality(int verbose);
 int genders_parse_functionality(int verbose);
 int genders_set_errnum_functionality(int verbose);
 

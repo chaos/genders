@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_functionality.c,v 1.13 2009-05-16 01:15:28 chu11 Exp $
+ *  $Id: genders_test_functionality.c,v 1.14 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -1561,8 +1561,6 @@ genders_testattrval_functionality(int verbose)
 						  errnum,
 						  databases[i]->filename,
 						  verbose);
-              if (err)
-                printf("%s:%d\n", __FUNCTION__, __LINE__);
 	  errcount += err;
 	}
 
@@ -2159,13 +2157,17 @@ genders_query_functionality(int verbose)
 					 querybuf);
 	    errnum = genders_errnum(handle);
 	  
+            sprintf(msgbuf, "%s: \"%s\"", 
+                    databases[i]->filename,
+                    querybuf);
+
 	    err = genders_return_value_errnum_check("genders_query",
 						    num,
 						    0,
 						    GENDERS_ERR_SUCCESS,
 						    return_value,
 						    errnum,
-						    databases[i]->filename,
+						    msgbuf,
 						    verbose);
 	    errcount += err;
 	  }
@@ -2232,6 +2234,223 @@ genders_query_functionality(int verbose)
 
 	if (genders_nodelist_destroy(handle, nodelist) < 0)
 	  genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
+	if (genders_handle_destroy(handle) < 0)
+	  genders_err_exit("genders_handle_destroy");
+	
+	num++;
+	i++;
+      }
+  }
+
+  return errcount;
+}
+
+int
+genders_testquery_functionality(int verbose)
+{
+  char msgbuf[GENDERS_ERR_BUFLEN];
+  int errcount = 0;
+  int num = 0;
+
+  /* Part A: Parse error queries */
+  {
+    genders_t handle;
+    int return_value, errnum, err;
+    int i = 0;
+      
+    if (!(handle = genders_handle_create()))
+      genders_err_exit("genders_handle_create");
+	
+    if (genders_load_data(handle, genders_database_base.filename) < 0)
+      genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+    while (genders_query_parse_error_tests[i] != NULL)
+      {
+	return_value = genders_testquery(handle,
+                                         "node1",
+                                         genders_query_parse_error_tests[i]);
+	errnum = genders_errnum(handle);
+	
+	sprintf(msgbuf, "\"%s\"", genders_query_parse_error_tests[i]);
+	err = genders_return_value_errnum_check("genders_testquery",
+						num,
+						-1,
+						GENDERS_ERR_SYNTAX,
+						return_value,
+						errnum,
+						msgbuf,
+						verbose);
+	errcount += err;
+	num++;
+	i++;
+      }
+
+    if (genders_handle_destroy(handle) < 0)
+      genders_err_exit("genders_handle_destroy");
+  }
+
+  /* Part B: Simple attr and attr=val queries  */
+  {
+    int i = 0;
+    genders_t handle;
+    genders_database_t **databases = &genders_functionality_databases[0];
+    while (databases[i] != NULL)
+      {
+	int j, return_value, errnum, err;
+      
+	if (!(handle = genders_handle_create()))
+	  genders_err_exit("genders_handle_create");
+	
+	if (genders_load_data(handle, databases[i]->filename) < 0)
+	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+	for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
+	  {
+	    char querybuf[GENDERS_QUERY_BUFLEN];
+            int k;
+
+	    /* Construct simple query */
+	    if (databases[i]->data->attrval_nodes[j].attr)
+	      {
+		memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
+		strcpy(querybuf, databases[i]->data->attrval_nodes[j].attr);
+		if (databases[i]->data->attrval_nodes[j].val)
+		  {
+		    strcat(querybuf, "=");
+		    strcat(querybuf, databases[i]->data->attrval_nodes[j].val);
+		  }
+
+                for (k = 0; k < databases[i]->data->attrval_nodes[j].nodeslen; k++)
+                  {
+                    return_value = genders_testquery(handle,
+                                                     databases[i]->data->attrval_nodes[j].nodes[k],
+                                                     querybuf);
+                    errnum = genders_errnum(handle);
+                    
+                    sprintf(msgbuf, "%s: \"%s\"", 
+                            databases[i]->filename,
+                            querybuf);
+                    err = genders_return_value_errnum_check("genders_testquery",
+                                                            num,
+                                                            1,
+                                                            GENDERS_ERR_SUCCESS,
+                                                            return_value,
+                                                            errnum,
+                                                            msgbuf,
+                                                            verbose);                    
+                    errcount += err;
+                  }
+              }
+
+            for (k = 0; k < databases[i]->data->attrval_nodes[j].nodeslen; k++)
+              {
+                /* Test invalid attr */
+                return_value = genders_testquery(handle,
+                                                 databases[i]->data->attrval_nodes[j].nodes[k],
+                                                 GENDERS_DATABASE_INVALID_ATTR);
+                errnum = genders_errnum(handle);
+	
+                sprintf(msgbuf, "%s: \"%s\"", 
+                        databases[i]->filename,
+                        GENDERS_DATABASE_INVALID_ATTR);
+                err = genders_return_value_errnum_check("genders_testquery",
+                                                        num,
+                                                        0,
+                                                        GENDERS_ERR_SUCCESS,
+                                                        return_value,
+                                                        errnum,
+                                                        msgbuf,
+                                                        verbose);
+                errcount += err;
+
+                /* Test attr with val, but invalid val */
+                if (databases[i]->data->attr_with_val)
+                  {
+                    char querybuf2[GENDERS_QUERY_BUFLEN];
+                    
+                    memset(querybuf2, '\0', GENDERS_QUERY_BUFLEN);
+                    strcpy(querybuf2, databases[i]->data->attr_with_val);
+                    strcat(querybuf2, "=");
+                    strcat(querybuf2, GENDERS_DATABASE_INVALID_VAL);
+                    
+                    return_value = genders_testquery(handle,
+                                                     databases[i]->data->attrval_nodes[j].nodes[k],
+                                                     querybuf2);
+                    errnum = genders_errnum(handle);
+                    
+                    sprintf(msgbuf, "%s: \"%s\"", 
+                            databases[i]->filename,
+                            querybuf2);
+                    err = genders_return_value_errnum_check("genders_testquery",
+                                                            num,
+                                                            0,
+                                                            GENDERS_ERR_SUCCESS,
+                                                            return_value,
+                                                            errnum,
+                                                            msgbuf,
+                                                            verbose);
+                    errcount += err;
+                  }
+              }
+          }
+
+	if (genders_handle_destroy(handle) < 0)
+	  genders_err_exit("genders_handle_destroy");
+	
+	num++;
+	i++;
+      }
+  }
+
+  /* Part C: Complex queries  */
+  {
+    int i = 0;
+    genders_t handle;
+    genders_query_functionality_tests_t **databases = &genders_query_functionality_tests[0];
+
+    while (databases[i] != NULL)
+      {
+	int j, return_value, errnum, err;
+      
+	if (!(handle = genders_handle_create()))
+	  genders_err_exit("genders_handle_create");
+	
+	if (genders_load_data(handle, databases[i]->filename) < 0)
+	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+	
+	j = 0;
+	while (databases[i]->tests->tests[j].query != NULL)
+	  {
+            if (databases[i]->tests->tests[j].nodeslen)
+              {
+                int k;
+
+                for (k = 0; k < databases[i]->tests->tests[j].nodeslen; k++)
+                  {
+                    return_value = genders_testquery(handle, 
+                                                     databases[i]->tests->tests[j].nodes[k],
+                                                     databases[i]->tests->tests[j].query);
+                    errnum = genders_errnum(handle);
+
+                    sprintf(msgbuf, "%s: \"%s\"", 
+                            databases[i]->filename,
+                            databases[i]->tests->tests[j].query);
+                    
+                    err = genders_return_value_errnum_check("genders_testquery",
+                                                            num,
+                                                            1,
+                                                            GENDERS_ERR_SUCCESS,
+                                                            return_value,
+                                                            errnum,
+                                                            msgbuf,
+                                                            verbose);
+                    errcount += err;
+                  }
+              }
+	    
+	    j++;
+	  }
+
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
 	

@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_corner_case.h,v 1.6 2008-03-28 16:56:36 chu11 Exp $
+ *  $Id: genders_test_corner_case.h,v 1.7 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -177,6 +177,15 @@ typedef struct {
 typedef struct {
   int num;
   genders_handle_type_t param1;
+  genders_pointer_type_t param2;
+  genders_pointer_type_t param3;
+  int expected_return_value;
+  int expected_errnum;
+} genders_testquery_corner_case_t;
+
+typedef struct {
+  int num;
+  genders_handle_type_t param1;
   genders_filename_type_t param2;
   genders_pointer_type_t param3;
   int expected_return_value;
@@ -222,6 +231,7 @@ extern genders_isattr_corner_case_t genders_isattr_corner_case_tests[];
 extern genders_isattrval_corner_case_t genders_isattrval_corner_case_tests[];
 extern genders_index_attrvals_corner_case_t genders_index_attrvals_corner_case_tests[];
 extern genders_query_corner_case_t genders_query_corner_case_tests[];
+extern genders_testquery_corner_case_t genders_testquery_corner_case_tests[];
 extern genders_parse_corner_case_t genders_parse_corner_case_tests[];
 extern genders_set_errnum_corner_case_t genders_set_errnum_corner_case_tests[];
 
@@ -260,6 +270,7 @@ int genders_isattr_corner_case(int verbose);
 int genders_isattrval_corner_case(int verbose);
 int genders_index_attrvals_corner_case(int verbose);
 int genders_query_corner_case(int verbose);
+int genders_testquery_corner_case(int verbose);
 int genders_parse_corner_case(int verbose);
 int genders_set_errnum_corner_case(int verbose);
 

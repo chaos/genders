@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query.y,v 1.33 2009-06-01 20:59:13 chu11 Exp $
+ *  $Id: genders_query.y,v 1.34 2009-06-02 18:05:21 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -273,6 +273,7 @@ _calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
   char **nodes = NULL;
   int i, len, num;
   char *attr, *val;
+  int errnum_save;
     
   attr = t->str; 
   if ((val = strchr(attr, '=')))
@@ -297,8 +298,11 @@ _calc_attrval_nodes(genders_t handle, struct genders_treenode *t)
   genders_nodelist_destroy(handle, nodes);
   hostlist_uniq(h);
   return h;
+
  cleanup:
+  errnum_save = handle->errnum;
   genders_nodelist_destroy(handle, nodes);
+  handle->errnum = errnum_save;
   __hostlist_destroy(h);
   return NULL;
 }
@@ -441,6 +445,7 @@ _calc_complement(genders_t handle, hostlist_t h)
   char **nodes = NULL;
   char *node = NULL;
   int i, len, num;
+  int errnum_save;
     
   if ((len = genders_nodelist_create(handle, &nodes)) < 0)
     return NULL;
@@ -466,8 +471,11 @@ _calc_complement(genders_t handle, hostlist_t h)
   genders_nodelist_destroy(handle, nodes);
   hostlist_uniq(ch);
   return ch;
+
  cleanup:
+  errnum_save = handle->errnum;
   genders_nodelist_destroy(handle, nodes);
+  handle->errnum = errnum_save;
   __hostlist_destroy(ch);
   free(node);
   return NULL;
@@ -536,7 +544,11 @@ _calc_query(genders_t handle, struct genders_treenode *t)
   if (t->complement) 
     {
       hostlist_t temp;
-      temp = _calc_complement(handle, h);
+      if (!(temp = _calc_complement(handle, h)))
+        {
+          __hostlist_destroy(h);
+          return NULL;
+        }
       __hostlist_destroy(h);
       h = temp;
     }
@@ -590,6 +602,69 @@ genders_query(genders_t handle, char *nodes[], int len, const char *query)
   /* reset */
   genders_treeroot = NULL;
   genders_query_err = 0;
+  return rv;
+}
+
+int
+genders_testquery(genders_t handle, 
+                  const char *node,
+                  const char *query)
+{
+  genders_node_t n;
+  char **nodelist = NULL;
+  int i, len, num;
+  int found = 0;
+  int rv = -1;
+  int errnum_save;
+
+  if (_genders_loaded_handle_error_check(handle) < 0)
+    return -1;
+
+  if (!query)
+    {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
+      return -1;
+    }
+
+  if (!node)
+    node = handle->nodename;
+
+  if (!handle->numnodes)
+    {
+      handle->errnum = GENDERS_ERR_NOTFOUND;
+      return -1;
+    }
+  
+  if (!(n = hash_find(handle->node_index, node)))
+    {
+      handle->errnum = GENDERS_ERR_NOTFOUND;
+      return -1;
+    }
+
+  if ((len = genders_nodelist_create(handle, &nodelist)) < 0)
+    return -1;
+
+  if ((num = genders_query(handle, nodelist, len, query)) < 0)
+    goto cleanup;
+  
+  for (i = 0; i < num; i++)
+    {
+      if (!strcmp(nodelist[i], node))
+        {
+          found++;
+          break;
+        }
+    }
+  
+  if (found)
+    rv = 1;
+  else
+    rv = 0;
+  handle->errnum = GENDERS_ERR_SUCCESS;
+ cleanup:
+  errnum_save = handle->errnum;
+  genders_nodelist_destroy(handle, nodelist);
+  handle->errnum = errnum_save;
   return rv;
 }
 %}

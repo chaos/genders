@@ -1,5 +1,5 @@
 #############################################################################
-#  $Id: Genders.pm.in,v 1.7 2008-03-28 16:56:25 chu11 Exp $
+#  $Id: Genders.pm.in,v 1.8 2009-06-02 18:05:21 chu11 Exp $
 #############################################################################
 #  Copyright (C) 2007-2008 Lawrence Livermore National Security, LLC.
 #  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -306,6 +306,25 @@ sub query {
     }
 }
 
+sub testquery {
+    my $self = shift;
+    my $query = shift;
+    my $node = shift;
+    my $rv;
+
+    if (ref($self)) {
+        $rv = $self->{$handlekey}->genders_testquery($query, $node);
+        if ($rv < 0) {
+            _errormsg($self, "genders_testquery()");
+            return 0;
+        }
+        return $rv; 
+    }
+    else {
+        return 0;
+    }
+}
+
 1;
 
 __END__
@@ -341,6 +360,7 @@ Genders - Perl library for querying a genders file
  $obj->index_attrvals($attr)
 
  $obj->query($query)
+ $obj->testquery($query, [$node])
 
 =head1 DESCRIPTION
 
@@ -431,6 +451,12 @@ used to change the order of operations.  For example, the following
 query would retrieve all nodes other than management or login nodes:
 "all-(mgmt+login)".  If the query is not specified, all nodes listed
 in the genders file are returned.
+
+=item B<$obj-E<gt>testquery($query, [$node])>
+
+Returns 1 if the specified node meets the conditions of the specified
+query, 0 if it does not.  If the node is not specified, the local node
+is checked.
 
 =back 
 
