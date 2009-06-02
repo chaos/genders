@@ -19,6 +19,8 @@
 
 	* configure.ac: Update library versions.  Update for release.
 
+	* tagged genders-1-13-1
+
 2009-06-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/Genders/Genders.pm.in, src/Libgenders/Libgenders.pm.in,
