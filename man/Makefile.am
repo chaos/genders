@@ -1,5 +1,5 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.14 2005-05-08 15:32:55 achu Exp $
+## $Id: Makefile.am,v 1.15 2009-06-02 18:29:33 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
@@ -44,6 +44,7 @@ man3_MANS = \
 	genders_isattrval.3 \
 	genders_index_attrvals.3 \
 	genders_query.3 \
+	genders_testquery.3 \
 	genders_parse.3
 
 EXTRA_DIST = \
@@ -83,4 +84,5 @@ EXTRA_DIST = \
 	genders_isattrval.3 \
 	genders_index_attrvals.3 \
 	genders_query.3 \
+	genders_testquery.3 \
 	genders_parse.3
