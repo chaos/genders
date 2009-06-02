@@ -17,7 +17,7 @@
 	* src/nodeattr/nodeattr.c, man/nodeattr.1: Support new -Q option
 	in nodeattr.
 
-	* configure.ac: Update for release.
+	* configure.ac: Update library versions.  Update for release.
 
 2009-06-02  Albert Chu  <chu11@llnl.gov>
 
