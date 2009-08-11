@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.13-2
+=========================
+ -- Fix FC11/RHEL6 portability bugs.
+
 Changes in genders-1.13
 =========================
  -- Add genders_testquery() library function.
@@ -104,4 +108,4 @@ Changes in genders-1.2-pre1
     as well as compress back to this same form.
  -- started NEWS file.
 
-$Id: NEWS,v 1.35 2009-06-02 22:45:21 chu11 Exp $
+$Id: NEWS,v 1.36 2009-08-11 17:13:49 chu11 Exp $
