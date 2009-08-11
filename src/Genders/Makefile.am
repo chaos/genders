@@ -1,14 +1,14 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.31 2009-02-19 00:50:17 chu11 Exp $
+## $Id: Makefile.am,v 1.32 2009-08-11 16:56:59 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-INSTALLSITEARCH=`$(PERL) -e 'use Config; $$T=$$Config{installsitearch}; $$T=~/^\Q$$Config{siteprefix}\E\/(.+)/; print $$1;'`
+INSTALLSITEARCH=`$(PERL) -e 'use Config; $$T=$$Config{installsitearch}; print $$T;'`
 
 if WITH_PERL_EXTENSIONS
 GENDERSPMFILES = Genders.pm
-GENDERSPMFILESdir = $(prefix)/$(INSTALLSITEARCH)
+GENDERSPMFILESdir = $(INSTALLSITEARCH)
 GENDERSPMFILES_DATA = $(GENDERSPMFILES)
 
 Genders.$(PERLMAN3EXT):
@@ -21,7 +21,7 @@ Genders.$(PERLMAN3EXT):
 man3_MANS = Genders.$(PERLMAN3EXT)
 
 install-data-hook:
-	chmod 444 $(DESTDIR)/$(prefix)/$(INSTALLSITEARCH)/Genders.pm
+	chmod 444 $(DESTDIR)/$(INSTALLSITEARCH)/Genders.pm
 endif
 
 EXTRA_DIST = Genders.pm
