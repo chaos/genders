@@ -2,6 +2,8 @@
 
 	* src/Genders/Makefile.am: Fix portability bug.
 	
+	* tagged genders-1-13-2
+
 2009-06-02  Albert Chu  <chu11@llnl.gov>
 
 	* man/genders_query.3, man/libgenders.3: Update for const
