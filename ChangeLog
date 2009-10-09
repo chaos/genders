@@ -1,4 +1,6 @@
 2009-10-09  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Add appropriate build requires.
 	
 	* tagged genders-1-13-2
 
