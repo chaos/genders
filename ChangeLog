@@ -1,3 +1,7 @@
+2009-10-09  Albert Chu  <chu11@llnl.gov>
+	
+	* tagged genders-1-13-2
+
 2009-08-12  Albert Chu  <chu11@llnl.gov>
 
 	* src/Genders/Makefile.am: Revert portability fixes.
