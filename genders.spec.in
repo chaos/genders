@@ -7,6 +7,7 @@ License: GPL
 Source: %{name}-%{version}.tar.gz
 Requires: perl
 BuildRequires: bison flex
+BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
