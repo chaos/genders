@@ -1,6 +1,6 @@
 %{
 /*****************************************************************************\
- *  $Id: genders_query_parse.l,v 1.9 2008-07-21 22:51:28 chu11 Exp $
+ *  $Id: genders_query_parse.l,v 1.10 2010-03-24 21:26:05 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -42,12 +42,12 @@
 %}
 
 %%
-[a-zA-Z0-9][a-zA-Z0-9_\.\=:%\\\/]*([\-\|&]?[a-zA-Z0-9_\.\=:%\\\/]+)* yylval.attr = strdup(yytext); return ATTRTOK;
-\(                                                                   return LPARENTOK;
-\)                                                                   return RPARENTOK;
-\|\|                                                                 return UNIONTOK;
-&&                                                                   return INTERSECTIONTOK;
---                                                                   return DIFFERENCETOK;
-~                                                                    return COMPLEMENTTOK;
-[ \t\n]+                                                             ; /* ignore whitespace */
+[a-zA-Z0-9][a-zA-Z0-9_\.\=:%\\\/\+]*([\-\|&]?[a-zA-Z0-9_\.\=:%\\\/\+]+)* yylval.attr = strdup(yytext); return ATTRTOK;
+\(                                                                       return LPARENTOK;
+\)                                                                       return RPARENTOK;
+\|\|                                                                     return UNIONTOK;
+&&                                                                       return INTERSECTIONTOK;
+--                                                                       return DIFFERENCETOK;
+~                                                                        return COMPLEMENTTOK;
+[ \t\n]+                                                                 ; /* ignore whitespace */
 %%

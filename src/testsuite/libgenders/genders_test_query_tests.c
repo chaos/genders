@@ -1,5 +1,5 @@
 /*****************************************************************************\
- *  $Id: genders_test_query_tests.c,v 1.8 2010-02-02 00:04:34 chu11 Exp $
+ *  $Id: genders_test_query_tests.c,v 1.9 2010-03-24 21:26:05 chu11 Exp $
  *****************************************************************************
  *  Copyright (C) 2007-2010 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
@@ -2561,6 +2561,27 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
 	{"node3", NULL},
 	1,
       },
+      {
+	"attr1+plus",
+	{"node4", NULL},
+	1,
+      },
+      {
+	"attr2+foo+plus",
+	{"node4", NULL},
+	1,
+      },
+      {
+	"attr3=val3+plus",
+	{"node4", NULL},
+	1,
+      },
+      {
+	"attr4=val4+foo+plus",
+	{"node4", NULL},
+	1,
+      },
+
       {
 	NULL,
 	{NULL},

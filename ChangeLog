@@ -1,3 +1,9 @@
+2010-03-24  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/: Support plus signs in genders queries.
+
+	* src/testsuite/libgenders/: Support plus sign tests.
+	
 2010-02-01  Albert Chu  <chu11@llnl.gov>
 
 	* Update copyright globally.
