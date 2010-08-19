@@ -1,3 +1,7 @@
+2010-08-19  Albert Chu  <chu11@llnl.gov>
+
+	* genders.spec.in: Update for build on RHEL6.
+	
 2010-03-24  Albert Chu  <chu11@llnl.gov>
 
 	* META, configure.ac: Update for release.
