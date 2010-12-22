@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.15
+=======================
+ -- Fix genders_parse() corner case.
+
 Changes in genders-1.14
 =======================
  -- Support '+' sign in genders query parsing.

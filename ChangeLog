@@ -1,3 +1,9 @@
+2010-12-22  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders_parsing.c (_attr_node_processsing): Fix
+	corner case in logic leading to errors when running
+	genders_parse().
+	
 2010-08-19  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in: Update for build on RHEL6.

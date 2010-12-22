@@ -230,14 +230,42 @@ _attr_node_processsing(genders_t handle,
                        FILE *stream)
 {
   ListIterator attrvals_itr = NULL;
+  List tmpattrlist = NULL;
   genders_attrval_t av = NULL;
   int rv = -1;
 
+  __list_create(tmpattrlist, NULL);
+
+  /* First check for parse errors */
   __list_iterator_create(attrvals_itr, attrvals);
   while ((av = list_next(attrvals_itr))) 
     {
-      List l = NULL;
+      /* do not use _genders_find_attrval().  If the attrval already
+       * exists within the node, we don't need the actual entry.  We
+       * just want to know if it's there or not.  We avoid some list
+       * iteration by not using it.
+       */
+      /* Check attribute already listed for this node and on same line */
+      if (hash_find(n->attrlist_index, av->attr)
+	  || list_find_first(tmpattrlist, _genders_list_is_str, av->attr))
+	{
+	  if (line_num > 0) 
+	    {
+	      fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
+		      line_num, av->attr, n->name);
+	      rv = 1;
+	    }
+	  handle->errnum = GENDERS_ERR_PARSE;
+	  goto cleanup;
+	}
+      
+      __list_append(tmpattrlist, av->attr);
+    }
 
+  /* If no parse errors, insert everything as needed */
+  list_iterator_reset(attrvals_itr);
+  while ((av = list_next(attrvals_itr))) 
+    {
       /* do not use _genders_find_attrval().  If the attrval already
        * exists within the node, we don't need the actual entry.  We
        * just want to know if it's there or not.  We avoid some list
@@ -254,6 +282,12 @@ _attr_node_processsing(genders_t handle,
 	  handle->errnum = GENDERS_ERR_PARSE;
 	  goto cleanup;
 	}
+    }
+
+  list_iterator_reset(attrvals_itr);
+  while ((av = list_next(attrvals_itr)))
+    {
+      List l = NULL;
 
       /* add node to attr_index */
       /* attribute should already be in the hash */
@@ -279,6 +313,7 @@ _attr_node_processsing(genders_t handle,
   rv = 0;
  cleanup:
   __list_iterator_destroy(attrvals_itr);
+  __list_destroy(tmpattrlist);
   return rv;
 }
 
@@ -526,7 +561,7 @@ _parse_line(genders_t handle,
                                            line_num,
                                            stream)) != 0)
 	    goto cleanup;
-	  
+
           __list_append(n->attrlist, attrvals);
 	  n->attrcount += list_count(attrvals);
 	}
