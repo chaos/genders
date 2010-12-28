@@ -147,8 +147,12 @@ AC_CONFIG_FILES( \
   src/libgenders/Makefile \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \
-  src/Libgenders/Makefile \
-  src/Genders/Makefile \
+  src/extensions/Makefile \
+  src/extensions/perl/Makefile \
+  src/extensions/perl/Libgenders/Makefile \
+  src/extensions/perl/Libgenders/Libgenders.pm \
+  src/extensions/perl/Genders/Makefile \
+  src/extensions/perl/Genders/Genders.pm \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \
@@ -157,8 +161,6 @@ AC_CONFIG_FILES( \
   contrib/php/Makefile \
   man/Makefile \
   man/compat/Makefile \
-  src/Libgenders/Libgenders.pm \
-  src/Genders/Genders.pm \
 )
 AC_OUTPUT
 

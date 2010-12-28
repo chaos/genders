@@ -13,9 +13,9 @@
 
 PERL_DESTDIR = @PERL_DESTDIR@
 
-PERL_INC = "-I../../config -I$(srcdir)/../libgenders"
+PERL_INC = "-I$(srcdir)/../../../../config -I$(srcdir)/../../../libgenders"
 
-PERL_LIBS = "-L../libgenders/.libs -lgenders"
+PERL_LIBS = "-L$(srcdir)/../../../libgenders/.libs -lgenders"
 
 MAKEMAKERFLAGS = INSTALLDIRS=site \
 		 DESTDIR=$(PERL_DESTDIR) \
