@@ -56,6 +56,7 @@ AM_PROG_LEX
 AC_PROG_YACC
 AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG([PERL], [perl])
+AC_PATH_PROG([PYTHON], [python])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
 AC_DEBUG
 
@@ -103,9 +104,13 @@ AC_CHECK_HEADERS( \
 AC_GENDERS_FILE
 
 #
+# Check for extension stuff
+#
+AC_EXTENSION_DESTDIR
+
+#
 # Check for perl stuff
 #
-AC_PERL_DESTDIR
 AC_PERL_EXTENSIONS
 AM_CONDITIONAL(WITH_PERL_EXTENSIONS, [test "$ac_with_perl_extensions" = "yes"])
 
@@ -114,6 +119,12 @@ AM_CONDITIONAL(WITH_PERL_EXTENSIONS, [test "$ac_with_perl_extensions" = "yes"])
 #
 PERLMAN3EXT=`$PERL -MConfig -e 'print $Config{man3ext}'`
 AC_SUBST([PERLMAN3EXT])
+
+#
+# Check for python stuff
+#
+AC_PYTHON_EXTENSIONS
+AM_CONDITIONAL(WITH_PYTHON_EXTENSIONS, [test "$ac_with_python_extensions" = "yes"])
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
@@ -153,6 +164,8 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Libgenders/Libgenders.pm \
   src/extensions/perl/Genders/Makefile \
   src/extensions/perl/Genders/Genders.pm \
+  src/extensions/python/Makefile \
+  src/extensions/python/Libgenders/Makefile \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \

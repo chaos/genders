@@ -8,10 +8,10 @@
 # into the correct location
 
 # DESTDIR is usually set during make install time, not configure or
-# make time, so we work around it with the --with-perl-destdir
+# make time, so we work around it with the --with-extension-destdir
 # autoconf option.
 
-PERL_DESTDIR = @PERL_DESTDIR@
+PERL_DESTDIR = @EXTENSION_DESTDIR@
 
 PERL_INC = "-I$(srcdir)/../../../../config -I$(srcdir)/../../../libgenders"
 
