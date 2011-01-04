@@ -1,3 +1,7 @@
+2011-01-04  Albert Chu  <chu11@llnl.gov>
+
+	* src/Libgenders/Libgenders.pm.in: Fix some documentation english.
+	
 2010-12-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_attr_node_processsing): Fix
