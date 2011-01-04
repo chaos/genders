@@ -739,9 +739,6 @@ static PyTypeObject LibgendersType = {
   0,				/* tp_descr_set */
   0,				/* tp_dictoffset */
   0, 				/* tp_init */
-#if 0
-  (initproc)Libgenders_init,	/* tp_init */
-#endif
   0,				/* tp_alloc */
   Libgenders_new,			/* tp_new */
 };
