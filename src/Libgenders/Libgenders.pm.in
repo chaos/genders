@@ -96,7 +96,7 @@ Libgenders - Perl extension for libgenders
 
  $handle->genders_index_attrvals($attr)
 
- $handle->genders_query($query)
+ $handle->genders_query([$query])
  $handle->genders_testquery($query, [$node])
  
  $handle->genders_parse([$filename]);
@@ -243,7 +243,7 @@ the genders_getnodes and genders_isattrval functions.  Only one
 attribute can be indexed at a time.  Subsequent calls to this function
 with a different attribute will overwrite earlier indexes.
 
-=item B<$handle-E<gt>genders_query($query)>
+=item B<$handle-E<gt>genders_query([$query])>
 
 Returns a reference to a list of nodes specified by a genders query.
 A genders query is based on the union, intersection, set difference,
