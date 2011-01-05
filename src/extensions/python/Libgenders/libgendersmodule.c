@@ -72,6 +72,57 @@ static PyMemberDef Libgenders_members[] = {
   {NULL},  /* Sentinel */
 };
 
+static void
+_set_genders_exception(Libgenders *self)
+{
+  PyObject *e;
+  int errnum;
+
+  errnum = genders_errnum(self->gh);
+
+  switch (errnum)
+    {
+    case GENDERS_ERR_OPEN:
+      e = PyErr_NewException("genders.GENDERS_ERR_OPEN", NULL, NULL);
+      break;
+    case GENDERS_ERR_READ:
+      e = PyErr_NewException("genders.GENDERS_ERR_READ", NULL, NULL);
+      break;
+    case GENDERS_ERR_PARSE:
+      e = PyErr_NewException("genders.GENDERS_ERR_PARSE", NULL, NULL);
+      break;
+    case GENDERS_ERR_NOTLOADED:
+      e = PyErr_NewException("genders.GENDERS_ERR_NOTLOADED", NULL, NULL);
+      break;
+    case GENDERS_ERR_ISLOADED:
+      e = PyErr_NewException("genders.GENDERS_ERR_ISLOADED", NULL, NULL);
+      break;
+    case GENDERS_ERR_OVERFLOW:
+      e = PyErr_NewException("genders.GENDERS_ERR_OVERFLOW", NULL, NULL);
+      break;
+    case GENDERS_ERR_PARAMETERS:
+      e = PyErr_NewException("genders.GENDERS_ERR_PARAMETERS", NULL, NULL);
+      break;
+    case GENDERS_ERR_NULLPTR:
+      e = PyErr_NewException("genders.GENDERS_ERR_NULLPTR", NULL, NULL);
+      break;
+    case GENDERS_ERR_NOTFOUND:
+      e = PyErr_NewException("genders.GENDERS_ERR_NOTFOUND", NULL, NULL);
+      break;
+    case GENDERS_ERR_OUTMEM:
+      e = PyErr_NewException("genders.GENDERS_ERR_OUTMEM", NULL, NULL);
+      break;
+    case GENDERS_ERR_SYNTAX:
+      e = PyErr_NewException("genders.GENDERS_ERR_SYNTAX", NULL, NULL);
+      break;
+    default:
+      e = PyExc_Exception;
+      break;
+    }
+
+  PyErr_SetString(e, genders_strerror(errnum));
+}
+
 static PyObject *
 Libgenders_load_data(Libgenders *self, PyObject *args)
 {
@@ -79,11 +130,13 @@ Libgenders_load_data(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "|s", &filename))
+  if (!PyArg_ParseTuple(args, "|z", &filename))
     goto cleanup;
 
-  if ((ret = genders_load_data(self->gh, filename)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((ret = genders_load_data(self->gh, filename)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
   
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
@@ -146,8 +199,10 @@ Libgenders_getnumnodes(Libgenders *self)
   int numnodes;
   PyObject *rv = NULL;
 
-  if ((numnodes = genders_getnumnodes(self->gh)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((numnodes = genders_getnumnodes(self->gh)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(rv = Py_BuildValue("i", numnodes)))
     goto cleanup;
@@ -162,8 +217,10 @@ Libgenders_getnumattrs(Libgenders *self)
   int numattrs;
   PyObject *rv = NULL;
 
-  if ((numattrs = genders_getnumattrs(self->gh)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((numattrs = genders_getnumattrs(self->gh)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(rv = Py_BuildValue("i", numattrs)))
     goto cleanup;
@@ -182,9 +239,11 @@ _build_comma_separated_string(int maxitemlen, char **itemlist, int itemlistlen)
 
   /* achu: As far as I can tell, there is no (present) way to
    * (reasonbly and easily) return a Python list instead of a single
-   * object.  Therefore, I'll return a giant comma separated string.
-   * It's the job of an upper level library to deal with the string
-   * and convert it to something more useful like a list.
+   * object.  If there is a way, I can't find it and/or it's advanced Python stuff.
+   *
+   * Until I learn of a way, I'll return a giant comma separated
+   * string.  It's the job of an upper level library to deal with the
+   * string and convert it to something more useful like a list.
    */
 
   /* +1 to deal with commas */
@@ -221,14 +280,18 @@ Libgenders_getnodes(Libgenders *self, PyObject *args)
   int nodelen;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "|ss", &attr, &val))
+  if (!PyArg_ParseTuple(args, "|zz", &attr, &val))
     goto cleanup;
 
-  if ((nodelistlen = genders_nodelist_create(self->gh, &nodelist)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((nodelistlen = genders_nodelist_create(self->gh, &nodelist)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
-  if ((nodelen = genders_getnodes(self->gh, nodelist, nodelistlen, attr, val)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((nodelen = genders_getnodes(self->gh, nodelist, nodelistlen, attr, val)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (nodelen) {
     int maxnodelen;
@@ -260,18 +323,22 @@ Libgenders_getattr(Libgenders *self, PyObject *args)
   int attrlen;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "|s", &node))
+  if (!PyArg_ParseTuple(args, "|z", &node))
     goto cleanup;
 
-  if ((attrlistlen = genders_attrlist_create(self->gh, &attrlist)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((attrlistlen = genders_attrlist_create(self->gh, &attrlist)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if ((attrlen = genders_getattr(self->gh,
 				 attrlist,
 				 NULL,
 				 attrlistlen,
-				 node)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+				 node)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (attrlen) {
     int maxattrlen;
@@ -302,14 +369,18 @@ Libgenders_getattr_all(Libgenders *self)
   int attrlen;
   PyObject *rv = NULL;
 
-  if ((attrlistlen = genders_attrlist_create(self->gh, &attrlist)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((attrlistlen = genders_attrlist_create(self->gh, &attrlist)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if ((attrlen = genders_getattr_all(self->gh,
 				     attrlist,
-				     attrlistlen)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
-  
+				     attrlistlen)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (attrlen) {
     int maxattrlen;
 
@@ -338,9 +409,11 @@ Libgenders_getnodename(Libgenders* self)
   int maxnodelen;
   PyObject *rv = NULL;
 
-  if ((maxnodelen = genders_getmaxnodelen(self->gh)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((maxnodelen = genders_getmaxnodelen(self->gh)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(nodenamebuf = (char *)malloc(maxnodelen + 1))) {
     PyErr_NoMemory();
     goto cleanup;
@@ -348,8 +421,10 @@ Libgenders_getnodename(Libgenders* self)
 
   memset(nodenamebuf, '\0', maxnodelen + 1);
 
-  if (genders_getnodename(self->gh, nodenamebuf, maxnodelen + 1) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
+  if (genders_getnodename(self->gh, nodenamebuf, maxnodelen + 1) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(rv = Py_BuildValue("s", nodenamebuf)))
     goto cleanup;
@@ -369,11 +444,13 @@ Libgenders_getattrval(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "s|s", &attr, &node))
+  if (!PyArg_ParseTuple(args, "s|z", &attr, &node))
     goto cleanup;
 
-  if ((maxvallen = genders_getmaxvallen(self->gh)) < 0)
-    goto cleanup;                       /* Genders exceptions dealt with higher up */
+  if ((maxvallen = genders_getmaxvallen(self->gh)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(valbuf = (char *)malloc(maxvallen + 1))) {
     PyErr_NoMemory();
@@ -382,9 +459,11 @@ Libgenders_getattrval(Libgenders *self, PyObject *args)
  
   memset(valbuf, '\0', maxvallen + 1);
 
-  if ((ret = genders_testattr(self->gh, node, attr, valbuf, maxvallen + 1)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_testattr(self->gh, node, attr, valbuf, maxvallen + 1)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (ret && strlen(valbuf)) {
     if (!(rv = Py_BuildValue("z", valbuf)))
       goto cleanup;
@@ -407,12 +486,14 @@ Libgenders_testattr(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "s|s", &attr, &node))
+  if (!PyArg_ParseTuple(args, "s|z", &attr, &node))
     goto cleanup;
 
-  if ((ret = genders_testattr(self->gh, node, attr, NULL, 0)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_testattr(self->gh, node, attr, NULL, 0)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
 
@@ -429,12 +510,14 @@ Libgenders_testattrval(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "ss|s", &attr, &val, &node))
+  if (!PyArg_ParseTuple(args, "ss|z", &attr, &val, &node))
     goto cleanup;
 
-  if ((ret = genders_testattrval(self->gh, node, attr, val)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_testattrval(self->gh, node, attr, val)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
   
@@ -449,12 +532,14 @@ Libgenders_isnode(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "|s", &node))
+  if (!PyArg_ParseTuple(args, "|z", &node))
     goto cleanup;
 
-  if ((ret = genders_isnode(self->gh, node)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_isnode(self->gh, node)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
 
@@ -472,9 +557,11 @@ Libgenders_isattr(Libgenders *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "s", &attr))
     goto cleanup;
 
-  if ((ret = genders_isattr(self->gh, attr)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_isattr(self->gh, attr)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
 
@@ -493,9 +580,11 @@ Libgenders_isattrval(Libgenders *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "ss", &attr, &val))
     goto cleanup;
 
-  if ((ret = genders_isattrval(self->gh, attr, val)) < 0)
-    goto cleanup;			/* Genders exceptions dealt with higher up */
-  
+  if ((ret = genders_isattrval(self->gh, attr, val)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
 
@@ -513,8 +602,10 @@ Libgenders_index_attrvals(Libgenders *self, PyObject *args)
   if (!PyArg_ParseTuple(args, "s", &attr))
     goto cleanup;
 
-  if ((ret = genders_index_attrvals(self->gh, attr)) < 0)
-    goto cleanup;                       /* Genders exceptions dealt with higher up */
+  if ((ret = genders_index_attrvals(self->gh, attr)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
@@ -532,14 +623,18 @@ Libgenders_query(Libgenders *self, PyObject *args)
   int nodelen;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "|s", &query))
+  if (!PyArg_ParseTuple(args, "|z", &query))
     goto cleanup;
 
-  if ((nodelistlen = genders_nodelist_create(self->gh, &nodelist)) < 0)
-    goto cleanup;		/* Genders exceptions dealt with higher up */
+  if ((nodelistlen = genders_nodelist_create(self->gh, &nodelist)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
-  if ((nodelen = genders_query(self->gh, nodelist, nodelistlen, query)) < 0)
-    goto cleanup;                       /* Genders exceptions dealt with higher up */
+  if ((nodelen = genders_query(self->gh, nodelist, nodelistlen, query)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (nodelen) {
     int maxnodelen;
@@ -570,11 +665,13 @@ Libgenders_testquery(Libgenders *self, PyObject *args)
   int ret;
   PyObject *rv = NULL;
 
-  if (!PyArg_ParseTuple(args, "s|s", &query, &node))
+  if (!PyArg_ParseTuple(args, "s|z", &query, &node))
     goto cleanup;
 
-  if ((ret = genders_testquery(self->gh, node, query)) < 0)
-    goto cleanup;                       /* Genders exceptions dealt with higher up */
+  if ((ret = genders_testquery(self->gh, node, query)) < 0) {
+    _set_genders_exception(self);
+    goto cleanup;
+  }
 
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
