@@ -1,6 +1,0 @@
-from distutils.core import setup, Extension
-
-setup (name = 'genders',
-       version = '@PYTHONGENDERS_VERSION@',
-       description = 'This is the genders package',
-       py_modules=['genders'])

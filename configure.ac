@@ -171,10 +171,7 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Genders/Makefile \
   src/extensions/perl/Genders/Genders.pm \
   src/extensions/python/Makefile \
-  src/extensions/python/Libgenders/Makefile \
-  src/extensions/python/Libgenders/libgenderssetup.py \
-  src/extensions/python/Genders/Makefile \
-  src/extensions/python/Genders/genderssetup.py \
+  src/extensions/python/genderssetup.py \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \
