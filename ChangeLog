@@ -1,7 +1,22 @@
+2010-01-06  Albert Chu  <chu11@llnl.gov>
+
+	Support Python Extensions 
+
+	* Re-architect src/ subdirectory.  Place perl extensions under new
+	extensions sub directory.
+
+	* config/ac_perl_destdir.m4: Renamed config/ac_extension_destdir.m4.
+
+	* src/extensions/python/: New
+	
+	* configure.ac: Update appropriately.
+
+	* genders.spec.in: Update appropriately.
+
 2011-01-04  Albert Chu  <chu11@llnl.gov>
 
 	* src/Libgenders/Libgenders.pm.in: Fix some documentation.
-	
+
 2010-12-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_attr_node_processsing): Fix

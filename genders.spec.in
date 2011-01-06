@@ -8,6 +8,7 @@ Source: %{name}-%{version}.tar.gz
 Requires: perl
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
+BuildRequires: python
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
@@ -27,15 +28,18 @@ Group: System Environment/Base
 genders API that is compatible with earlier releases of genders
 
 %{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
+%{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
 
 %prep
 %setup  -q -n %{name}-%{version}
 
 %build
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
-    --with-perl-destdir="$RPM_BUILD_ROOT" \
+    --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
-    %{?_without_perl_extensions}
+    %{?_without_perl_extensions} \
+    %{?_with_python_extensions} \
+    %{?_without_python_extensions}
 make 
 
 %install
@@ -58,6 +62,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_mandir}/man3/Libgenders*
 %{_mandir}/man3/Genders*
 %{_perldir}/*
+%endif
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+%{_libdir}/python*
 %endif
 
 %files compat

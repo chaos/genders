@@ -1,0 +1,307 @@
+#############################################################################
+#  $Id: Libgenders.pm.in,v 1.7 2010-02-02 00:04:34 chu11 Exp $
+#############################################################################
+#  Copyright (C) 2007-2010 Lawrence Livermore National Security, LLC.
+#  Copyright (C) 2001-2007 The Regents of the University of California.
+#  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
+#  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
+#  UCRL-CODE-2003-004.
+#  
+#  This file is part of Genders, a cluster configuration database.
+#  For details, see <http://www.llnl.gov/linux/genders/>.
+#  
+#  Genders is free software; you can redistribute it and/or modify it under
+#  the terms of the GNU General Public License as published by the Free
+#  Software Foundation; either version 2 of the License, or (at your option)
+#  any later version.
+#  
+#  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+#  details.
+#  
+#  You should have received a copy of the GNU General Public License along
+#  with Genders.  If not, see <http://www.gnu.org/licenses/>.
+#############################################################################
+
+package Libgenders;
+
+use 5.006;
+use strict;
+use warnings;
+use Carp;
+
+require Exporter;
+require DynaLoader;
+
+our @ISA = qw(Exporter DynaLoader);
+
+our $VERSION = '@PERLGENDERS_VERSION@';
+
+bootstrap Libgenders $VERSION;
+
+1;
+
+__END__
+
+=head1 NAME
+
+Libgenders - Perl extension for libgenders
+
+=head1 SYNOPSIS
+
+ use Libgenders;
+
+ Libgenders::GENDERS_ERR_SUCCESS
+ Libgenders::GENDERS_ERR_NULLHANDLE
+ Libgenders::GENDERS_ERR_OPEN
+ Libgenders::GENDERS_ERR_READ
+ Libgenders::GENDERS_ERR_PARSE
+ Libgenders::GENDERS_ERR_NOTLOADED
+ Libgenders::GENDERS_ERR_ISLOADED
+ Libgenders::GENDERS_ERR_OVERFLOW
+ Libgenders::GENDERS_ERR_PARAMETERS
+ Libgenders::GENDERS_ERR_NULLPTR
+ Libgenders::GENDERS_ERR_NOTFOUND
+ Libgenders::GENDERS_ERR_SYNTAX
+ Libgenders::GENDERS_ERR_QUERYINPUT
+ Libgenders::GENDERS_ERR_OUTMEM
+ Libgenders::GENDERS_ERR_MAGIC
+ Libgenders::GENDERS_ERR_INTERNAL
+ Libgenders::GENDERS_ERR_ERRNUMRANGE
+ Libgenders::GENDERS_DEFAULT_FILE
+
+ $handle = Libgenders->genders_handle_create();
+ $handle->genders_load_data([$filename]);
+
+ $handle->genders_errnum()
+ $handle->genders_strerror($errnum)
+ $handle->genders_errormsg()
+ $handle->genders_perror($msg)
+
+ $handle->genders_getnumnodes()
+ $handle->genders_getnumattrs()
+ $handle->genders_getnodename()
+
+ $handle->genders_getnodes([$attr, [$val]])
+ $handle->genders_getattr([$node])
+ $handle->genders_getattr_all()
+ $handle->genders_getattrval($attr, [$node])
+ $handle->genders_testattr($attr, [$node])
+ $handle->genders_testattrval($attr, $val, [$node])
+
+ $handle->genders_isnode([$node])
+ $handle->genders_isattr($attr)
+ $handle->genders_isattrval($attr, $val)
+
+ $handle->genders_index_attrvals($attr)
+
+ $handle->genders_query([$query])
+ $handle->genders_testquery($query, [$node])
+ 
+ $handle->genders_parse([$filename]);
+
+=head1 DESCRIPTION
+
+This package provides a perl interface to the genders C API (see
+libgenders(3)).  The perl interface is simliar to the genders C API,
+with some necessary changes due to the inherent differences between C
+and perl.  Some of the functions from the C API cannot be accessed via
+this perl interface, some new functions were created, the behavior of
+some functions was modified, and the parameters passed into some
+functions have been changed.  Please read the instructions below so to
+understand how to use the Libgenders package.
+
+=head2 Initialization
+
+=over 4
+
+=item B<Libgenders-E<gt>genders_handle_create>
+
+Returns a genders object on success, undef on error.
+
+=item B<$handle-E<gt>genders_load_data([$filename])>
+
+Opens, reads, and parses the genders file specified by $filename.  If
+$filename is not specified, the default genders file is parsed.
+Returns 0 on success, -1 on error.
+
+=back
+
+=head2 Error Messages
+
+Similarly to the C API, an error code is stored in the genders object
+after an error has occurred.  The following can be used to retrieve
+the error code and output information about the error.
+
+=over 4
+
+=item B<$handle-E<gt>genders_errnum()>
+
+Returns the error code most recently set.
+
+=item B<$handle-E<gt>genders_strerror($errnum)>
+
+Returns a string describing the error code $errnum.  
+
+=item B<$handle-E<gt>genders_errormsg()>
+
+Returns a string describing the most recent error.
+
+=item B<$handle-E<gt>genders_perror([$msg])>
+
+Outputs $msg and a string describing the most recent error to standard
+error.  If $msg is not specified, only a description of the most
+recent error will be output to standard error.
+
+=back
+
+=head2 Utility Functions
+
+=over 4
+
+=item B<$handle-E<gt>genders_getnumnodes()>
+
+Returns the number of nodes listed in the genders file.  Returns -1 on
+error.
+
+=item B<$handle-E<gt>genders_getnumattrs()>
+
+Returns the number of attributes listed in the genders file.  Returns
+-1 on error.
+
+=item B<$handle-E<gt>genders_getnodename()>
+
+Returns the shortened hostname of the current node.  Returns undef on
+error.
+
+=back
+
+=head2 Parsing Functions
+
+=over 4
+
+=item B<$handle-E<gt>genders_getnodes([$attr, [$val]])>
+
+Returns a reference to a list of nodes that have the specified
+attribute and value.  If $val is not specified, only $attr is
+considered.  If both $attr and $val are not specified, all nodes
+listed in the genders file are returned.  Returns undef on error.
+
+=item B<$handle-E<gt>genders_getattr([$node])>
+
+Returns a reference to an array that holds references to two lists.
+The first list is a reference to an array of attributes for the
+specified node.  The second list is a reference to an array of values
+for the specified node.  If $node is not specified, the local node is
+used.  Returns undef on error.
+
+=item B<$handle-E<gt>genders_getattr_all()>
+
+Returns a reference to a list of all the attributes listed in the
+genders file.  Returns undef on error.
+
+=item B<$handle-E<gt>genders_getattrval($attr, [$node])>
+
+Returns the value of an attribute listed in a node.  Returns the empty
+string if the attribute has no value.  If $node is not specified,
+local node is used.  Returns undef on error.
+
+=item B<$handle-E<gt>genders_testattr($attr, [$node])>
+
+Tests if a node has a specified attribute.  If $node is not specified,
+local node is used.  Returns 1 if the node contains the attribute, 0
+if not, -1 on error.
+
+=item B<$handle-E<gt>genders_testattrval($attr, $val, [$node])>
+
+Tests if a node has a specified attribute=value pair.  If $node is not
+specified, local node is used.  Returns 1 if the node contains the
+attribute=value pair, 0 if not, -1 on error.
+
+=item B<$handle-E<gt>genders_isnode([$node])>
+
+Tests if a node is listed in the genders file.  If $node is not
+specified, local node is used.  Returns 1 if the node is listed, 0 if
+it is not, -1 on error.
+
+=item B<$handle-E<gt>genders_isattr($attr)>
+
+Tests if the attribute $attr is listed in the genders file.  Returns 1
+if the attribute is listed, 0 if it is not, -1 on error.
+
+=item B<$handle-E<gt>genders_isattrval($attr, $val)>
+
+Tests if the attribute=value pair is listed in the genders file.
+Returns 1 if the pair is listed, 0 if it is not, -1 on error.
+
+=item B<$handle-E<gt>genders_index_attrvals($attr)>
+
+Internally adds indexing to decrease search times for genders
+attribute value combinations.  Will specifically aid performance of
+the genders_getnodes and genders_isattrval functions.  Only one
+attribute can be indexed at a time.  Subsequent calls to this function
+with a different attribute will overwrite earlier indexes.
+
+=item B<$handle-E<gt>genders_query([$query])>
+
+Returns a reference to a list of nodes specified by a genders query.
+A genders query is based on the union, intersection, set difference,
+or complement between genders attributes and values.  Union is
+represented by two pipe symbols ('||'), intersection by two ampersand
+symbols ('&&'), difference by two minus symbols ('--'), and complement
+by a tilde ('~') Operations are performed from left to right.
+Parentheses may be used to change the order of operations.  For
+example, the following query would retrieve all nodes other than
+management or login nodes: "all-(mgmt+login)".  If $query is not
+specified, all nodes listed in the genders file are returned. Returns
+undef on error.
+
+=item B<$handle-E<gt>genders_testquery($query, [$node])>
+
+Tests if a node meets the conditions specified in the query.  If $node
+is not specified, local node is used.  Returns 1 if the node is
+contained within the query, 0 if not, -1 on error.
+
+=item B<$handle-E<gt>genders_parse([$filename])>
+
+Parse a genders file and output parse errors to standard error.  If
+$filename is not specified, the default genders file is parsed.
+Returns the number of errors (0 if no parse errors were found) on
+success, -1 on error.
+
+=back
+
+=head2 Error Codes/Constants
+
+The same error codes and constants listed in /usr/include/genders.h
+can be accessed through the following functions: 
+
+ Libgenders::GENDERS_ERR_SUCCESS
+ Libgenders::GENDERS_ERR_NULLHANDLE
+ Libgenders::GENDERS_ERR_OPEN
+ Libgenders::GENDERS_ERR_READ
+ Libgenders::GENDERS_ERR_PARSE
+ Libgenders::GENDERS_ERR_NOTLOADED
+ Libgenders::GENDERS_ERR_ISLOADED
+ Libgenders::GENDERS_ERR_OVERFLOW
+ Libgenders::GENDERS_ERR_PARAMETERS
+ Libgenders::GENDERS_ERR_NULLPTR
+ Libgenders::GENDERS_ERR_NOTFOUND
+ Libgenders::GENDERS_ERR_OUTMEM
+ Libgenders::GENDERS_ERR_SYNTAX
+ Libgenders::GENDERS_ERR_QUERYINPUT
+ Libgenders::GENDERS_ERR_MAGIC
+ Libgenders::GENDERS_ERR_INTERNAL
+ Libgenders::GENDERS_ERR_ERRNUMRANGE
+ Libgenders::GENDERS_DEFAULT_FILE
+
+=head1 AUTHOR
+
+Albert Chu E<lt>chu11@llnl.govE<gt>
+
+=head1 SEE ALSO
+
+L<libgenders>
+
+=cut

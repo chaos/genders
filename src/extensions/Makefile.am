@@ -4,4 +4,4 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = libcommon libgenders nodeattr extensions testsuite
+SUBDIRS = perl python
