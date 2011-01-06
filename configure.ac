@@ -40,11 +40,17 @@ LIBGENDERS_AGE=2
 LIBGENDERS_VERSION_INFO=$LIBGENDERS_CURRENT:$LIBGENDERS_REVISION:$LIBGENDERS_AGE
 AC_SUBST([LIBGENDERS_VERSION_INFO])
 
-# Libgenders and Genders versioning
+# Perl Libgenders and Genders versioning
 PERLGENDERS_MAJOR=0
 PERLGENDERS_MINOR=03
 PERLGENDERS_VERSION=$PERLGENDERS_MAJOR.$PERLGENDERS_MINOR
 AC_SUBST([PERLGENDERS_VERSION])
+
+# Python Libgenders and Genders versioning
+PYTHONGENDERS_MAJOR=1
+PYTHONGENDERS_MINOR=0
+PYTHONGENDERS_VERSION=$PYTHONGENDERS_MAJOR.$PYTHONGENDERS_MINOR
+AC_SUBST([PYTHONGENDERS_VERSION])
 
 ##
 # Checks for programs.
@@ -166,6 +172,9 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Genders/Genders.pm \
   src/extensions/python/Makefile \
   src/extensions/python/Libgenders/Makefile \
+  src/extensions/python/Libgenders/libgenderssetup.py \
+  src/extensions/python/Genders/Makefile \
+  src/extensions/python/Genders/genderssetup.py \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \

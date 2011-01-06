@@ -7,6 +7,6 @@ libgendersmodule = Extension('libgenders',
                              sources = ['libgendersmodule.c'])
 
 setup (name = 'libgenders',
-       version = '1.0',
+       version = '@PYTHONGENDERS_VERSION@',
        description = 'This is the libgenders package',
        ext_modules = [libgendersmodule])

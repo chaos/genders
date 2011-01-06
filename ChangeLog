@@ -7,12 +7,12 @@
 
 	* config/ac_perl_destdir.m4: Renamed config/ac_extension_destdir.m4.
 
+	* src/extensions/python/: New
+	
 	* configure.ac: Update appropriately.
 
 	* genders.spec.in: Update appropriately.
 
-	* src/extensions/python/: New
-	
 2010-12-22  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_attr_node_processsing): Fix
