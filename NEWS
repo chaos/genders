@@ -5,6 +5,7 @@ and admins.
 Changes in genders-1.15
 =======================
  -- Fix genders_parse() corner case.
+ -- Include beta Python extensions library.
 
 Changes in genders-1.14
 =======================
