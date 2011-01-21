@@ -1,5 +1,9 @@
 2011-01-19  Albert Chu  <chu11@llnl.gov>
 
+	* src/extensions/cplusplus/: Add experimental C++ genders library.
+	
+2011-01-19  Albert Chu  <chu11@llnl.gov>
+
 	* src/libgenders/genders.h.in: Support C++ linking.
 
 	* src/extensions/python/genderssetup.py.in: Autoconf python lib version number.

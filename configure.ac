@@ -165,6 +165,7 @@ AC_CONFIG_FILES( \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \
   src/extensions/Makefile \
+  src/extensions/cplusplus/Makefile \
   src/extensions/perl/Makefile \
   src/extensions/perl/Libgenders/Makefile \
   src/extensions/perl/Libgenders/Libgenders.pm \
