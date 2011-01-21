@@ -75,6 +75,9 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     {"testdatabases/genders.parse_error_duplicate_attr_same_line_attr_with_val_comma", 1},
     {"testdatabases/genders.parse_error_duplicate_attr_same_line_attr_with_val_hostrange", 1},
     {"testdatabases/genders.parse_error_duplicate_attr_not_last_in_line", 1},
+    {"testdatabases/genders.parse_error_no_attr_before_equal_sign", 6},
+    {"testdatabases/genders.parse_error_no_value_after_equal_sign", 6},
+    {"testdatabases/genders.parse_error_errant_commas", 5},
     {"testdatabases/genders.parse_error_all", 8},
     {NULL, -1},
   };

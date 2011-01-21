@@ -1,0 +1,6 @@
+node1  =val1
+node2  attr2,=val3
+node3  attr4,=val5,attr6
+node4  attr7,=,attr9
+node5  attr10,=
+node6  =

@@ -433,7 +433,7 @@ _parse_line(genders_t handle,
   /* if strsep() sets line == NULL, line has no attributes */
   if (line) 
     {
-      char *attr, *linebuf;
+      char *attr;
 
       /* move forward to attributes */
       while(isspace(*line))  
@@ -458,7 +458,7 @@ _parse_line(genders_t handle,
 	  __list_create(attrvals, _genders_list_free_genders_attrval);
 	  
 	  /* parse attributes */
-	  attr = strtok_r(line,",\0",&linebuf);
+	  attr = strsep(&line, ",");
 	  while (attr) 
 	    {
 	      char *val = NULL;
@@ -481,6 +481,29 @@ _parse_line(genders_t handle,
                 }
 #endif
 	
+	      if (!strlen(attr))
+		{
+		  if (line_num > 0) 
+		    {
+		      fprintf(stream, "Line %d: empty string attribute listed\n", line_num);
+		      rv = 1;
+		    }
+		  handle->errnum = GENDERS_ERR_PARSE;
+		  goto cleanup;
+		}
+
+	      if (val && !strlen(val))
+		{
+		  if (line_num > 0) 
+		    {
+		      fprintf(stream, "Line %d: no value specified for attribute \"%s\"\n",
+			      line_num, attr);
+		      rv = 1;
+		    }
+		  handle->errnum = GENDERS_ERR_PARSE;
+		  goto cleanup;
+		}
+
               /* achu: No need to check if there are duplicate
                * attributes within this line of the file.  Will be
                * caught during duplicate attribute checks within each
@@ -511,7 +534,7 @@ _parse_line(genders_t handle,
 		    }
 		}
 	      
-	      attr = strtok_r(NULL,",\0",&linebuf);
+	      attr = strsep(&line, ",");
 	    }
 	}
     }

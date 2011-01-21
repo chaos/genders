@@ -1,3 +1,11 @@
+2011-01-21  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/: Fix various parsing corner cases.  In
+	particular, deal with empty-string attributes, empty-string
+	values, and errant commas.
+
+	* src/testsuite/: Update w/ test cases.
+	
 2011-01-19  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.h.in: Support C++ linking.
