@@ -3,6 +3,8 @@
 	* src/extensions/cplusplus/: Add experimental C++ genders library.
 
 	* src/libgenders/: Treat empty string (i.e. "") identically to NULL.
+
+	* src/testsuite/libgenders/: Update for new test cases.
 	
 2011-01-19  Albert Chu  <chu11@llnl.gov>
 
