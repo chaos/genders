@@ -1,6 +1,7 @@
 #include <gendersplusplus.hpp>
 
 using namespace std;
+using namespace Gendersplusplus;
 
 static genders_t genders_constructor(const string filename)
 {

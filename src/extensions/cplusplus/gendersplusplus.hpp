@@ -10,6 +10,9 @@ extern "C" {
 #include <genders.h>
 }
 
+namespace Gendersplusplus
+{
+
 class Genders
 {
 public:
@@ -35,5 +38,7 @@ public:
 private:
   genders_t gh;
 };
+
+} // Gendersplusplus
 
 #endif /* _GENDERSPLUSPLUS_HPP */
