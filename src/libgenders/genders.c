@@ -588,6 +588,12 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       goto cleanup;
     }
 
+  if (attr && !strlen(attr))
+    attr = NULL;
+
+  if (val && !strlen(val))
+    val = NULL;
+
   if (handle->attrval_index 
       && attr
       && val

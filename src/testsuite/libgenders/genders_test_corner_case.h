@@ -110,8 +110,8 @@ typedef struct {
   genders_handle_type_t param1;
   genders_pointer_type_t param2;
   genders_length_type_t param3;
-  genders_pointer_type_t param4;
-  genders_pointer_type_t param5;
+  genders_string_type_t param4;
+  genders_string_type_t param5;
   int expected_return_value;
   int expected_errnum;
 } genders_getnodes_corner_case_t;

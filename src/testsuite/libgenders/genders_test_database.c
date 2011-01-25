@@ -231,6 +231,12 @@ genders_database_data_t genders_database_data_base =
 	2,
       },
       {
+	"",
+	"",
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node2", NULL},
@@ -249,7 +255,7 @@ genders_database_data_t genders_database_data_base =
 	2,
       },
     },
-    4,
+    5,
   };
 
 genders_database_t genders_database_base = 
@@ -485,6 +491,12 @@ genders_database_data_t genders_database_data_test_1 =
 	4,
       },
       {
+	"",
+	"",
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node2", "node3", "node4", NULL},
@@ -521,7 +533,7 @@ genders_database_data_t genders_database_data_test_1 =
 	4,
       },
     },
-    7,
+    8,
   };
 
 genders_database_t genders_database_test_1 =
@@ -599,6 +611,12 @@ genders_database_data_t genders_database_data_test_2 =
 	4,
       },
       {
+	"",
+	"",
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node3", NULL},
@@ -671,7 +689,7 @@ genders_database_data_t genders_database_data_test_2 =
 	2,
       },
     },
-    13,
+    14,
   };
 
 genders_database_t genders_database_test_2 =
@@ -749,6 +767,12 @@ genders_database_data_t genders_database_data_test_3 =
       {
 	NULL,
 	NULL,
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+      {
+	"",
+	"",
 	{"node1", "node2", "node3", "node4", NULL},
 	4,
       },
@@ -897,7 +921,7 @@ genders_database_data_t genders_database_data_test_3 =
 	1,
       },
     },
-    25,
+    26,
   };
 
 genders_database_t genders_database_test_3 =
@@ -983,10 +1007,15 @@ genders_database_data_t genders_database_data_equal_sign_in_value =
     },
     2,
     {
-
       {
 	NULL,
 	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"",
+	"",
 	{"node1", "node2", NULL},
 	2,
       },
@@ -1016,7 +1045,7 @@ genders_database_data_t genders_database_data_equal_sign_in_value =
 	1,
       },
     },
-    5,
+    6,
   };
 
 genders_database_t genders_database_equal_sign_in_value =
@@ -1059,8 +1088,14 @@ genders_database_data_t genders_database_data_nodes_only_one =
 	{"node1", NULL},
 	1,
       },
+      {
+	"",
+	"",
+	{"node1", NULL},
+	1,
+      },
     },
-    1,
+    2,
   };
 
 genders_database_t genders_database_nodes_only_one = 
@@ -1103,8 +1138,14 @@ genders_database_data_t genders_database_data_nodes_only_many =
 	{"node1", "node2", "node3", "node4", "node5", NULL},
 	5,
       },
+      {
+	"",
+	"",
+	{"node1", "node2", "node3", "node4", "node5", NULL},
+	5,
+      },
     },
-    1,
+    2,
   };
 
 genders_database_t genders_database_nodes_only_many = 
@@ -1154,6 +1195,12 @@ genders_database_data_t genders_database_data_nodes_and_attrs_only =
 	2,
       },
       {
+	"",
+	"",
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node2", NULL},
@@ -1166,7 +1213,7 @@ genders_database_data_t genders_database_data_nodes_and_attrs_only =
 	2,
       },
     },
-    3,
+    4,
   };
 
 genders_database_t genders_database_nodes_and_attrs_only = 
@@ -1228,6 +1275,12 @@ genders_database_data_t genders_database_data_subst_escape_char =
 	2,
       },
       {
+	"",
+	"",
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node2", NULL},
@@ -1282,7 +1335,7 @@ genders_database_data_t genders_database_data_subst_escape_char =
 	2,
       },
     },
-    10,
+    11,
   };
 
 genders_database_t genders_database_subst_escape_char = 
@@ -1333,6 +1386,12 @@ genders_database_data_t genders_database_data_subst_nodename =
 	2,
       },
       {
+	"",
+	"",
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", "node2", NULL},
@@ -1369,7 +1428,7 @@ genders_database_data_t genders_database_data_subst_nodename =
 	1,
       },
     },
-    7,
+    8,
   };
 
 genders_database_t genders_database_subst_nodename = 
@@ -1425,13 +1484,19 @@ genders_database_data_t genders_database_data_large_attr =
 	1,
       },
       {
+	"",
+	"",
+	{"node1", NULL},
+	1,
+      },
+      {
 	"abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
 	NULL,
 	{"node1", NULL},
 	1,
       },
     },
-    2,
+    3,
   };
 
 genders_database_t genders_database_large_attr = 
@@ -1475,6 +1540,12 @@ genders_database_data_t genders_database_data_large_val =
 	1,
       },
       {
+	"",
+	"",
+	{"node1", NULL},
+	1,
+      },
+      {
 	"attr1",
 	NULL,
 	{"node1", NULL},
@@ -1487,7 +1558,7 @@ genders_database_data_t genders_database_data_large_val =
 	1,
       },
     },
-    3,
+    4,
   };
 
 genders_database_t genders_database_large_val = 
