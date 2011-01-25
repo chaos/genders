@@ -4,3 +4,20 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
+include_HEADERS       = gendersplusplus.hpp
+lib_LTLIBRARIES       = libgendersplusplus.la
+
+libgendersplusplus_la_CXXFLAGS = -D_REENTRANT \
+				 -I $(srcdir)/../../libgenders/
+
+libgendersplusplus_la_SOURCES = gendersplusplus.cpp
+
+libgendersplusplus_la_LIBADD = ../../libgenders/libgenders.la
+
+libgendersplusplus_la_LDFLAGS = -version-info @LIBGENDERSPLUSPLUS_VERSION_INFO@ $(OTHER_FLAGS)
+
+../../libgenders/libgenders.la: force-dependency-check
+	@cd `dirname $@` && make `basename $@`
+
+force-dependency-check:
+
