@@ -882,7 +882,7 @@ genders_isnode(genders_t handle, const char *node)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
 
   if (!handle->numnodes)
@@ -905,7 +905,7 @@ genders_isattr(genders_t handle, const char *attr)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
@@ -934,7 +934,10 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   if (_genders_loaded_handle_error_check(handle) < 0)
     goto cleanup;
 
-  if (!attr || !val) 
+  if (!attr
+      || !strlen(attr)
+      || !val
+      || !strlen(val))
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       goto cleanup;

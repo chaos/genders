@@ -1250,7 +1250,14 @@ genders_isnode_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      nodeptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->node;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	nodeptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	nodeptr = "";
+      else
+	nodeptr = genders_database_corner_case.data->node;
+      
       return_value = genders_isnode(handle, nodeptr);
       errnum = genders_errnum(handle);
 
@@ -1284,7 +1291,14 @@ genders_isattr_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      attrptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_without_val;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	attrptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	attrptr = "";
+      else
+	attrptr = genders_database_corner_case.data->attr_without_val;
+
       return_value = genders_isattr(handle, attrptr);
       errnum = genders_errnum(handle);
 
@@ -1318,8 +1332,21 @@ genders_isattrval_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      attrptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
-      valptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->val;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	attrptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	attrptr = "";
+      else
+	attrptr = genders_database_corner_case.data->attr_with_val;
+
+      if (tests[i].param3 == GENDERS_STRING_NULL)
+	valptr = NULL;
+      else if (tests[i].param3 == GENDERS_STRING_NON_NULL_EMPTY)
+	valptr = "";
+      else
+	valptr = genders_database_corner_case.data->val;
+
       return_value = genders_isattrval(handle, attrptr, valptr);
       errnum = genders_errnum(handle);
 
