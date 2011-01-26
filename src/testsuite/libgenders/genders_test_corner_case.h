@@ -170,7 +170,7 @@ typedef struct {
   int expected_errnum;
 } genders_isattrval_corner_case_t;
 
-typedef genders_handle_pointer_corner_case_t genders_index_attrvals_corner_case_t;
+typedef genders_handle_string_corner_case_t genders_index_attrvals_corner_case_t;
 
 typedef struct {
   int num;

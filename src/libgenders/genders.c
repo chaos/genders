@@ -1001,7 +1001,7 @@ genders_index_attrvals(genders_t handle, const char *attr)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr))
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       goto cleanup;

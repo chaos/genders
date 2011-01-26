@@ -1380,7 +1380,14 @@ genders_index_attrvals_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      attrptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	attrptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	attrptr = "";
+      else
+	attrptr = genders_database_corner_case.data->attr_with_val;
+
       return_value = genders_index_attrvals(handle, attrptr);
       errnum = genders_errnum(handle);
 
