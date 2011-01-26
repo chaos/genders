@@ -1009,8 +1009,21 @@ genders_getnodes_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       listptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : list;
       len = (tests[i].param3 == GENDERS_LENGTH_POSITIVE_LARGE) ? list_len : tests[i].param3;
-      attrptr = (tests[i].param4 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
-      valptr = (tests[i].param5 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->val;;
+
+      if (tests[i].param4 == GENDERS_STRING_NULL)
+	attrptr = NULL;
+      else if (tests[i].param4 == GENDERS_STRING_NON_NULL_EMPTY)
+	attrptr = "";
+      else
+	attrptr = genders_database_corner_case.data->attr_with_val;
+
+      if (tests[i].param5 == GENDERS_STRING_NULL)
+	valptr = NULL;
+      else if (tests[i].param5 == GENDERS_STRING_NON_NULL_EMPTY)
+	valptr = "";
+      else
+	valptr = genders_database_corner_case.data->val;
+
       return_value = genders_getnodes(handle, listptr, len, attrptr, valptr);
       errnum = genders_errnum(handle);
 
