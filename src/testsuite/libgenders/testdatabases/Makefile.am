@@ -68,12 +68,15 @@ EXTRA_DIST = \
 	genders.parse_error_empty_file \
 	genders.parse_error_equal_sign_in_value_1 \
 	genders.parse_error_equal_sign_in_value_2 \
+	genders.parse_error_errant_commas \
 	genders.parse_error_hostname_not_shortened \
 	genders.parse_error_hostname_not_shortened_comma \
 	genders.parse_error_hostname_not_shortened_hostrange \
 	genders.parse_error_hostname_too_long \
 	genders.parse_error_hostname_too_long_comma \
 	genders.parse_error_hostname_too_long_hostrange \
+	genders.parse_error_no_attr_before_equal_sign \
+	genders.parse_error_no_value_after_equal_sign \
 	genders.parse_error_whitespace_in_attr \
 	genders.parse_error_whitespace_in_attr_comma \
 	genders.parse_error_whitespace_in_attr_hostrange \

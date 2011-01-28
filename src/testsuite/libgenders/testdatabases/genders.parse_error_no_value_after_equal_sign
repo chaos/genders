@@ -1,0 +1,6 @@
+node1  attr1=
+node2  attr2,attr3=
+nodd3  attr4,attr5=,attr6
+node4  attr7,=,attr9
+node5  attr10,=
+node6  =
