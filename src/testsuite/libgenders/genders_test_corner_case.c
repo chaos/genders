@@ -1076,7 +1076,14 @@ genders_getattr_corner_case(int verbose)
       attrlistptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : attrlist;
       vallistptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : vallist;
       len = (tests[i].param4 == GENDERS_LENGTH_POSITIVE_LARGE) ? attrlist_len : tests[i].param4;
-      nodeptr = (tests[i].param5 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->node;
+
+      if (tests[i].param5 == GENDERS_STRING_NULL)
+	nodeptr = NULL;
+      else if (tests[i].param5 == GENDERS_STRING_NON_NULL_EMPTY)
+	nodeptr = "";
+      else
+	nodeptr = genders_database_corner_case.data->node;
+
       return_value = genders_getattr(handle, attrlistptr, vallistptr, len, nodeptr);
       errnum = genders_errnum(handle);
 

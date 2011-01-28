@@ -688,7 +688,7 @@ genders_getattr(genders_t handle,
       goto cleanup;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
   
   if (!handle->numnodes)
