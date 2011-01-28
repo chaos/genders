@@ -151,9 +151,9 @@ typedef struct {
 typedef struct {
   int num;
   genders_handle_type_t param1;
-  genders_pointer_type_t param2;
-  genders_pointer_type_t param3;
-  genders_pointer_type_t param4;
+  genders_string_type_t param2;
+  genders_string_type_t param3;
+  genders_string_type_t param4;
   int expected_return_value;
   int expected_errnum;
 } genders_testattrval_corner_case_t;

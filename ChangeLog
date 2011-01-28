@@ -1,3 +1,11 @@
+2011-XX-XX  Albert Chu  <chu11@llnl.gov>
+
+	* src/extensions/cplusplus/: Add experimental C++ genders library.
+
+	* src/libgenders/: Treat empty string (i.e. "") identically to NULL.
+
+	* src/testsuite/libgenders/: Update for new test cases.
+
 2011-01-27  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders.c (genders_testattr): Fix corner case.
@@ -9,14 +17,6 @@
 	values, and errant commas.
 
 	* src/testsuite/: Update w/ test cases.
-	
-2011-01-19  Albert Chu  <chu11@llnl.gov>
-
-	* src/extensions/cplusplus/: Add experimental C++ genders library.
-
-	* src/libgenders/: Treat empty string (i.e. "") identically to NULL.
-
-	* src/testsuite/libgenders/: Update for new test cases.
 	
 2011-01-19  Albert Chu  <chu11@llnl.gov>
 

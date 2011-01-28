@@ -848,14 +848,17 @@ genders_testattrval(genders_t handle,
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
+
+  if (val && !strlen(val))
+    val = NULL;
 
   if (!handle->numnodes)
     {

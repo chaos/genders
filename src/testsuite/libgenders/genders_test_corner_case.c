@@ -1227,9 +1227,28 @@ genders_testattrval_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      nodeptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->node;
-      attrptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
-      valptr = (tests[i].param4 == GENDERS_POINTER_NULL) ? NULL: genders_database_corner_case.data->val;;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	nodeptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	nodeptr = "";
+      else
+	nodeptr = genders_database_corner_case.data->node;
+
+      if (tests[i].param3 == GENDERS_STRING_NULL)
+	attrptr = NULL;
+      else if (tests[i].param3 == GENDERS_STRING_NON_NULL_EMPTY)
+	attrptr = "";
+      else
+	attrptr = genders_database_corner_case.data->attr_with_val;
+
+      if (tests[i].param4 == GENDERS_STRING_NULL)
+	valptr = NULL;
+      else if (tests[i].param4 == GENDERS_STRING_NON_NULL_EMPTY)
+	valptr = "";
+      else
+	valptr = genders_database_corner_case.data->val;
+
       return_value = genders_testattrval(handle, nodeptr, attrptr, valptr);
       errnum = genders_errnum(handle);
 
