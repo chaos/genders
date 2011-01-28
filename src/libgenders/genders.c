@@ -812,7 +812,7 @@ genders_testattr(genders_t handle,
 	      char *valptr;
 	      if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
 		return -1;
-	      if (strlen(valptr + 1) > len) 
+	      if ((strlen(valptr) + 1) > len) 
 		{
 		  handle->errnum = GENDERS_ERR_OVERFLOW;
 		  return -1;
