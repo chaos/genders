@@ -785,13 +785,15 @@ genders_testattr(genders_t handle,
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr || (val && len < 0)) 
+  if (!attr
+      || !strlen(attr)
+      || (val && len < 0)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
 
   if (!handle->numnodes)
@@ -818,6 +820,7 @@ genders_testattr(genders_t handle,
 	      char *valptr;
 	      if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
 		return -1;
+
 	      if (strlen(valptr + 1) > len) 
 		{
 		  handle->errnum = GENDERS_ERR_OVERFLOW;
