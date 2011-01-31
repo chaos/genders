@@ -39,6 +39,42 @@ Genders::~Genders()
   (void)genders_handle_destroy(gh);
 }
 
+unsigned int Genders::getnumnodes() const
+{
+  int rv;
+
+  if ((rv = genders_getnumnodes(gh)) < 0)
+    {
+      // XXX
+    }
+
+  return rv;
+}
+
+unsigned int Genders::getnumattrs() const
+{
+  int rv;
+
+  if ((rv = genders_getnumattrs(gh)) < 0)
+    {
+      // XXX
+    }
+
+  return rv;
+}
+
+unsigned int Genders::getmaxattrs() const
+{
+  int rv;
+
+  if ((rv = genders_getmaxattrs(gh)) < 0)
+    {
+      // XXX
+    }
+
+  return rv;
+}
+
 string Genders::getnodename() const
 {
   string rv;
@@ -73,25 +109,17 @@ vector< string > Genders::getnodes(const string attr, const string val) const
   char **nodelist = NULL;
   int nodelist_len;
   int nodelist_count;
-  const char *c_str_attr = NULL;
-  const char *c_str_val = NULL;
 
   if ((nodelist_len = genders_nodelist_create(gh, &nodelist)) < 0)
     {
       // XXX
     }
 
-  if (!attr.empty())
-    c_str_attr = attr.c_str();
-
-  if (!val.empty())
-    c_str_val = val.c_str();
-
   if ((nodelist_count = genders_getnodes(gh,
 					 nodelist,
 					 nodelist_len,
-					 c_str_attr,
-					 c_str_val)) < 0)
+					 attr.c_str(),
+					 val.c_str())) < 0)
     {
       // XXX
     }

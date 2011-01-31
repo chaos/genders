@@ -16,15 +16,15 @@ namespace Gendersplusplus
 class Genders
 {
 public:
-  Genders();
-  Genders(const std::string filename);
+  Genders();			// done
+  Genders(const std::string filename); // done
   Genders(const Genders &copy);
-  ~Genders();
-  int getnumnodes() const;
-  int getnumattrs() const;
-  int getmaxattrs() const;
-  std::string getnodename() const;
-  std::vector< std::string > getnodes(const std::string attr = "", const std::string val = "") const;
+  ~Genders();			// done
+  unsigned int getnumnodes() const; // done
+  unsigned int getnumattrs() const; // done
+  unsigned int getmaxattrs() const; // done
+  std::string getnodename() const; // done
+  std::vector< std::string > getnodes(const std::string attr = "", const std::string val = "") const; // done
   std::vector< std::pair< std::string, std::string > > getattr(const std::string node) const;
   std::vector< std::string > getattr_all() const;
   bool testattr(const std::string node, const std::string attr, std::string &val) const;
