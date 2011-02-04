@@ -25,8 +25,8 @@ public:
   unsigned int getmaxattrs() const; // done
   std::string getnodename() const; // done
   std::vector< std::string > getnodes(const std::string attr = "", const std::string val = "") const; // done
-  std::vector< std::pair< std::string, std::string > > getattr(const std::string node) const;
-  std::vector< std::string > getattr_all() const;
+  std::vector< std::pair< std::string, std::string > > getattr(const std::string node = "") const; // done
+  std::vector< std::string > getattr_all() const; // done
   bool testattr(const std::string node, const std::string attr, std::string &val) const;
   bool testattrval(const std::string node, const std::string attr, const std::string val) const;
   bool isnode(const std::string node) const;

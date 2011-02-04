@@ -132,3 +132,67 @@ vector< string > Genders::getnodes(const string attr, const string val) const
   return rv;
 }
 
+vector< pair< string, string > > Genders::getattr(const std::string node) const
+{
+  vector< pair< string, string> > rv;
+  char **attrlist = NULL;
+  int attrlist_len;
+  char **vallist = NULL;
+  int vallist_len;
+  int list_count;
+
+  if ((attrlist_len = genders_attrlist_create(gh, &attrlist)) < 0)
+    {
+      // XXX
+    }
+
+  if ((vallist_len = genders_vallist_create(gh, &vallist)) < 0)
+    {
+      // XXX
+    }
+
+  if ((list_count = genders_getattr(gh,
+				    attrlist,
+				    vallist,
+				    attrlist_len,
+				    node.c_str())) < 0)
+    {
+      // XXX
+    }
+
+  for (int i = 0; i < list_count; i++)
+    rv.push_back(pair<string, string>(attrlist[i], vallist[i]));
+
+ cleanup:
+  genders_attrlist_destroy(gh, attrlist);
+  genders_vallist_destroy(gh, vallist);
+  return rv;
+}
+
+vector< string > Genders::getattr_all() const
+{
+  vector<string> rv;
+  char **attrlist = NULL;
+  int attrlist_len;
+  int attrlist_count;
+
+  if ((attrlist_len = genders_attrlist_create(gh, &attrlist)) < 0)
+    {
+      // XXX
+    }
+
+  if ((attrlist_count = genders_getattr_all(gh,
+					    attrlist,
+					    attrlist_len)) < 0)
+    {
+      // XXX
+    }
+  
+  for (int i = 0; i < attrlist_count; i++)
+    rv.push_back(attrlist[i]);
+
+ cleanup:
+  genders_attrlist_destroy(gh, attrlist);
+  return rv;
+}
+
