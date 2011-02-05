@@ -196,3 +196,61 @@ vector< string > Genders::getattr_all() const
   return rv;
 }
 
+bool Genders::testattr(const string attr, string &val, const string node) const
+{
+  char *valbuf = NULL;
+  int maxvallen;
+  int ret;
+  bool rv = false;
+  
+  if ((maxvallen = genders_getmaxvallen(gh)) < 0)
+    {
+      // XXX
+    }
+  
+  if (!(valbuf = (char *)malloc(maxvallen + 1)))
+    {
+      // XXX
+    }
+
+  memset(valbuf, '\0', maxvallen + 1);
+
+  if ((ret = genders_testattr(gh,
+			      node.c_str(),
+			      attr.c_str(),
+			      valbuf,
+			      maxvallen + 1)) < 0)
+    {
+      // XXX
+    }
+
+  if (ret)
+    {
+      rv = true;
+      val = valbuf;
+    }
+
+ cleanup:
+  free(valbuf);
+  return rv;
+}
+
+bool Genders::testattrval(const string attr, const string val, const string node) const
+{
+  bool rv = false;
+  int ret;
+
+  if ((ret = genders_testattrval(gh,
+				 node.c_str(),
+				 attr.c_str(),
+				 val.c_str())) < 0)
+    {
+      // XXX
+    }
+  
+  if (ret)
+    rv = true;
+
+ cleanup:
+  return rv;
+}

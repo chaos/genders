@@ -27,8 +27,8 @@ public:
   std::vector< std::string > getnodes(const std::string attr = "", const std::string val = "") const; // done
   std::vector< std::pair< std::string, std::string > > getattr(const std::string node = "") const; // done
   std::vector< std::string > getattr_all() const; // done
-  bool testattr(const std::string node, const std::string attr, std::string &val) const;
-  bool testattrval(const std::string node, const std::string attr, const std::string val) const;
+  bool testattr(const std::string attr, std::string &val, const std::string node = "") const; // done
+  bool testattrval(const std::string attr, const std::string val = "", const std::string node = "") const; // done
   bool isnode(const std::string node) const;
   bool isattr(const std::string attr) const;
   bool isattrval(const std::string attr, const std::string val) const;
