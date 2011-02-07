@@ -2086,11 +2086,13 @@ genders_query_functionality(int verbose)
 	    char *queryptr;
 	    
 	    /* Construct simple query */
-	    if (databases[i]->data->attrval_nodes[j].attr)
+	    if (databases[i]->data->attrval_nodes[j].attr
+		&& strlen(databases[i]->data->attrval_nodes[j].attr))
 	      {
 		memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
 		strcpy(querybuf, databases[i]->data->attrval_nodes[j].attr);
-		if (databases[i]->data->attrval_nodes[j].val)
+		if (databases[i]->data->attrval_nodes[j].val
+		    && strlen(databases[i]->data->attrval_nodes[j].val))
 		  {
 		    strcat(querybuf, "=");
 		    strcat(querybuf, databases[i]->data->attrval_nodes[j].val);
@@ -2099,8 +2101,7 @@ genders_query_functionality(int verbose)
 	      }
 	    else
 	      queryptr = NULL;
-	    
-	    
+	     
 	    return_value = genders_query(handle, 
 					 nodelist,
 					 nodelist_len,
@@ -2310,11 +2311,13 @@ genders_testquery_functionality(int verbose)
             int k;
 
 	    /* Construct simple query */
-	    if (databases[i]->data->attrval_nodes[j].attr)
+	    if (databases[i]->data->attrval_nodes[j].attr
+		&& strlen(databases[i]->data->attrval_nodes[j].attr))
 	      {
 		memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
 		strcpy(querybuf, databases[i]->data->attrval_nodes[j].attr);
-		if (databases[i]->data->attrval_nodes[j].val)
+		if (databases[i]->data->attrval_nodes[j].val
+		    && strlen(databases[i]->data->attrval_nodes[j].val))
 		  {
 		    strcat(querybuf, "=");
 		    strcat(querybuf, databases[i]->data->attrval_nodes[j].val);

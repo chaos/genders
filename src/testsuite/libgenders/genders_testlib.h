@@ -51,6 +51,12 @@ typedef enum {
 } genders_pointer_type_t;
 
 typedef enum {
+  GENDERS_STRING_NULL = 0,
+  GENDERS_STRING_NON_NULL_EMPTY = 1,
+  GENDERS_STRING_NON_NULL_FULL = 2,
+} genders_string_type_t;
+
+typedef enum {
   GENDERS_LENGTH_NEGATIVE = -1,
   GENDERS_LENGTH_ZERO = 0,
   GENDERS_LENGTH_POSITIVE_SMALL = 1,

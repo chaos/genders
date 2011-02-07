@@ -48,6 +48,14 @@ typedef struct {
 typedef struct {
   int num;
   genders_handle_type_t param1;
+  genders_string_type_t param2;
+  int expected_return_value;
+  int expected_errnum;
+} genders_handle_string_corner_case_t;
+
+typedef struct {
+  int num;
+  genders_handle_type_t param1;
   genders_pointer_type_t param2;
   genders_length_type_t param3;
   int expected_return_value;
@@ -110,8 +118,8 @@ typedef struct {
   genders_handle_type_t param1;
   genders_pointer_type_t param2;
   genders_length_type_t param3;
-  genders_pointer_type_t param4;
-  genders_pointer_type_t param5;
+  genders_string_type_t param4;
+  genders_string_type_t param5;
   int expected_return_value;
   int expected_errnum;
 } genders_getnodes_corner_case_t;
@@ -122,7 +130,7 @@ typedef struct {
   genders_pointer_type_t param2;
   genders_pointer_type_t param3;
   genders_length_type_t param4;
-  genders_pointer_type_t param5;
+  genders_string_type_t param5;
   int expected_return_value;
   int expected_errnum;
 } genders_getattr_corner_case_t;
@@ -132,8 +140,8 @@ typedef genders_handle_pointer_length_corner_case_t genders_getattr_all_corner_c
 typedef struct {
   int num;
   genders_handle_type_t param1;
-  genders_pointer_type_t param2;
-  genders_pointer_type_t param3;
+  genders_string_type_t param2;
+  genders_string_type_t param3;
   genders_pointer_type_t param4;
   genders_length_type_t param5;
   int expected_return_value;
@@ -143,26 +151,26 @@ typedef struct {
 typedef struct {
   int num;
   genders_handle_type_t param1;
-  genders_pointer_type_t param2;
-  genders_pointer_type_t param3;
-  genders_pointer_type_t param4;
+  genders_string_type_t param2;
+  genders_string_type_t param3;
+  genders_string_type_t param4;
   int expected_return_value;
   int expected_errnum;
 } genders_testattrval_corner_case_t;
 
-typedef genders_handle_pointer_corner_case_t genders_isnode_corner_case_t;
-typedef genders_handle_pointer_corner_case_t genders_isattr_corner_case_t;
+typedef genders_handle_string_corner_case_t genders_isnode_corner_case_t;
+typedef genders_handle_string_corner_case_t genders_isattr_corner_case_t;
 
 typedef struct {
   int num;
   genders_handle_type_t param1;
-  genders_pointer_type_t param2;
-  genders_pointer_type_t param3;
+  genders_string_type_t param2;
+  genders_string_type_t param3;
   int expected_return_value;
   int expected_errnum;
 } genders_isattrval_corner_case_t;
 
-typedef genders_handle_pointer_corner_case_t genders_index_attrvals_corner_case_t;
+typedef genders_handle_string_corner_case_t genders_index_attrvals_corner_case_t;
 
 typedef struct {
   int num;

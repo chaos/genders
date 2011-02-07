@@ -588,6 +588,12 @@ genders_getnodes(genders_t handle, char *nodes[], int len,
       goto cleanup;
     }
 
+  if (attr && !strlen(attr))
+    attr = NULL;
+
+  if (val && !strlen(val))
+    val = NULL;
+
   if (handle->attrval_index 
       && attr
       && val
@@ -682,7 +688,7 @@ genders_getattr(genders_t handle,
       goto cleanup;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
   
   if (!handle->numnodes)
@@ -779,13 +785,15 @@ genders_testattr(genders_t handle,
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr || (val && len < 0)) 
+  if (!attr
+      || !strlen(attr)
+      || (val && len < 0)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
 
   if (!handle->numnodes)
@@ -840,14 +848,17 @@ genders_testattrval(genders_t handle,
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
+
+  if (val && !strlen(val))
+    val = NULL;
 
   if (!handle->numnodes)
     {
@@ -876,7 +887,7 @@ genders_isnode(genders_t handle, const char *node)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
 
   if (!handle->numnodes)
@@ -899,7 +910,7 @@ genders_isattr(genders_t handle, const char *attr)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr)) 
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
@@ -928,7 +939,10 @@ genders_isattrval(genders_t handle, const char *attr, const char *val)
   if (_genders_loaded_handle_error_check(handle) < 0)
     goto cleanup;
 
-  if (!attr || !val) 
+  if (!attr
+      || !strlen(attr)
+      || !val
+      || !strlen(val))
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       goto cleanup;
@@ -992,7 +1006,7 @@ genders_index_attrvals(genders_t handle, const char *attr)
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!attr) 
+  if (!attr || !strlen(attr))
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       goto cleanup;
