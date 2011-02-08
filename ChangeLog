@@ -1,6 +1,7 @@
 2011-02-07  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/: Treat empty string (i.e. "") identically to NULL.
+	* src/libgenders/: Treat empty string (i.e. "") identically to
+	NULL for many circumstances.
 
 	* src/testsuite/libgenders/: Update for new test cases.
 
