@@ -640,7 +640,7 @@ _genders_open_and_parse(genders_t handle,
   int len, errcount = 0, fd = -1, rv = -1, line_count = 1, parsed_nodes = 0;
   char buf[GENDERS_BUFLEN];
 
-  if (!filename)
+  if (!filename || !strlen(filename))
     filename = GENDERS_DEFAULT_FILE;
 
   if ((fd = open(filename, O_RDONLY)) < 0) 
