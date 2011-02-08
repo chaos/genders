@@ -18,6 +18,7 @@ static genders_t genders_constructor(const string filename)
   
   if (genders_load_data(gh, c_str_filename) < 0)
     {
+      genders_handle_destroy(gh);
       // XXX
     }
 
@@ -83,22 +84,23 @@ string Genders::getnodename() const
 
   if ((maxnodelen = genders_getmaxnodelen(gh)) < 0)
     {
+      free(buf);
       // XXX
     }
 
   if (!(buf = (char *)malloc(maxnodelen + 1)))
     {
+      free(buf);
       // XXX
     }
 
   if (genders_getnodename(gh, buf, maxnodelen + 1) < 0)
     {
+      free(buf);
       // XXX
     }
 
   rv = buf;
-  
- cleanup:
   free(buf);
   return rv;
 }
@@ -121,13 +123,13 @@ vector< string > Genders::getnodes(const string attr, const string val) const
 					 attr.c_str(),
 					 val.c_str())) < 0)
     {
+      genders_nodelist_destroy(gh, nodelist);
       // XXX
     }
   
   for (int i = 0; i < nodelist_count; i++)
     rv.push_back(nodelist[i]);
   
- cleanup:
   genders_nodelist_destroy(gh, nodelist);
   return rv;
 }
@@ -148,6 +150,7 @@ vector< pair< string, string > > Genders::getattr(const std::string node) const
 
   if ((vallist_len = genders_vallist_create(gh, &vallist)) < 0)
     {
+      genders_attrlist_destroy(gh, attrlist);
       // XXX
     }
 
@@ -157,13 +160,14 @@ vector< pair< string, string > > Genders::getattr(const std::string node) const
 				    attrlist_len,
 				    node.c_str())) < 0)
     {
+      genders_attrlist_destroy(gh, attrlist);
+      genders_vallist_destroy(gh, vallist);
       // XXX
     }
 
   for (int i = 0; i < list_count; i++)
     rv.push_back(pair<string, string>(attrlist[i], vallist[i]));
 
- cleanup:
   genders_attrlist_destroy(gh, attrlist);
   genders_vallist_destroy(gh, vallist);
   return rv;
@@ -185,13 +189,13 @@ vector< string > Genders::getattr_all() const
 					    attrlist,
 					    attrlist_len)) < 0)
     {
+      genders_attrlist_destroy(gh, attrlist);
       // XXX
     }
   
   for (int i = 0; i < attrlist_count; i++)
     rv.push_back(attrlist[i]);
 
- cleanup:
   genders_attrlist_destroy(gh, attrlist);
   return rv;
 }
@@ -221,6 +225,7 @@ bool Genders::testattr(const string attr, string &val, const string node) const
 			      valbuf,
 			      maxvallen + 1)) < 0)
     {
+      free(valbuf);
       // XXX
     }
 
@@ -229,8 +234,9 @@ bool Genders::testattr(const string attr, string &val, const string node) const
       rv = true;
       val = valbuf;
     }
+  else
+    val = "";
 
- cleanup:
   free(valbuf);
   return rv;
 }
@@ -251,7 +257,53 @@ bool Genders::testattrval(const string attr, const string val, const string node
   if (ret)
     rv = true;
 
- cleanup:
   return rv;
 }
 
+bool Genders::isnode(const string node) const
+{
+  bool rv = false;
+  int ret;
+
+  if ((ret = genders_isnode(gh, node.c_str())) < 0)
+    {
+      // XXX
+    }
+
+  if (ret)
+    rv = true;
+
+  return rv;
+}
+
+bool Genders::isattr(const string attr) const
+{
+  bool rv = false;
+  int ret;
+
+  if ((ret = genders_isattr(gh, attr.c_str())) < 0)
+    {
+      // XXX
+    }
+
+  if (ret)
+    rv = true;
+
+  return rv;
+}
+
+bool Genders::isattrval(const string attr, const string val) const
+{
+  bool rv = false;
+  int ret;
+
+  if ((ret = genders_isattrval(gh, attr.c_str(), val.c_str())) < 0)
+    {
+      // XXX
+    }
+
+  if (ret)
+    rv = true;
+
+  return rv;
+}

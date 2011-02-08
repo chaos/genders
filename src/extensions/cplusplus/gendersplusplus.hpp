@@ -29,9 +29,9 @@ public:
   std::vector< std::string > getattr_all() const; // done
   bool testattr(const std::string attr, std::string &val, const std::string node = "") const; // done
   bool testattrval(const std::string attr, const std::string val = "", const std::string node = "") const; // done
-  bool isnode(const std::string node) const;
-  bool isattr(const std::string attr) const;
-  bool isattrval(const std::string attr, const std::string val) const;
+  bool isnode(const std::string node = "") const; // done
+  bool isattr(const std::string attr) const; // done
+  bool isattrval(const std::string attr, const std::string val) const; // done
   std::vector< std::string > query(const std::string query) const;
   bool testquery(const std::string node, const std::string query);
   void parse(const std::string filename);
