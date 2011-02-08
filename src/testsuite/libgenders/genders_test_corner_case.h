@@ -177,7 +177,7 @@ typedef struct {
   genders_handle_type_t param1;
   genders_pointer_type_t param2;
   genders_length_type_t param3;
-  genders_pointer_type_t param4;
+  genders_string_type_t param4;
   int expected_return_value;
   int expected_errnum;
 } genders_query_corner_case_t;
@@ -185,8 +185,8 @@ typedef struct {
 typedef struct {
   int num;
   genders_handle_type_t param1;
-  genders_pointer_type_t param2;
-  genders_pointer_type_t param3;
+  genders_string_type_t param2;
+  genders_string_type_t param3;
   int expected_return_value;
   int expected_errnum;
 } genders_testquery_corner_case_t;

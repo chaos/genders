@@ -1473,7 +1473,12 @@ genders_query_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       listptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : list;
       len = (tests[i].param3 == GENDERS_LENGTH_POSITIVE_LARGE) ? list_len : tests[i].param3;
-      queryptr = (tests[i].param4 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+      if (tests[i].param4 == GENDERS_STRING_NULL)
+	queryptr = NULL;
+      else if (tests[i].param4 == GENDERS_STRING_NON_NULL_EMPTY)
+	queryptr = "";
+      else
+	queryptr = genders_database_corner_case.data->attr_with_val;
       return_value = genders_query(handle, listptr, len, queryptr);
       errnum = genders_errnum(handle);
 
@@ -1512,11 +1517,24 @@ genders_testquery_corner_case(int verbose)
       int return_value, errnum;
 
       handle = genders_handle_get(tests[i].param1);
-      nodeptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->node;
-      queryptr = (tests[i].param3 == GENDERS_POINTER_NULL) ? NULL : genders_database_corner_case.data->attr_with_val;
+
+      if (tests[i].param2 == GENDERS_STRING_NULL)
+	nodeptr = NULL;
+      else if (tests[i].param2 == GENDERS_STRING_NON_NULL_EMPTY)
+	nodeptr = "";
+      else
+	nodeptr = genders_database_corner_case.data->node;
+
+      if (tests[i].param3 == GENDERS_STRING_NULL)
+	queryptr = NULL;
+      else if (tests[i].param3 == GENDERS_STRING_NON_NULL_EMPTY)
+	queryptr = "";
+      else
+	queryptr = genders_database_corner_case.data->attr_with_val;
+
       return_value = genders_testquery(handle, nodeptr, queryptr);
       errnum = genders_errnum(handle);
-
+      
       errcount += genders_return_value_errnum_check("genders_testquery",
 						    tests[i].num,
 						    tests[i].expected_return_value,
@@ -1525,7 +1543,7 @@ genders_testquery_corner_case(int verbose)
 						    errnum,
 						    NULL,
 						    verbose);
-
+      
       genders_handle_cleanup(handle);
       i++;
     }

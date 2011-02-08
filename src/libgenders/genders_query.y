@@ -572,8 +572,8 @@ genders_query(genders_t handle, char *nodes[], int len, const char *query)
       goto cleanup;
     }
 
-  /* Special case for NULL query */
-  if (!query)
+  /* Special case for NULL or empty string query */
+  if (!query || !strlen(query))
     return genders_getnodes(handle, nodes, len, NULL, NULL);
 
   if (_parse_query(handle, query) < 0)
@@ -620,13 +620,13 @@ genders_testquery(genders_t handle,
   if (_genders_loaded_handle_error_check(handle) < 0)
     return -1;
 
-  if (!query)
+  if (!query || !strlen(query))
     {
       handle->errnum = GENDERS_ERR_PARAMETERS;
       return -1;
     }
 
-  if (!node)
+  if (!node || !strlen(node))
     node = handle->nodename;
 
   if (!handle->numnodes)

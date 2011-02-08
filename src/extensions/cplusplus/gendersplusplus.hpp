@@ -32,8 +32,8 @@ public:
   bool isnode(const std::string node = "") const; // done
   bool isattr(const std::string attr) const; // done
   bool isattrval(const std::string attr, const std::string val) const; // done
-  std::vector< std::string > query(const std::string query) const;
-  bool testquery(const std::string node, const std::string query);
+  std::vector< std::string > query(const std::string query = "") const;
+  bool testquery(const std::string query, const std::string node = "");
   void parse(const std::string filename);
 private:
   genders_t gh;

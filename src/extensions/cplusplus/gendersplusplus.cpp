@@ -6,17 +6,13 @@ using namespace Gendersplusplus;
 static genders_t genders_constructor(const string filename)
 {
   genders_t gh;
-  const char *c_str_filename = NULL;
 
   if (!(gh = genders_handle_create()))
     {
       // XXX
     }
   
-  if (!filename.empty())
-    c_str_filename = filename.c_str();
-  
-  if (genders_load_data(gh, c_str_filename) < 0)
+  if (genders_load_data(gh, filename.c_str()) < 0)
     {
       genders_handle_destroy(gh);
       // XXX
@@ -306,4 +302,40 @@ bool Genders::isattrval(const string attr, const string val) const
     rv = true;
 
   return rv;
+}
+
+vector< string > Genders::query(const string query) const
+{
+  vector<string> rv;
+  char **nodelist = NULL;
+  int nodelist_len;
+  int nodelist_count;
+
+  if ((nodelist_len = genders_nodelist_create(gh, &nodelist)) < 0)
+    {
+      // XXX
+    }
+
+  if ((nodelist_count = genders_query(gh,
+				      nodelist,
+				      nodelist_len,
+				      query.c_str())) < 0)
+    {
+      genders_nodelist_destroy(gh, nodelist);
+      // XXX
+    }
+  
+  for (int i = 0; i < nodelist_count; i++)
+    rv.push_back(nodelist[i]);
+  
+  genders_nodelist_destroy(gh, nodelist);
+  return rv;
+}
+
+bool Genders::testquery(const std::string query, const std::string node)
+{
+}
+
+void Genders::parse(const std::string filename)
+{
 }
