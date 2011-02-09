@@ -334,8 +334,28 @@ vector< string > Genders::query(const string query) const
 
 bool Genders::testquery(const std::string query, const std::string node)
 {
+  bool rv = false;
+  int ret;
+
+  if ((ret = genders_testquery(gh, node.c_str(), query.c_str())) < 0)
+    {
+      // XXX
+    }
+
+  if (ret)
+    rv = true;
+
+  return rv;
 }
 
-void Genders::parse(const std::string filename)
+unsigned int Genders::parse(const std::string filename)
 {
+  int rv;
+
+  if ((rv = genders_parse(gh, filename.c_str(), NULL)) < 0)
+    {
+      // XXX
+    }
+
+  return rv;
 }
