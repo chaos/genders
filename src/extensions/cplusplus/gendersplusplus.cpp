@@ -3,32 +3,115 @@
 using namespace std;
 using namespace Gendersplusplus;
 
-static genders_t genders_constructor(const string filename)
+GendersException::GendersException()
 {
-  genders_t gh;
+  _errnum = GENDERS_ERR_ERRNUMRANGE;
+}
 
-  if (!(gh = genders_handle_create()))
+GendersException::GendersException(int errnum)
+{
+  _errnum = errnum;
+}
+
+const char *GendersException::errormsg() const
+{
+  return genders_strerror(_errnum);
+}
+
+ostream &operator<<(ostream &output, const GendersException &e)
+{
+  output << e.errormsg();
+  return output;
+}
+
+GendersExceptionOpen::GendersExceptionOpen() : GendersException(GENDERS_ERR_OPEN)
+{
+}
+
+GendersExceptionRead::GendersExceptionRead() : GendersException(GENDERS_ERR_READ)
+{
+}
+
+GendersExceptionParse::GendersExceptionParse() : GendersException(GENDERS_ERR_PARSE)
+{
+}
+
+GendersExceptionParameters::GendersExceptionParameters() : GendersException(GENDERS_ERR_PARAMETERS)
+{
+}
+
+GendersExceptionNotfound::GendersExceptionNotfound() : GendersException(GENDERS_ERR_NOTFOUND)
+{
+}
+
+GendersExceptionOutmem::GendersExceptionOutmem() : GendersException(GENDERS_ERR_OUTMEM)
+{
+}
+
+GendersExceptionSyntax::GendersExceptionSyntax() : GendersException(GENDERS_ERR_SYNTAX)
+{
+}
+
+GendersExceptionInternal::GendersExceptionInternal() : GendersException(GENDERS_ERR_INTERNAL)
+{
+}
+
+void Genders::_throw_exception(int errnum) const
+{
+  switch (errnum)
     {
-      // XXX
+    case GENDERS_ERR_OPEN:
+      throw GendersExceptionOpen();
+    case GENDERS_ERR_READ:
+      throw GendersExceptionRead();
+    case GENDERS_ERR_PARSE:
+      throw GendersExceptionParse();
+    case GENDERS_ERR_NOTFOUND:
+      throw GendersExceptionNotfound();
+    case GENDERS_ERR_OUTMEM:
+      throw GendersExceptionOutmem();
+    case GENDERS_ERR_SYNTAX:
+      throw GendersExceptionSyntax();
+    default:
+      throw GendersExceptionInternal();
     }
+}
+
+void Genders::_constructor(const string filename)
+{
+  if (!(gh = genders_handle_create()))
+    _throw_exception(GENDERS_ERR_OUTMEM);
   
   if (genders_load_data(gh, filename.c_str()) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_handle_destroy(gh);
-      // XXX
+      _throw_exception(errnum);
     }
-
-  return gh;
 }
 
 Genders::Genders()
 {
-  gh = genders_constructor("");
+  _constructor("");
 }
 
 Genders::Genders(const string filename)
 {
-  gh = genders_constructor(filename);
+  _constructor(filename);
+}
+
+Genders::Genders(const Genders &copy)
+{
+  
+}
+
+const Genders &Genders::operator=(const Genders &right)
+{
+  if (&right != this)
+    {
+    }
+
+  return *this;
 }
 
 Genders::~Genders()
@@ -41,9 +124,7 @@ unsigned int Genders::getnumnodes() const
   int rv;
 
   if ((rv = genders_getnumnodes(gh)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   return rv;
 }
@@ -53,9 +134,7 @@ unsigned int Genders::getnumattrs() const
   int rv;
 
   if ((rv = genders_getnumattrs(gh)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   return rv;
 }
@@ -65,9 +144,7 @@ unsigned int Genders::getmaxattrs() const
   int rv;
 
   if ((rv = genders_getmaxattrs(gh)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   return rv;
 }
@@ -81,19 +158,19 @@ string Genders::getnodename() const
   if ((maxnodelen = genders_getmaxnodelen(gh)) < 0)
     {
       free(buf);
-      // XXX
+      _throw_exception(genders_errnum(gh));
     }
 
   if (!(buf = (char *)malloc(maxnodelen + 1)))
     {
       free(buf);
-      // XXX
+      _throw_exception(genders_errnum(gh));
     }
 
   if (genders_getnodename(gh, buf, maxnodelen + 1) < 0)
     {
       free(buf);
-      // XXX
+      _throw_exception(genders_errnum(gh));
     }
 
   rv = buf;
@@ -109,9 +186,7 @@ vector< string > Genders::getnodes(const string attr, const string val) const
   int nodelist_count;
 
   if ((nodelist_len = genders_nodelist_create(gh, &nodelist)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if ((nodelist_count = genders_getnodes(gh,
 					 nodelist,
@@ -119,8 +194,9 @@ vector< string > Genders::getnodes(const string attr, const string val) const
 					 attr.c_str(),
 					 val.c_str())) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_nodelist_destroy(gh, nodelist);
-      // XXX
+      _throw_exception(errnum);
     }
   
   for (int i = 0; i < nodelist_count; i++)
@@ -140,14 +216,13 @@ vector< pair< string, string > > Genders::getattr(const std::string node) const
   int list_count;
 
   if ((attrlist_len = genders_attrlist_create(gh, &attrlist)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if ((vallist_len = genders_vallist_create(gh, &vallist)) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_attrlist_destroy(gh, attrlist);
-      // XXX
+      _throw_exception(errnum);
     }
 
   if ((list_count = genders_getattr(gh,
@@ -156,9 +231,10 @@ vector< pair< string, string > > Genders::getattr(const std::string node) const
 				    attrlist_len,
 				    node.c_str())) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_attrlist_destroy(gh, attrlist);
       genders_vallist_destroy(gh, vallist);
-      // XXX
+      _throw_exception(errnum);
     }
 
   for (int i = 0; i < list_count; i++)
@@ -177,16 +253,15 @@ vector< string > Genders::getattr_all() const
   int attrlist_count;
 
   if ((attrlist_len = genders_attrlist_create(gh, &attrlist)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if ((attrlist_count = genders_getattr_all(gh,
 					    attrlist,
 					    attrlist_len)) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_attrlist_destroy(gh, attrlist);
-      // XXX
+      _throw_exception(errnum);
     }
   
   for (int i = 0; i < attrlist_count; i++)
@@ -204,14 +279,10 @@ bool Genders::testattr(const string attr, string &val, const string node) const
   bool rv = false;
   
   if ((maxvallen = genders_getmaxvallen(gh)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
   
   if (!(valbuf = (char *)malloc(maxvallen + 1)))
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   memset(valbuf, '\0', maxvallen + 1);
 
@@ -222,7 +293,7 @@ bool Genders::testattr(const string attr, string &val, const string node) const
 			      maxvallen + 1)) < 0)
     {
       free(valbuf);
-      // XXX
+      _throw_exception(genders_errnum(gh));
     }
 
   if (ret)
@@ -246,9 +317,7 @@ bool Genders::testattrval(const string attr, const string val, const string node
 				 node.c_str(),
 				 attr.c_str(),
 				 val.c_str())) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
   
   if (ret)
     rv = true;
@@ -262,9 +331,7 @@ bool Genders::isnode(const string node) const
   int ret;
 
   if ((ret = genders_isnode(gh, node.c_str())) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (ret)
     rv = true;
@@ -278,9 +345,7 @@ bool Genders::isattr(const string attr) const
   int ret;
 
   if ((ret = genders_isattr(gh, attr.c_str())) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (ret)
     rv = true;
@@ -294,9 +359,7 @@ bool Genders::isattrval(const string attr, const string val) const
   int ret;
 
   if ((ret = genders_isattrval(gh, attr.c_str(), val.c_str())) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (ret)
     rv = true;
@@ -312,17 +375,16 @@ vector< string > Genders::query(const string query) const
   int nodelist_count;
 
   if ((nodelist_len = genders_nodelist_create(gh, &nodelist)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if ((nodelist_count = genders_query(gh,
 				      nodelist,
 				      nodelist_len,
 				      query.c_str())) < 0)
     {
+      int errnum = genders_errnum(gh);
       genders_nodelist_destroy(gh, nodelist);
-      // XXX
+      _throw_exception(errnum);
     }
   
   for (int i = 0; i < nodelist_count; i++)
@@ -338,9 +400,7 @@ bool Genders::testquery(const std::string query, const std::string node)
   int ret;
 
   if ((ret = genders_testquery(gh, node.c_str(), query.c_str())) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (ret)
     rv = true;
@@ -353,9 +413,7 @@ unsigned int Genders::parse(const std::string filename)
   int rv;
 
   if ((rv = genders_parse(gh, filename.c_str(), NULL)) < 0)
-    {
-      // XXX
-    }
+    _throw_exception(genders_errnum(gh));
 
   return rv;
 }
