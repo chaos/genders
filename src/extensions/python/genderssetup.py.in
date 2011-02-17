@@ -1,8 +1,8 @@
 from distutils.core import setup, Extension
 
 libgendersmodule = Extension('libgenders',
-                             include_dirs = ['../../../../config', '../../../libgenders'],
-                             library_dirs = ['../../../libgenders/.libs'],
+                             include_dirs = ['../../../config', '../../libgenders'],
+                             library_dirs = ['../../libgenders/.libs'],
                              libraries = ['genders'],
                              sources = ['libgendersmodule.c'])
 

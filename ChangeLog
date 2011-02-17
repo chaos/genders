@@ -1,3 +1,7 @@
+2011-02-16  Albert Chu  <chu11@llnl.gov>
+
+	* src/extensions/python/genderssetup.py: Fix build bug.
+	
 2011-02-08  Albert Chu  <chu11@llnl.gov>
 	
 	* src/libgenders/: Treat empty string (i.e. "") identically to
