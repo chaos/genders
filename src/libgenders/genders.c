@@ -1184,3 +1184,73 @@ genders_set_errnum(genders_t handle, int errnum)
 
   handle->errnum = errnum;
 }
+
+genders_t
+genders_copy(genders_t handle) 
+{
+  genders_t copy = NULL;
+
+  if (_genders_loaded_handle_error_check(handle) < 0)
+    return NULL;
+
+  if (!(copy = genders_handle_create()))
+    {
+      handle->errnum = GENDERS_ERR_OUTMEM;
+      goto cleanup;
+    }
+
+  copy->is_loaded = handle->is_loaded;
+  copy->numnodes = handle->numnodes;
+  copy->numattrs = handle->numattrs;
+  copy->maxattrs = handle->maxattrs;
+  copy->maxnodelen = handle->maxnodelen;
+  copy->maxattrlen = handle->maxattrlen;
+  copy->maxvallen = handle->maxvallen;
+
+  memcpy(copy->nodename, handle->nodename, GENDERS_MAXHOSTNAMELEN+1);
+  
+  /* nodeslist */
+
+  /* hash_t node_index */
+
+  copy->node_index_size = handle->node_index_size;
+
+  __hash_create(copy->attr_index,
+                copy->attr_index_size,
+                (hash_key_f)hash_key_string,
+                (hash_cmp_f)strcmp,
+                (hash_del_f)list_destroy);
+
+  if (_genders_hash_copy(handle, &handle->attr_index, &copy->attr_index) < 0)
+    goto cleanup;
+
+  /* attrvalslist */
+
+  /* attrslist */
+
+  /* hash_t attr_index */
+
+  copy->attr_index_size = handle->attr_index_size;
+
+  /* Create a buffer for value substitutions */
+  __xmalloc(copy->valbuf, char *, copy->maxvallen + 1);
+
+  if (handle->attrval_index)
+    {
+      if (genders_index_attrvals(copy, handle->attrval_index_attr) < 0)
+	{
+	  handle->errnum = GENDERS_ERR_INTERNAL;
+	  goto cleanup;
+	}
+    }
+
+  /* attrval_buflist */
+
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return copy;
+
+ cleanup:
+  if (copy)
+    (void)genders_handle_destroy(copy);
+  return copy;
+}

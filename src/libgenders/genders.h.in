@@ -418,6 +418,15 @@ int genders_parse(genders_t handle, const char *filename, FILE *stream);
  */      
 void genders_set_errnum(genders_t handle, int errnum);
 
+/*
+ * genders_copy
+ *
+ * Creates and returns a copy of a loaded genders handle.
+ *
+ * Returns new genders handle on success, NULL on error.
+ */
+genders_t genders_copy(genders_t handle);
+
 #ifdef __cplusplus
 }
 #endif
