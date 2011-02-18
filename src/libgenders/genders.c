@@ -1185,6 +1185,121 @@ genders_set_errnum(genders_t handle, int errnum)
   handle->errnum = errnum;
 }
 
+/* 
+ * _genders_copy_attrvalslist
+ *
+ * Copy contents of the attrvalslist list into the copy.
+ *
+ */
+static int
+_genders_copy_attrvalslist(genders_t handle, genders_t copy)
+{
+  ListIterator attrvalslistitr = NULL;
+  ListIterator attrvalsitr = NULL;
+  List newattrvals = NULL;
+  List attrvals;
+  genders_attrval_t newav = NULL;
+  int rv = -1;
+
+  __list_iterator_create(attrvalslistitr, handle->attrvalslist);
+  while ((attrvals = list_next(attrvalslistitr)))
+    {
+      genders_attrval_t av = NULL;
+
+      __list_iterator_create(attrvalsitr, attrvals);
+      __list_create(newattrvals, _genders_list_free_genders_attrval);
+
+      while ((av = list_next(attrvalsitr)))
+	{
+	  __xmalloc(newav, genders_attrval_t, sizeof(struct genders_attrval));
+	  __xstrdup(newav->attr, av->attr);
+	  if (av->val)
+	    __xstrdup(newav->val, av->val);
+	  else
+	    newav->val = NULL;
+	  newav->val_contains_subst = av->val_contains_subst;
+	  __list_append(newattrvals, newav);
+	  av = NULL;
+	}
+      
+      __list_append(copy->attrvalslist, newattrvals);
+      newattrvals = NULL;
+  }
+  
+  rv = 0;
+ cleanup:
+  if (rv < 0)
+    {
+      if (newav)
+	{
+	  free(newav->attr);
+	  free(newav->val);
+	  free(newav);
+	}
+    }
+  __list_iterator_destroy(attrvalslistitr);
+  __list_iterator_destroy(attrvalsitr);
+  return rv;
+}
+
+/* 
+ * _genders_copy_attrlist
+ *
+ * Copy contents of the attrlist list into the copy.
+ *
+ */
+static int
+_genders_copy_attrslist(genders_t handle, genders_t copy)
+{
+  ListIterator itr = NULL;
+  char *newattr = NULL;
+  char *attr;
+  int rv = -1;
+
+  __list_iterator_create(itr, handle->attrslist);
+  while ((attr = list_next(itr)))
+    {
+      __xstrdup(newattr, attr);
+      __list_append(copy->attrslist, newattr);
+      newattr = NULL;
+    }
+  
+  rv = 0;
+ cleanup:
+  if (rv < 0)
+    free(newattr);
+  __list_iterator_destroy(itr);
+  return rv;
+}
+
+/* 
+ * _genders_copy_fill_attr_index
+ *
+ * Add keys into the attr_index
+ *
+ */
+static int _genders_copy_fill_attr_index(genders_t handle, genders_t copy)
+{
+  List l = NULL;
+  ListIterator itr = NULL;
+  char *attr;
+  int rv = -1;
+
+  __list_iterator_create(itr, copy->attrslist);
+  while ((attr = list_next(itr)))
+    {
+      __list_create(l, NULL);
+      __hash_insert(copy->attr_index, attr, l);
+    }
+
+  rv = 0;
+ cleanup:
+  if (rv < 0)
+    __list_destroy(l);
+  __list_iterator_destroy(itr);
+  return rv;
+}
+
 genders_t
 genders_copy(genders_t handle) 
 {
@@ -1211,30 +1326,38 @@ genders_copy(genders_t handle)
   
   /* nodeslist */
 
-  /* hash_t node_index */
-
   copy->node_index_size = handle->node_index_size;
 
+  __hash_create(copy->node_index,
+                copy->node_index_size,
+                (hash_key_f)hash_key_string,
+                (hash_cmp_f)strcmp,
+                NULL);
+
+  /* attrvalslist */
+
+  if (_genders_copy_attrslist(handle, copy) < 0)
+    goto cleanup;
+
+  copy->attr_index_size = handle->attr_index_size;
+  
   __hash_create(copy->attr_index,
                 copy->attr_index_size,
                 (hash_key_f)hash_key_string,
                 (hash_cmp_f)strcmp,
                 (hash_del_f)list_destroy);
 
-  if (_genders_hash_copy(handle, &handle->attr_index, &copy->attr_index) < 0)
+  if (_genders_copy_fill_attr_index(handle, copy) < 0)
     goto cleanup;
-
-  /* attrvalslist */
-
-  /* attrslist */
-
-  /* hash_t attr_index */
-
-  copy->attr_index_size = handle->attr_index_size;
+  
+  /* XXX: Need to fill up attr_index with data */
 
   /* Create a buffer for value substitutions */
   __xmalloc(copy->valbuf, char *, copy->maxvallen + 1);
 
+  /* attrval_index, attrval_index_attr, and attrval_buflist
+   * set/re-created by genders_index_attrvals
+   */
   if (handle->attrval_index)
     {
       if (genders_index_attrvals(copy, handle->attrval_index_attr) < 0)
@@ -1243,8 +1366,6 @@ genders_copy(genders_t handle)
 	  goto cleanup;
 	}
     }
-
-  /* attrval_buflist */
 
   handle->errnum = GENDERS_ERR_SUCCESS;
   return copy;
