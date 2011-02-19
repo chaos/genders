@@ -127,6 +127,7 @@ _insert_node(genders_t handle,
   if (n) 
     {
       __list_destroy(n->attrlist);
+      __hash_destroy(n->attrlist_index);
       free(n);
     }
   return NULL;
