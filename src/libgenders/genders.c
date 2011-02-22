@@ -1399,8 +1399,6 @@ genders_copy(genders_t handle)
   if (_genders_copy_nodeslist(handle, copy) < 0)
     goto cleanup;
 
-  /* XXX fill each node with attrvalslist and attr_index */
-
   copy->node_index_size = handle->node_index_size;
 
   __hash_create(copy->node_index,
@@ -1414,6 +1412,8 @@ genders_copy(genders_t handle)
 
   if (_genders_copy_attrvalslist(handle, copy) < 0)
     goto cleanup;
+
+  /* XXX fill each node with attrvalslist and attr_index */
 
   if (_genders_copy_attrslist(handle, copy) < 0)
     goto cleanup;
