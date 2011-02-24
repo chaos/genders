@@ -1268,18 +1268,23 @@ _genders_copy_attrvalslist(genders_t handle, genders_t copy)
 {
   ListIterator attrvalslistitr = NULL;
   ListIterator attrvalsitr = NULL;
-  List newattrvals = NULL;
-  List attrvals;
+  genders_attrvals_container_t avc;
+  genders_attrvals_container_t newavc = NULL;
   genders_attrval_t newav = NULL;
   int rv = -1;
 
   __list_iterator_create(attrvalslistitr, handle->attrvalslist);
-  while ((attrvals = list_next(attrvalslistitr)))
+  while ((avc = list_next(attrvalslistitr)))
     {
       genders_attrval_t av = NULL;
 
-      __list_iterator_create(attrvalsitr, attrvals);
-      __list_create(newattrvals, _genders_list_free_genders_attrval);
+      __list_iterator_create(attrvalsitr, avc->attrvals);
+
+      __xmalloc(newavc,
+		genders_attrvals_container_t,
+		sizeof(struct genders_attrvals_container));
+      __list_create(avc->attrvals, _genders_list_free_genders_attrval);
+      newavc->index = avc->index;
 
       while ((av = list_next(attrvalsitr)))
 	{
@@ -1290,12 +1295,12 @@ _genders_copy_attrvalslist(genders_t handle, genders_t copy)
 	  else
 	    newav->val = NULL;
 	  newav->val_contains_subst = av->val_contains_subst;
-	  __list_append(newattrvals, newav);
-	  av = NULL;
+	  __list_append(newavc->attrvals, newav);
+	  newav = NULL;
 	}
       
-      __list_append(copy->attrvalslist, newattrvals);
-      newattrvals = NULL;
+      __list_append(copy->attrvalslist, newavc);
+      newavc = NULL;
   }
   
   rv = 0;
@@ -1307,6 +1312,11 @@ _genders_copy_attrvalslist(genders_t handle, genders_t copy)
 	  free(newav->attr);
 	  free(newav->val);
 	  free(newav);
+	}
+      if (newavc)
+	{
+	  __list_destroy(newavc->attrvals);
+	  free(newavc);
 	}
     }
   __list_iterator_destroy(attrvalslistitr);
