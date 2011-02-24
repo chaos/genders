@@ -1188,11 +1188,11 @@ genders_set_errnum(genders_t handle, int errnum)
 /* 
  * _genders_copy_nodeslist
  *
- * Copy contents of the nodeslist list into the copy.
+ * Copy contents of the nodeslist list into the handlecopy.
  *
  */
 static int
-_genders_copy_nodeslist(genders_t handle, genders_t copy)
+_genders_copy_nodeslist(genders_t handle, genders_t handlecopy)
 {
   ListIterator itr = NULL;
   genders_node_t n = NULL;
@@ -1213,7 +1213,7 @@ _genders_copy_nodeslist(genders_t handle, genders_t copy)
                     (hash_cmp_f)strcmp,
                     NULL);
 
-      __list_append(copy->nodeslist, newn);
+      __list_append(handlecopy->nodeslist, newn);
       newn = NULL;
     }
   
@@ -1238,16 +1238,16 @@ _genders_copy_nodeslist(genders_t handle, genders_t copy)
  * Add keys into the node_index
  *
  */
-static int _genders_copy_fill_node_index(genders_t handle, genders_t copy)
+static int _genders_copy_fill_node_index(genders_t handle, genders_t handlecopy)
 {
   List l = NULL;
   ListIterator itr = NULL;
   genders_node_t n;
   int rv = -1;
 
-  __list_iterator_create(itr, copy->nodeslist);
+  __list_iterator_create(itr, handlecopy->nodeslist);
   while ((n = list_next(itr)))
-    __hash_insert(copy->node_index, n->name, n);
+    __hash_insert(handlecopy->node_index, n->name, n);
   
   rv = 0;
  cleanup:
@@ -1260,11 +1260,11 @@ static int _genders_copy_fill_node_index(genders_t handle, genders_t copy)
 /* 
  * _genders_copy_attrvalslist
  *
- * Copy contents of the attrvalslist list into the copy.
+ * Copy contents of the attrvalslist list into the handlecopy.
  *
  */
 static int
-_genders_copy_attrvalslist(genders_t handle, genders_t copy)
+_genders_copy_attrvalslist(genders_t handle, genders_t handlecopy)
 {
   ListIterator attrvalslistitr = NULL;
   ListIterator attrvalsitr = NULL;
@@ -1299,7 +1299,7 @@ _genders_copy_attrvalslist(genders_t handle, genders_t copy)
 	  newav = NULL;
 	}
       
-      __list_append(copy->attrvalslist, newavc);
+      __list_append(handlecopy->attrvalslist, newavc);
       newavc = NULL;
   }
   
@@ -1325,78 +1325,13 @@ _genders_copy_attrvalslist(genders_t handle, genders_t copy)
 }
 
 /* 
- * _genders_copy_fill_node_data
- *
- * Fill node attrlist and attrlist index.
- *
- */
-static int
-_genders_copy_fill_node(genders_t handle,
-			genders_t copy,
-			genders_node_t nhandle,
-			genders_node_t ncopy)
-{
-  ListIterator attrlistitr = NULL;
-  List attrlisttmp = NULL;
-  int rv = -1;
-
-  __list_iterator_create(attrlistitr, nhandle->attrlist);
-  while ((attrlisttmp = list_next(attrlistitr)))
-    {
-    }
-  
-  rv = 0;
- cleanup:
-  __list_iterator_destroy(attrlistitr);
-  return rv;
-}
-
-/* 
- * _genders_copy_fill_node_data
- *
- * Fill node attrlist and attrlist index.
- *
- */
-static int
-_genders_copy_fill_node_data(genders_t handle, genders_t copy)
-{
-  ListIterator nodeslistitr = NULL;
-  genders_node_t ncopy;
-  int rv = -1;
-
-  __list_iterator_create(nodeslistitr, copy->nodeslist);
-  while ((ncopy = list_next(nodeslistitr)))
-    {
-      genders_node_t nhandle;
-
-      if (!(nhandle = hash_find(handle->node_index, ncopy->name)))
-	{
-	  /* Shouldn't be possible to error here */
-	  handle->errnum = GENDERS_ERR_INTERNAL;
-	  goto cleanup;
-	}
-
-      if (_genders_copy_fill_node(handle,
-				  copy,
-				  nhandle,
-				  ncopy) < 0)
-	goto cleanup;
-    }
-  
-  rv = 0;
- cleanup:
-  __list_iterator_destroy(nodeslistitr);
-  return rv;
-}
-
-/* 
  * _genders_copy_attrslist
  *
- * Copy contents of the attrslist list into the copy.
+ * Copy contents of the attrslist list into the handlecopy.
  *
  */
 static int
-_genders_copy_attrslist(genders_t handle, genders_t copy)
+_genders_copy_attrslist(genders_t handle, genders_t handlecopy)
 {
   ListIterator itr = NULL;
   char *newattr = NULL;
@@ -1407,7 +1342,7 @@ _genders_copy_attrslist(genders_t handle, genders_t copy)
   while ((attr = list_next(itr)))
     {
       __xstrdup(newattr, attr);
-      __list_append(copy->attrslist, newattr);
+      __list_append(handlecopy->attrslist, newattr);
       newattr = NULL;
     }
   
@@ -1425,18 +1360,18 @@ _genders_copy_attrslist(genders_t handle, genders_t copy)
  * Add keys into the attr_index
  *
  */
-static int _genders_copy_fill_attr_index(genders_t handle, genders_t copy)
+static int _genders_copy_fill_attr_index(genders_t handle, genders_t handlecopy)
 {
   List l = NULL;
   ListIterator itr = NULL;
   char *attr;
   int rv = -1;
 
-  __list_iterator_create(itr, copy->attrslist);
+  __list_iterator_create(itr, handlecopy->attrslist);
   while ((attr = list_next(itr)))
     {
       __list_create(l, NULL);
-      __hash_insert(copy->attr_index, attr, l);
+      __hash_insert(handlecopy->attr_index, attr, l);
     }
 
   rv = 0;
@@ -1447,76 +1382,200 @@ static int _genders_copy_fill_attr_index(genders_t handle, genders_t copy)
   return rv;
 }
 
+/*
+ * _genders_copy_find_attrvals_container
+ *
+ * Find the genders_attrvals_container pointer indicated by the index.
+ */
+static genders_attrvals_container_t
+_genders_copy_find_attrvals_container(genders_t handle,
+				      genders_t handlecopy,
+				      unsigned int index)
+{
+  ListIterator attrvalsitr = NULL;
+  genders_attrvals_container_t rv = NULL;
+  genders_attrvals_container_t avc;
+  
+  __list_iterator_create(attrvalsitr, handlecopy->attrvalslist);
+  while ((avc = list_next(attrvalsitr)))
+    {
+      if (avc->index == index)
+	{
+	  rv = avc;
+	  goto cleanup;
+	}
+    }
+
+ cleanup:
+  __list_iterator_destroy(attrvalsitr);
+  return rv;
+}
+
+/* 
+ * _genders_copy_fill_node_data
+ *
+ * Fill node attrlist and attrlist index.
+ *
+ */
+static int
+_genders_copy_fill_node(genders_t handle,
+			genders_t handlecopy,
+			genders_node_t nodehandle,
+			genders_node_t nodecopy)
+{
+  ListIterator attrlistitr = NULL;
+  ListIterator attrvalsitr = NULL;
+  genders_attrvals_container_t avc;
+  int rv = -1;
+
+  __list_iterator_create(attrlistitr, nodehandle->attrlist);
+  while ((avc = list_next(attrlistitr)))
+    {
+      genders_attrvals_container_t tmpavc;
+      genders_attrval_t av;
+
+      if (!(tmpavc = _genders_copy_find_attrvals_container(handle,
+							   handlecopy,
+							   avc->index)))
+	goto cleanup;
+      
+      __list_append(nodecopy->attrlist, tmpavc);
+      
+      __list_iterator_create(attrvalsitr, tmpavc->attrvals);
+      while ((av = list_next(attrvalsitr)))
+	{
+	  List l;
+
+	  __hash_insert(nodecopy->attrlist_index,
+			av->attr,
+			tmpavc);
+
+	  if (!(l = hash_find(handlecopy->attr_index, av->attr)))
+	    {
+	      handle->errnum = GENDERS_ERR_INTERNAL;
+	      goto cleanup;
+	    }
+
+	  __list_append(l, nodecopy);
+	}
+
+      __list_iterator_destroy(attrvalsitr);
+      attrvalsitr = NULL;
+    }
+  
+  rv = 0;
+ cleanup:
+  __list_iterator_destroy(attrlistitr);
+  __list_iterator_destroy(attrvalsitr);
+  return rv;
+}
+
+/* 
+ * _genders_copy_fill_node_data
+ *
+ * Fill node attrlist and attrlist index.
+ *
+ */
+static int
+_genders_copy_fill_node_data(genders_t handle, genders_t handlecopy)
+{
+  ListIterator nodeslistitr = NULL;
+  genders_node_t nodecopy;
+  int rv = -1;
+
+  __list_iterator_create(nodeslistitr, handlecopy->nodeslist);
+  while ((nodecopy = list_next(nodeslistitr)))
+    {
+      genders_node_t nodehandle;
+
+      if (!(nodehandle = hash_find(handle->node_index, nodecopy->name)))
+	{
+	  /* Shouldn't be possible to error here */
+	  handle->errnum = GENDERS_ERR_INTERNAL;
+	  goto cleanup;
+	}
+
+      if (_genders_copy_fill_node(handle,
+				  handlecopy,
+				  nodehandle,
+				  nodecopy) < 0)
+	goto cleanup;
+    }
+  
+  rv = 0;
+ cleanup:
+  __list_iterator_destroy(nodeslistitr);
+  return rv;
+}
+
 genders_t
 genders_copy(genders_t handle) 
 {
-  genders_t copy = NULL;
+  genders_t handlecopy = NULL;
 
   if (_genders_loaded_handle_error_check(handle) < 0)
     return NULL;
 
-  if (!(copy = genders_handle_create()))
+  if (!(handlecopy = genders_handle_create()))
     {
       handle->errnum = GENDERS_ERR_OUTMEM;
       goto cleanup;
     }
 
-  copy->is_loaded = handle->is_loaded;
-  copy->numnodes = handle->numnodes;
-  copy->numattrs = handle->numattrs;
-  copy->maxattrs = handle->maxattrs;
-  copy->maxnodelen = handle->maxnodelen;
-  copy->maxattrlen = handle->maxattrlen;
-  copy->maxvallen = handle->maxvallen;
+  handlecopy->is_loaded = handle->is_loaded;
+  handlecopy->numnodes = handle->numnodes;
+  handlecopy->numattrs = handle->numattrs;
+  handlecopy->maxattrs = handle->maxattrs;
+  handlecopy->maxnodelen = handle->maxnodelen;
+  handlecopy->maxattrlen = handle->maxattrlen;
+  handlecopy->maxvallen = handle->maxvallen;
 
-  memcpy(copy->nodename, handle->nodename, GENDERS_MAXHOSTNAMELEN+1);
+  memcpy(handlecopy->nodename, handle->nodename, GENDERS_MAXHOSTNAMELEN+1);
   
-  if (_genders_copy_nodeslist(handle, copy) < 0)
+  if (_genders_copy_nodeslist(handle, handlecopy) < 0)
     goto cleanup;
 
-  copy->node_index_size = handle->node_index_size;
+  handlecopy->node_index_size = handle->node_index_size;
 
-  __hash_create(copy->node_index,
-                copy->node_index_size,
+  __hash_create(handlecopy->node_index,
+                handlecopy->node_index_size,
                 (hash_key_f)hash_key_string,
                 (hash_cmp_f)strcmp,
                 NULL);
 
-  if (_genders_copy_fill_node_index(handle, copy) < 0)
+  if (_genders_copy_fill_node_index(handle, handlecopy) < 0)
     goto cleanup;
 
-  if (_genders_copy_attrvalslist(handle, copy) < 0)
+  if (_genders_copy_attrvalslist(handle, handlecopy) < 0)
     goto cleanup;
 
-  /* XXX fill each node with attrvalslist and attr_index */
-  if (_genders_copy_fill_node_data(handle, copy) < 0)
+  if (_genders_copy_attrslist(handle, handlecopy) < 0)
     goto cleanup;
 
-  if (_genders_copy_attrslist(handle, copy) < 0)
-    goto cleanup;
-
-  copy->attr_index_size = handle->attr_index_size;
+  handlecopy->attr_index_size = handle->attr_index_size;
   
-  __hash_create(copy->attr_index,
-                copy->attr_index_size,
+  __hash_create(handlecopy->attr_index,
+                handlecopy->attr_index_size,
                 (hash_key_f)hash_key_string,
                 (hash_cmp_f)strcmp,
                 (hash_del_f)list_destroy);
 
-  if (_genders_copy_fill_attr_index(handle, copy) < 0)
+  if (_genders_copy_fill_attr_index(handle, handlecopy) < 0)
     goto cleanup;
   
-  /* XXX: Need to fill up attr_index with data */
+  /* XXX fill each node with attrvalslist and attr_index */
+  if (_genders_copy_fill_node_data(handle, handlecopy) < 0)
+    goto cleanup;
 
   /* Create a buffer for value substitutions */
-  __xmalloc(copy->valbuf, char *, copy->maxvallen + 1);
+  __xmalloc(copy->valbuf, char *, handlecopy->maxvallen + 1);
 
   /* attrval_index, attrval_index_attr, and attrval_buflist
    * set/re-created by genders_index_attrvals
    */
   if (handle->attrval_index)
     {
-      if (genders_index_attrvals(copy, handle->attrval_index_attr) < 0)
+      if (genders_index_attrvals(handlecopy, handle->attrval_index_attr) < 0)
 	{
 	  handle->errnum = GENDERS_ERR_INTERNAL;
 	  goto cleanup;
@@ -1524,10 +1583,10 @@ genders_copy(genders_t handle)
     }
 
   handle->errnum = GENDERS_ERR_SUCCESS;
-  return copy;
+  return handlecopy;
 
  cleanup:
-  if (copy)
-    (void)genders_handle_destroy(copy);
-  return copy;
+  if (handlecopy)
+    (void)genders_handle_destroy(handlecopy);
+  return handlecopy;
 }
