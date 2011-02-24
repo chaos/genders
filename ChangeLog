@@ -2,6 +2,11 @@
 
 	* src/extensions/cplusplus/: Add experimental C++ genders library.
 
+	* src/libgenders/: Add new genders_copy() function.
+
+	* src/libgenders/: Re-architect attrvalslist architecture to
+	contain a list of structs instead of a list of lists.
+
 2011-02-08  Albert Chu  <chu11@llnl.gov>
 	
 	* src/libgenders/: Treat empty string (i.e. "") identically to

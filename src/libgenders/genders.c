@@ -675,7 +675,7 @@ genders_getattr(genders_t handle,
 {
   ListIterator attrlist_itr = NULL;
   ListIterator attrvals_itr = NULL;
-  List attrvals;
+  genders_attrvals_container_t avc;
   genders_node_t n;
   int index = 0, rv = -1;
 
@@ -704,11 +704,11 @@ genders_getattr(genders_t handle,
     }
 
   __list_iterator_create(attrlist_itr, n->attrlist);
-  while ((attrvals = list_next(attrlist_itr))) 
+  while ((avc = list_next(attrlist_itr))) 
     {
       genders_attrval_t av;
       
-      __list_iterator_create(attrvals_itr, attrvals);
+      __list_iterator_create(attrvals_itr, avc->attrvals);
       while ((av = list_next(attrvals_itr))) 
 	{
 	  if (_genders_put_in_array(handle, av->attr, attrs, index, len) < 0)

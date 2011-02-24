@@ -135,12 +135,12 @@ _insert_node(genders_t handle,
 /* 
  * _insert_attrval
  *
- * Insert an attrval into the attrvals list.
+ * Insert an attrval into the attrvallist.
  *
  * Returns 0 on success, -1 on error
  */
 static int 
-_insert_attrval(genders_t handle, List attrvals, char *attr, char *val) 
+_insert_attrval(genders_t handle, genders_attrvals_container_t avc, char *attr, char *val) 
 {
   genders_attrval_t av = NULL;
 
@@ -157,7 +157,7 @@ _insert_attrval(genders_t handle, List attrvals, char *attr, char *val)
   else 
     av->val = NULL; 
 
-  __list_append(attrvals, av);
+  __list_append(avc->attrvals, av);
 
   return 0;
  cleanup:
@@ -214,7 +214,7 @@ _insert_attr(genders_t handle,
 /* 
  * _attr_node_processsing
  *
- * Determine if an attr in the attrvals list already exists for the
+ * Determine if an attr in the attrvallist already exists for the
  * node.  If not insert into the attr_index and node attrlist_index.
  *
  * If line_num > 0, returns 1 if a duplicate exists, 0 if not, -1 on error
@@ -224,7 +224,7 @@ _insert_attr(genders_t handle,
 static int
 _attr_node_processsing(genders_t handle, 
                        genders_node_t n, 
-                       List attrvals,
+		       genders_attrvals_container_t avc,
                        hash_t *attr_index,
                        int line_num,
                        FILE *stream)
@@ -237,7 +237,7 @@ _attr_node_processsing(genders_t handle,
   __list_create(tmpattrlist, NULL);
 
   /* First check for parse errors */
-  __list_iterator_create(attrvals_itr, attrvals);
+  __list_iterator_create(attrvals_itr, avc->attrvals);
   while ((av = list_next(attrvals_itr))) 
     {
       /* do not use _genders_find_attrval().  If the attrval already
@@ -307,7 +307,7 @@ _attr_node_processsing(genders_t handle,
       
       __hash_insert(n->attrlist_index,
                     av->attr,
-                    attrvals);
+                    avc);
     }
   
   rv = 0;
@@ -397,7 +397,7 @@ _parse_line(genders_t handle,
 {
   char *temp, *nodenames, *node = NULL;
   int max_n_subst_vallen = 0, line_maxnodelen = 0, rv = -1;
-  List attrvals = NULL;
+  genders_attrvals_container_t avc = NULL;
   hostlist_t hl = NULL;
   hostlist_iterator_t hlitr = NULL;
 
@@ -455,7 +455,11 @@ _parse_line(genders_t handle,
 	      goto cleanup;
 	    }
 
-	  __list_create(attrvals, _genders_list_free_genders_attrval);
+	  __xmalloc(avc,
+		    genders_attrvals_container_t,
+		    sizeof(struct genders_attrvals_container));
+	  __list_create(avc->attrvals, _genders_list_free_genders_attrval);
+	  avc->index = list_count(handle->attrvalslist);
 	  
 	  /* parse attributes */
 	  attr = strsep(&line, ",");
@@ -510,7 +514,7 @@ _parse_line(genders_t handle,
                * node below.
                */
       
-	      if (_insert_attrval(handle, attrvals, attr, val) < 0)
+	      if (_insert_attrval(handle, avc, attr, val) < 0)
 		goto cleanup;
 	      
               if ((insert_count = _insert_attr(handle,
@@ -575,18 +579,18 @@ _parse_line(genders_t handle,
                              node)))
 	goto cleanup;
       
-      if (attrvals) 
+      if (avc) 
 	{
 	  if ((rv = _attr_node_processsing(handle,
                                            n,
-                                           attrvals,
+                                           avc,
                                            attr_index,
                                            line_num,
                                            stream)) != 0)
 	    goto cleanup;
 
-          __list_append(n->attrlist, attrvals);
-	  n->attrcount += list_count(attrvals);
+          __list_append(n->attrlist, avc);
+	  n->attrcount += list_count(avc->attrvals);
 	}
       
       if (!line_num) 
@@ -606,17 +610,21 @@ _parse_line(genders_t handle,
 				    handle->maxvallen);
   
   /* Append at the very end, so cleanup area cleaner */
-  if (attrvals) 
+  if (avc) 
     {
-      __list_append(attrvalslist, attrvals);
-      attrvals = NULL;
+      __list_append(attrvalslist, avc);
+      avc = NULL;
     }
   
   rv = 0;
  cleanup:
   __hostlist_iterator_destroy(hlitr);
   __hostlist_destroy(hl);
-  __list_destroy(attrvals);
+  if (avc)
+    {
+      __list_destroy(avc->attrvals);
+      free(avc);
+    }
   free(node);
   return rv;
 }

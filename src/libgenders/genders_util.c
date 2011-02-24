@@ -92,10 +92,11 @@ _genders_list_free_genders_attrval(void *x)
 void
 _genders_list_free_attrvallist(void *x)
 {
-  List attrvals;
+  genders_attrvals_container_t avc;
 
-  attrvals = (List)x;
-  __list_destroy(attrvals);
+  avc = (List)x;
+  __list_destroy(avc->attrvals);
+  free(avc);
 }
 
 int 
@@ -224,16 +225,16 @@ _genders_find_attrval(genders_t handle,
 		      const char *val,
 		      genders_attrval_t *avptr)
 {
-  List attrvals;
+  genders_attrvals_container_t avc;
   int retval = -1;
   
   *avptr = NULL;
 
-  if ((attrvals = hash_find(n->attrlist_index, attr)))
+  if ((avc = hash_find(n->attrlist_index, attr)))
     {
       genders_attrval_t av;
       
-      if ((av = list_find_first(attrvals, 
+      if ((av = list_find_first(avc->attrvals, 
 				_genders_list_is_attr_in_attrvals, 
 				(char *)attr))) 
 	{
