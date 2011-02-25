@@ -1207,8 +1207,8 @@ _genders_copy_nodeslist(genders_t handle, genders_t handlecopy)
       __list_create(newn->attrlist, NULL);
       newn->attrcount = n->attrcount;
       newn->attrlist_index_size = n->attrlist_index_size;
-      __hash_create(n->attrlist_index,
-                    n->attrlist_index_size,
+      __hash_create(newn->attrlist_index,
+                    newn->attrlist_index_size,
                     (hash_key_f)hash_key_string,
                     (hash_cmp_f)strcmp,
                     NULL);
@@ -1224,6 +1224,7 @@ _genders_copy_nodeslist(genders_t handle, genders_t handlecopy)
       if (newn)
 	{
 	  free(newn->name);
+	  __list_destroy(newn->attrlist);
 	  __hash_destroy(newn->attrlist_index);
 	  free(newn);
 	}
@@ -1412,7 +1413,7 @@ _genders_copy_find_attrvals_container(genders_t handle,
 }
 
 /* 
- * _genders_copy_fill_node_data
+ * _genders_copy_fill_node
  *
  * Fill node attrlist and attrlist index.
  *
@@ -1449,16 +1450,16 @@ _genders_copy_fill_node(genders_t handle,
 	  __hash_insert(nodecopy->attrlist_index,
 			av->attr,
 			tmpavc);
-
+	  
 	  if (!(l = hash_find(handlecopy->attr_index, av->attr)))
 	    {
 	      handle->errnum = GENDERS_ERR_INTERNAL;
 	      goto cleanup;
 	    }
-
+	  
 	  __list_append(l, nodecopy);
 	}
-
+      
       __list_iterator_destroy(attrvalsitr);
       attrvalsitr = NULL;
     }
