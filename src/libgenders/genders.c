@@ -1568,7 +1568,7 @@ genders_copy(genders_t handle)
     goto cleanup;
 
   /* Create a buffer for value substitutions */
-  __xmalloc(copy->valbuf, char *, handlecopy->maxvallen + 1);
+  __xmalloc(handlecopy->valbuf, char *, handlecopy->maxvallen + 1);
 
   /* attrval_index, attrval_index_attr, and attrval_buflist
    * set/re-created by genders_index_attrvals
