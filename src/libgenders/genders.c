@@ -1283,7 +1283,7 @@ _genders_copy_attrvalslist(genders_t handle, genders_t handlecopy)
       __xmalloc(newavc,
 		genders_attrvals_container_t,
 		sizeof(struct genders_attrvals_container));
-      __list_create(avc->attrvals, _genders_list_free_genders_attrval);
+      __list_create(newavc->attrvals, _genders_list_free_genders_attrval);
       newavc->index = avc->index;
 
       while ((av = list_next(attrvalsitr)))
