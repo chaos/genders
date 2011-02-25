@@ -155,6 +155,7 @@ _test_corner_cases(void)
   errtotal += _corner_case(genders_testquery_corner_case, "genders_testquery"); 
   errtotal += _corner_case(genders_parse_corner_case, "genders_parse");
   errtotal += _corner_case(genders_set_errnum_corner_case, "genders_set_errnum");
+  errtotal += _corner_case(genders_copy_corner_case, "genders_copy");
 
   return errtotal;
 }

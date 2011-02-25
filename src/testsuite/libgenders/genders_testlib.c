@@ -87,8 +87,51 @@ genders_pass_output(char *funcname,
 }
 
 /* XXX - need to remove */
-int 
+int
 genders_val_check(char *funcname,
+		  int num,
+		  int expected_val,
+		  char *expected_val_str,
+		  int val,
+		  char *val_str,
+		  char *msg,
+		  int verbose)
+{
+  int err = 0;
+  
+  assert(funcname && expected_val_str && val_str);
+  
+  if (val != expected_val)
+    {
+      if (verbose)
+        {
+          if (msg)
+            fprintf(stderr,
+                    "%s(%d): %s: FAIL: %s=%d, %s=%d\n",
+                    funcname,
+                    num,
+                    msg,
+                    val_str,
+                    val,
+                    expected_val_str,
+                    expected_val);
+          else
+            fprintf(stderr,
+                    "%s(%d): FAIL: %s=%d, %s=%d\n",
+                    funcname,
+                    num,
+                    val_str,
+                    val,
+                    expected_val_str,
+                    expected_val);
+        }
+      err++;
+    }
+  return err;
+}
+
+static int 
+_genders_val_check(char *funcname,
 		   int num,
 		   int expected_val,
 		   char *expected_val_str,
@@ -130,44 +173,46 @@ genders_val_check(char *funcname,
   return err;
 }
 
-
 static int 
-_genders_val_check(char *funcname,
-		   int num,
-		   int expected_val,
-		   char *expected_val_str,
-		   int val,
-		   char *val_str,
-		   char *msg,
-		   int verbose)
+_genders_pointer_check(char *funcname,
+		       int num,
+		       int expected_val,
+		       char *expected_val_str,
+		       void *val,
+		       char *val_str,
+		       char *msg,
+		       int verbose)
 {
   int err = 0;
 
   assert(funcname && expected_val_str && val_str);
-
-  if (val != expected_val)
+  
+  if (!((expected_val == GENDERS_POINTER_NULL
+	 && val == NULL)
+	|| (expected_val == GENDERS_POINTER_NON_NULL
+	    && val != NULL)))
     {
       if (verbose)
 	{
 	  if (msg)
 	    fprintf(stderr, 
-		    "%s(%d): %s: FAIL: %s=%d, %s=%d\n",
+		    "%s(%d): %s: FAIL: %s=%p, %s=%s\n",
 		    funcname,
 		    num,
 		    msg,
 		    val_str,
 		    val,
 		    expected_val_str,
-		    expected_val);
+		    (expected_val == GENDERS_POINTER_NULL) ? "NULL" : "Non-NULL");
 	  else
 	    fprintf(stderr, 
-		    "%s(%d): FAIL: %s=%d, %s=%d\n",
+		    "%s(%d): FAIL: %s=%p, %s=%s\n",
 		    funcname,
 		    num,
 		    val_str,
 		    val,
 		    expected_val_str,
-		    expected_val);
+		    (expected_val == GENDERS_POINTER_NULL) ? "NULL" : "Non-NULL");
 	}
       err++;
     }
@@ -400,6 +445,41 @@ genders_return_value_errnum_check(char *funcname,
 			    "return_value",
 			    msg,
 			    verbose);
+  err += _genders_val_check(funcname,
+			    num,
+			    expected_errnum,
+			    "expected_errnum",
+			    errnum,
+			    "errnum",
+			    msg,
+			    verbose);
+  genders_pass_output(funcname, num, err, msg, verbose);
+
+  return err;
+}
+
+int
+genders_return_value_pointer_errnum_check(char *funcname,
+					  int num, 
+					  int expected_return_value,
+					  int expected_errnum,
+					  void *return_value,
+					  int errnum,
+					  char *msg,
+					  int verbose)
+{
+  int err = 0;
+
+  assert(funcname);
+  
+  err += _genders_pointer_check(funcname,
+				num,
+				expected_return_value,
+				"expected_return_value",
+				return_value,
+				"return_value",
+				msg,
+				verbose);
   err += _genders_val_check(funcname,
 			    num,
 			    expected_errnum,

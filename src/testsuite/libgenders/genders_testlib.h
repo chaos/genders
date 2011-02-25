@@ -141,6 +141,15 @@ int genders_return_value_errnum_check(char *funcname,
 				      char *msg,
 				      int verbose);
 
+int genders_return_value_pointer_errnum_check(char *funcname,
+					      int num, 
+					      int expected_return_value,
+					      int expected_errnum,
+					      void *return_value,
+					      int errnum,
+					      char *msg,
+					      int verbose);
+
 int genders_return_value_errnum_string_check(char *funcname,
 					     int num, 
 					     int expected_return_value,

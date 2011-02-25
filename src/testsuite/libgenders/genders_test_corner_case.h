@@ -207,6 +207,13 @@ typedef struct {
   int expected_errnum;
 } genders_set_errnum_corner_case_t;
 
+typedef struct {
+  int num;
+  genders_handle_type_t param1;
+  genders_pointer_type_t expected_return_value;
+  int expected_errnum;
+} genders_copy_corner_case_t;
+
 extern genders_handle_destroy_corner_case_t genders_handle_destroy_corner_case_tests[];
 extern genders_load_data_corner_case_t genders_load_data_corner_case_tests[];
 extern genders_errnum_corner_case_t genders_errnum_corner_case_tests[];
@@ -242,6 +249,7 @@ extern genders_query_corner_case_t genders_query_corner_case_tests[];
 extern genders_testquery_corner_case_t genders_testquery_corner_case_tests[];
 extern genders_parse_corner_case_t genders_parse_corner_case_tests[];
 extern genders_set_errnum_corner_case_t genders_set_errnum_corner_case_tests[];
+extern genders_copy_corner_case_t genders_copy_corner_case_tests[];
 
 typedef int (*GendersCornerCaseFunc)(int);
 
@@ -281,5 +289,6 @@ int genders_query_corner_case(int verbose);
 int genders_testquery_corner_case(int verbose);
 int genders_parse_corner_case(int verbose);
 int genders_set_errnum_corner_case(int verbose);
+int genders_copy_corner_case(int verbose);
 
 #endif /* _GENDERS_TEST_CORNER_CASE_H */
