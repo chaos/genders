@@ -1373,6 +1373,7 @@ static int _genders_copy_fill_attr_index(genders_t handle, genders_t handlecopy)
     {
       __list_create(l, NULL);
       __hash_insert(handlecopy->attr_index, attr, l);
+      l = NULL;
     }
 
   rv = 0;
@@ -1589,5 +1590,5 @@ genders_copy(genders_t handle)
  cleanup:
   if (handlecopy)
     (void)genders_handle_destroy(handlecopy);
-  return handlecopy;
+  return NULL;
 }
