@@ -6,6 +6,7 @@ Changes in genders-1.15
 =======================
  -- Fix genders_parse() corner case.
  -- Fix genders_testattr() corner case.
+ -- Fix potential genders_parse() corruption corner case.
  -- Force stricter genders file database format rules
     - Empty string attributes and values no longer allowed
       - e.g. "node1 attr1="

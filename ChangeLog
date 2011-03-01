@@ -1,3 +1,9 @@
+2011-03-01  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/genders.c, src/libgenders/genders_parsing.c: Fix
+	several potential corruption corner cases related to
+	genders_parse() implementation.
+	
 2011-02-18  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c (_insert_node): Fix cleanup

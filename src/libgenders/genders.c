@@ -191,8 +191,14 @@ genders_load_data(genders_t handle, const char *filename)
 
   if (_genders_open_and_parse(handle, 
 			      filename, 
+			      &handle->numattrs,
+			      &handle->maxattrs,
+			      &handle->maxnodelen,
+			      &handle->maxattrlen,
+			      &handle->maxvallen,
 			      handle->nodeslist, 
 			      handle->attrvalslist,
+			      handle->attrslist,
                               &(handle->node_index),
                               &(handle->node_index_size),
                               &(handle->attr_index),
@@ -1128,8 +1134,14 @@ int
 genders_parse(genders_t handle, const char *filename, FILE *stream) 
 {
   int errcount, rv = -1;
+  int debugnumattrs = 0;
+  int debugmaxattrs = 0;
+  int debugmaxnodelen = 0;
+  int debugmaxattrlen = 0;
+  int debugmaxvallen = 0;
   List debugnodeslist = NULL;
   List debugattrvalslist = NULL;
+  List debugattrslist = NULL;
   hash_t debugnode_index = NULL;
   int debugnode_index_size = GENDERS_NODE_INDEX_INIT_SIZE;
   hash_t debugattr_index = NULL;
@@ -1142,7 +1154,8 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
     stream = stderr;
 
   __list_create(debugnodeslist, _genders_list_free_genders_node);
-  __list_create(debugattrvalslist, NULL);
+  __list_create(debugattrvalslist, _genders_list_free_attrvallist);
+  __list_create(debugattrslist, free);
   __hash_create(debugnode_index,
                 debugnode_index_size,
                 (hash_key_f)hash_key_string,
@@ -1156,8 +1169,14 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 
   if ((errcount = _genders_open_and_parse(handle, 
 					  filename,
+					  &debugnumattrs,
+					  &debugmaxattrs,
+					  &debugmaxnodelen,
+					  &debugmaxattrlen,
+					  &debugmaxvallen,
 					  debugnodeslist, 
 					  debugattrvalslist,
+					  debugattrslist,
                                           &(debugnode_index),
                                           &(debugnode_index_size),
                                           &(debugattr_index),
@@ -1171,6 +1190,7 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
  cleanup:
   __list_destroy(debugnodeslist);
   __list_destroy(debugattrvalslist);
+  __list_destroy(debugattrslist);
   __hash_destroy(debugnode_index);
   __hash_destroy(debugattr_index);
   return rv;
