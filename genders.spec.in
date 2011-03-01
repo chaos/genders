@@ -29,6 +29,7 @@ genders API that is compatible with earlier releases of genders
 
 %{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
 %{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
+%{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
 
 %prep
 %setup  -q -n %{name}-%{version}
@@ -39,7 +40,9 @@ genders API that is compatible with earlier releases of genders
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
     %{?_with_python_extensions} \
-    %{?_without_python_extensions}
+    %{?_without_python_extensions} \
+    %{?_with_cplusplus_extensions} \
+    %{?_without_cplusplus_extensions}
 make 
 
 %install
@@ -65,6 +68,9 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %endif
 %if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
 %{_libdir}/python*
+%endif
+%if %{?_with_cplusplus_extensions:1}%{!?_with_cplusplus_extensions:0}
+%{_libdir}/libgendersplusplus.*
 %endif
 
 %files compat

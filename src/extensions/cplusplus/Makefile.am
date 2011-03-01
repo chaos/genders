@@ -4,6 +4,7 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
+if WITH_CPLUSPLUS_EXTENSIONS
 include_HEADERS       = gendersplusplus.hpp
 lib_LTLIBRARIES       = libgendersplusplus.la
 
@@ -21,3 +22,4 @@ libgendersplusplus_la_LDFLAGS = -version-info @LIBGENDERSPLUSPLUS_VERSION_INFO@ 
 
 force-dependency-check:
 
+endif

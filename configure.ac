@@ -139,6 +139,12 @@ AC_SUBST([PERLMAN3EXT])
 AC_PYTHON_EXTENSIONS
 AM_CONDITIONAL(WITH_PYTHON_EXTENSIONS, [test "$ac_with_python_extensions" = "yes"])
 
+#
+# Check for c++ stuff
+#
+AC_CPLUSPLUS_EXTENSIONS
+AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" = "yes"])
+
 ##
 # Checks for typedefs, structures, and compiler characteristics.
 ##
