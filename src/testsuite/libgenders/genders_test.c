@@ -223,6 +223,7 @@ _test_functionality(void)
   errtotal += _functionality(genders_testquery_functionality, "genders_testquery");
   errtotal += _functionality(genders_parse_functionality, "genders_parse");
   errtotal += _functionality(genders_set_errnum_functionality, "genders_set_errnum");
+  errtotal += _functionality(genders_copy_functionality, "genders_copy");
 
   return errtotal;
 }

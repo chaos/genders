@@ -68,5 +68,6 @@ int genders_query_functionality(int verbose);
 int genders_testquery_functionality(int verbose);
 int genders_parse_functionality(int verbose);
 int genders_set_errnum_functionality(int verbose);
+int genders_copy_functionality(int verbose);
 
 #endif /* _GENDERS_TEST_FUNCTIONALITY_H */
