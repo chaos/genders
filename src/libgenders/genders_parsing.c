@@ -179,6 +179,7 @@ _insert_attrval(genders_t handle, genders_attrvals_container_t avc, char *attr, 
  */
 static int 
 _insert_attr(genders_t handle,
+	     List attrslist,
              hash_t *attr_index,
              int *attr_index_size,
              char *attr) 
@@ -191,7 +192,7 @@ _insert_attr(genders_t handle,
 
   /* insert into attrlist */
   __xstrdup(attr_new, attr);
-  __list_append(handle->attrslist, attr_new);
+  __list_append(attrslist, attr_new);
 
   /* insert into attr_index */
 
@@ -384,8 +385,14 @@ strsep (char **stringp, const char *delim)
  */
 static int 
 _parse_line(genders_t handle, 
+	    int *numattrs,
+	    int *maxattrs,
+	    int *maxnodelen,
+	    int *maxattrlen,
+	    int *maxvallen,
 	    List nodeslist, 
 	    List attrvalslist, 
+	    List attrslist,
             hash_t *node_index,
             int *node_index_size,
             hash_t *attr_index,
@@ -518,6 +525,7 @@ _parse_line(genders_t handle,
 		goto cleanup;
 	      
               if ((insert_count = _insert_attr(handle,
+					       attrslist,
                                                attr_index,
                                                attr_index_size,
                                                attr)) < 0)
@@ -525,16 +533,15 @@ _parse_line(genders_t handle,
 		  
 	      if (!line_num) 
 		{
-		  handle->numattrs += insert_count;
-		  handle->maxattrlen = GENDERS_MAX(strlen(attr), handle->maxattrlen);
+		  (*numattrs) += insert_count;
+		  (*maxattrlen) = GENDERS_MAX(strlen(attr), (*maxattrlen));
 
 		  if (val) 
 		    {
 		      if (strstr(val, "%n") && !strstr(val, "%%n"))
 			max_n_subst_vallen = strlen(val);
 		      else
-			handle->maxvallen = GENDERS_MAX(strlen(val), 
-							handle->maxvallen);
+			(*maxvallen) = GENDERS_MAX(strlen(val), (*maxvallen));
 		    }
 		}
 	      
@@ -595,8 +602,8 @@ _parse_line(genders_t handle,
       
       if (!line_num) 
 	{
-	  handle->maxattrs = GENDERS_MAX(n->attrcount, handle->maxattrs);
-	  handle->maxnodelen = GENDERS_MAX(strlen(node), handle->maxnodelen);
+	  (*maxattrs) = GENDERS_MAX(n->attrcount, (*maxattrs));
+	  (*maxnodelen) = GENDERS_MAX(strlen(node), (*maxnodelen));
 	  line_maxnodelen = GENDERS_MAX(strlen(node), line_maxnodelen);
 	}
       
@@ -606,8 +613,8 @@ _parse_line(genders_t handle,
   
   /* %n substitution found on this line, update maxvallen */
   if (!line_num && max_n_subst_vallen)
-    handle->maxvallen = GENDERS_MAX(max_n_subst_vallen - 2 + line_maxnodelen,
-				    handle->maxvallen);
+    (*maxvallen) = GENDERS_MAX(max_n_subst_vallen - 2 + line_maxnodelen,
+			       (*maxvallen));
   
   /* Append at the very end, so cleanup area cleaner */
   if (avc) 
@@ -632,8 +639,14 @@ _parse_line(genders_t handle,
 int
 _genders_open_and_parse(genders_t handle,
 			const char *filename,
+			int *numattrs,
+			int *maxattrs,
+			int *maxnodelen,
+			int *maxattrlen,
+			int *maxvallen,
 			List nodeslist,
 			List attrvalslist,
+			List attrslist,
                         hash_t *node_index,
                         int *node_index_size,
                         hash_t *attr_index,
@@ -663,8 +676,14 @@ _genders_open_and_parse(genders_t handle,
       int bug_count;
 
       if ((bug_count = _parse_line(handle, 
+				   numattrs,
+				   maxattrs,
+				   maxnodelen,
+				   maxattrlen,
+				   maxvallen,				   
 				   nodeslist, 
 				   attrvalslist, 
+				   attrslist,
                                    node_index,
                                    node_index_size,
                                    attr_index,
