@@ -102,13 +102,17 @@ Genders::Genders(const string filename)
 
 Genders::Genders(const Genders &copy)
 {
-  
+  if (!(gh = genders_copy(copy.gh)))
+    _throw_exception(genders_errnum(copy.gh));
 }
 
 const Genders &Genders::operator=(const Genders &right)
 {
   if (&right != this)
     {
+      genders_handle_destroy(this->gh);
+      if (!(this->gh = genders_copy(right.gh)))
+	_throw_exception(genders_errnum(right.gh));
     }
 
   return *this;
