@@ -15,6 +15,7 @@ Changes in genders-1.15
       - e.g. "node1 attr1,"
       - e.g. "node1 attr1,,attr2"
  -- Include beta Python extensions library.
+ -- Include beta C++ extensions library.
 
 Changes in genders-1.14
 =======================

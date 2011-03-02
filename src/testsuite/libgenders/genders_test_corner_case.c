@@ -1650,3 +1650,36 @@ genders_set_errnum_corner_case(int verbose)
 
   return errcount;
 }
+
+int
+genders_copy_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_copy_corner_case_t *tests = &genders_copy_corner_case_tests[0];
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      genders_t return_value;
+      int errnum;
+
+      handle = genders_handle_get(tests[i].param1);
+      return_value = genders_copy(handle);
+      errnum = genders_errnum(handle);
+ 
+      errcount += genders_return_value_pointer_errnum_check("genders_copy",
+							    tests[i].num,
+							    tests[i].expected_return_value,
+							    tests[i].expected_errnum,
+							    return_value,
+							    errnum,
+							    NULL,
+							    verbose);
+      
+      genders_handle_cleanup(handle);
+      i++;
+    }
+
+  return errcount;
+}

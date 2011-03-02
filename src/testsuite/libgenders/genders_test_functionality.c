@@ -2597,3 +2597,369 @@ genders_set_errnum_functionality(int verbose)
 
   return errcount;
 }
+
+int
+genders_copy_functionality(int verbose)
+{
+  int errcount = 0;
+  int num = 0;
+  int i = 0;
+  genders_database_t **databases = &genders_functionality_databases[0];
+
+  while (databases[i] != NULL)
+    {
+      genders_t handleorig, handlecopy;
+      genders_t return_value;
+      int numnodesorig, numnodescopy;
+      int numattrsorig, numattrscopy;
+      int maxattrsorig, maxattrscopy;
+      int maxnodelenorig, maxnodelencopy;
+      int maxattrlenorig, maxattrlencopy;
+      int maxvallenorig, maxvallencopy;
+      char **nodelistorig, **nodelistcopy;
+      int nodelist_lenorig, nodelist_lencopy;
+      int nodelist_countorig, nodelist_countcopy;
+      char **attrlistorig, **attrlistcopy;
+      int attrlist_lenorig, attrlist_lencopy;
+      int attrlist_countorig, attrlist_countcopy;
+      char **vallistorig, **vallistcopy;
+      int vallist_lenorig, vallist_lencopy;
+      int countorig, countcopy;
+      int nodelist_err = 0;
+      int errnum;
+      int err = 0;
+      int j, k;
+      
+      if (!(handleorig = genders_handle_create()))
+	genders_err_exit("genders_handle_create");
+      
+      if (genders_load_data(handleorig, databases[i]->filename) < 0)
+	genders_err_exit("genders_load_data: %s", genders_errormsg(handleorig));
+
+      return_value = genders_copy(handleorig);
+
+      errnum = genders_errnum(handleorig);
+
+      err = genders_return_value_pointer_errnum_check("genders_copy",
+						      num,
+						      GENDERS_POINTER_NON_NULL,
+						      GENDERS_ERR_SUCCESS,
+						      return_value,
+						      errnum,
+						      databases[i]->filename,
+						      verbose);
+      
+      errcount +=err;
+      
+      if (err)
+	goto try_next_database;
+
+      handlecopy = return_value;
+
+      if ((numnodesorig = genders_getnumnodes(handleorig)) < 0)
+	genders_err_exit("genders_getnumnodes: %s", genders_errormsg(handleorig));
+      if ((numnodescopy = genders_getnumnodes(handlecopy)) < 0)
+	genders_err_exit("genders_getnumnodes: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       numnodesorig,
+				       numnodescopy,
+				       "numnodes",
+				       verbose);
+      
+      err += errcount;
+
+      if ((numattrsorig = genders_getnumattrs(handleorig)) < 0)
+	genders_err_exit("genders_getnumattrs: %s", genders_errormsg(handleorig));
+      if ((numattrscopy = genders_getnumattrs(handlecopy)) < 0)
+	genders_err_exit("genders_getnumattrs: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       numattrsorig,
+				       numattrscopy,
+				       "numattrs",
+				       verbose);
+      
+      err += errcount;
+
+      if ((maxattrsorig = genders_getmaxattrs(handleorig)) < 0)
+	genders_err_exit("genders_getmaxattrs: %s", genders_errormsg(handleorig));
+      if ((maxattrscopy = genders_getmaxattrs(handlecopy)) < 0)
+	genders_err_exit("genders_getmaxattrs: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       maxattrsorig,
+				       maxattrscopy,
+				       "maxattrs",
+				       verbose);
+      
+      err += errcount;
+
+      if ((maxnodelenorig = genders_getmaxnodelen(handleorig)) < 0)
+	genders_err_exit("genders_getmaxnodelen: %s", genders_errormsg(handleorig));
+      if ((maxnodelencopy = genders_getmaxnodelen(handlecopy)) < 0)
+	genders_err_exit("genders_getmaxnodelen: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       maxnodelenorig,
+				       maxnodelencopy,
+				       "maxnodelen",
+				       verbose);
+      
+      err += errcount;
+
+      if ((maxattrlenorig = genders_getmaxattrlen(handleorig)) < 0)
+	genders_err_exit("genders_getmaxattrlen: %s", genders_errormsg(handleorig));
+      if ((maxattrlencopy = genders_getmaxattrlen(handlecopy)) < 0)
+	genders_err_exit("genders_getmaxattrlen: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       maxattrlenorig,
+				       maxattrlencopy,
+				       "maxattrlen",
+				       verbose);
+      
+      err += errcount;
+
+      if ((maxvallenorig = genders_getmaxvallen(handleorig)) < 0)
+	genders_err_exit("genders_getmaxvallen: %s", genders_errormsg(handleorig));
+      if ((maxvallencopy = genders_getmaxvallen(handlecopy)) < 0)
+	genders_err_exit("genders_getmaxvallen: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       maxvallenorig,
+				       maxvallencopy,
+				       "maxvallen",
+				       verbose);
+      
+      err += errcount;
+
+      if ((nodelist_lenorig = genders_nodelist_create(handleorig, &nodelistorig)) < 0) 
+	genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handleorig));
+
+      if ((nodelist_lencopy = genders_nodelist_create(handlecopy, &nodelistcopy)) < 0) 
+	genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handlecopy));
+
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       nodelist_lenorig,
+				       nodelist_lencopy,
+				       "nodelist_len",
+				       verbose);
+      
+      err += errcount;
+
+      if ((attrlist_lenorig = genders_attrlist_create(handleorig, &attrlistorig)) < 0) 
+	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handleorig));
+
+      if ((attrlist_lencopy = genders_attrlist_create(handlecopy, &attrlistcopy)) < 0) 
+	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handlecopy));
+
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       attrlist_lenorig,
+				       attrlist_lencopy,
+				       "attrlist_len",
+				       verbose);
+      
+      err += errcount;
+
+      if ((vallist_lenorig = genders_vallist_create(handleorig, &vallistorig)) < 0) 
+	genders_err_exit("genders_vallist_create: %s", genders_errormsg(handleorig));
+
+      if ((vallist_lencopy = genders_vallist_create(handlecopy, &vallistcopy)) < 0) 
+	genders_err_exit("genders_vallist_create: %s", genders_errormsg(handlecopy));
+	    
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       vallist_lenorig,
+				       vallist_lencopy,
+				       "vallist_len",
+				       verbose);
+      
+      err += errcount;
+
+      if ((nodelist_countorig = genders_getnodes(handleorig,
+						 nodelistorig,
+						 nodelist_lenorig,
+						 NULL,
+						 NULL)) < 0)
+	genders_err_exit("genders_getnodes: %s", genders_errormsg(handleorig));
+
+      if ((nodelist_countcopy = genders_getnodes(handlecopy,
+						 nodelistcopy,
+						 nodelist_lencopy,
+						 NULL,
+						 NULL)) < 0)
+	genders_err_exit("genders_getnodes: %s", genders_errormsg(handlecopy));
+     
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       nodelist_countorig,
+				       nodelist_countcopy,
+				       "nodelist_count",
+				       verbose);
+      
+      err += errcount;
+
+      for (j = 0; j < nodelist_countorig; j++)
+	{
+	  err = genders_string_check("genders_copy",
+				     num,
+				     nodelistorig[j],
+				     "orig",
+				     nodelistcopy[j],
+				     "copy",
+				     "node listing",
+				     verbose);
+
+	  err += errcount;
+	  nodelist_err += err;
+	}
+
+      if (!nodelist_err)
+	{
+	  for (j = 0; j < nodelist_countorig; j++)
+	    {
+	      int getattr_err = 0;
+
+	      if (genders_attrlist_clear(handleorig, attrlistorig) < 0)
+		genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handleorig));
+	      
+	      if (genders_attrlist_clear(handlecopy, attrlistcopy) < 0)
+		genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handlecopy));
+	      
+	      if (genders_vallist_clear(handleorig, vallistorig) < 0)
+		genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handleorig));
+	      
+	      if (genders_vallist_clear(handlecopy, vallistcopy) < 0)
+		genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handlecopy));
+	      
+	      countorig = genders_getattr(handleorig,
+					  attrlistorig,
+					  vallistorig,
+					  attrlist_lenorig,
+					  nodelistorig[j]);
+	      
+	      countcopy = genders_getattr(handlecopy,
+					  attrlistcopy,
+					  vallistcopy,
+					  attrlist_lencopy,
+					  nodelistcopy[j]);
+	      
+	      err = genders_return_value_check("genders_copy",
+					       num,
+					       countorig,
+					       countcopy,
+					       "getattr count",
+					       verbose);
+
+	      err += errcount;
+	      getattr_err += err;
+
+	      if (!getattr_err)
+		{
+		  for (k = 0; k < countorig; k++)
+		    {
+		      err = genders_string_check("genders_copy",
+						 num,
+						 attrlistorig[k],
+						 "orig",
+						 attrlistcopy[k],
+						 "copy",
+						 "getattr attr listing",
+						 verbose);
+		      
+		      err += errcount;
+
+		      err = genders_string_check("genders_copy",
+						 num,
+						 vallistorig[k],
+						 "orig",
+						 vallistcopy[k],
+						 "copy",
+						 "getattr val listing",
+						 verbose);
+		      
+		      err += errcount;
+		    }
+		}
+	    }
+	}
+      
+      if (genders_attrlist_clear(handleorig, attrlistorig) < 0)
+	genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handleorig));
+
+      if (genders_attrlist_clear(handlecopy, attrlistcopy) < 0)
+	genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handlecopy));
+
+      if ((attrlist_countorig = genders_getattr_all(handleorig,
+						    attrlistorig,
+						    attrlist_lenorig)) < 0)
+	genders_err_exit("genders_getattr_all: %s", genders_errormsg(handleorig));
+
+      if ((attrlist_countcopy = genders_getattr_all(handlecopy,
+						    attrlistcopy,
+						    attrlist_lencopy)) < 0)
+	genders_err_exit("genders_getattr_all: %s", genders_errormsg(handlecopy));
+      
+      err = genders_return_value_check("genders_copy",
+				       num,
+				       attrlist_countorig,
+				       attrlist_countcopy,
+				       "attrlist_count",
+				       verbose);
+      
+      err += errcount;
+      
+      for (j = 0; j < attrlist_countorig; j++)
+	{
+	  err = genders_string_check("genders_copy",
+				     num,
+				     attrlistorig[j],
+				     "orig",
+				     attrlistcopy[j],
+				     "copy",
+				     "attr listing",
+				     verbose);
+
+	  err += errcount;
+	}
+
+    cleanup_and_try_next_database:
+
+      if (genders_nodelist_destroy(handleorig, nodelistorig) < 0)
+	genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handleorig));
+
+      if (genders_nodelist_destroy(handlecopy, nodelistcopy) < 0)
+	genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handlecopy));
+
+      if (genders_attrlist_destroy(handleorig, attrlistorig) < 0)
+	genders_err_exit("genders_attrlist_destroy: %s", genders_errormsg(handleorig));
+
+      if (genders_attrlist_destroy(handlecopy, attrlistcopy) < 0)
+	genders_err_exit("genders_attrlist_destroy: %s", genders_errormsg(handlecopy));
+
+      if (genders_vallist_destroy(handleorig, vallistorig) < 0)
+	genders_err_exit("genders_vallist_destroy: %s", genders_errormsg(handleorig));
+
+      if (genders_vallist_destroy(handlecopy, vallistcopy) < 0)
+	genders_err_exit("genders_vallist_destroy: %s", genders_errormsg(handlecopy));
+
+    try_next_database:
+      if (genders_handle_destroy(handleorig) < 0)
+	genders_err_exit("genders_handle_destroy");
+      
+      num++;
+      i++;
+    }
+
+  return errcount;
+
+}

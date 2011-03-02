@@ -1,5 +1,19 @@
 2011-03-01  Albert Chu  <chu11@llnl.gov>
 
+	* src/extensions/cplusplus/: Add experimental C++ genders library.
+
+	* src/libgenders/: Add new genders_copy() function.
+
+
+	* src/libgenders/: Re-architect attrvalslist architecture to
+	contain a list of structs instead of a list of lists.
+
+	* genders.spec.in, configure.ac,
+	config/ac_cplusplus_extensions.m4: Support optional extensions
+	build.
+	
+2011-03-01  Albert Chu  <chu11@llnl.gov>
+
 	* src/libgenders/genders.c, src/libgenders/genders_parsing.c: Fix
 	several potential corruption corner cases related to
 	genders_parse() implementation.

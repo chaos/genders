@@ -92,10 +92,11 @@ _genders_list_free_genders_attrval(void *x)
 void
 _genders_list_free_attrvallist(void *x)
 {
-  List attrvals;
+  genders_attrvals_container_t avc;
 
-  attrvals = (List)x;
-  __list_destroy(attrvals);
+  avc = (List)x;
+  __list_destroy(avc->attrvals);
+  free(avc);
 }
 
 int 
@@ -224,16 +225,16 @@ _genders_find_attrval(genders_t handle,
 		      const char *val,
 		      genders_attrval_t *avptr)
 {
-  List attrvals;
+  genders_attrvals_container_t avc;
   int retval = -1;
   
   *avptr = NULL;
 
-  if ((attrvals = hash_find(n->attrlist_index, attr)))
+  if ((avc = hash_find(n->attrlist_index, attr)))
     {
       genders_attrval_t av;
       
-      if ((av = list_find_first(attrvals, 
+      if ((av = list_find_first(avc->attrvals, 
 				_genders_list_is_attr_in_attrvals, 
 				(char *)attr))) 
 	{
@@ -320,5 +321,26 @@ _genders_rehash(genders_t handle,
  cleanup:
   if (retval < 0)
     __hash_destroy(new_hash);
+  return retval;
+}
+
+int
+_genders_hash_copy(genders_t handle,
+		   hash_t *hash_src,
+		   hash_t *hash_dest)
+{
+  int hash_num;
+  int retval = -1;
+
+  hash_num = hash_count(*hash_src);
+
+  if (hash_for_each(*hash_src, _hash_reinsert, hash_dest) != hash_num)
+    {
+      handle->errnum = GENDERS_ERR_INTERNAL;
+      goto cleanup;
+    }
+  
+  retval = 0;
+ cleanup:
   return retval;
 }

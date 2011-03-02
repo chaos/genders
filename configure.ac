@@ -40,6 +40,13 @@ LIBGENDERS_AGE=2
 LIBGENDERS_VERSION_INFO=$LIBGENDERS_CURRENT:$LIBGENDERS_REVISION:$LIBGENDERS_AGE
 AC_SUBST([LIBGENDERS_VERSION_INFO])
 
+# C++ library
+LIBGENDERSPLUSPLUS_CURRENT=1
+LIBGENDERSPLUSPLUS_REVISION=0
+LIBGENDERSPLUSPLUS_AGE=0
+LIBGENDERSPLUSPLUS_VERSION_INFO=$LIBGENDERSPLUSPLUS_CURRENT:$LIBGENDERSPLUSPLUS_REVISION:$LIBGENDERSPLUSPLUS_AGE
+AC_SUBST([LIBGENDERSPLUSPLUS_VERSION_INFO])
+
 # Perl Libgenders and Genders versioning
 PERLGENDERS_MAJOR=0
 PERLGENDERS_MINOR=03
@@ -132,6 +139,12 @@ AC_SUBST([PERLMAN3EXT])
 AC_PYTHON_EXTENSIONS
 AM_CONDITIONAL(WITH_PYTHON_EXTENSIONS, [test "$ac_with_python_extensions" = "yes"])
 
+#
+# Check for c++ stuff
+#
+AC_CPLUSPLUS_EXTENSIONS
+AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" = "yes"])
+
 ##
 # Checks for typedefs, structures, and compiler characteristics.
 ##
@@ -165,6 +178,7 @@ AC_CONFIG_FILES( \
   src/nodeattr/Makefile \
   src/libgenders/genders.h \
   src/extensions/Makefile \
+  src/extensions/cplusplus/Makefile \
   src/extensions/perl/Makefile \
   src/extensions/perl/Libgenders/Makefile \
   src/extensions/perl/Libgenders/Libgenders.pm \

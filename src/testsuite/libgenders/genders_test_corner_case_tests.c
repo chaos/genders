@@ -1855,3 +1855,12 @@ genders_set_errnum_corner_case_t genders_set_errnum_corner_case_tests[] = {
   {14, GENDERS_HANDLE_LOADED_DESTROYED,    GENDERS_ERR_ERRNUMRANGE + 1, GENDERS_ERR_MAGIC          },
   {-1, -1, -1, -1},
 };
+
+genders_copy_corner_case_t genders_copy_corner_case_tests[] = {
+  {0, GENDERS_HANDLE_NULL,               GENDERS_POINTER_NULL,     GENDERS_ERR_NULLHANDLE},
+  {1, GENDERS_HANDLE_UNLOADED,           GENDERS_POINTER_NULL,     GENDERS_ERR_NOTLOADED },
+  {2, GENDERS_HANDLE_UNLOADED_DESTROYED, GENDERS_POINTER_NULL,     GENDERS_ERR_MAGIC     },
+  {3, GENDERS_HANDLE_LOADED,             GENDERS_POINTER_NON_NULL, GENDERS_ERR_SUCCESS   },
+  {4, GENDERS_HANDLE_LOADED_DESTROYED,   GENDERS_POINTER_NULL,     GENDERS_ERR_MAGIC     },
+  {-1, -1, -1, -1},
+};

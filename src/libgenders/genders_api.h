@@ -73,6 +73,19 @@ struct genders_attrval {
 };
 typedef struct genders_attrval *genders_attrval_t;
 
+/*
+ * struct genders_attrvals_container
+ *
+ * stores attrvals list and an index indicating its location.
+ * Implemented predominantly to make genders_copy() easier to
+ * implement.
+ */
+struct genders_attrvals_container {
+  List attrvals;
+  unsigned int index;
+};
+typedef struct genders_attrvals_container *genders_attrvals_container_t;
+
 /* 
  * struct genders
  * 
