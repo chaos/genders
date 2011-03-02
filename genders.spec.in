@@ -9,6 +9,7 @@ Requires: perl
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python
+BuildRequires: python-devel
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
