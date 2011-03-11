@@ -32,6 +32,9 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
 %{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
 
+# choose site arch by default
+%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_site_arch --with-perl-site-arch}}
+
 %prep
 %setup  -q -n %{name}-%{version}
 
@@ -40,6 +43,10 @@ genders API that is compatible with earlier releases of genders
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
     %{?_without_perl_extensions} \
+    %{?_with_perl_site_arch} \
+    %{?_without_perl_site_arch} \
+    %{?_with_perl_vendor_arch} \
+    %{?_without_perl_vendor_arch} \
     %{?_with_python_extensions} \
     %{?_without_python_extensions} \
     %{?_with_cplusplus_extensions} \
@@ -55,7 +62,12 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
 # packaging must work off whatever Perl is installed.  
+%if %{?_with_perl_site_arch:1}%{!?_with_perl_site_arch:0}
 %define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $P=$Config{siteprefix}; $T=~/$P\\/(.*)/; print "%{_prefix}/$1\\n"')
+%endif
+%if %{?_with_perl_vendor_arch:1}%{!?_with_perl_vendor_arch:0}
+%define _perldir %(perl -e 'use Config; $T=$Config{installvendorarch}; $P=$Config{vendorprefix}; $T=~/$P\\/(.*)/; print "%{_prefix}/$1\\n"')
+%endif
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
 %{_mandir}/man3/libgenders* 
