@@ -2,6 +2,11 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.15-2
+=========================
+ -- Support --with-perl-vendor-arch and --with-perl-site-arch
+    configure options.
+
 Changes in genders-1.15
 =======================
  -- Fix genders_parse() corner case.
