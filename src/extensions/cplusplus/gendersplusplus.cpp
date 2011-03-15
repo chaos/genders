@@ -23,6 +23,7 @@
 \*****************************************************************************/
 
 #include <stdlib.h>
+#include <string.h>
 #include <gendersplusplus.hpp>
 
 using namespace std;
