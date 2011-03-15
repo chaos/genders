@@ -2,6 +2,9 @@
 
 	* src/extensions/cplusplus/gendersplusplus.cpp
 	(Genders::getnodename): Fix free bug.
+
+	* src/extensions/cplusplus/gendersplusplus.cpp: Fix RHEL6 compile
+	bug.
 	
 2011-03-15  Albert Chu  <chu11@llnl.gov>
 
