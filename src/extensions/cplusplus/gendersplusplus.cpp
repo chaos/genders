@@ -160,16 +160,10 @@ string Genders::getnodename() const
   int maxnodelen;
 
   if ((maxnodelen = genders_getmaxnodelen(gh)) < 0)
-    {
-      free(buf);
-      _throw_exception(genders_errnum(gh));
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (!(buf = (char *)malloc(maxnodelen + 1)))
-    {
-      free(buf);
-      _throw_exception(genders_errnum(gh));
-    }
+    _throw_exception(genders_errnum(gh));
 
   if (genders_getnodename(gh, buf, maxnodelen + 1) < 0)
     {

@@ -1,5 +1,10 @@
 2011-03-15  Albert Chu  <chu11@llnl.gov>
 
+	* src/extensions/cplusplus/gendersplusplus.cpp
+	(Genders::getnodename): Fix free bug.
+	
+2011-03-15  Albert Chu  <chu11@llnl.gov>
+
 	* configure.ac: Add AC_PROG_CXX check.
 	
 2011-03-14  Albert Chu  <chu11@llnl.gov>
