@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.17
+=======================
+ -- Fix RHEL6 build bugs.
+
 Changes in genders-1.16
 =======================
  -- Support --with-perl-vendor-arch and --with-perl-site-arch
