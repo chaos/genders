@@ -1585,7 +1585,6 @@ genders_copy(genders_t handle)
   if (_genders_copy_fill_attr_index(handle, handlecopy) < 0)
     goto cleanup;
   
-  /* XXX fill each node with attrvalslist and attr_index */
   if (_genders_copy_fill_node_data(handle, handlecopy) < 0)
     goto cleanup;
 
