@@ -84,12 +84,6 @@ public:
   GendersExceptionNotfound();
 };
 
-class GendersExceptionOutmem : public GendersException
-{
-public:
-  GendersExceptionOutmem();
-};
-
 class GendersExceptionSyntax : public GendersException
 {
 public:

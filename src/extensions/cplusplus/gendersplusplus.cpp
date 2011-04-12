@@ -70,10 +70,6 @@ GendersExceptionNotfound::GendersExceptionNotfound() : GendersException(GENDERS_
 {
 }
 
-GendersExceptionOutmem::GendersExceptionOutmem() : GendersException(GENDERS_ERR_OUTMEM)
-{
-}
-
 GendersExceptionSyntax::GendersExceptionSyntax() : GendersException(GENDERS_ERR_SYNTAX)
 {
 }
@@ -94,10 +90,10 @@ void Genders::_throw_exception(int errnum) const
       throw GendersExceptionParse();
     case GENDERS_ERR_NOTFOUND:
       throw GendersExceptionNotfound();
-    case GENDERS_ERR_OUTMEM:
-      throw GendersExceptionOutmem();
     case GENDERS_ERR_SYNTAX:
       throw GendersExceptionSyntax();
+    case GENDERS_ERR_OUTMEM:
+      throw std::bad_alloc();
     default:
       throw GendersExceptionInternal();
     }

@@ -1,3 +1,8 @@
+2011-04-11  Albert Chu  <chu11@llnl.gov>
+
+	* src/extensions/cplusplus/: throw bad_alloc instead of exception
+	on memory allocation error.
+	
 2011-03-15  Albert Chu  <chu11@llnl.gov>
 
 	* tagged genders-1-17-1
