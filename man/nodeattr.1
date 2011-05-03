@@ -32,18 +32,19 @@
 nodeattr \- query genders file
 .SH SYNOPSIS
 .B nodeattr
-.I "[-f genders] [-q | -c | -n | -s] [-X exclude_query] query
-.br
-.I "[-f genders] [-q | -c | -n | -s] -A
+.I "[-f genders] [-q | -c | -n | -s] [-X exclude_query] query"
 .br
 .B nodeattr
-.I "[-f genders] [-v] [node] attr[=val]
+.I "[-f genders] [-q | -c | -n | -s] -A"
 .br
 .B nodeattr
-.I "[-f genders] -Q [node] query
+.I "[-f genders] [-v] [node] attr[=val]"
 .br
 .B nodeattr
-.I "[-f genders] -V [-U] attr
+.I "[-f genders] -Q [node] query"
+.br
+.B nodeattr
+.I "[-f genders] -V [-U] attr"
 .br
 .B nodeattr
 .I "[-f genders] -l [node]"
@@ -52,7 +53,7 @@ nodeattr \- query genders file
 .I "[-f genders] -k"
 .br
 .B nodeattr
-.I "[-f genders] -d genders
+.I "[-f genders] -d genders"
 .br
 .SH DESCRIPTION
 When invoked with the 
