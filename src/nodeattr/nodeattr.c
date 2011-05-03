@@ -283,7 +283,7 @@ main(int argc, char *argv[])
         list_attr_val(gp, attr, Uopt);
     }
 
-    /* Usage 6:  list attributes */
+    /* Usage 5:  list attributes */
     if (lopt) {
         char *node = NULL;
 
