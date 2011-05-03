@@ -1,3 +1,7 @@
+2011-05-03  Albert Chu  <chu11@llnl.gov>
+
+	* man/nodeattr.1: Fix typos.
+	
 2011-05-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/: Support -A option.
