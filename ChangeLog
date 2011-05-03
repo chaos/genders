@@ -1,6 +1,8 @@
 2011-05-03  Albert Chu  <chu11@llnl.gov>
 
 	* man/nodeattr.1: Fix typos.
+
+	* src/nodeattr/: Support --expand option.
 	
 2011-05-02  Albert Chu  <chu11@llnl.gov>
 

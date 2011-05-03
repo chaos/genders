@@ -55,6 +55,9 @@ nodeattr \- query genders file
 .B nodeattr
 .I "[-f genders] -d genders"
 .br
+.B nodeattr
+.I "[-f genders] --expand"
+.br
 .SH DESCRIPTION
 When invoked with the 
 .I "-q"
@@ -142,6 +145,13 @@ filename indicated by the
 .I -f
 option or the default genders database.  The differences contained in
 the specified database will be output to standard error.
+.LP
+The
+.I "--expand"
+option will take a genders database, expand all hostranges, and output
+a new genders database.  The subsequent database will be identical to
+the first, but every node will be listed on a separate line.  May be
+useful for debugging or determining the difference between databases.
 .LP
 Attribute names may optionally appear in the genders file with an
 equal sign followed by a value.

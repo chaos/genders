@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqX:AvQVUlf:kd:"
+#define OPTIONS "cnsqX:AvQVUlf:kd:e"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -68,6 +68,7 @@ static struct option longopts[] = {
     { "filename", 1, 0, 'f' },
     { "parse-check", 0, 0, 'k'},
     { "diff", 1, 0, 'd'},
+    { "expand", 0, 0, 'e'},
     { 0,0,0,0 },
 };
 #endif
@@ -81,6 +82,7 @@ static void list_nodes(genders_t gp, char *attr, char *excludequery, fmt_t fmt);
 static void list_attrs(genders_t gp, char *node);
 static void usage(void);
 static void diff_genders(char *db1, char *db2);
+static void expand(genders_t gp);
 
 /* Utility functions */
 static int _gend_error_exit(genders_t gp, char *msg);
@@ -98,7 +100,7 @@ main(int argc, char *argv[])
 {
     int c, errors;
     int Aopt = 0, lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
-      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
+      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0, eopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -155,6 +157,9 @@ main(int argc, char *argv[])
             dopt = 1;
             dfilename = optarg;
             break;
+	case 'e':   /* --expand */
+	    eopt = 1;
+	    break;
         default:
             usage();
             break;
@@ -164,20 +169,20 @@ main(int argc, char *argv[])
     /* check parameter inputs */
 
     /* specify correct option combinations */
-    if ((qopt + Qopt + Vopt + lopt + kopt + dopt) > 1)
+    if ((qopt + Qopt + Vopt + lopt + kopt + dopt + eopt) > 1)
         usage();
 
-    if ((qopt || Qopt || Vopt || lopt || kopt || dopt) && vopt)
+    if ((qopt || Qopt || Vopt || lopt || kopt || dopt || eopt) && vopt)
         usage();
 
     if (Aopt && !qopt)
         usage();
 
     if (!qopt && Xopt)
-      usage();
+        usage();
 
     if (!Vopt && Uopt)
-      usage();
+        usage();
 
     /* specified correctly number of arguments */
     if ((qopt 
@@ -189,13 +194,15 @@ main(int argc, char *argv[])
             && !lopt
             && !kopt
             && !dopt
+	    && !eopt
             && (optind != (argc - 1) && optind != (argc - 2)))
         || (Qopt && (optind != (argc - 1) && optind != (argc - 2)))
         || (Vopt && optind != (argc - 1))
         || (lopt && (optind != argc && optind != (argc - 1)))
         || (kopt && optind != argc)
-        || (dopt && optind != argc))
-      usage();
+        || (dopt && optind != argc)
+        || (eopt && optind != argc))
+        usage();
 
     /* genders database diff */
     if (dopt) {
@@ -222,6 +229,12 @@ main(int argc, char *argv[])
 
     if (genders_load_data(gp, filename) < 0)
         _gend_error_exit(gp, filename);
+
+    /* expand */
+    if (eopt) {
+        expand(gp);
+	exit(0);
+    }
 
     /* Usage 1: list nodes with specified attribute, or all nodes */
     if (qopt) {
@@ -489,7 +502,8 @@ usage(void)
         "or     nodeattr [-f genders] -V [-U] attr\n"   
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"
-        "or     nodeattr [-f genders] -d genders\n"    
+        "or     nodeattr [-f genders] -d genders\n"
+	"or     nodeattr [-f genders] --expand\n"
             );
     exit(1);
 }
@@ -755,6 +769,54 @@ diff_genders(char *filename, char *dfilename)
 
     if (_diff(gh, dgh, filename, dfilename) != 0)
         return;
+}
+
+static void
+expand(genders_t gp)
+{
+    char **nodes, **attrs, **vals;
+    int nodeslen, attrslen, valslen;
+    int nodescount, attrscount;
+    int i, j;
+
+    if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
+        _gend_error_exit(gp, "genders_nodelist_create");
+
+    if ((attrslen = genders_attrlist_create(gp, &attrs)) < 0)
+        _gend_error_exit(gp, "genders_attrlist_create");
+
+    if ((valslen = genders_vallist_create(gp, &vals)) < 0)
+        _gend_error_exit(gp, "genders_vallist_create");
+
+    if ((nodescount = genders_getnodes(gp, nodes, nodeslen, NULL, NULL)) < 0)
+        _gend_error_exit(gp, "genders_getnodes");
+
+    for (i = 0; i < nodescount; i++) {
+        if (genders_attrlist_clear(gp, attrs) < 0)
+	    _gend_error_exit(gp, "genders_attrlist_clear");
+
+        if (genders_vallist_clear(gp, vals) < 0)
+	    _gend_error_exit(gp, "genders_vallist_clear");
+
+	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
+	  _gend_error_exit(gp, "genders_getattr");
+	
+	printf("%s%s", nodes[i], attrscount ? " " : "\0"); 
+	for (j = 0 ; j < attrscount; j++) {
+	    if (j)
+	        printf(",");
+
+	    if (strlen(vals[j]))
+	        printf("%s=%s", attrs[j], vals[j]); 
+	    else
+	        printf("%s", attrs[j]);
+	}
+	printf("\n");
+    }
+
+    genders_nodelist_destroy(gp, nodes);
+    genders_attrlist_destroy(gp, attrs);
+    genders_vallist_destroy(gp, vals);
 }
 
 /**
