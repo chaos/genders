@@ -34,6 +34,8 @@ nodeattr \- query genders file
 .B nodeattr
 .I "[-f genders] [-q | -c | -n | -s] [-X exclude_query] query
 .br
+.I "[-f genders] [-q | -c | -n | -s] -A
+.br
 .B nodeattr
 .I "[-f genders] [-v] [node] attr[=val]
 .br
@@ -76,7 +78,11 @@ order of operations.
 The 
 .I "-X"
 argument and query can be used to exclude nodes from the resulting
-output.
+output.  A query can be replaced with the
+.I "-A"
+option to cause
+.B nodeattr
+to print all the nodes listed in the genders database.
 .LP
 When called with a node name (optional) and attribute name,
 .B nodeattr

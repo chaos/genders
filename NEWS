@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.18
+=======================
+ -- Support -A option in nodeattr, to output all nodes.
+
 Changes in genders-1.17
 =======================
  -- Fix RHEL6 build bugs.

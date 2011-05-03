@@ -50,7 +50,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqX:vQVUlf:kd:"
+#define OPTIONS "cnsqX:AvQVUlf:kd:"
 
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
@@ -59,6 +59,7 @@ static struct option longopts[] = {
     { "queryspace", 0, 0, 'n' },
     { "query", 0, 0, 'q' },
     { "excludequery", 1, 0, 'X'},
+    { "allnodes", 0, 0, 'A' },
     { "value", 0, 0, 'v' },
     { "testquery", 0, 0, 'Q' },
     { "values", 0, 0, 'V' },
@@ -96,7 +97,7 @@ int
 main(int argc, char *argv[])
 {
     int c, errors;
-    int lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
+    int Aopt = 0, lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
       Vopt = 0, Uopt = 0, kopt = 0, dopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
@@ -126,6 +127,9 @@ main(int argc, char *argv[])
             excludequery = optarg;
             Xopt = 1;
             break;
+	case 'A':   /* --allnodes */
+	    Aopt = 1;
+	    break;
         case 'v':   /* --value */
             vopt = 1;
             break;
@@ -166,6 +170,9 @@ main(int argc, char *argv[])
     if ((qopt || Qopt || Vopt || lopt || kopt || dopt) && vopt)
         usage();
 
+    if (Aopt && !qopt)
+        usage();
+
     if (!qopt && Xopt)
       usage();
 
@@ -173,7 +180,9 @@ main(int argc, char *argv[])
       usage();
 
     /* specified correctly number of arguments */
-    if ((qopt && optind != (argc - 1))
+    if ((qopt 
+	 && ((!Aopt && optind != (argc - 1))
+	     || (Aopt && optind != argc))) 
         || (!qopt
             && !Qopt
             && !Vopt
@@ -214,12 +223,16 @@ main(int argc, char *argv[])
     if (genders_load_data(gp, filename) < 0)
         _gend_error_exit(gp, filename);
 
-    /* Usage 1: list nodes with specified attribute. */
+    /* Usage 1: list nodes with specified attribute, or all nodes */
     if (qopt) {
         char *query;
 
-        query = argv[optind++];
-        list_nodes(gp, query, excludequery, qfmt);
+	if (Aopt)
+	    list_nodes(gp, NULL, NULL, qfmt); 
+	else {
+	    query = argv[optind++];
+	    list_nodes(gp, query, excludequery, qfmt);
+	}
 
         exit(0);
     }
@@ -270,7 +283,7 @@ main(int argc, char *argv[])
         list_attr_val(gp, attr, Uopt);
     }
 
-    /* Usage 5:  list attributes */
+    /* Usage 6:  list attributes */
     if (lopt) {
         char *node = NULL;
 
@@ -470,6 +483,7 @@ usage(void)
 {
     fprintf(stderr,
         "Usage: nodeattr [-f genders] [-q|-c|-n|-s] [-X exclude_query] query\n"
+        "or     nodeattr [-f genders] [-q|-c|-n|-s] -A\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -Q [node] query\n"
         "or     nodeattr [-f genders] -V [-U] attr\n"   

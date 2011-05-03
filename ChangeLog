@@ -1,3 +1,7 @@
+2011-05-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/nodeattr/: Support -A option.
+	
 2011-04-11  Albert Chu  <chu11@llnl.gov>
 
 	* src/extensions/cplusplus/: throw bad_alloc exception instead of
