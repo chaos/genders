@@ -126,6 +126,8 @@ _test_corner_cases(void)
   errtotal += _corner_case(genders_strerror_corner_case, "genders_strerror");
   errtotal += _corner_case(genders_errormsg_corner_case, "genders_errormsg");
   errtotal += _corner_case(genders_perror_corner_case, "genders_perror");
+  errtotal += _corner_case(genders_get_flags_corner_case, "genders_get_flags");
+  errtotal += _corner_case(genders_set_flags_corner_case, "genders_set_flags");
   errtotal += _corner_case(genders_getnumnodes_corner_case, "genders_getnumnodes");
   errtotal += _corner_case(genders_getnumattrs_corner_case, "genders_getnumattrs");
   errtotal += _corner_case(genders_getmaxattrs_corner_case, "genders_getmaxattrs");
@@ -194,6 +196,8 @@ _test_functionality(void)
   errtotal += _functionality(genders_strerror_functionality, "genders_strerror");
   errtotal += _functionality(genders_errormsg_functionality, "genders_errormsg");
   errtotal += _functionality(genders_perror_functionality, "genders_perror");
+  errtotal += _functionality(genders_get_flags_functionality, "genders_get_flags");
+  errtotal += _functionality(genders_set_flags_functionality, "genders_set_flags");
   errtotal += _functionality(genders_getnumnodes_functionality, "genders_getnumnodes");
   errtotal += _functionality(genders_getnumattrs_functionality, "genders_getnumattrs");
   errtotal += _functionality(genders_getmaxattrs_functionality, "genders_getmaxattrs");

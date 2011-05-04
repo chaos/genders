@@ -2,6 +2,9 @@
 
 	* src/genders/: Add new functions genders_get_flags and
 	genders_set_flags.
+
+	* src/testsuite/libgenders/: Support genders_get_flags and
+	genders_set_flags tests.
 	
 2011-05-03  Albert Chu  <chu11@llnl.gov>
 

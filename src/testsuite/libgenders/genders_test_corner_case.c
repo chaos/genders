@@ -387,6 +387,75 @@ genders_perror_corner_case(int verbose)
   return errcount;
 }
 
+int
+genders_get_flags_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_get_flags_corner_case_t *tests = &genders_get_flags_corner_case_tests[0];
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      unsigned int flags;
+      int return_value, errnum;
+      unsigned int *flagsptr;
+
+      handle = genders_handle_get(tests[i].param1);
+      flagsptr = (tests[i].param2 == GENDERS_POINTER_NULL) ? NULL : &flags;
+      return_value = genders_get_flags(handle, flagsptr);
+      errnum = genders_errnum(handle);
+
+      errcount += genders_return_value_errnum_check("genders_get_flags",
+						    tests[i].num,
+						    tests[i].expected_return_value,
+						    tests[i].expected_errnum,
+						    return_value,
+						    errnum,
+						    NULL,
+						    verbose);
+
+      genders_handle_cleanup(handle);
+      i++;
+    }
+
+  return errcount;
+}
+
+int
+genders_set_flags_corner_case(int verbose)
+{
+  int i = 0;
+  int errcount = 0;
+  genders_set_flags_corner_case_t *tests = &genders_set_flags_corner_case_tests[0];
+
+  while (!(tests[i].num < 0)) 
+    {
+      genders_t handle;
+      unsigned int flags;
+      int return_value, errnum;
+
+      handle = genders_handle_get(tests[i].param1);
+      flags = tests[i].param2;
+      return_value = genders_set_flags(handle, flags);
+      errnum = genders_errnum(handle);
+
+      errcount += genders_return_value_errnum_check("genders_set_flags",
+						    tests[i].num,
+						    tests[i].expected_return_value,
+						    tests[i].expected_errnum,
+						    return_value,
+						    errnum,
+						    NULL,
+						    verbose);
+
+      genders_handle_cleanup(handle);
+      i++;
+    }
+
+  return errcount;
+}
+
 static int
 _genders_getfunc_corner_case(GendersGetFunc func, 
 			     char *funcname,

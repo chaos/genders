@@ -94,6 +94,16 @@ typedef struct {
   int expected_errnum;
 } genders_perror_corner_case_t;
 
+typedef genders_handle_pointer_corner_case_t genders_get_flags_corner_case_t;
+
+typedef struct {
+  int num;
+  genders_handle_type_t param1;
+  genders_flag_type_t param2;
+  int expected_return_value;
+  int expected_errnum;
+} genders_set_flags_corner_case_t; 
+
 typedef genders_handle_corner_case_t genders_getnumnodes_corner_case_t;
 typedef genders_handle_corner_case_t genders_getnumattrs_corner_case_t;
 typedef genders_handle_corner_case_t genders_getmaxattrs_corner_case_t;
@@ -220,6 +230,8 @@ extern genders_errnum_corner_case_t genders_errnum_corner_case_tests[];
 extern genders_strerror_corner_case_t genders_strerror_corner_case_tests[];
 extern genders_errormsg_corner_case_t genders_errormsg_corner_case_tests[];
 extern genders_perror_corner_case_t genders_perror_corner_case_tests[];
+extern genders_get_flags_corner_case_t genders_get_flags_corner_case_tests[];
+extern genders_set_flags_corner_case_t genders_set_flags_corner_case_tests[];
 extern genders_getnumnodes_corner_case_t genders_getnumnodes_corner_case_tests[];
 extern genders_getnumattrs_corner_case_t genders_getnumattrs_corner_case_tests[];
 extern genders_getmaxattrs_corner_case_t genders_getmaxattrs_corner_case_tests[];
@@ -260,6 +272,8 @@ int genders_errnum_corner_case(int verbose);
 int genders_strerror_corner_case(int verbose);
 int genders_errormsg_corner_case(int verbose);
 int genders_perror_corner_case(int verbose);
+int genders_get_flags_corner_case(int verbose);
+int genders_set_flags_corner_case(int verbose);
 int genders_getnumnodes_corner_case(int verbose);
 int genders_getnumattrs_corner_case(int verbose);
 int genders_getmaxattrs_corner_case(int verbose);

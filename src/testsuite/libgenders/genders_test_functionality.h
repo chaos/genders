@@ -39,6 +39,8 @@ int genders_errnum_functionality(int verbose);
 int genders_strerror_functionality(int verbose);
 int genders_errormsg_functionality(int verbose);
 int genders_perror_functionality(int verbose);
+int genders_get_flags_functionality(int verbose);
+int genders_set_flags_functionality(int verbose);
 int genders_getnumnodes_functionality(int verbose);
 int genders_getnumattrs_functionality(int verbose);
 int genders_getmaxattrs_functionality(int verbose);

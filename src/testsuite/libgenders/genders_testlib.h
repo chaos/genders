@@ -65,6 +65,12 @@ typedef enum {
 } genders_length_type_t;
 
 typedef enum {
+  GENDERS_TEST_FLAG_DEFAULT = GENDERS_FLAG_DEFAULT,
+  GENDERS_TEST_FLAG_MIN = 0x00000001,
+  GENDERS_TEST_FLAG_MAX = 0x80000000,
+} genders_flag_type_t;
+
+typedef enum {
   GENDERS_COMPARISON_MATCH = 0,
   GENDERS_COMPARISON_CLEAR = 1,
 } genders_comparison_type_t;
@@ -189,5 +195,13 @@ int genders_return_value_errnum_attrval_list_check(char *funcname,
 						   int list_len,
 						   char *msg,
 						   int verbose);
+
+int genders_flag_check(char *funcname,
+		       int num,
+		       unsigned int expected_flags,
+		       unsigned int return_flags,
+		       char *msg,
+		       int verbose);
+
 
 #endif /* _GENDERS_TESTLIB_H */

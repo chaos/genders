@@ -86,7 +86,6 @@ genders_pass_output(char *funcname,
     }
 }
 
-/* XXX - need to remove */
 int
 genders_val_check(char *funcname,
 		  int num,
@@ -731,6 +730,30 @@ genders_return_value_errnum_attrval_list_check(char *funcname,
 	}
     }
   
+  genders_pass_output(funcname, num, err, msg, verbose);
+  return err;
+}
+
+int
+genders_flag_check(char *funcname,
+		   int num,
+		   unsigned int expected_flags,
+		   unsigned int return_flags,
+		   char *msg,
+		   int verbose)
+{
+  int err = 0;
+  
+  assert(funcname);
+  
+  err += _genders_val_check(funcname,
+                            num,
+                            expected_flags,
+                            "expected_flags",
+                            return_flags,
+                            "return_flags",
+                            msg,
+                            verbose);
   genders_pass_output(funcname, num, err, msg, verbose);
   return err;
 }

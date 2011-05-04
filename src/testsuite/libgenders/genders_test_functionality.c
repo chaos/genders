@@ -447,6 +447,96 @@ genders_perror_functionality(int verbose)
   return errcount;
 }
 
+int
+genders_get_flags_functionality(int verbose)
+{
+  genders_t handle;
+  unsigned int flags;
+  int errcount = 0;
+  int return_value, errnum, err, num = 0;
+
+  if (!(handle = genders_handle_create()))
+    genders_err_exit("genders_handle_create");
+  
+  if (genders_set_flags(handle, GENDERS_FLAG_DEFAULT) < 0)
+    genders_err_exit("genders_set_flags");
+	
+  return_value = genders_get_flags(handle, &flags);
+  errnum = genders_errnum(handle);
+
+  err = genders_return_value_errnum_check("genders_get_flags",
+					  num,
+					  0,
+					  GENDERS_ERR_SUCCESS,
+					  return_value,
+					  errnum,
+					  "GENDERS_FLAG_DEFAULT",
+					  verbose);
+
+  errcount += err;
+  num++;
+
+  err = genders_flag_check("genders_get_flags",
+			   num,
+			   0,
+			   flags,
+			   "GENDERS_FLAG_DEFAULT",
+			   verbose);
+
+  errcount += err;
+  num++;
+  
+  if (genders_handle_destroy(handle) < 0)
+    genders_err_exit("genders_handle_create");
+
+  return errcount;
+}
+
+int
+genders_set_flags_functionality(int verbose)
+{
+  genders_t handle;
+  unsigned int flags;
+  int errcount = 0;
+  int return_value, errnum, err, num = 0;
+
+  if (!(handle = genders_handle_create()))
+    genders_err_exit("genders_handle_create");
+  
+  return_value = genders_set_flags(handle, GENDERS_FLAG_DEFAULT);
+  errnum = genders_errnum(handle);
+	
+  err = genders_return_value_errnum_check("genders_set_flags",
+					  num,
+					  0,
+					  GENDERS_ERR_SUCCESS,
+					  return_value,
+					  errnum,
+					  "GENDERS_FLAG_DEFAULT",
+					  verbose);
+
+  errcount += err;
+  num++;
+
+  return_value = genders_get_flags(handle, &flags);
+  errnum = genders_errnum(handle);
+
+  err = genders_flag_check("genders_set_flags",
+			   num,
+			   0,
+			   flags,
+			   "GENDERS_FLAG_DEFAULT",
+			   verbose);
+
+  errcount += err;
+  num++;
+  
+  if (genders_handle_destroy(handle) < 0)
+    genders_err_exit("genders_handle_create");
+
+  return errcount;
+}
+
 static int
 _genders_getfunc_functionality(GendersGetFunc func, 
 			       char *funcname,
