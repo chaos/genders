@@ -50,6 +50,8 @@ extern "C" {
 #define GENDERS_ERR_INTERNAL     14
 #define GENDERS_ERR_ERRNUMRANGE  15
 
+#define GENDERS_FLAG_DEFAULT     0x00000000
+
 #define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 
 typedef struct genders *genders_t;
@@ -113,6 +115,25 @@ char *genders_errormsg(genders_t handle);
  */
 void genders_perror(genders_t handle, const char *msg);
  
+/*
+ * genders_get_flags
+ *
+ * Get the currently configured flags for alternate genders
+ * behavior.
+ *
+ * Returns 0 on success, -1 on failure
+ */
+int genders_get_flags(genders_t handle, unsigned int *flags);
+
+/*
+ * genders_set_flags
+ *
+ * Set the flags for alternate genders behavior.
+ *
+ * Returns 0 on success, -1 on failure
+ */
+int genders_set_flags(genders_t handle, unsigned int flags);
+
 /* 
  * genders_getnumnodes
  *

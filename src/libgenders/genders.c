@@ -81,6 +81,7 @@ _initialize_handle_info(genders_t handle)
 {
   handle->magic = GENDERS_MAGIC_NUM;
   handle->is_loaded = 0;
+  handle->flags = GENDERS_FLAG_DEFAULT;
   handle->numnodes = 0;
   handle->numattrs = 0;
   handle->maxattrs = 0;
@@ -282,6 +283,42 @@ genders_perror(genders_t handle, const char *msg)
     fprintf(stderr, "%s\n", errormsg);
   else
     fprintf(stderr, "%s: %s\n", msg, errormsg);
+}
+
+int
+genders_get_flags(genders_t handle, unsigned int *flags)
+{
+  if (_genders_handle_error_check(handle) < 0)
+    return -1;
+
+  if (!flags)
+    {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
+      return -1;
+    }
+
+  *flags = handle->flags;
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return 0;
+}
+
+int
+genders_set_flags(genders_t handle, unsigned int flags)
+{
+  unsigned int mask = GENDERS_FLAG_DEFAULT;
+
+  if (_genders_handle_error_check(handle) < 0)
+    return -1;
+
+  if (flags & ~mask)
+    {
+      handle->errnum = GENDERS_ERR_PARAMETERS;
+      return -1;
+    }
+
+  handle->flags = flags;
+  handle->errnum = GENDERS_ERR_SUCCESS;
+  return 0;
 }
 
 int 
@@ -1545,6 +1582,7 @@ genders_copy(genders_t handle)
     }
 
   handlecopy->is_loaded = handle->is_loaded;
+  handlecopy->flags = handle->flags;
   handlecopy->numnodes = handle->numnodes;
   handlecopy->numattrs = handle->numattrs;
   handlecopy->maxattrs = handle->maxattrs;

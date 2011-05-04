@@ -157,6 +157,7 @@ struct genders {
   int magic;                                /* magic number */ 
   int errnum;                               /* error code */
   int is_loaded;                            /* genders loaded flag */
+  unsigned int flags;                       /* flags for alternate behavior */
   int numnodes;                             /* number of nodes */
   int numattrs;                             /* number of attrs */
   int maxattrs;                             /* max attrs for any one node */

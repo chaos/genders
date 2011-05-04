@@ -1,3 +1,8 @@
+2011-05-04  Albert Chu  <chu11@llnl.gov>
+
+	* src/genders/: Add new functions genders_get_flags and
+	genders_set_flags.
+	
 2011-05-03  Albert Chu  <chu11@llnl.gov>
 
 	* man/nodeattr.1: Fix typos.
