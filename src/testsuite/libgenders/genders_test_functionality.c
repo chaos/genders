@@ -451,7 +451,7 @@ static int
 _genders_get_flags_functionality_common(genders_t handle,
 					int *num,
 					unsigned int flag,
-					const char *flag_str,
+					char *flag_str,
 					int verbose)
 {
   unsigned int tmpflags;
@@ -525,7 +525,7 @@ static int
 _genders_set_flags_functionality_common(genders_t handle,
 					int *num,
 					unsigned int flag,
-					const char *flag_str,
+					char *flag_str,
 					int verbose)
 {
   unsigned int tmpflags;
