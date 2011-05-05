@@ -510,8 +510,8 @@ genders_get_flags_functionality(int verbose)
   
   err = _genders_get_flags_functionality_common(handle,
 						&num,
-						GENDERS_FLAG_NO_SUBSTITUTION,
-						"GENDERS_FLAG_NO_SUBSTITUTION",
+						GENDERS_FLAG_RAW_VALUES,
+						"GENDERS_FLAG_RAW_VALUES",
 						verbose);
   errcount += err;
 
@@ -584,8 +584,8 @@ genders_set_flags_functionality(int verbose)
   
   err = _genders_set_flags_functionality_common(handle,
 						&num,
-						GENDERS_FLAG_NO_SUBSTITUTION,
-						"GENDERS_FLAG_NO_SUBSTITUTION",
+						GENDERS_FLAG_RAW_VALUES,
+						"GENDERS_FLAG_RAW_VALUES",
 						verbose);
   errcount += err;
 

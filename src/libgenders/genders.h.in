@@ -52,10 +52,11 @@ extern "C" {
 
 /* Flags for alternate genders before
  * 
- * NO_SUBSTITUTION - Do not perform substitution, such as with "%n".
+ * RAW_VALUES - Do not perform any substitution, such as with "%n" or
+ * "%%", when returning attribute values.
  */
-#define GENDERS_FLAG_DEFAULT          0x00000000
-#define GENDERS_FLAG_NO_SUBSTITUTION  0x00000001
+#define GENDERS_FLAG_DEFAULT     0x00000000
+#define GENDERS_FLAG_RAW_VALUES  0x00000001
 
 #define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
 
