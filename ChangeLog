@@ -1,6 +1,6 @@
 2011-05-05  Albert Chu  <chu11@llnl.gov>
 
-	* src/libgenders/: Support NO_SUBSTITUTION flag.
+	* src/libgenders/: Support RAW_VALUES flag.
 	
 2011-05-04  Albert Chu  <chu11@llnl.gov>
 
