@@ -1,6 +1,8 @@
 2011-05-05  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/: Support RAW_VALUES flag.
+
+	* src/testsuite/: Support RAW_VALUES testing.
 	
 2011-05-04  Albert Chu  <chu11@llnl.gov>
 

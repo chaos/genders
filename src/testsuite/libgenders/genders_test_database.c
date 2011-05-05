@@ -1624,3 +1624,101 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_large_val,
     NULL,
   };
+
+genders_database_data_t genders_database_data_flag_test_raw_values = 
+  {
+    "node1",
+    NULL,			
+    "escape1",			
+    "%t",			
+    1,
+    4,
+    4,
+    5,
+    7,
+    5,
+    {"node1", NULL},
+    1,				
+    {"escape1", "escape2", "escape3", "escape4", NULL},
+    4,
+    {"%t", "%t", "%n", "node1", NULL},
+    4,
+    {
+      {
+	{"escape1", "escape2", "escape3", "escape4", NULL},
+	{"%t", "%t", "%n", "node1", NULL}, /* cheat, these are the substituted values */
+	{"%t", "%%t", "%%n", "%n", NULL}, /* cheat, these are "raw" values */
+	4,
+      },
+    },
+    1,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"",
+	"",
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape1",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape1",
+	"%t",
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape2",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape2",
+	"%t",
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape3",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape3",
+	"%n",
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape4",
+	NULL,
+	{"node1", NULL},
+	1,
+      },
+      {
+	"escape4",
+	"node1",
+	{"node1", NULL},
+	1,
+      },
+    },
+    10,
+  };
+
+genders_database_t genders_database_flag_test_raw_values = 
+  {
+    "testdatabases/genders.flag_test_raw_values",
+    &genders_database_data_flag_test_raw_values,
+  };

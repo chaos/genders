@@ -174,7 +174,7 @@ genders_load_data_functionality(int verbose)
 						verbose);
 
 	if (genders_handle_destroy(handle) < 0)
-	  genders_err_exit("genders_handle_create");
+	  genders_err_exit("genders_handle_destroy");
 
 	errcount += err;
 	num++;
@@ -208,7 +208,7 @@ genders_load_data_functionality(int verbose)
 						verbose);
 	
 	if (genders_handle_destroy(handle) < 0)
-	  genders_err_exit("genders_handle_create");
+	  genders_err_exit("genders_handle_destroy");
 
 	errcount += err;
 	num++;
@@ -251,7 +251,7 @@ genders_errnum_functionality(int verbose)
     }
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return errcount;
 }
@@ -293,7 +293,7 @@ genders_strerror_functionality(int verbose)
     }
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return errcount;
 }
@@ -335,7 +335,7 @@ genders_errormsg_functionality(int verbose)
     }
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return errcount;
 }
@@ -443,7 +443,7 @@ genders_perror_functionality(int verbose)
     }
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
   return errcount;
 }
 
@@ -461,7 +461,7 @@ _genders_get_flags_functionality_common(genders_t handle,
   assert(handle && num && flag_str);
 
   if (genders_set_flags(handle, flag) < 0)
-    genders_err_exit("genders_set_flags");
+    genders_err_exit("genders_set_flags: %s", genders_errormsg(handle));
 	
   return_value = genders_get_flags(handle, &tmpflags);
   errnum = genders_errnum(handle);
@@ -516,7 +516,7 @@ genders_get_flags_functionality(int verbose)
   errcount += err;
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return errcount;
 }
@@ -549,8 +549,8 @@ _genders_set_flags_functionality_common(genders_t handle,
   errcount += err;
   (*num)++;
   
-  return_value = genders_get_flags(handle, &tmpflags);
-  errnum = genders_errnum(handle);
+  if (genders_get_flags(handle, &tmpflags) < 0)
+    genders_err_exit("genders_get_flags: %s", genders_errormsg(handle));
   
   err = genders_flag_check("genders_set_flags",
 			   (*num),
@@ -565,6 +565,110 @@ _genders_set_flags_functionality_common(genders_t handle,
   return errcount;
 }
 
+static int
+_genders_set_flags_raw_values(int *num,
+			      int verbose)
+{
+  genders_database_t *database = &genders_database_flag_test_raw_values;
+  genders_t handle;
+  int return_value, errnum, err;
+  int errcount = 0;
+  char **attrlist = NULL, **vallist = NULL;
+  int attrlist_len, vallist_len;
+
+  assert(num);
+
+  if (!(handle = genders_handle_create()))
+    genders_err_exit("genders_handle_create");
+
+  if (genders_load_data(handle, database->filename) < 0)
+    genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
+
+  if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0) 
+    genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handle));
+      
+  if ((vallist_len = genders_vallist_create(handle, &vallist)) < 0) 
+    genders_err_exit("genders_vallist_create: %s", genders_errormsg(handle));
+
+  if (genders_set_flags(handle, GENDERS_FLAG_RAW_VALUES) < 0)
+    genders_err_exit("genders_set_flags: %s", genders_errormsg(handle));
+ 
+  /* Note: we're cheating, vals_string represents the substituted
+   * values, vals_input represents the raw values.  This is not what
+   * is typically done.
+   */
+
+  return_value = genders_getattr(handle,
+				 attrlist,
+				 vallist,
+				 attrlist_len,
+				 database->data->node);
+  
+  errnum = genders_errnum(handle);
+
+  err = genders_return_value_errnum_attrval_list_check("genders_set_flags",
+						       (*num),
+						       database->data->node_attrvals[0].attrslen,
+						       GENDERS_ERR_SUCCESS,
+						       database->data->node_attrvals[0].attrs,
+						       database->data->node_attrvals[0].vals_input,
+						       database->data->node_attrvals[0].attrslen,
+						       return_value,
+						       errnum,
+						       attrlist,
+						       vallist,
+						       return_value,
+						       database->filename,
+						       verbose);
+  errcount += err;
+  (*num)++;
+
+  if (genders_set_flags(handle, GENDERS_FLAG_DEFAULT) < 0)
+    genders_err_exit("genders_set_flags: %s", genders_errormsg(handle));
+
+  if (genders_attrlist_clear(handle, attrlist) < 0)
+    genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handle));
+
+  if (genders_vallist_clear(handle, vallist) < 0)
+    genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handle));
+
+  return_value = genders_getattr(handle,
+				 attrlist,
+				 vallist,
+				 attrlist_len,
+				 database->data->node);
+  
+  errnum = genders_errnum(handle);
+  
+  err = genders_return_value_errnum_attrval_list_check("genders_set_flags",
+						       (*num),
+						       database->data->node_attrvals[0].attrslen,
+						       GENDERS_ERR_SUCCESS,
+						       database->data->node_attrvals[0].attrs,
+						       database->data->node_attrvals[0].vals_string,
+						       database->data->node_attrvals[0].attrslen,
+						       return_value,
+						       errnum,
+						       attrlist,
+						       vallist,
+						       return_value,
+						       database->filename,
+						       verbose);
+  errcount += err;
+  (*num)++;
+
+  if (genders_attrlist_destroy(handle, attrlist) < 0)
+    genders_err_exit("genders_attrlist_destroy: %s", genders_errormsg(handle));
+
+  if (genders_vallist_destroy(handle, vallist) < 0)
+    genders_err_exit("genders_vallist_destroy: %s", genders_errormsg(handle));
+
+  if (genders_handle_destroy(handle) < 0)
+    genders_err_exit("genders_handle_destroy");
+
+  return errcount;
+}
+
 int
 genders_set_flags_functionality(int verbose)
 {
@@ -575,6 +679,8 @@ genders_set_flags_functionality(int verbose)
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
    
+  /* Part 1: Test Basics */
+
   err = _genders_set_flags_functionality_common(handle,
 						&num,
 						GENDERS_FLAG_DEFAULT,
@@ -590,7 +696,14 @@ genders_set_flags_functionality(int verbose)
   errcount += err;
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
+
+  /* Part 2: Test actual flags */
+
+  err = _genders_set_flags_raw_values(&num,
+				      verbose);
+
+  errcount += err;
 
   return errcount;
 }
@@ -629,7 +742,7 @@ _genders_getfunc_functionality(GendersGetFunc func,
 					  verbose);
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return err;
 }
@@ -877,7 +990,7 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
     }
   
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
   
   return retval;
 }
@@ -2657,7 +2770,7 @@ genders_parse_functionality(int verbose)
 						verbose);
 
 	if (genders_handle_destroy(handle) < 0)
-	  genders_err_exit("genders_handle_create");
+	  genders_err_exit("genders_handle_destroy");
 
 	errcount += err;
 	num++;
@@ -2696,7 +2809,7 @@ genders_parse_functionality(int verbose)
 						verbose);
 
 	if (genders_handle_destroy(handle) < 0)
-	  genders_err_exit("genders_handle_create");
+	  genders_err_exit("genders_handle_destroy");
 
 	errcount += err;
 	num++;
@@ -2741,7 +2854,7 @@ genders_set_errnum_functionality(int verbose)
     }
 
   if (genders_handle_destroy(handle) < 0)
-    genders_err_exit("genders_handle_create");
+    genders_err_exit("genders_handle_destroy");
 
   return errcount;
 }

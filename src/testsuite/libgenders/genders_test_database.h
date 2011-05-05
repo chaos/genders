@@ -113,4 +113,6 @@ extern genders_parse_error_database_t genders_parse_error_databases[];
 
 extern genders_database_t *genders_functionality_databases[];
 
+extern genders_database_t genders_database_flag_test_raw_values;
+
 #endif /* _GENDERS_TEST_DATABASE_H */
