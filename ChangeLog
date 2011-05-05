@@ -1,6 +1,10 @@
+2011-05-05  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/: Support NO_SUBSTITUTION flag.
+	
 2011-05-04  Albert Chu  <chu11@llnl.gov>
 
-	* src/genders/: Add new functions genders_get_flags and
+	* src/libgenders/: Add new functions genders_get_flags and
 	genders_set_flags.
 
 	* src/testsuite/libgenders/: Support genders_get_flags and

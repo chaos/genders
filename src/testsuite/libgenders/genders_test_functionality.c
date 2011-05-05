@@ -447,47 +447,120 @@ genders_perror_functionality(int verbose)
   return errcount;
 }
 
-int
-genders_get_flags_functionality(int verbose)
+static int
+_genders_get_flags_functionality_common(genders_t handle,
+					int *num,
+					unsigned int flag,
+					const char *flag_str,
+					int verbose)
 {
-  genders_t handle;
-  unsigned int flags;
+  unsigned int tmpflags;
+  int return_value, errnum, err;
   int errcount = 0;
-  int return_value, errnum, err, num = 0;
 
-  if (!(handle = genders_handle_create()))
-    genders_err_exit("genders_handle_create");
-  
-  if (genders_set_flags(handle, GENDERS_FLAG_DEFAULT) < 0)
+  assert(handle && num && flag_str);
+
+  if (genders_set_flags(handle, flag) < 0)
     genders_err_exit("genders_set_flags");
 	
-  return_value = genders_get_flags(handle, &flags);
+  return_value = genders_get_flags(handle, &tmpflags);
   errnum = genders_errnum(handle);
 
   err = genders_return_value_errnum_check("genders_get_flags",
-					  num,
+					  (*num),
 					  0,
 					  GENDERS_ERR_SUCCESS,
 					  return_value,
 					  errnum,
-					  "GENDERS_FLAG_DEFAULT",
+					  flag_str,
 					  verbose);
-
+  
   errcount += err;
-  num++;
+  (*num)++;
 
   err = genders_flag_check("genders_get_flags",
-			   num,
-			   0,
-			   flags,
-			   "GENDERS_FLAG_DEFAULT",
+			   (*num),
+			   flag,
+			   tmpflags,
+			   flag_str,
 			   verbose);
 
   errcount += err;
-  num++;
+  (*num)++;
+
+  return errcount;
+}
+
+int
+genders_get_flags_functionality(int verbose)
+{
+  genders_t handle;
+  int errcount = 0;
+  int err, num = 0;
+
+  if (!(handle = genders_handle_create()))
+    genders_err_exit("genders_handle_create");
   
+  err = _genders_get_flags_functionality_common(handle,
+						&num,
+						GENDERS_FLAG_DEFAULT,
+						"GENDERS_FLAG_DEFAULT",
+						verbose);
+  errcount += err;
+  
+  err = _genders_get_flags_functionality_common(handle,
+						&num,
+						GENDERS_FLAG_NO_SUBSTITUTION,
+						"GENDERS_FLAG_NO_SUBSTITUTION",
+						verbose);
+  errcount += err;
+
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_create");
+
+  return errcount;
+}
+
+static int
+_genders_set_flags_functionality_common(genders_t handle,
+					int *num,
+					unsigned int flag,
+					const char *flag_str,
+					int verbose)
+{
+  unsigned int tmpflags;
+  int return_value, errnum, err;
+  int errcount = 0;
+
+  assert(handle && num && flag_str);
+
+  return_value = genders_set_flags(handle, flag);
+  errnum = genders_errnum(handle);
+  
+  err = genders_return_value_errnum_check("genders_set_flags",
+					  (*num),
+					  0,
+					  GENDERS_ERR_SUCCESS,
+					  return_value,
+					  errnum,
+					  flag_str,
+					  verbose);
+  
+  errcount += err;
+  (*num)++;
+  
+  return_value = genders_get_flags(handle, &tmpflags);
+  errnum = genders_errnum(handle);
+  
+  err = genders_flag_check("genders_set_flags",
+			   (*num),
+			   flag,
+			   tmpflags,
+			   flag_str,
+			   verbose);
+
+  errcount += err;
+  (*num)++;
 
   return errcount;
 }
@@ -496,41 +569,26 @@ int
 genders_set_flags_functionality(int verbose)
 {
   genders_t handle;
-  unsigned int flags;
   int errcount = 0;
-  int return_value, errnum, err, num = 0;
+  int err, num = 0;
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
-  return_value = genders_set_flags(handle, GENDERS_FLAG_DEFAULT);
-  errnum = genders_errnum(handle);
-	
-  err = genders_return_value_errnum_check("genders_set_flags",
-					  num,
-					  0,
-					  GENDERS_ERR_SUCCESS,
-					  return_value,
-					  errnum,
-					  "GENDERS_FLAG_DEFAULT",
-					  verbose);
-
+   
+  err = _genders_set_flags_functionality_common(handle,
+						&num,
+						GENDERS_FLAG_DEFAULT,
+						"GENDERS_FLAG_DEFAULT",
+						verbose);
   errcount += err;
-  num++;
-
-  return_value = genders_get_flags(handle, &flags);
-  errnum = genders_errnum(handle);
-
-  err = genders_flag_check("genders_set_flags",
-			   num,
-			   0,
-			   flags,
-			   "GENDERS_FLAG_DEFAULT",
-			   verbose);
-
-  errcount += err;
-  num++;
   
+  err = _genders_set_flags_functionality_common(handle,
+						&num,
+						GENDERS_FLAG_NO_SUBSTITUTION,
+						"GENDERS_FLAG_NO_SUBSTITUTION",
+						verbose);
+  errcount += err;
+
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_create");
 

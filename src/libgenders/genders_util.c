@@ -169,7 +169,8 @@ _genders_get_valptr(genders_t handle,
 {
   char *valptr, *nodenameptr, *valbufptr;
 
-  if (!(av->val_contains_subst)) 
+  if (!(av->val_contains_subst)
+      || (handle->flags & GENDERS_FLAG_NO_SUBSTITUTION))
     {
       if (subst_occurred)
 	*subst_occurred = 0;

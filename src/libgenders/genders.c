@@ -305,7 +305,8 @@ genders_get_flags(genders_t handle, unsigned int *flags)
 int
 genders_set_flags(genders_t handle, unsigned int flags)
 {
-  unsigned int mask = GENDERS_FLAG_DEFAULT;
+  unsigned int mask = (GENDERS_FLAG_DEFAULT
+		       | GENDERS_FLAG_NO_SUBSTITUTION);
 
   if (_genders_handle_error_check(handle) < 0)
     return -1;
