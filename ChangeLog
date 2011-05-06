@@ -1,5 +1,10 @@
 2011-05-05  Albert Chu  <chu11@llnl.gov>
 
+	* src/nodeattr/: If -A is specified without an output format,
+	assume an output format.
+	
+2011-05-05  Albert Chu  <chu11@llnl.gov>
+
 	* src/libgenders/: Support RAW_VALUES flag.
 
 	* src/testsuite/: Support RAW_VALUES testing.

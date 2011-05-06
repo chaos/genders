@@ -175,8 +175,10 @@ main(int argc, char *argv[])
     if ((qopt || Qopt || Vopt || lopt || kopt || dopt || eopt) && vopt)
         usage();
 
-    if (Aopt && !qopt)
-        usage();
+    if (Aopt && !qopt) {
+        qfmt = FMT_HOSTLIST;
+	qopt = 1;
+    }
 
     if (!qopt && Xopt)
         usage();
