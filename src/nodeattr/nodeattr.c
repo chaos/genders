@@ -806,6 +806,7 @@ expand(genders_t gp)
     char **nodes, **attrs, **vals;
     int nodeslen, attrslen, valslen;
     int nodescount, attrscount;
+    unsigned int maxnodenamelen = 0;
     int i, j;
 
     if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
@@ -820,6 +821,16 @@ expand(genders_t gp)
     if ((nodescount = genders_getnodes(gp, nodes, nodeslen, NULL, NULL)) < 0)
         _gend_error_exit(gp, "genders_getnodes");
 
+    /* This is inefficient, but no other way to get the length of the
+     * longest node name
+     */
+    for (i = 0; i < nodescount; i++) {
+        unsigned int tmp = strlen(nodes[i]);
+	if (tmp > maxnodenamelen) {
+	    maxnodenamelen = tmp;
+	}
+    }
+
     for (i = 0; i < nodescount; i++) {
         if (genders_attrlist_clear(gp, attrs) < 0)
 	    _gend_error_exit(gp, "genders_attrlist_clear");
@@ -830,7 +841,14 @@ expand(genders_t gp)
 	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
 	    _gend_error_exit(gp, "genders_getattr");
 	
-	printf("%s%s", nodes[i], attrscount ? " " : "\0"); 
+	printf("%s", nodes[i]);
+	if (attrscount) {
+	    unsigned int numspace = maxnodenamelen - strlen(nodes[i]);
+	    for (j = 0; j < numspace; j++)
+		printf(" ");
+	    printf(" ");
+	}
+
 	for (j = 0 ; j < attrscount; j++) {
 	    if (j)
 	        printf(",");
@@ -840,6 +858,7 @@ expand(genders_t gp)
 	    else
 	        printf("%s", attrs[j]);
 	}
+
 	printf("\n");
     }
 

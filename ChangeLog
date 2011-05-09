@@ -1,6 +1,8 @@
 2011-05-09  Albert Chu  <chu11@llnl.gov>
 
 	* src/nodeattr/: Support --compress option.
+
+	* src/nodeattr/: Make --expand output prettier.
 	
 2011-05-05  Albert Chu  <chu11@llnl.gov>
 
