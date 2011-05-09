@@ -55,6 +55,9 @@
 
 #define OPTIONS "cnsqX:AvQVUlf:kd:e"
 
+/* an impossible attribute */
+#define NOATTRSFLAG "=,,=,,=,,=,,="
+
 #if HAVE_GETOPT_LONG
 static struct option longopts[] = {
     { "querycomma", 0, 0, 'c' },
@@ -897,6 +900,62 @@ _attr_list_del(void *data)
     free(al);
 }
 
+static void
+_hash_attrval(hash_t hattr, char *node, char *attr, char *val)
+{
+    struct hosts_data *hd = NULL;
+    char *hashkey = NULL;
+    int keylen, attrlen, vallen;
+    
+    assert(hattr && node && attr && val);
+
+    attrlen = strlen(attr);
+    vallen = strlen(val);
+    keylen = attrlen + vallen;
+
+    /* for equal sign */
+    if (vallen)
+	keylen++;
+
+    /* for NUL char */
+    keylen++;
+    
+    if (!(hashkey = (char *)malloc(keylen))) {
+	fprintf(stderr, "malloc: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    if (vallen)
+	snprintf(hashkey, keylen, "%s=%s", attr, val);
+    else
+	snprintf(hashkey, keylen, "%s", attr);
+
+    if (!(hd = hash_find(hattr, hashkey))) {
+	if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
+	    fprintf(stderr, "malloc: %s\n", strerror(errno));
+	    exit(1);
+	}
+
+	hd->key = hashkey;
+	if (!(hd->hl = hostlist_create(NULL))) {
+	    fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
+	    exit(1);
+	}
+
+	if (!hash_insert(hattr, hd->key, hd)) {
+	    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+	    exit(1);
+	}
+    }
+    else
+	free(hashkey);
+
+    if (!hostlist_push(hd->hl, node)) {
+	fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+	exit(1);
+    }
+}
+
 static int
 _hash_hostrange(void *data, const void *key, void *arg)
 {
@@ -962,6 +1021,10 @@ _output_hostrange(void *data, const void *key, void *arg)
     }
     
     while ((attrval = list_next(litr))) {
+
+	if (!strcmp(attrval, NOATTRSFLAG))
+	    continue;
+
         printf("%s", attrval);
 	count++;
 	if (lcount != count)
@@ -1038,58 +1101,14 @@ compress(genders_t gp)
 
 	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
 	    _gend_error_exit(gp, "genders_getattr");
-	
-	for (j = 0 ; j < attrscount; j++) {
-	    struct hosts_data *hd = NULL;
-	    char *hashkey = NULL;
-	    int keylen, attrlen, vallen;
 
-	    attrlen = strlen(attrs[j]);
-	    vallen = strlen(vals[j]);
-	    keylen = attrlen + vallen;
-
-	    /* for equal sign */
-	    if (vallen)
-	      keylen++;
-
-	    /* for NUL char */
-	    keylen++;
-
-	    if (!(hashkey = (char *)malloc(keylen))) {
-	        fprintf(stderr, "malloc: %s\n", strerror(errno));
-		exit(1);
-	    }
-
-	    if (vallen)
-	        snprintf(hashkey, keylen, "%s=%s", attrs[j], vals[j]);
-	    else
-	        snprintf(hashkey, keylen, "%s", attrs[j]);
-
-	    if (!(hd = hash_find(hattr, hashkey))) {
-	        if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
-		    fprintf(stderr, "malloc: %s\n", strerror(errno));
-		    exit(1);
-		}
-
-		hd->key = hashkey;
-		if (!(hd->hl = hostlist_create(NULL))) {
-		    fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
-		    exit(1);
-		}
-
-		if (!hash_insert(hattr, hd->key, hd)) {
-		    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
-		    exit(1);
-		}
-	    }
-	    else
-	        free(hashkey);
-
-	    if (!hostlist_push(hd->hl, nodes[i])) {
-	        fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
-		exit(1);
-	    }
+	if (!attrscount) {
+	    _hash_attrval(hattr, nodes[i], NOATTRSFLAG, "");
+	    continue;
 	}
+	
+	for (j = 0 ; j < attrscount; j++)
+	    _hash_attrval(hattr, nodes[i], attrs[j], vals[j]);
     }
 
     /* Now, find all the common attributes for a particular hostrange */
