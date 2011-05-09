@@ -810,6 +810,9 @@ expand(genders_t gp)
     int nodeslen, attrslen, valslen;
     int nodescount, attrscount;
     unsigned int maxnodenamelen = 0;
+    hostlist_t hl = NULL;
+    hostlist_iterator_t hlitr = NULL;
+    char *node;
     int i, j;
 
     if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
@@ -824,29 +827,47 @@ expand(genders_t gp)
     if ((nodescount = genders_getnodes(gp, nodes, nodeslen, NULL, NULL)) < 0)
         _gend_error_exit(gp, "genders_getnodes");
 
-    /* This is inefficient, but no other way to get the length of the
-     * longest node name
+    /* We use the hostlist as a cheap mechanism to sort the node names
+     * before outputting them
      */
+
+    if (!(hl = hostlist_create(NULL))) {
+        fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
+	exit(1);
+    }
+
     for (i = 0; i < nodescount; i++) {
         unsigned int tmp = strlen(nodes[i]);
 	if (tmp > maxnodenamelen) {
 	    maxnodenamelen = tmp;
 	}
+
+	if (!hostlist_push(hl, nodes[i])) {
+	    fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+	    exit(1);
+	}
     }
 
-    for (i = 0; i < nodescount; i++) {
+    hostlist_sort(hl);
+
+    if (!(hlitr = hostlist_iterator_create(hl))) {
+	fprintf(stderr, "hostlist_iterator_create: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    while ((node = hostlist_next(hlitr))) {
         if (genders_attrlist_clear(gp, attrs) < 0)
 	    _gend_error_exit(gp, "genders_attrlist_clear");
 
         if (genders_vallist_clear(gp, vals) < 0)
 	    _gend_error_exit(gp, "genders_vallist_clear");
 
-	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
+	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, node)) < 0)
 	    _gend_error_exit(gp, "genders_getattr");
 	
-	printf("%s", nodes[i]);
+	printf("%s", node);
 	if (attrscount) {
-	    unsigned int numspace = maxnodenamelen - strlen(nodes[i]);
+	    unsigned int numspace = maxnodenamelen - strlen(node);
 	    for (j = 0; j < numspace; j++)
 		printf(" ");
 	    printf(" ");
@@ -863,11 +884,13 @@ expand(genders_t gp)
 	}
 
 	printf("\n");
+	free(node);
     }
 
     genders_nodelist_destroy(gp, nodes);
     genders_attrlist_destroy(gp, attrs);
     genders_vallist_destroy(gp, vals);
+    hostlist_destroy(hl);
 }
 
 struct hosts_data {
