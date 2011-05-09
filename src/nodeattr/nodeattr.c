@@ -40,9 +40,12 @@
 #if HAVE_GETOPT_H 
 #include <getopt.h>
 #endif /* HAVE_GETOPT_H */
+#include <errno.h>
 
 #include "genders.h"
+#include "hash.h"
 #include "hostlist.h"
+#include "list.h"
 
 #if HAVE_GETOPT_LONG
 #define GETOPT(ac,av,opt,lopt) getopt_long(ac,av,opt,lopt,NULL)
@@ -69,6 +72,7 @@ static struct option longopts[] = {
     { "parse-check", 0, 0, 'k'},
     { "diff", 1, 0, 'd'},
     { "expand", 0, 0, 'e'},
+    { "compress", 0, 0, 'C'},
     { 0,0,0,0 },
 };
 #endif
@@ -83,6 +87,7 @@ static void list_attrs(genders_t gp, char *node);
 static void usage(void);
 static void diff_genders(char *db1, char *db2);
 static void expand(genders_t gp);
+static void compress(genders_t gp);
 
 /* Utility functions */
 static int _gend_error_exit(genders_t gp, char *msg);
@@ -95,12 +100,14 @@ static char *_node_create(genders_t gp);
 static char *_attr_create(genders_t gp);
 #endif
 
+#define HOSTLIST_BUFLEN 1024
+
 int
 main(int argc, char *argv[])
 {
     int c, errors;
     int Aopt = 0, lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
-      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0, eopt = 0;
+      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0, eopt = 0, Copt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -160,6 +167,9 @@ main(int argc, char *argv[])
 	case 'e':   /* --expand */
 	    eopt = 1;
 	    break;
+	case 'C':   /* --compress */
+	    Copt = 1;
+	    break;
         default:
             usage();
             break;
@@ -169,10 +179,18 @@ main(int argc, char *argv[])
     /* check parameter inputs */
 
     /* specify correct option combinations */
-    if ((qopt + Qopt + Vopt + lopt + kopt + dopt + eopt) > 1)
+    if ((qopt + Qopt + Vopt + lopt + kopt + dopt + eopt + Copt) > 1)
         usage();
 
-    if ((qopt || Qopt || Vopt || lopt || kopt || dopt || eopt) && vopt)
+    if ((qopt
+	 || Qopt
+	 || Vopt
+	 || lopt
+	 || kopt
+	 || dopt
+	 || eopt
+	 || Copt)
+	&& vopt)
         usage();
 
     if (Aopt && !qopt) {
@@ -197,13 +215,15 @@ main(int argc, char *argv[])
             && !kopt
             && !dopt
 	    && !eopt
+	    && !Copt
             && (optind != (argc - 1) && optind != (argc - 2)))
         || (Qopt && (optind != (argc - 1) && optind != (argc - 2)))
         || (Vopt && optind != (argc - 1))
         || (lopt && (optind != argc && optind != (argc - 1)))
         || (kopt && optind != argc)
         || (dopt && optind != argc)
-        || (eopt && optind != argc))
+        || (eopt && optind != argc)
+        || (Copt && optind != argc))
         usage();
 
     /* genders database diff */
@@ -235,6 +255,12 @@ main(int argc, char *argv[])
     /* expand */
     if (eopt) {
         expand(gp);
+	exit(0);
+    }
+
+    /* compress */
+    if (Copt) {
+        compress(gp);
 	exit(0);
     }
 
@@ -506,6 +532,7 @@ usage(void)
         "or     nodeattr [-f genders] -k\n"
         "or     nodeattr [-f genders] -d genders\n"
 	"or     nodeattr [-f genders] --expand\n"
+	"or     nodeattr [-f genders] --compress\n"
             );
     exit(1);
 }
@@ -801,7 +828,7 @@ expand(genders_t gp)
 	    _gend_error_exit(gp, "genders_vallist_clear");
 
 	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
-	  _gend_error_exit(gp, "genders_getattr");
+	    _gend_error_exit(gp, "genders_getattr");
 	
 	printf("%s%s", nodes[i], attrscount ? " " : "\0"); 
 	for (j = 0 ; j < attrscount; j++) {
@@ -819,6 +846,258 @@ expand(genders_t gp)
     genders_nodelist_destroy(gp, nodes);
     genders_attrlist_destroy(gp, attrs);
     genders_vallist_destroy(gp, vals);
+}
+
+struct hosts_data {
+    char *key;
+    hostlist_t hl;
+};
+
+struct attr_list {
+    char *hostrange;
+    List l;
+};
+
+static void
+_hosts_data_del(void *data)
+{
+    struct hosts_data *hd = (struct hosts_data *)data;
+
+    free(hd->key);
+    hostlist_destroy(hd->hl);
+    free(hd);
+}
+
+static void
+_attr_list_del(void *data)
+{
+    struct attr_list *al = (struct attr_list *)data;
+
+    free(al->hostrange);
+    list_destroy(al->l);
+    free(al);
+}
+
+static int
+_hash_hostrange(void *data, const void *key, void *arg)
+{
+    struct hosts_data *hd = (struct hosts_data *)data;
+    hash_t *hrange = (hash_t *)arg;
+    char hostrange[HOSTLIST_BUFLEN + 1];
+    struct attr_list *al;
+
+    memset(hostrange, '\0', HOSTLIST_BUFLEN + 1);
+
+    hostlist_sort(hd->hl);
+
+    if (hostlist_ranged_string(hd->hl, HOSTLIST_BUFLEN, hostrange) < 0) {
+        fprintf(stderr, "hostlist_ranged_string: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    if (!(al = hash_find(*hrange, hostrange))) {
+        if (!(al = (struct attr_list *)malloc(sizeof(struct attr_list)))) {
+	    fprintf(stderr, "malloc: %s\n", strerror(errno));
+	    exit(1);
+	}
+	
+	if (!(al->hostrange = strdup(hostrange))) {
+	    fprintf(stderr, "strdup: %s\n", strerror(errno));
+	    exit(1);
+	}
+	
+	if (!(al->l = list_create(NULL))) {
+	    fprintf(stderr, "list_create: %s\n", strerror(errno));
+	    exit(1);
+	}
+
+	if (!hash_insert(*hrange, al->hostrange, al)) {
+	    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+	    exit(1);
+	}
+    }
+
+    if (!list_append(al->l, hd->key)) {
+        fprintf(stderr, "list_append: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    return 0;
+}
+
+static int
+_output_hostrange(void *data, const void *key, void *arg)
+{
+    struct attr_list *al = (struct attr_list *)data;
+    char *attrval;
+    ListIterator litr;
+    int lcount, count = 0;
+
+    printf("%s ", al->hostrange);
+    
+    lcount = list_count(al->l);
+
+    if (!(litr = list_iterator_create(al->l))) {
+        fprintf(stderr, "list_iterator_create: %s\n", strerror(errno));
+	exit(1);
+    }
+    
+    while ((attrval = list_next(litr))) {
+        printf("%s", attrval);
+	count++;
+	if (lcount != count)
+	    printf(",");
+    }
+
+    printf("\n");
+
+    list_iterator_destroy(litr);
+    return 0;
+}
+
+static void
+compress(genders_t gp)
+{
+    char **nodes, **attrs, **vals;
+    int nodeslen, attrslen, valslen;
+    int nodescount, attrscount;
+    int numnodes, numattrs;
+    hash_t hattr = NULL;
+    hash_t hrange = NULL;
+    int i, j;
+
+    /* The basic idea behind this algorithm is that we will find every
+     * host that contains an attr or attr=val combination.
+     *
+     * Then, we will find every attr or attr=val combination with the
+     * same sets of hosts, than output a compressed hostrange output
+     * for those hosts with every appropriate attr/attr=val.
+     */
+
+    /* need to treat values w/ raw inputs in order to compress */
+    if (genders_set_flags(gp, GENDERS_FLAG_RAW_VALUES) < 0)
+        _gend_error_exit(gp, "genders_set_flags");
+
+    if ((numnodes = genders_getnumnodes(gp)) < 0)
+        _gend_error_exit(gp, "genders_getnumnodes");
+
+    if ((numattrs = genders_getnumattrs(gp)) < 0)
+        _gend_error_exit(gp, "genders_getnumattrs");
+
+    /* numattrs + 1, in case numattrs == 0
+     *
+     * (numattrs + 1) * 4, is an estimate on attribute=value pair
+     * types, b/c we are keying off attr=val pairs, not just the
+     * attribute name.
+     */
+    if (!(hattr = hash_create((numattrs + 1)*4, 
+			      (hash_key_f)hash_key_string,
+			      (hash_cmp_f)strcmp,
+			      _hosts_data_del))) {
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
+        _gend_error_exit(gp, "genders_nodelist_create");
+
+    if ((attrslen = genders_attrlist_create(gp, &attrs)) < 0)
+        _gend_error_exit(gp, "genders_attrlist_create");
+
+    if ((valslen = genders_vallist_create(gp, &vals)) < 0)
+        _gend_error_exit(gp, "genders_vallist_create");
+
+    if ((nodescount = genders_getnodes(gp, nodes, nodeslen, NULL, NULL)) < 0)
+        _gend_error_exit(gp, "genders_getnodes");
+
+    for (i = 0; i < nodescount; i++) {
+        if (genders_attrlist_clear(gp, attrs) < 0)
+	    _gend_error_exit(gp, "genders_attrlist_clear");
+
+        if (genders_vallist_clear(gp, vals) < 0)
+	    _gend_error_exit(gp, "genders_vallist_clear");
+
+	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
+	    _gend_error_exit(gp, "genders_getattr");
+	
+	for (j = 0 ; j < attrscount; j++) {
+	    struct hosts_data *hd = NULL;
+	    char *hashkey = NULL;
+	    int keylen, attrlen, vallen;
+
+	    attrlen = strlen(attrs[j]);
+	    vallen = strlen(vals[j]);
+	    keylen = attrlen + vallen;
+
+	    /* for equal sign */
+	    if (vallen)
+	      keylen++;
+
+	    /* for NUL char */
+	    keylen++;
+
+	    if (!(hashkey = (char *)malloc(keylen))) {
+	        fprintf(stderr, "malloc: %s\n", strerror(errno));
+		exit(1);
+	    }
+
+	    if (vallen)
+	        snprintf(hashkey, keylen, "%s=%s", attrs[j], vals[j]);
+	    else
+	        snprintf(hashkey, keylen, "%s", attrs[j]);
+
+	    if (!(hd = hash_find(hattr, hashkey))) {
+	        if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
+		    fprintf(stderr, "malloc: %s\n", strerror(errno));
+		    exit(1);
+		}
+
+		hd->key = hashkey;
+		if (!(hd->hl = hostlist_create(NULL))) {
+		    fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
+		    exit(1);
+		}
+
+		if (!hash_insert(hattr, hd->key, hd)) {
+		    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+		    exit(1);
+		}
+	    }
+	    else
+	        free(hashkey);
+
+	    if (!hostlist_push(hd->hl, nodes[i])) {
+	        fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+		exit(1);
+	    }
+	}
+    }
+
+    /* Now, find all the common attributes for a particular hostrange */
+
+    if (!(hrange = hash_create(numnodes, 
+			      (hash_key_f)hash_key_string,
+			      (hash_cmp_f)strcmp,
+			      _attr_list_del))) {
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    if (hash_for_each(hattr, _hash_hostrange, &hrange) < 0) {
+        fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    if (hash_for_each(hrange, _output_hostrange, NULL) < 0) {
+        fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    genders_nodelist_destroy(gp, nodes);
+    genders_attrlist_destroy(gp, attrs);
+    genders_vallist_destroy(gp, vals);
+    hash_destroy(hattr);
+    hash_destroy(hrange);
 }
 
 /**

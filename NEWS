@@ -5,8 +5,8 @@ and admins.
 Changes in genders-1.18
 =======================
  -- Support -A option in nodeattr, to output all nodes.
- -- Support --expand option in nodeattr, to output expanded genders
-    database.
+ -- Support --expand and --compress options in nodeattr, to output
+    expanded or compressed genders databases.
  -- Support new libgenders flags.
 
 Changes in genders-1.17

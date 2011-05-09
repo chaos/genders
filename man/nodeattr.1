@@ -58,6 +58,9 @@ nodeattr \- query genders file
 .B nodeattr
 .I "[-f genders] --expand"
 .br
+.B nodeattr
+.I "[-f genders] --compress"
+.br
 .SH DESCRIPTION
 When invoked with the 
 .I "-q"
@@ -150,8 +153,19 @@ The
 .I "--expand"
 option will take a genders database, expand all hostranges, and output
 a new genders database.  The subsequent database will be identical to
-the first, but every node will be listed on a separate line.  May be
-useful for debugging or determining the difference between databases.
+the first, but every node will be listed on a separate line.  This
+option may be useful for debugging or determining the difference
+between databases.
+.LP
+The
+.I "--compress"
+is opposite of the
+.I "--expand"
+option.  It will output a new identical genders database with
+hostranges of nodes with identical attributes.  Depending on the setup
+of your genders database, the resulting database may be longer or
+shorter.  This option may be useful as a beginning step to compressing
+an existing genders database.
 .LP
 Attribute names may optionally appear in the genders file with an
 equal sign followed by a value.
