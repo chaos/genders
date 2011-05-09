@@ -2,7 +2,7 @@
 
 	* src/nodeattr/: Support --compress option.
 
-	* src/nodeattr/: Make --expand output prettier.
+	* src/nodeattr/: Make --expand and --compress output prettier.
 	
 2011-05-05  Albert Chu  <chu11@llnl.gov>
 

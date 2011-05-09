@@ -903,6 +903,11 @@ struct attr_list {
     List l;
 };
 
+struct store_hostrange_data {
+    List hlist;
+    unsigned int maxhostrangelen;
+};
+
 static void
 _hosts_data_del(void *data)
 {
@@ -1027,14 +1032,54 @@ _hash_hostrange(void *data, const void *key, void *arg)
 }
 
 static int
-_output_hostrange(void *data, const void *key, void *arg)
+_store_hostrange(void *data, const void *key, void *arg)
 {
     struct attr_list *al = (struct attr_list *)data;
+    struct store_hostrange_data *shd = (struct store_hostrange_data *)arg;
+    unsigned int len;
+
+    if (!list_append(shd->hlist, al)) {
+        fprintf(stderr, "list_append: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    len = strlen(al->hostrange);
+    if (len > shd->maxhostrangelen)
+	shd->maxhostrangelen = len;
+
+    return 0;
+}
+
+static int
+_hostrange_cmp(void *x, void *y)
+{
+    struct attr_list *al1 = (struct attr_list *)x;
+    struct attr_list *al2 = (struct attr_list *)y;
+
+    if (strlen(al1->hostrange) < strlen(al2->hostrange))
+	return 1;
+    else if (strlen(al1->hostrange) > strlen(al2->hostrange))
+	return -1;
+    else
+	return 0;
+}
+
+static int
+_output_hostrange(void *x, void *arg)
+{
+    struct attr_list *al = (struct attr_list *)x;
+    unsigned int maxhostrangelen = *(unsigned int *)arg;
     char *attrval;
     ListIterator litr;
     int lcount, count = 0;
+    unsigned int numspace;
+    int i;
 
-    printf("%s ", al->hostrange);
+    printf("%s", al->hostrange);
+    numspace = maxhostrangelen - strlen(al->hostrange);
+    for (i = 0; i < numspace; i++)
+	printf(" ");
+    printf(" ");
     
     lcount = list_count(al->l);
 
@@ -1069,6 +1114,8 @@ compress(genders_t gp)
     int numnodes, numattrs;
     hash_t hattr = NULL;
     hash_t hrange = NULL;
+    List hlist = NULL;
+    struct store_hostrange_data shd;
     int i, j;
 
     /* The basic idea behind this algorithm is that we will find every
@@ -1149,8 +1196,23 @@ compress(genders_t gp)
 	exit(1);
     }
 
-    if (hash_for_each(hrange, _output_hostrange, NULL) < 0) {
+    if (!(hlist = list_create(NULL))) {
+        fprintf(stderr, "list_create: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    shd.hlist = hlist;
+    shd.maxhostrangelen = 0;
+
+    if (hash_for_each(hrange, _store_hostrange, &shd) < 0) {
         fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+	exit(1);
+    }
+
+    list_sort(hlist, _hostrange_cmp);
+
+    if (list_for_each(hlist, _output_hostrange, &shd.maxhostrangelen) < 0) {
+	fprintf(stderr, "list_for_each: %s\n", strerror(errno));
 	exit(1);
     }
 
@@ -1159,6 +1221,7 @@ compress(genders_t gp)
     genders_vallist_destroy(gp, vals);
     hash_destroy(hattr);
     hash_destroy(hrange);
+    list_destroy(hlist);
 }
 
 /**
