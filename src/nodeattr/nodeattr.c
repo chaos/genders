@@ -139,9 +139,9 @@ main(int argc, char *argv[])
             excludequery = optarg;
             Xopt = 1;
             break;
-	case 'A':   /* --allnodes */
-	    Aopt = 1;
-	    break;
+        case 'A':   /* --allnodes */
+            Aopt = 1;
+            break;
         case 'v':   /* --value */
             vopt = 1;
             break;
@@ -167,12 +167,12 @@ main(int argc, char *argv[])
             dopt = 1;
             dfilename = optarg;
             break;
-	case 'e':   /* --expand */
-	    eopt = 1;
-	    break;
-	case 'C':   /* --compress */
-	    Copt = 1;
-	    break;
+        case 'e':   /* --expand */
+            eopt = 1;
+            break;
+        case 'C':   /* --compress */
+            Copt = 1;
+            break;
         default:
             usage();
             break;
@@ -186,19 +186,19 @@ main(int argc, char *argv[])
         usage();
 
     if ((qopt
-	 || Qopt
-	 || Vopt
-	 || lopt
-	 || kopt
-	 || dopt
-	 || eopt
-	 || Copt)
-	&& vopt)
+         || Qopt
+         || Vopt
+         || lopt
+         || kopt
+         || dopt
+         || eopt
+         || Copt)
+        && vopt)
         usage();
 
     if (Aopt && !qopt) {
         qfmt = FMT_HOSTLIST;
-	qopt = 1;
+        qopt = 1;
     }
 
     if (!qopt && Xopt)
@@ -209,16 +209,16 @@ main(int argc, char *argv[])
 
     /* specified correctly number of arguments */
     if ((qopt 
-	 && ((!Aopt && optind != (argc - 1))
-	     || (Aopt && optind != argc))) 
+         && ((!Aopt && optind != (argc - 1))
+             || (Aopt && optind != argc))) 
         || (!qopt
             && !Qopt
             && !Vopt
             && !lopt
             && !kopt
             && !dopt
-	    && !eopt
-	    && !Copt
+            && !eopt
+            && !Copt
             && (optind != (argc - 1) && optind != (argc - 2)))
         || (Qopt && (optind != (argc - 1) && optind != (argc - 2)))
         || (Vopt && optind != (argc - 1))
@@ -258,25 +258,25 @@ main(int argc, char *argv[])
     /* expand */
     if (eopt) {
         expand(gp);
-	exit(0);
+        exit(0);
     }
 
     /* compress */
     if (Copt) {
         compress(gp);
-	exit(0);
+        exit(0);
     }
 
     /* Usage 1: list nodes with specified attribute, or all nodes */
     if (qopt) {
         char *query;
 
-	if (Aopt)
-	    list_nodes(gp, NULL, NULL, qfmt); 
-	else {
-	    query = argv[optind++];
-	    list_nodes(gp, query, excludequery, qfmt);
-	}
+        if (Aopt)
+            list_nodes(gp, NULL, NULL, qfmt); 
+        else {
+            query = argv[optind++];
+            list_nodes(gp, query, excludequery, qfmt);
+        }
 
         exit(0);
     }
@@ -534,8 +534,8 @@ usage(void)
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"
         "or     nodeattr [-f genders] -d genders\n"
-	"or     nodeattr [-f genders] --expand\n"
-	"or     nodeattr [-f genders] --compress\n"
+        "or     nodeattr [-f genders] --expand\n"
+        "or     nodeattr [-f genders] --compress\n"
             );
     exit(1);
 }
@@ -833,58 +833,58 @@ expand(genders_t gp)
 
     if (!(hl = hostlist_create(NULL))) {
         fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     for (i = 0; i < nodescount; i++) {
         unsigned int tmp = strlen(nodes[i]);
-	if (tmp > maxnodenamelen) {
-	    maxnodenamelen = tmp;
-	}
+        if (tmp > maxnodenamelen) {
+            maxnodenamelen = tmp;
+        }
 
-	if (!hostlist_push(hl, nodes[i])) {
-	    fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
-	    exit(1);
-	}
+        if (!hostlist_push(hl, nodes[i])) {
+            fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+            exit(1);
+        }
     }
 
     hostlist_sort(hl);
 
     if (!(hlitr = hostlist_iterator_create(hl))) {
-	fprintf(stderr, "hostlist_iterator_create: %s\n", strerror(errno));
-	exit(1);
+        fprintf(stderr, "hostlist_iterator_create: %s\n", strerror(errno));
+        exit(1);
     }
 
     while ((node = hostlist_next(hlitr))) {
         if (genders_attrlist_clear(gp, attrs) < 0)
-	    _gend_error_exit(gp, "genders_attrlist_clear");
+            _gend_error_exit(gp, "genders_attrlist_clear");
 
         if (genders_vallist_clear(gp, vals) < 0)
-	    _gend_error_exit(gp, "genders_vallist_clear");
+            _gend_error_exit(gp, "genders_vallist_clear");
 
-	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, node)) < 0)
-	    _gend_error_exit(gp, "genders_getattr");
-	
-	printf("%s", node);
-	if (attrscount) {
-	    unsigned int numspace = maxnodenamelen - strlen(node);
-	    for (j = 0; j < numspace; j++)
-		printf(" ");
-	    printf(" ");
-	}
+        if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, node)) < 0)
+            _gend_error_exit(gp, "genders_getattr");
+        
+        printf("%s", node);
+        if (attrscount) {
+            unsigned int numspace = maxnodenamelen - strlen(node);
+            for (j = 0; j < numspace; j++)
+                printf(" ");
+            printf(" ");
+        }
 
-	for (j = 0 ; j < attrscount; j++) {
-	    if (j)
-	        printf(",");
+        for (j = 0 ; j < attrscount; j++) {
+            if (j)
+                printf(",");
 
-	    if (strlen(vals[j]))
-	        printf("%s=%s", attrs[j], vals[j]); 
-	    else
-	        printf("%s", attrs[j]);
-	}
+            if (strlen(vals[j]))
+                printf("%s=%s", attrs[j], vals[j]); 
+            else
+                printf("%s", attrs[j]);
+        }
 
-	printf("\n");
-	free(node);
+        printf("\n");
+        free(node);
     }
 
     genders_nodelist_destroy(gp, nodes);
@@ -943,44 +943,44 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
 
     /* for equal sign */
     if (vallen)
-	keylen++;
+        keylen++;
 
     /* for NUL char */
     keylen++;
     
     if (!(hashkey = (char *)malloc(keylen))) {
-	fprintf(stderr, "malloc: %s\n", strerror(errno));
-	exit(1);
+        fprintf(stderr, "malloc: %s\n", strerror(errno));
+        exit(1);
     }
 
     if (vallen)
-	snprintf(hashkey, keylen, "%s=%s", attr, val);
+        snprintf(hashkey, keylen, "%s=%s", attr, val);
     else
-	snprintf(hashkey, keylen, "%s", attr);
+        snprintf(hashkey, keylen, "%s", attr);
 
     if (!(hd = hash_find(hattr, hashkey))) {
-	if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
-	    fprintf(stderr, "malloc: %s\n", strerror(errno));
-	    exit(1);
-	}
+        if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
+            fprintf(stderr, "malloc: %s\n", strerror(errno));
+            exit(1);
+        }
 
-	hd->key = hashkey;
-	if (!(hd->hl = hostlist_create(NULL))) {
-	    fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
-	    exit(1);
-	}
+        hd->key = hashkey;
+        if (!(hd->hl = hostlist_create(NULL))) {
+            fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
+            exit(1);
+        }
 
-	if (!hash_insert(hattr, hd->key, hd)) {
-	    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
-	    exit(1);
-	}
+        if (!hash_insert(hattr, hd->key, hd)) {
+            fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+            exit(1);
+        }
     }
     else
-	free(hashkey);
+        free(hashkey);
 
     if (!hostlist_push(hd->hl, node)) {
-	fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
-	exit(1);
+        fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+        exit(1);
     }
 }
 
@@ -998,34 +998,34 @@ _hash_hostrange(void *data, const void *key, void *arg)
 
     if (hostlist_ranged_string(hd->hl, HOSTLIST_BUFLEN, hostrange) < 0) {
         fprintf(stderr, "hostlist_ranged_string: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     if (!(al = hash_find(*hrange, hostrange))) {
         if (!(al = (struct attr_list *)malloc(sizeof(struct attr_list)))) {
-	    fprintf(stderr, "malloc: %s\n", strerror(errno));
-	    exit(1);
-	}
-	
-	if (!(al->hostrange = strdup(hostrange))) {
-	    fprintf(stderr, "strdup: %s\n", strerror(errno));
-	    exit(1);
-	}
-	
-	if (!(al->l = list_create(NULL))) {
-	    fprintf(stderr, "list_create: %s\n", strerror(errno));
-	    exit(1);
-	}
+            fprintf(stderr, "malloc: %s\n", strerror(errno));
+            exit(1);
+        }
+        
+        if (!(al->hostrange = strdup(hostrange))) {
+            fprintf(stderr, "strdup: %s\n", strerror(errno));
+            exit(1);
+        }
+        
+        if (!(al->l = list_create(NULL))) {
+            fprintf(stderr, "list_create: %s\n", strerror(errno));
+            exit(1);
+        }
 
-	if (!hash_insert(*hrange, al->hostrange, al)) {
-	    fprintf(stderr, "hash_insert: %s\n", strerror(errno));
-	    exit(1);
-	}
+        if (!hash_insert(*hrange, al->hostrange, al)) {
+            fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+            exit(1);
+        }
     }
 
     if (!list_append(al->l, hd->key)) {
         fprintf(stderr, "list_append: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     return 0;
@@ -1040,12 +1040,12 @@ _store_hostrange(void *data, const void *key, void *arg)
 
     if (!list_append(shd->hlist, al)) {
         fprintf(stderr, "list_append: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     len = strlen(al->hostrange);
     if (len > shd->maxhostrangelen)
-	shd->maxhostrangelen = len;
+        shd->maxhostrangelen = len;
 
     return 0;
 }
@@ -1057,11 +1057,11 @@ _hostrange_cmp(void *x, void *y)
     struct attr_list *al2 = (struct attr_list *)y;
 
     if (strlen(al1->hostrange) < strlen(al2->hostrange))
-	return 1;
+        return 1;
     else if (strlen(al1->hostrange) > strlen(al2->hostrange))
-	return -1;
+        return -1;
     else
-	return 0;
+        return 0;
 }
 
 static int
@@ -1078,25 +1078,25 @@ _output_hostrange(void *x, void *arg)
     printf("%s", al->hostrange);
     numspace = maxhostrangelen - strlen(al->hostrange);
     for (i = 0; i < numspace; i++)
-	printf(" ");
+        printf(" ");
     printf(" ");
     
     lcount = list_count(al->l);
 
     if (!(litr = list_iterator_create(al->l))) {
         fprintf(stderr, "list_iterator_create: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
     
     while ((attrval = list_next(litr))) {
 
-	if (!strcmp(attrval, NOATTRSFLAG))
-	    continue;
+        if (!strcmp(attrval, NOATTRSFLAG))
+            continue;
 
         printf("%s", attrval);
-	count++;
-	if (lcount != count)
-	    printf(",");
+        count++;
+        if (lcount != count)
+            printf(",");
     }
 
     printf("\n");
@@ -1143,11 +1143,11 @@ compress(genders_t gp)
      * attribute name.
      */
     if (!(hattr = hash_create((numattrs + 1)*4, 
-			      (hash_key_f)hash_key_string,
-			      (hash_cmp_f)strcmp,
-			      _hosts_data_del))) {
+                              (hash_key_f)hash_key_string,
+                              (hash_cmp_f)strcmp,
+                              _hosts_data_del))) {
         fprintf(stderr, "hash_create: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
@@ -1164,41 +1164,41 @@ compress(genders_t gp)
 
     for (i = 0; i < nodescount; i++) {
         if (genders_attrlist_clear(gp, attrs) < 0)
-	    _gend_error_exit(gp, "genders_attrlist_clear");
+            _gend_error_exit(gp, "genders_attrlist_clear");
 
         if (genders_vallist_clear(gp, vals) < 0)
-	    _gend_error_exit(gp, "genders_vallist_clear");
+            _gend_error_exit(gp, "genders_vallist_clear");
 
-	if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
-	    _gend_error_exit(gp, "genders_getattr");
+        if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, nodes[i])) < 0)
+            _gend_error_exit(gp, "genders_getattr");
 
-	if (!attrscount) {
-	    _hash_attrval(hattr, nodes[i], NOATTRSFLAG, "");
-	    continue;
-	}
-	
-	for (j = 0 ; j < attrscount; j++)
-	    _hash_attrval(hattr, nodes[i], attrs[j], vals[j]);
+        if (!attrscount) {
+            _hash_attrval(hattr, nodes[i], NOATTRSFLAG, "");
+            continue;
+        }
+        
+        for (j = 0 ; j < attrscount; j++)
+            _hash_attrval(hattr, nodes[i], attrs[j], vals[j]);
     }
 
     /* Now, find all the common attributes for a particular hostrange */
 
     if (!(hrange = hash_create(numnodes, 
-			      (hash_key_f)hash_key_string,
-			      (hash_cmp_f)strcmp,
-			      _attr_list_del))) {
+                              (hash_key_f)hash_key_string,
+                              (hash_cmp_f)strcmp,
+                              _attr_list_del))) {
         fprintf(stderr, "hash_create: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     if (hash_for_each(hattr, _hash_hostrange, &hrange) < 0) {
         fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     if (!(hlist = list_create(NULL))) {
         fprintf(stderr, "list_create: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     shd.hlist = hlist;
@@ -1206,14 +1206,14 @@ compress(genders_t gp)
 
     if (hash_for_each(hrange, _store_hostrange, &shd) < 0) {
         fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
-	exit(1);
+        exit(1);
     }
 
     list_sort(hlist, _hostrange_cmp);
 
     if (list_for_each(hlist, _output_hostrange, &shd.maxhostrangelen) < 0) {
-	fprintf(stderr, "list_for_each: %s\n", strerror(errno));
-	exit(1);
+        fprintf(stderr, "list_for_each: %s\n", strerror(errno));
+        exit(1);
     }
 
     genders_nodelist_destroy(gp, nodes);
