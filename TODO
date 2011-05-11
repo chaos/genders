@@ -47,3 +47,5 @@
 - int->unsigned int?
 - possible integer overflows all over the place?
   - rehashing
+- readline stuff
+  - use file streams (i.e. fread) to avoid constant syscalls to read()
