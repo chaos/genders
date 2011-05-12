@@ -49,3 +49,4 @@
   - rehashing
 - readline stuff
   - use file streams (i.e. fread) to avoid constant syscalls to read()
+- support FQDN
