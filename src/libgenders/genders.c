@@ -217,9 +217,14 @@ genders_load_data(genders_t handle, const char *filename)
     }
   handle->nodename[GENDERS_MAXHOSTNAMELEN]='\0';
 
+#if 0
+  /* achu: Shortened hostnames no longer required, fully qualified
+   * domain names acceptable
+   */
   /* shorten hostname if necessary */
   if ((temp = strchr(handle->nodename,'.')))
     *temp = '\0';
+#endif
   
   handle->maxnodelen = GENDERS_MAX(strlen(handle->nodename), handle->maxnodelen);
 

@@ -8,7 +8,7 @@
 
                                June 19, 2000
 
-                (Revised by Albert Chu - May 2003, April 2004) 
+            (Revised by Albert Chu - May 2003, April 2004, May 2011) 
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "Genders" software package,
@@ -47,12 +47,14 @@ the section "Host Ranges" below for most information on host ranges.
      nodename1,nodename2,... attr[=value],attr[=value],...
      nodenames[A-B]          attr[=value],attr[=value],...
 
-The nodename(s) is the shortened[2] hostname of a node.  This is followed by
-any number of spaces or tabs, and then the comma-separated list of attributes,
-each of which can optionally have a value.  The substitution string "%n" can
-be used in an attribute value to represent the nodename.  Nodenames can be
-listed on multiple lines, so a node's attributes can be specified on multiple
-lines.  However, no single node may have duplicate attributes.
+The nodename(s) is typically the shortened[2] hostname of a node,
+although a fully qualified domain name is acceptable.  This is
+followed by any number of spaces or tabs, and then the comma-separated
+list of attributes, each of which can optionally have a value.  The
+substitution string "%n" can be used in an attribute value to
+represent the nodename.  Nodenames can be listed on multiple lines, so
+a node's attributes can be specified on multiple lines.  However, no
+single node may have duplicate attributes.
 
 There must be no spaces embedded in the attribute list and there is
 no provision for continuation lines.  Commas and equal characters are special

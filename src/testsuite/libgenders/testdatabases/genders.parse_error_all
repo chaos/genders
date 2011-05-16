@@ -1,10 +1,9 @@
-node1.foo.com attr1,attr2=val2
-node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz attr1,attr2=val2
-node3 attr1, attr2=val2
-node4 attr1,at tr2=val2
-node5 attr1,attr2=val 2
-node6 attr1,attr2=val2
-node6 attr2=val2
-node7 attr1,attr1
-node8 attr1
-node8 attr1
+node101234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 attr1,attr2=val2
+node2 attr1, attr2=val2
+node3 attr1,at tr2=val2
+node4 attr1,attr2=val 2
+node5 attr1,attr2=val2
+node5 attr2=val2
+node6 attr1,attr1
+node7 attr1
+node7 attr1

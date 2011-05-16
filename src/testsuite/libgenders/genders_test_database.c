@@ -40,10 +40,13 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     {"testdatabases/genders.parse_error_equal_sign_in_value_1", 1},
     /* we are leaving this as a "feature" */
     {"testdatabases/genders.parse_error_equal_sign_in_value_2", 1},
-#endif
+    /* fqdn now allowed */
     {"testdatabases/genders.parse_error_hostname_not_shortened", 1},
+    /* fqdn now allowed */
     {"testdatabases/genders.parse_error_hostname_not_shortened_comma", 1},
+    /* fqdn now allowed */
     {"testdatabases/genders.parse_error_hostname_not_shortened_hostrange", 1},
+#endif
     {"testdatabases/genders.parse_error_hostname_too_long", 1},
     {"testdatabases/genders.parse_error_hostname_too_long_comma", 1},
     {"testdatabases/genders.parse_error_hostname_too_long_hostrange", 1},
@@ -78,7 +81,7 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     {"testdatabases/genders.parse_error_no_attr_before_equal_sign", 6},
     {"testdatabases/genders.parse_error_no_value_after_equal_sign", 6},
     {"testdatabases/genders.parse_error_errant_commas", 5},
-    {"testdatabases/genders.parse_error_all", 8},
+    {"testdatabases/genders.parse_error_all", 7},
     {NULL, -1},
   };
 

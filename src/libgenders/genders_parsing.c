@@ -551,6 +551,10 @@ _parse_line(genders_t handle,
 	}
     }
   
+#if 0
+  /* achu: Shortened hostnames no longer required, fully qualified
+   * domain names acceptable
+   */
   if (strchr(nodenames, '.')) 
     {
       if (line_num > 0) 
@@ -561,6 +565,7 @@ _parse_line(genders_t handle,
       handle->errnum = GENDERS_ERR_PARSE;
       goto cleanup;
     }
+#endif
 
   __hostlist_create(hl, nodenames);
   __hostlist_iterator_create(hlitr, hl);

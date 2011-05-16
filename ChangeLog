@@ -1,3 +1,7 @@
+2011-05-16  Albert Chu  <chu11@llnl.gov>
+
+	* Support fully qualified domain names.
+	
 2011-05-09  Albert Chu  <chu11@llnl.gov>
 
 	* tagged genders-1-18-1
