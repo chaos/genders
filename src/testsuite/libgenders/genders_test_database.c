@@ -1573,6 +1573,178 @@ genders_database_t genders_database_large_val =
     &genders_database_data_large_val,
   };
 
+genders_database_data_t genders_database_data_fqdn = 
+  {
+    "node1.foo.com",
+    "attr1",
+    "attr2",
+    "val2",
+    2,
+    2,
+    2,
+    13,
+    5,
+    4,
+    {"node1.foo.com", "node2.foo.com", NULL},
+    2,				
+    {"attr1", "attr2", NULL},
+    2,
+    {NULL,    "val2", NULL},
+    2,
+    {
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+    },
+    2,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1.foo.com", "node2.foo.com", NULL},
+	2,
+      },
+      {
+	"",
+	"",
+	{"node1.foo.com", "node2.foo.com", NULL},
+	2,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1.foo.com", "node2.foo.com", NULL},
+	2,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node1.foo.com", "node2.foo.com", NULL},
+	2,
+      },
+      {
+	"attr2",
+	"val2",
+	{"node1.foo.com", "node2.foo.com", NULL},
+	2,
+      },
+    },
+    5,
+  };
+
+genders_database_t genders_database_fqdn = 
+  {
+    "testdatabases/genders.fqdn",
+    &genders_database_data_fqdn,
+  };
+
+genders_database_t genders_database_fqdn_comma = 
+  {
+    "testdatabases/genders.fqdn_comma",
+    &genders_database_data_fqdn,
+  };
+
+genders_database_t genders_database_fqdn_hostrange = 
+  {
+    "testdatabases/genders.fqdn_hostrange",
+    &genders_database_data_fqdn,
+  };
+
+genders_database_data_t genders_database_data_long_hostname = 
+  {
+    "node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz",
+    "attr1",
+    "attr2",
+    "val2",
+    2,
+    2,
+    2,
+    83,
+    5,
+    4,
+    {"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+    2,				
+    {"attr1", "attr2", NULL},
+    2,
+    {NULL,    "val2", NULL},
+    2,
+    {
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+    },
+    2,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	2,
+      },
+      {
+	"",
+	"",
+	{"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	2,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	2,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	2,
+      },
+      {
+	"attr2",
+	"val2",
+	{"node1abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", "node2abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz", NULL},
+	2,
+      },
+    },
+    5,
+  };
+
+genders_database_t genders_database_long_hostname = 
+  {
+    "testdatabases/genders.long_hostname",
+    &genders_database_data_long_hostname,
+  };
+
+genders_database_t genders_database_long_hostname_comma = 
+  {
+    "testdatabases/genders.long_hostname_comma",
+    &genders_database_data_long_hostname,
+  };
+
+genders_database_t genders_database_long_hostname_hostrange = 
+  {
+    "testdatabases/genders.long_hostname_hostrange",
+    &genders_database_data_long_hostname,
+  };
+
 genders_database_t *genders_functionality_databases[] = 
   {
     &genders_database_base,
@@ -1625,6 +1797,12 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_subst_nodename_hostrange,
     &genders_database_large_attr,
     &genders_database_large_val,
+    &genders_database_fqdn, 
+    &genders_database_fqdn_comma, 
+    &genders_database_fqdn_hostrange, 
+    &genders_database_long_hostname, 
+    &genders_database_long_hostname_comma, 
+    &genders_database_long_hostname_hostrange, 
     NULL,
   };
 
