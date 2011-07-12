@@ -32,8 +32,8 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
 %{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
 
-# choose site arch by default
-%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_site_arch --with-perl-site-arch}}
+# choose vendor arch by default
+%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_vendor_arch --with-perl-vendor-arch}}
 
 %prep
 %setup  -q -n %{name}-%{version}
