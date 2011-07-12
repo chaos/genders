@@ -147,7 +147,7 @@ elif test "$ac_with_perl_site_arch" = yes; then
 elif test "$ac_with_perl_vendor_arch" = yes; then
    PERL_ARCH_INSTALL=vendor
 else
-   PERL_ARCH_INSTALL=site
+   PERL_ARCH_INSTALL=vendor
 fi
 AC_SUBST(PERL_ARCH_INSTALL)
 

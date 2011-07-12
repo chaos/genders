@@ -1,3 +1,8 @@
+2011-07-12  Albert Chu  <chu11@llnl.gov>
+
+	* configure.ac: Change default install to vendorarch instead of
+	sitearch.
+	
 2011-05-09  Albert Chu  <chu11@llnl.gov>
 
 	* tagged genders-1-18-1
