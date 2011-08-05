@@ -1,3 +1,7 @@
+2011-08-05  Py Watson <watson30@llnl.gov>
+
+	* man/genders_load_data.3: Fix typo.
+	
 2011-07-12  Albert Chu  <chu11@llnl.gov>
 
 	* configure.ac: Change default install to vendorarch instead of
