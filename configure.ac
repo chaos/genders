@@ -24,16 +24,18 @@ AM_MAINTAINER_MODE
 
 # libgenders versioning
 #
-# If library source code has changed at all increment rev
-# (current:rev:age) = (current:rev+1:age)
+# If the library source code has changed at all since the last update,
+# then increment c:r: c:r+1:).                                                                                     
 #
-# If any interfaces have been added,removed, or changed increment current
-#  and set rev = 0;
+# If any interfaces have been added, removed, or changed since the
+# last update, increment current, and set revision to 0.
 #
-# If any interfaces have been added increment age
+# If any interfaces have been added since the last public release,
+# then increment age.
 #
-# If any interfaces have been removed, set age = 0
-#
+# If any interfaces have been removed or changed since the last public                                                
+# release, then set age to 0.
+#                                               
 LIBGENDERS_CURRENT=3
 LIBGENDERS_REVISION=0
 LIBGENDERS_AGE=3
