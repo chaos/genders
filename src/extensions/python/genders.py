@@ -110,7 +110,7 @@ class Genders:
         self.__lgh = libgenders.Libgenders()
         try:
             self.__lgh.load_data(filename)
-        except SytemError:
+        except SystemError:
             raise Genders.__find_exception(self)
     def getnodename(self):
         """
