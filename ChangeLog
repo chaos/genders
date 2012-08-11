@@ -1,4 +1,4 @@
-2012-08-10  Albert Chu  <chu11@llnl.gov>
+2012-08-10  Wil Cooley <wilcooley@gmail.com>
 
 	* src/extensions/python/genders.py (__init__): Fix typo.
 	
