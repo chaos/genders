@@ -218,8 +218,10 @@ genders_load_data(genders_t handle, const char *filename)
   handle->nodename[GENDERS_MAXHOSTNAMELEN]='\0';
 
   /* shorten hostname if necessary */
+#ifndef WITH_NON_SHORTENED_HOSTNAMES
   if ((temp = strchr(handle->nodename,'.')))
     *temp = '\0';
+#endif /* !WITH_NON_SHORTENED_HOSTNAMES */
   
   handle->maxnodelen = GENDERS_MAX(strlen(handle->nodename), handle->maxnodelen);
 

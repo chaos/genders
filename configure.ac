@@ -7,7 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders], [1.19])
+AC_INIT([genders], [1.20])
 AC_META
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
@@ -101,6 +101,31 @@ AC_MSG_RESULT(${ac_force_yacc=no})
 if test "$ac_force_yacc" = yes; then
   YACC=yacc
   AC_SUBST(FORCE_YACC)
+fi
+
+##
+##
+##
+AC_MSG_CHECKING(for --with-non-shortened-hostnames)
+AC_ARG_WITH(non-shortened-hostnames,
+   AC_HELP_STRING([--with-non-shortened-hostnames],
+                  [allow non-shortened hostnames with periods]),
+   [ case "$withval" in
+   yes)
+       ac_non_shortened_hostnames=yes
+       ;;
+   no)
+       ac_non_shortened_hostnames=no
+       ;;
+   *)
+       ac_non_shortened_hostnames=no
+       ;;
+   esac ]
+) 
+AC_MSG_RESULT(${ac_non_shortened_hostnames=no})
+
+if test x"${ac_non_shortened_hostnames}" = xyes; then
+   AC_DEFINE([WITH_NON_SHORTENED_HOSTNAMES], [1], [Define if you want to support non shortened hostnames])
 fi
 
 ##

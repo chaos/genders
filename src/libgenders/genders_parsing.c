@@ -551,6 +551,7 @@ _parse_line(genders_t handle,
 	}
     }
   
+#ifndef WITH_NON_SHORTENED_HOSTNAMES
   if (strchr(nodenames, '.')) 
     {
       if (line_num > 0) 
@@ -561,6 +562,7 @@ _parse_line(genders_t handle,
       handle->errnum = GENDERS_ERR_PARSE;
       goto cleanup;
     }
+#endif /* !WITH_NON_SHORTENED_HOSTNAMES */
 
   __hostlist_create(hl, nodenames);
   __hostlist_iterator_create(hlitr, hl);
