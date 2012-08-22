@@ -1,0 +1,7 @@
+javac HelloWorld.java
+javah -jni HelloWorld
+gcc HelloWorld.c -fPIC -shared -o libHelloWorld.so
+setenv LD_LIBRARY_PATH .
+java HelloWorld
+
+
