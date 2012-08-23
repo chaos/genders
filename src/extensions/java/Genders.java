@@ -1,10 +1,18 @@
 class Genders
 {
     private long gh = 0;
+
+    private native int genders_handle_setup();
+
     public Genders()
     {
-	gh = 1;
+	if (genders_handle_setup() < 0)
+	    {
+		System.out.println("genders_handle_setup: error");
+	    }
+	System.out.println("gh = " + gh); 
     }
+
     public int getnumnodes()
     {
 	return 5;
@@ -16,6 +24,7 @@ class Genders
     public int getmaxattrs()
     {
     }
+    */
     public long ghaddr()
     {
 	return gh;
@@ -24,5 +33,4 @@ class Genders
     {
 	System.loadLibrary("Genders");
     }
-    */
 }

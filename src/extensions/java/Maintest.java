@@ -4,6 +4,7 @@ class Maintest
     {
 	Genders gh = new Genders();
 	System.out.println("Hello World");
-	System.out.println(gh.getnumnodes());
+	System.out.println("Handle Address = " + gh.ghaddr());
+	System.out.println("NumNodes = " + gh.getnumnodes());
     }
 }
