@@ -1,6 +1,6 @@
 class Genders
 {
-    private long gh = 0;
+    private long gh_addr = 0;
 
     private native int genders_constructor(String filename);
 
@@ -26,10 +26,7 @@ class Genders
 
     public native int getmaxattrs();
 
-    public long ghaddr()
-    {
-	return gh;
-    }
+    public native String getnodename();
 
     static
     {

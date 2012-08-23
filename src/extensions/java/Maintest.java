@@ -7,6 +7,7 @@ class Maintest
 	System.out.println("NumNodes = " + gh.getnumnodes());
 	System.out.println("Numattrs = " + gh.getnumattrs());
 	System.out.println("Maxattrs = " + gh.getmaxattrs());
+	System.out.println("Getnodname = " + gh.getnodename());
     }
 
     public static void main(String[] args)

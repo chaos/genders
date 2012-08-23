@@ -12,7 +12,7 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 {
   genders_t handle;
   jclass genders_cls;
-  jfieldID gh_fid;
+  jfieldID gh_addr_fid;
   jint rv = -1;
 
   if (!(handle = genders_handle_create ()))
@@ -29,14 +29,14 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
-  gh_fid = (*env)->GetFieldID (env, genders_cls, "gh", "J");
-  if (!gh_fid)
+  gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J");
+  if (!gh_addr_fid)
     {
-      fprintf (stderr, "gh_fid GetFieldID error\n");
+      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
       goto cleanup;
     } 
 
-  (*env)->SetLongField (env, obj, gh_fid, (long)handle);
+  (*env)->SetLongField (env, obj, gh_addr_fid, (long)handle);
 
   rv = 0;
  cleanup:
@@ -73,21 +73,21 @@ int
 _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
 {
   jclass genders_cls;
-  jfieldID gh_fid;
-  jlong jgh_addr;
+  jfieldID gh_addr_fid;
+  jlong jgh_addr_addr;
   int rv = -1;
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
-  gh_fid = (*env)->GetFieldID (env, genders_cls, "gh", "J");
-  if (!gh_fid)
+  gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J");
+  if (!gh_addr_fid)
     {
-      fprintf (stderr, "gh_fid GetFieldID error\n");
+      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
       goto cleanup;
     }
   
-  jgh_addr = (*env)->GetLongField (env, obj, gh_fid);
-  (*handle) = (genders_t)jgh_addr;
+  jgh_addr_addr = (*env)->GetLongField (env, obj, gh_addr_fid);
+  (*handle) = (genders_t)jgh_addr_addr;
 
   rv = 0;
  cleanup:
@@ -98,7 +98,6 @@ JNIEXPORT jint JNICALL
 Java_Genders_getnumnodes (JNIEnv *env, jobject obj)
 {
   genders_t handle;
-  long gh_addr;
   int rv = -1;
 
   if (_get_handle (env, obj, &handle) < 0)
@@ -118,7 +117,6 @@ JNIEXPORT jint JNICALL
 Java_Genders_getnumattrs (JNIEnv *env, jobject obj)
 {
   genders_t handle;
-  long gh_addr;
   int rv = -1;
 
   if (_get_handle (env, obj, &handle) < 0)
@@ -138,7 +136,6 @@ JNIEXPORT jint JNICALL
 Java_Genders_getmaxattrs (JNIEnv *env, jobject obj)
 {
   genders_t handle;
-  long gh_addr;
   int rv = -1;
 
   if (_get_handle (env, obj, &handle) < 0)
@@ -151,5 +148,39 @@ Java_Genders_getmaxattrs (JNIEnv *env, jobject obj)
     }
 
  cleanup:
+  return (rv);
+}
+
+JNIEXPORT jstring JNICALL
+Java_Genders_getnodename (JNIEnv *env, jobject obj)
+{
+  genders_t handle;
+  char *nodename_buf = NULL;
+  int maxnodenamelen;
+  jstring rv = NULL;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if ((maxnodenamelen = genders_getmaxnodelen (handle)) < 0)
+    goto cleanup;
+
+  if (!(nodename_buf = (char *)malloc (maxnodenamelen + 1)))
+    {
+      fprintf (stderr, "malloc: %s\n", strerror (errno));
+      goto cleanup;
+    }
+
+  memset (nodename_buf, '\0', maxnodenamelen + 1);
+
+  if (genders_getnodename (handle, nodename_buf, maxnodenamelen + 1) < 0)
+    {
+      fprintf (stderr, "genders_getnodename: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  rv = (*env)->NewStringUTF(env, nodename_buf);
+ cleanup:
+  free (nodename_buf);
   return (rv);
 }

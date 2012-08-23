@@ -39,6 +39,14 @@ JNIEXPORT jint JNICALL Java_Genders_getnumattrs
 JNIEXPORT jint JNICALL Java_Genders_getmaxattrs
   (JNIEnv *, jobject);
 
+/*
+ * Class:     Genders
+ * Method:    getnodename
+ * Signature: ()Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_Genders_getnodename
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif
