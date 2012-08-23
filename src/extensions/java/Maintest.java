@@ -63,6 +63,22 @@ class Maintest
 
 	b = gh.isattrval("cfhost", "hypei");
 	System.out.println("Isattrval cfhost=hypei : " + b);
+
+	nodes = gh.query("mgmt");
+	for (String tmp : nodes)
+	    System.out.println("Query mgmt: " + tmp);
+
+	nodes = gh.query("mgmt||login");
+	for (String tmp : nodes)
+	    System.out.println("Query mgmt||login: " + tmp);
+
+	nodes = gh.query("mgmt&&login");
+	for (String tmp : nodes)
+	    System.out.println("Query mgmt&&login: " + tmp);
+
+	nodes = gh.query("~mgmt");
+	for (String tmp : nodes)
+	    System.out.println("Query ~mgmt: " + tmp);
     }
 
     public static void main(String[] args)

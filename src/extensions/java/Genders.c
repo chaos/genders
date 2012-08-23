@@ -332,7 +332,7 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
 
   if ((attrslen = genders_getattr_all (handle, attrlist, attrlistlen)) < 0)
     {
-      fprintf (stderr, "genders_getnodes: %s\n", genders_errormsg (handle));
+      fprintf (stderr, "genders_getattr_all: %s\n", genders_errormsg (handle));
       goto cleanup;
     }
 
@@ -513,7 +513,6 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
  cleanup:
   if (attr && attrutf)
     (*env)->ReleaseStringUTFChars(env, attr, attrutf);
-  
   if (val && valutf)
     (*env)->ReleaseStringUTFChars(env, val, valutf);
   return (rv);
@@ -522,6 +521,70 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 JNIEXPORT jobjectArray JNICALL
 Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
 {
+  genders_t handle;
+  const jbyte *queryutf = NULL;
+  char **nodelist = NULL;
+  int nodelistlen;
+  jclass string_class;
+  jobjectArray jnodelist = NULL;
+  jobjectArray rv = NULL;
+  int nodeslen;
+  int i;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (query)
+    {
+      if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((nodelistlen = genders_nodelist_create (handle, &nodelist)) < 0)
+    {
+      fprintf (stderr, "genders_nodelist_create: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if ((nodeslen = genders_query (handle, nodelist, nodelistlen, queryutf)) < 0)
+    {
+      fprintf (stderr, "genders_query: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  string_class = (*env)->FindClass(env, "java/lang/String");
+
+  if (!(jnodelist = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
+    {
+      fprintf (stderr, "NewObjectArray\n");
+      goto cleanup;
+    }
+
+  for (i = 0; i < nodeslen; i++)
+    {
+      jstring tmpstr;
+      
+      if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
+	{
+	  fprintf (stderr, "NewStringUTF\n");
+	  goto cleanup;
+	}
+
+      (*env)->SetObjectArrayElement (env, jnodelist, i, tmpstr);
+      (*env)->DeleteLocalRef (env, tmpstr);
+    }
+
+  rv = jnodelist;
+ cleanup:
+  if (!rv && jnodelist)
+    (*env)->DeleteLocalRef (env, jnodelist);
+  genders_nodelist_destroy (handle, nodelist);
+  if (query && queryutf)
+    (*env)->ReleaseStringUTFChars(env, query, queryutf);
+  return (rv);
 }
 
 JNIEXPORT jboolean JNICALL
