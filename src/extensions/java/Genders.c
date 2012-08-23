@@ -153,33 +153,43 @@ JNIEXPORT jstring JNICALL
 Java_Genders_getnodename (JNIEnv *env, jobject obj)
 {
   genders_t handle;
-  char *nodename_buf = NULL;
+  char *nodenamebuf = NULL;
   int maxnodenamelen;
+  jstring jnodename = NULL;
   jstring rv = NULL;
 
   if (_get_handle (env, obj, &handle) < 0)
     goto cleanup;
 
   if ((maxnodenamelen = genders_getmaxnodelen (handle)) < 0)
-    goto cleanup;
+    {
+      fprintf (stderr, "genders_getmaxnodelen : %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
 
-  if (!(nodename_buf = (char *)malloc (maxnodenamelen + 1)))
+  if (!(nodenamebuf = (char *)malloc (maxnodenamelen + 1)))
     {
       fprintf (stderr, "malloc: %s\n", strerror (errno));
       goto cleanup;
     }
 
-  memset (nodename_buf, '\0', maxnodenamelen + 1);
+  memset (nodenamebuf, '\0', maxnodenamelen + 1);
 
-  if (genders_getnodename (handle, nodename_buf, maxnodenamelen + 1) < 0)
+  if (genders_getnodename (handle, nodenamebuf, maxnodenamelen + 1) < 0)
     {
       fprintf (stderr, "genders_getnodename: %s\n", genders_errormsg (handle));
       goto cleanup;
     }
 
-  rv = (*env)->NewStringUTF(env, nodename_buf);
+  if (!(jnodename = (*env)->NewStringUTF(env, nodenamebuf)))
+    {
+      fprintf (stderr, "NewStringUTF\n");
+      goto cleanup;
+    }
+
+  rv = jnodename;
  cleanup:
-  free (nodename_buf);
+  free (nodenamebuf);
   return (rv);
 }
 
@@ -368,11 +378,133 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
 JNIEXPORT jstring JNICALL
 Java_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
 {
+  genders_t handle;
+  const jbyte *attrutf;
+  char *valbuf = NULL;
+  int maxvallen;
+  jstring jval = NULL;
+  jstring rv = NULL;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((maxvallen = genders_getmaxvallen (handle)) < 0)
+    {
+      fprintf (stderr, "genders_getmaxvallen : %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (!(valbuf = (char *)malloc (maxvallen + 1)))
+    {
+      fprintf (stderr, "malloc: %s\n", strerror (errno));
+      goto cleanup;
+    }
+
+  memset (valbuf, '\0', maxvallen + 1);
+
+  if ((ret = genders_testattr (handle, NULL, attrutf, valbuf, maxvallen + 1)) < 0)
+    {
+      fprintf (stderr, "genders_testattr: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (ret)
+    {
+      if (!(jval = (*env)->NewStringUTF(env, valbuf)))
+	{
+	  fprintf (stderr, "NewStringUTF\n");
+	  goto cleanup;
+	}
+    }
+  
+  rv = jval;
+ cleanup:
+  if (attr && attrutf)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+  free (valbuf);
+  return (rv);
 }
 
 JNIEXPORT jstring JNICALL
 Java_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
 {
+  genders_t handle;
+  const jbyte *nodeutf;
+  const jbyte *attrutf;
+  char *valbuf = NULL;
+  int maxvallen;
+  jstring jval = NULL;
+  jstring rv = NULL;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (node)
+    {
+      if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((maxvallen = genders_getmaxvallen (handle)) < 0)
+    {
+      fprintf (stderr, "genders_getmaxvallen : %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (!(valbuf = (char *)malloc (maxvallen + 1)))
+    {
+      fprintf (stderr, "malloc: %s\n", strerror (errno));
+      goto cleanup;
+    }
+
+  memset (valbuf, '\0', maxvallen + 1);
+
+  if ((ret = genders_testattr (handle, nodeutf, attrutf, valbuf, maxvallen + 1)) < 0)
+    {
+      fprintf (stderr, "genders_testattr: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (ret)
+    {
+      if (!(jval = (*env)->NewStringUTF(env, valbuf)))
+	{
+	  fprintf (stderr, "NewStringUTF\n");
+	  goto cleanup;
+	}
+    }
+  
+  rv = jval;
+ cleanup:
+  if (node && nodeutf)
+    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
+  if (attr && attrutf)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+  free (valbuf);
+  return (rv);
 }
 
 JNIEXPORT jboolean JNICALL

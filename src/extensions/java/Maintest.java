@@ -97,6 +97,35 @@ class Maintest
 
 	b = gh.testquery("hype356", "login");
 	System.out.println("TestQuery login: " + b);
+
+	String val;
+
+	val = gh.getattrval("mgmt");
+	System.out.println("Getattrval mgmt : " + val);
+
+	val = gh.getattrval("login");
+	System.out.println("Getattrval login : " + val);
+
+	val = gh.getattrval("cfhost");
+	System.out.println("Getattrval cfhost : " + val);
+
+	val = gh.getattrval("hype355", "mgmt");
+	System.out.println("Getattrval hype355 mgmt : " + val);
+
+	val = gh.getattrval("hype355", "login");
+	System.out.println("Getattrval hype355 login : " + val);
+
+	val = gh.getattrval("hype355", "cfhost");
+	System.out.println("Getattrval hype355 cfhost : " + val);
+
+	val = gh.getattrval("hype356", "mgmt");
+	System.out.println("Getattrval hype356 mgmt : " + val);
+
+	val = gh.getattrval("hype356", "login");
+	System.out.println("Getattrval hype356 login : " + val);
+
+	val = gh.getattrval("hype356", "cfhost");
+	System.out.println("Getattrval hype356 cfhost : " + val);
     }
 
     public static void main(String[] args)
