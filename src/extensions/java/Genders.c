@@ -227,6 +227,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 	}
 
       (*env)->SetObjectArrayElement (env, rv, i, tmpstr);
+      (*env)->DeleteLocalRef (env, tmpstr);
     }
 
  cleanup:
@@ -298,4 +299,126 @@ Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobj
 
  cleanup:
   return (rv);
+}
+
+JNIEXPORT jobjectArray JNICALL
+Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
+{
+  genders_t handle;
+  char **attrlist = NULL;
+  int attrlistlen;
+  jclass string_class;
+  jobjectArray rv = NULL;
+  int attrslen;
+  int i;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if ((attrlistlen = genders_attrlist_create (handle, &attrlist)) < 0)
+    {
+      fprintf (stderr, "genders_attrlist_create: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if ((attrslen = genders_getattr_all (handle, attrlist, attrlistlen)) < 0)
+    {
+      fprintf (stderr, "genders_getnodes: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  string_class = (*env)->FindClass(env, "java/lang/String");
+
+  if (!(rv = (*env)->NewObjectArray(env, attrslen, string_class, NULL)))
+    {
+      fprintf (stderr, "NewObjectArray\n");
+      goto cleanup;
+    }
+
+  for (i = 0; i < attrslen; i++)
+    {
+      jstring tmpstr;
+      
+      if (!(tmpstr = (*env)->NewStringUTF(env, attrlist[i])))
+	{
+	  fprintf (stderr, "NewStringUTF\n");
+	  goto cleanup;
+	}
+
+      (*env)->SetObjectArrayElement (env, rv, i, tmpstr);
+      (*env)->DeleteLocalRef (env, tmpstr);
+    }
+
+ cleanup:
+  return (rv);
+}
+
+JNIEXPORT jstring JNICALL
+Java_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+{
+}
+
+JNIEXPORT jstring JNICALL
+Java_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testattr__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr, jstring val)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
+{
+}
+
+JNIEXPORT jobjectArray JNICALL
+Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
+{
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring query)
+{
+}
+
+JNIEXPORT jint JNICALL
+Java_Genders_parse__ (JNIEnv *env, jobject obj)
+{
+}
+
+JNIEXPORT jint JNICALL
+Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filename)
+{
 }

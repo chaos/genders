@@ -34,6 +34,12 @@ class Maintest
 	nodes = gh.getnodes("cfhost", "hypei");
 	for (String tmp : nodes)
 	    System.out.println("GetNodes cfhost=hypei  Node: " + tmp);
+
+	String attrs[];
+
+	attrs = gh.getattr_all();
+	for (String tmp : attrs)
+	    System.out.println("Getattr All : " + tmp); 
     }
 
     public static void main(String[] args)

@@ -71,6 +71,126 @@ JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__Ljava_lang_String_2
 JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2
   (JNIEnv *, jobject, jstring, jstring);
 
+/*
+ * Class:     Genders
+ * Method:    getattr_all
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getattr_1all
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getattrval
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_Genders_getattrval__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    getattrval
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testattr
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testattr__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testattr
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testattr__Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testattrval
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testattrval
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    isnode
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_isnode
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    isattr
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_isattr
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    isattrval
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_isattrval
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    query
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_query
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testquery
+ * Signature: (Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testquery__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    testquery
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    parse
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_Genders_parse__
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    parse
+ * Signature: (Ljava/lang/String;)I
+ */
+JNIEXPORT jint JNICALL Java_Genders_parse__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
 #ifdef __cplusplus
 }
 #endif
