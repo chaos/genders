@@ -13,22 +13,17 @@ class Genders
 	System.out.println("gh = " + gh); 
     }
 
-    public int getnumnodes()
-    {
-	return 5;
-    }
-    /*
-    public int getnumattrs()
-    {
-    }
-    public int getmaxattrs()
-    {
-    }
-    */
+    public native int getnumnodes();
+
+    public native int getnumattrs();
+
+    public native int getmaxattrs();
+
     public long ghaddr()
     {
 	return gh;
     }
+
     static
     {
 	System.loadLibrary("Genders");

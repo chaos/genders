@@ -15,6 +15,30 @@ extern "C" {
 JNIEXPORT jint JNICALL Java_Genders_genders_1handle_1setup
   (JNIEnv *, jobject);
 
+/*
+ * Class:     Genders
+ * Method:    getnumnodes
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_Genders_getnumnodes
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getnumattrs
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_Genders_getnumattrs
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getmaxattrs
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_Genders_getmaxattrs
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif
