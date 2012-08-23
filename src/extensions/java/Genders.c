@@ -44,13 +44,7 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_genders_1constructor_1default (JNIEnv *env, jobject obj)
-{
-  return (_constructor (env, obj, NULL));
-}
-
-JNIEXPORT jint JNICALL
-Java_Genders_genders_1constructor_1filename (JNIEnv *env, jobject obj, jstring filename)
+Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
 {
   const jbyte *filenameutf;
   jint rv = -1;

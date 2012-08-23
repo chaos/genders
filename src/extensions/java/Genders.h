@@ -9,18 +9,10 @@ extern "C" {
 #endif
 /*
  * Class:     Genders
- * Method:    genders_constructor_default
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_Genders_genders_1constructor_1default
-  (JNIEnv *, jobject);
-
-/*
- * Class:     Genders
- * Method:    genders_constructor_filename
+ * Method:    genders_constructor
  * Signature: (Ljava/lang/String;)I
  */
-JNIEXPORT jint JNICALL Java_Genders_genders_1constructor_1filename
+JNIEXPORT jint JNICALL Java_Genders_genders_1constructor
   (JNIEnv *, jobject, jstring);
 
 /*
