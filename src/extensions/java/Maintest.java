@@ -79,6 +79,24 @@ class Maintest
 	nodes = gh.query("~mgmt");
 	for (String tmp : nodes)
 	    System.out.println("Query ~mgmt: " + tmp);
+
+	b = gh.testquery("mgmt");
+	System.out.println("TestQuery mgmt: " + b);
+
+	b = gh.testquery("login");
+	System.out.println("TestQuery login: " + b);
+
+	b = gh.testquery("hype355", "mgmt");
+	System.out.println("TestQuery mgmt: " + b);
+
+	b = gh.testquery("hype355", "login");
+	System.out.println("TestQuery login: " + b);
+
+	b = gh.testquery("hype356", "mgmt");
+	System.out.println("TestQuery mgmt: " + b);
+
+	b = gh.testquery("hype356", "login");
+	System.out.println("TestQuery login: " + b);
     }
 
     public static void main(String[] args)

@@ -590,11 +590,87 @@ Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
 JNIEXPORT jboolean JNICALL
 Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
 {
+  genders_t handle;
+  const jbyte *queryutf = NULL;
+  jboolean rv = JNI_FALSE;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (query)
+    {
+      if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((ret = genders_testquery (handle, NULL, queryutf)) < 0)
+    {
+      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (ret)
+    rv = JNI_TRUE;
+  else
+    rv = JNI_FALSE;
+
+ cleanup:
+  if (query && queryutf)
+    (*env)->ReleaseStringUTFChars(env, query, queryutf);
+  return (rv);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring query)
 {
+  genders_t handle;
+  const jbyte *nodeutf = NULL;
+  const jbyte *queryutf = NULL;
+  jboolean rv = JNI_FALSE;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (node)
+    {
+      if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if (query)
+    {
+      if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((ret = genders_testquery (handle, nodeutf, queryutf)) < 0)
+    {
+      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (ret)
+    rv = JNI_TRUE;
+  else
+    rv = JNI_FALSE;
+
+ cleanup:
+  if (node && nodeutf)
+    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
+  if (query && queryutf)
+    (*env)->ReleaseStringUTFChars(env, query, queryutf);
+  return (rv);
 }
 
 JNIEXPORT jint JNICALL
