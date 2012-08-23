@@ -863,27 +863,17 @@ Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
   return (rv);
 }
 
-JNIEXPORT jboolean JNICALL
-Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
+static jboolean
+_testquery (JNIEnv *env, jobject obj, const char *node, const char *query)
 {
   genders_t handle;
-  const jbyte *queryutf = NULL;
   jboolean rv = JNI_FALSE;
   int ret;
 
   if (_get_handle (env, obj, &handle) < 0)
     goto cleanup;
 
-  if (query)
-    {
-      if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
-    }
-
-  if ((ret = genders_testquery (handle, NULL, queryutf)) < 0)
+  if ((ret = genders_testquery (handle, node, query)) < 0)
     {
       fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
       goto cleanup;
@@ -895,6 +885,27 @@ Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring q
     rv = JNI_FALSE;
 
  cleanup:
+  return (rv);
+}
+
+JNIEXPORT jboolean JNICALL
+Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
+{
+  const jbyte *queryutf = NULL;
+  jboolean rv = JNI_FALSE;
+
+  if (query)
+    {
+      if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  rv = _testquery (env, obj, NULL, queryutf);
+
+ cleanup:
   if (query && queryutf)
     (*env)->ReleaseStringUTFChars(env, query, queryutf);
   return (rv);
@@ -903,14 +914,9 @@ Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring q
 JNIEXPORT jboolean JNICALL
 Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring query)
 {
-  genders_t handle;
   const jbyte *nodeutf = NULL;
   const jbyte *queryutf = NULL;
   jboolean rv = JNI_FALSE;
-  int ret;
-
-  if (_get_handle (env, obj, &handle) < 0)
-    goto cleanup;
 
   if (node)
     {
@@ -930,16 +936,7 @@ Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, job
 	}
     }
 
-  if ((ret = genders_testquery (handle, nodeutf, queryutf)) < 0)
-    {
-      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
-      goto cleanup;
-    }
-
-  if (ret)
-    rv = JNI_TRUE;
-  else
-    rv = JNI_FALSE;
+  rv = _testquery (env, obj, nodeutf, queryutf);
 
  cleanup:
   if (node && nodeutf)
@@ -949,12 +946,52 @@ Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, job
   return (rv);
 }
 
+static jint
+_parse (JNIEnv *env, jobject obj, const char *filename)
+{
+  genders_t handle;
+  jint rv = -1;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if ((ret = genders_parse (handle, filename, NULL)) < 0)
+    {
+      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  rv = ret;
+ cleanup:
+  return (rv);
+}
+
 JNIEXPORT jint JNICALL
 Java_Genders_parse__ (JNIEnv *env, jobject obj)
 {
+  return (_parse (env, obj, NULL));
 }
 
 JNIEXPORT jint JNICALL
 Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filename)
 {
+  const jbyte *filenameutf = NULL;
+  jint rv = -1;
+
+  if (filename)
+    {
+      if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  rv = _parse (env, obj, filenameutf);
+
+ cleanup:
+  if (filename && filenameutf)
+    (*env)->ReleaseStringUTFChars(env, filename, filenameutf);
+  return (rv);
 }

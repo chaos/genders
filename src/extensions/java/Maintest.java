@@ -208,6 +208,15 @@ class Maintest
 	b = gh.testattrval("hype356", "cfhost", "foobar");
 	System.out.println("Testattrval hype356 cfhost=foobar : " + b);
 
+	int errcount;
+	errcount = gh.parse();
+	System.out.println("Parse default: " + errcount);
+
+	errcount = gh.parse("./testgenders");
+	System.out.println("Parse ./testgenders: " + errcount);
+
+	errcount = gh.parse("./errtestgenders");
+	System.out.println("Parse ./errtestgenders: " + errcount);
     }
 
     public static void main(String[] args)
