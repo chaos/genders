@@ -1,12 +1,17 @@
 class Maintest
 {
-    public static void main(String[] args)
+    private static void test (String filename)
     {
-	Genders gh = new Genders();
-	System.out.println("Hello World");
-	System.out.println("Handle Address = " + gh.ghaddr());
+	Genders gh = new Genders(filename);
+	System.out.println("Genders Default");
 	System.out.println("NumNodes = " + gh.getnumnodes());
 	System.out.println("Numattrs = " + gh.getnumattrs());
 	System.out.println("Maxattrs = " + gh.getmaxattrs());
+    }
+
+    public static void main(String[] args)
+    {
+	test (null);
+	test ("./testgenders");
     }
 }
