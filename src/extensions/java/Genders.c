@@ -45,7 +45,7 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 JNIEXPORT jint JNICALL
 Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
 {
-  const jbyte *filenameutf;
+  const jbyte *filenameutf = NULL;
   jint rv = -1;
 
   if (filename)
@@ -58,12 +58,13 @@ Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
       
       rv = _constructor (env, obj, filenameutf);
 
-      (*env)->ReleaseStringUTFChars(env, filename, filenameutf);
     }
   else
     _constructor (env, obj, NULL);
 
  cleanup:
+  if (filename && filenameutf)
+      (*env)->ReleaseStringUTFChars(env, filename, filenameutf);
   return (rv);
 }
 
@@ -189,6 +190,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
   char **nodelist = NULL;
   int nodelistlen;
   jclass string_class;
+  jobjectArray jnodelist = NULL;
   jobjectArray rv = NULL;
   int nodeslen;
   int i;
@@ -210,7 +212,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
-  if (!(rv = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
+  if (!(jnodelist = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
     {
       fprintf (stderr, "NewObjectArray\n");
       goto cleanup;
@@ -226,11 +228,15 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 	  goto cleanup;
 	}
 
-      (*env)->SetObjectArrayElement (env, rv, i, tmpstr);
+      (*env)->SetObjectArrayElement (env, jnodelist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
     }
 
+  rv = jnodelist;
  cleanup:
+  if (!rv && jnodelist)
+    (*env)->DeleteLocalRef (env, jnodelist);
+  genders_nodelist_destroy (handle, nodelist);
   return (rv);
 }
 
@@ -257,10 +263,11 @@ Java_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring at
 
   rv = _getnodes (env, obj, attrutf, NULL);
 
-  if (attr)
+ cleanup:
+
+  if (attr && attrutf)
     (*env)->ReleaseStringUTFChars(env, attr, attrutf);
 
- cleanup:
   return (rv);
 }
 
@@ -291,13 +298,14 @@ Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobj
 
   rv = _getnodes (env, obj, attrutf, valutf);
 
-  if (attr)
+ cleanup:
+
+  if (attr && attrutf)
     (*env)->ReleaseStringUTFChars(env, attr, attrutf);
 
-  if (val)
+  if (val && valutf)
     (*env)->ReleaseStringUTFChars(env, val, valutf);
 
- cleanup:
   return (rv);
 }
 
@@ -308,6 +316,7 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
   char **attrlist = NULL;
   int attrlistlen;
   jclass string_class;
+  jobjectArray jattrlist = NULL;
   jobjectArray rv = NULL;
   int attrslen;
   int i;
@@ -329,7 +338,7 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
-  if (!(rv = (*env)->NewObjectArray(env, attrslen, string_class, NULL)))
+  if (!(jattrlist = (*env)->NewObjectArray(env, attrslen, string_class, NULL)))
     {
       fprintf (stderr, "NewObjectArray\n");
       goto cleanup;
@@ -345,11 +354,14 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
 	  goto cleanup;
 	}
 
-      (*env)->SetObjectArrayElement (env, rv, i, tmpstr);
+      (*env)->SetObjectArrayElement (env, jattrlist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
     }
 
+  rv = jattrlist;
  cleanup:
+  if (!rv && jattrlist)
+    (*env)->DeleteLocalRef (env, jattrlist);
   return (rv);
 }
 
@@ -409,15 +421,14 @@ Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
       goto cleanup;
     }
 
-  if (node)
-    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
-
   if (ret)
     rv = JNI_TRUE;
   else
     rv = JNI_FALSE;
 
  cleanup:
+  if (node && nodeutf)
+    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
   return (rv);
 }
 
@@ -440,8 +451,6 @@ Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
 	  goto cleanup;
 	}
     }
-  else
-    attrutf = "";
 
   if ((ret = genders_isattr (handle, attrutf)) < 0)
     {
@@ -449,15 +458,14 @@ Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
       goto cleanup;
     }
 
-  if (attr)
-    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
-
   if (ret)
     rv = JNI_TRUE;
   else
     rv = JNI_FALSE;
 
  cleanup:
+  if (attr && attrutf)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
   return (rv);
 }
 
@@ -481,8 +489,6 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 	  goto cleanup;
 	}
     }
-  else
-    attrutf = "";
 
   if (val)
     {
@@ -492,8 +498,6 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 	  goto cleanup;
 	}
     }
-  else
-    valutf = "";
 
   if ((ret = genders_isattrval (handle, attrutf, valutf)) < 0)
     {
@@ -501,15 +505,17 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
       goto cleanup;
     }
 
-  if (attr)
-    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
-
   if (ret)
     rv = JNI_TRUE;
   else
     rv = JNI_FALSE;
 
  cleanup:
+  if (attr && attrutf)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+  
+  if (val && valutf)
+    (*env)->ReleaseStringUTFChars(env, val, valutf);
   return (rv);
 }
 
