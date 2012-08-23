@@ -29,8 +29,7 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
-  gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J");
-  if (!gh_addr_fid)
+  if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
     {
       fprintf (stderr, "gh_addr_fid GetFieldID error\n");
       goto cleanup;
@@ -51,8 +50,7 @@ Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
 
   if (filename)
     {
-      filenameutf = (*env)->GetStringUTFChars(env, filename, NULL);
-      if (!filenameutf)
+      if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
 	{
 	  fprintf (stderr, "GetStringUTFChars error\n");
 	  goto cleanup;
@@ -79,8 +77,7 @@ _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
-  gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J");
-  if (!gh_addr_fid)
+  if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
     {
       fprintf (stderr, "gh_addr_fid GetFieldID error\n");
       goto cleanup;
@@ -182,5 +179,123 @@ Java_Genders_getnodename (JNIEnv *env, jobject obj)
   rv = (*env)->NewStringUTF(env, nodename_buf);
  cleanup:
   free (nodename_buf);
+  return (rv);
+}
+
+jobjectArray
+_getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
+{
+  genders_t handle;
+  char **nodelist = NULL;
+  int nodelistlen;
+  jclass string_class;
+  jobjectArray rv = NULL;
+  int nodeslen;
+  int i;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if ((nodelistlen = genders_nodelist_create (handle, &nodelist)) < 0)
+    {
+      fprintf (stderr, "genders_nodelist_create: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if ((nodeslen = genders_getnodes (handle, nodelist, nodelistlen, attr, val)) < 0)
+    {
+      fprintf (stderr, "genders_getnodes: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  string_class = (*env)->FindClass(env, "java/lang/String");
+
+  if (!(rv = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
+    {
+      fprintf (stderr, "NewObjectArray\n");
+      goto cleanup;
+    }
+
+  for (i = 0; i < nodeslen; i++)
+    {
+      jstring tmpstr;
+      
+      if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
+	{
+	  fprintf (stderr, "NewStringUTF\n");
+	  goto cleanup;
+	}
+
+      (*env)->SetObjectArrayElement (env, rv, i, tmpstr);
+    }
+
+ cleanup:
+  return (rv);
+}
+
+JNIEXPORT jobjectArray JNICALL
+Java_Genders_getnodes__ (JNIEnv *env, jobject obj)
+{
+  return (_getnodes (env, obj, NULL, NULL));
+}
+
+JNIEXPORT jobjectArray JNICALL
+Java_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+{
+  const jbyte *attrutf = NULL;
+  jobjectArray rv = NULL;
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  rv = _getnodes (env, obj, attrutf, NULL);
+
+  if (attr)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+
+ cleanup:
+  return (rv);
+}
+
+JNIEXPORT jobjectArray JNICALL
+Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
+{
+  const jbyte *attrutf = NULL;
+  const jbyte *valutf = NULL;
+  jobjectArray rv = NULL;
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if (val)
+    {
+      if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  rv = _getnodes (env, obj, attrutf, valutf);
+
+  if (attr)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+
+  if (val)
+    (*env)->ReleaseStringUTFChars(env, val, valutf);
+
+ cleanup:
   return (rv);
 }

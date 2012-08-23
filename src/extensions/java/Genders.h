@@ -47,6 +47,30 @@ JNIEXPORT jint JNICALL Java_Genders_getmaxattrs
 JNIEXPORT jstring JNICALL Java_Genders_getnodename
   (JNIEnv *, jobject);
 
+/*
+ * Class:     Genders
+ * Method:    getnodes
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getnodes
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    getnodes
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring, jstring);
+
 #ifdef __cplusplus
 }
 #endif

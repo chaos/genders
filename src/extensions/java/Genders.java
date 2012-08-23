@@ -28,6 +28,12 @@ class Genders
 
     public native String getnodename();
 
+    public native String[] getnodes();
+
+    public native String[] getnodes(String attr);
+
+    public native String[] getnodes(String attr, String val);
+
     static
     {
 	System.loadLibrary("Genders");
