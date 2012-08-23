@@ -39,7 +39,30 @@ class Maintest
 
 	attrs = gh.getattr_all();
 	for (String tmp : attrs)
-	    System.out.println("Getattr All : " + tmp); 
+	    System.out.println("Getattr All : " + tmp);
+
+	boolean b;
+
+	b = gh.isnode("foobar");
+	System.out.println("Isnode foobar : " + b);
+
+	b = gh.isnode("hype355");
+	System.out.println("Isnode hype355 : " + b);
+
+	b = gh.isnode(null);
+	System.out.println("Isnode null : " + b);
+
+	b = gh.isattr("foobar");
+	System.out.println("Isattr foobar : " + b);
+
+	b = gh.isattr("mgmt");
+	System.out.println("Isattr mgmt : " + b);
+
+	b = gh.isattrval("cfhost", "foobar");
+	System.out.println("Isattrval cfhost=foobar : " + b);
+
+	b = gh.isattrval("cfhost", "hypei");
+	System.out.println("Isattrval cfhost=hypei : " + b);
     }
 
     public static void main(String[] args)

@@ -386,16 +386,131 @@ Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_Strin
 JNIEXPORT jboolean JNICALL
 Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
 {
+  genders_t handle;
+  const jbyte *nodeutf = NULL;
+  jboolean rv = JNI_FALSE;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (node)
+    {
+      if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+
+  if ((ret = genders_isnode (handle, nodeutf)) < 0)
+    {
+      fprintf (stderr, "genders_isnode: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (node)
+    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
+
+  if (ret)
+    rv = JNI_TRUE;
+  else
+    rv = JNI_FALSE;
+
+ cleanup:
+  return (rv);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
 {
+  genders_t handle;
+  const jbyte *attrutf = NULL;
+  jboolean rv = JNI_FALSE;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+  else
+    attrutf = "";
+
+  if ((ret = genders_isattr (handle, attrutf)) < 0)
+    {
+      fprintf (stderr, "genders_isattr: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (attr)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+
+  if (ret)
+    rv = JNI_TRUE;
+  else
+    rv = JNI_FALSE;
+
+ cleanup:
+  return (rv);
 }
 
 JNIEXPORT jboolean JNICALL
 Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 {
+  genders_t handle;
+  const jbyte *attrutf = NULL;
+  const jbyte *valutf = NULL;
+  jboolean rv = JNI_FALSE;
+  int ret;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  if (attr)
+    {
+      if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+  else
+    attrutf = "";
+
+  if (val)
+    {
+      if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
+	{
+	  fprintf (stderr, "GetStringUTFChars error\n");
+	  goto cleanup;
+	}
+    }
+  else
+    valutf = "";
+
+  if ((ret = genders_isattrval (handle, attrutf, valutf)) < 0)
+    {
+      fprintf (stderr, "genders_isattr: %s\n", genders_errormsg (handle));
+      goto cleanup;
+    }
+
+  if (attr)
+    (*env)->ReleaseStringUTFChars(env, attr, attrutf);
+
+  if (ret)
+    rv = JNI_TRUE;
+  else
+    rv = JNI_FALSE;
+
+ cleanup:
+  return (rv);
 }
 
 JNIEXPORT jobjectArray JNICALL
