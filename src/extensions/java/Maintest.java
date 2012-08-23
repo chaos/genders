@@ -12,9 +12,28 @@ class Maintest
 	String[] nodes;
 
 	nodes = gh.getnodes();
-
 	for (String tmp : nodes)
 	    System.out.println("GetNodes All Node: " + tmp);
+
+	nodes = gh.getnodes("mgmt");
+	for (String tmp : nodes)
+	    System.out.println("GetNodes mgmt Node: " + tmp);
+
+	nodes = gh.getnodes("foobarlalala");
+	for (String tmp : nodes)
+	    System.out.println("GetNodes foobarlalala Node: " + tmp);
+
+	nodes = gh.getnodes("cfhost");
+	for (String tmp : nodes)
+	    System.out.println("GetNodes cfhost Node: " + tmp);
+
+	nodes = gh.getnodes("cfhost", "foobar");
+	for (String tmp : nodes)
+	    System.out.println("GetNodes cfhost=foobar  Node: " + tmp);
+
+	nodes = gh.getnodes("cfhost", "hypei");
+	for (String tmp : nodes)
+	    System.out.println("GetNodes cfhost=hypei  Node: " + tmp);
     }
 
     public static void main(String[] args)
