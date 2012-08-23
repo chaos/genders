@@ -126,6 +126,88 @@ class Maintest
 
 	val = gh.getattrval("hype356", "cfhost");
 	System.out.println("Getattrval hype356 cfhost : " + val);
+
+	b = gh.testattr("mgmt");
+	System.out.println("Testattr mgmt : " + b);
+
+	b = gh.testattr("login");
+	System.out.println("Testattr login : " + b);
+
+	b = gh.testattr("cfhost");
+	System.out.println("Testattr cfhost : " + b);
+
+	b = gh.testattr("hype355", "mgmt");
+	System.out.println("Testattr hype355 mgmt : " + b);
+
+	b = gh.testattr("hype355", "login");
+	System.out.println("Testattr hype355 login : " + b);
+
+	b = gh.testattr("hype355", "cfhost");
+	System.out.println("Testattr hype355 cfhost : " + b);
+
+	b = gh.testattr("hype356", "mgmt");
+	System.out.println("Testattr hype356 mgmt : " + b);
+
+	b = gh.testattr("hype356", "login");
+	System.out.println("Testattr hype356 login : " + b);
+
+	b = gh.testattr("hype356", "cfhost");
+	System.out.println("Testattr hype356 cfhost : " + b);
+
+	b = gh.testattrval("mgmt", "");
+	System.out.println("Testattrval mgmt= : " + b);
+
+	b = gh.testattrval("mgmt", "foobar");
+	System.out.println("Testattrval mgmt=foobar : " + b);
+
+	b = gh.testattrval("login", "");
+	System.out.println("Testattrval login= : " + b);
+
+	b = gh.testattrval("login", "foobar");
+	System.out.println("Testattrval login=foobar : " + b);
+
+	b = gh.testattrval("cfhost", "hypei");
+	System.out.println("Testattrval cfhost=hypei : " + b);
+
+	b = gh.testattrval("cfhost", "foobar");
+	System.out.println("Testattrval cfhost=foobar : " + b);
+
+	b = gh.testattrval("hype355", "mgmt", "");
+	System.out.println("Testattrval hype355 mgmt= : " + b);
+
+	b = gh.testattrval("hype355", "mgmt", "foobar");
+	System.out.println("Testattrval hype355 mgmt=foobar : " + b);
+
+	b = gh.testattrval("hype355", "login", "");
+	System.out.println("Testattrval hype355 login= : " + b);
+
+	b = gh.testattrval("hype355", "login", "foobar");
+	System.out.println("Testattrval hype355 login=foobar : " + b);
+
+	b = gh.testattrval("hype355", "cfhost", "hypei");
+	System.out.println("Testattrval hype355 cfhost=hypei : " + b);
+
+	b = gh.testattrval("hype355", "cfhost", "foobar");
+	System.out.println("Testattrval hype355 cfhost=foobar : " + b);
+
+	b = gh.testattrval("hype356", "mgmt", "");
+	System.out.println("Testattrval hype356 mgmt= : " + b);
+
+	b = gh.testattrval("hype356", "mgmt", "foobar");
+	System.out.println("Testattrval hype356 mgmt=foobar : " + b);
+
+	b = gh.testattrval("hype356", "login", "");
+	System.out.println("Testattrval hype356 login= : " + b);
+
+	b = gh.testattrval("hype356", "login", "foobar");
+	System.out.println("Testattrval hype356 login=foobar : " + b);
+
+	b = gh.testattrval("hype356", "cfhost", "hypei");
+	System.out.println("Testattrval hype356 cfhost=hypei : " + b);
+
+	b = gh.testattrval("hype356", "cfhost", "foobar");
+	System.out.println("Testattrval hype356 cfhost=foobar : " + b);
+
     }
 
     public static void main(String[] args)
