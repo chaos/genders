@@ -357,6 +357,66 @@ Libgenders_getattr(Libgenders *self, PyObject *args)
 }
 
 static PyObject *
+Libgenders_getval(Libgenders *self, PyObject *args)
+{
+  const char *node = NULL;
+  char **attrlist = NULL;
+  int attrlistlen;
+  char **vallist = NULL;
+  int vallistlen;
+  int vallen;
+  PyObject *rv = NULL;
+  int errnum;
+
+  if (!PyArg_ParseTuple(args, "|z", &node))
+    goto cleanup;
+
+  if ((attrlistlen = genders_attrlist_create(self->gh, &attrlist)) < 0) {
+    _genders_exception_check(self);
+    goto cleanup;
+  }
+
+  if ((vallistlen = genders_vallist_create(self->gh, &vallist)) < 0) {
+    _genders_exception_check(self);
+    goto cleanup;
+  }
+
+  if ((vallen = genders_getattr(self->gh,
+				 attrlist,
+				 vallist,
+				 attrlistlen,
+				 node)) < 0) {
+    _genders_exception_check(self);
+    goto cleanup;
+  }
+
+  if (vallen) {
+    int maxvallen;
+
+    if ((maxvallen = genders_getmaxvallen(self->gh)) < 0) {
+      _genders_exception_check(self);
+      goto cleanup;
+    }
+
+    if (!(rv = _build_comma_separated_string(maxvallen,
+					     vallist,
+					     vallen)))
+      goto cleanup;
+  }
+  else {
+    if (!(rv = Py_BuildValue("z", NULL)))
+      goto cleanup;
+  }
+  
+ cleanup:
+  errnum = genders_errnum(self->gh);
+  genders_attrlist_destroy(self->gh, attrlist);
+  genders_vallist_destroy(self->gh, vallist);
+  genders_set_errnum(self->gh, errnum);
+  return rv; 
+}
+
+static PyObject *
 Libgenders_getattr_all(Libgenders *self)
 {
   char **attrlist = NULL;
@@ -739,6 +799,12 @@ static PyMethodDef Libgenders_methods[] = {
     (PyCFunction)Libgenders_getattr,
     METH_VARARGS,
     "Returns a comma separated string of attributes for the specified node. If the node is not specified, the local node's attributes returned."
+  },
+  {
+    "getval",
+    (PyCFunction)Libgenders_getval,
+    METH_VARARGS,
+    "Returns a comma separated string of values for the specified node, mapping to the attributes returned with getattr. If the node is not specified, the local node's attributes returned."
   },
   {
     "getattr_all",
