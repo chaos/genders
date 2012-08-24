@@ -234,7 +234,11 @@ class Maintest
 
 	errcount = gh.parse("./errtestgenders");
 	System.out.println("Parse ./errtestgenders: " + errcount);
-    }
+
+	gh.cleanup();
+
+ 	System.out.println("NumNodes = " + gh.getnumnodes());
+   }
 
     public static void main(String[] args)
     {

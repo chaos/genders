@@ -223,6 +223,14 @@ JNIEXPORT jint JNICALL Java_Genders_parse__
 JNIEXPORT jint JNICALL Java_Genders_parse__Ljava_lang_String_2
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     Genders
+ * Method:    cleanup
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_Genders_cleanup
+  (JNIEnv *, jobject);
+
 #ifdef __cplusplus
 }
 #endif

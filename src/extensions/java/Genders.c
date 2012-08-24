@@ -11,7 +11,7 @@ static int
 _constructor (JNIEnv *env, jobject obj, const char *filename)
 {
   genders_t handle;
-  jclass genders_cls;
+  jclass genders_cls = NULL;
   jfieldID gh_addr_fid;
   jint rv = -1;
 
@@ -85,6 +85,13 @@ _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
     }
   
   jgh_addr_addr = (*env)->GetLongField (env, obj, gh_addr_fid);
+
+  if (!jgh_addr_addr)
+    {
+      fprintf (stderr, "NULL handle\n");
+      goto cleanup;
+    }
+
   (*handle) = (genders_t)jgh_addr_addr;
 
   rv = 0;
@@ -199,7 +206,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
   genders_t handle;
   char **nodelist = NULL;
   int nodelistlen;
-  jclass string_class;
+  jclass string_class = NULL;
   jobjectArray jnodelist = NULL;
   jobjectArray rv = NULL;
   int nodeslen;
@@ -247,6 +254,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
   if (!rv && jnodelist)
     (*env)->DeleteLocalRef (env, jnodelist);
   genders_nodelist_destroy (handle, nodelist);
+  (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
 
@@ -1118,4 +1126,30 @@ Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filen
   if (filename && filenameutf)
     (*env)->ReleaseStringUTFChars(env, filename, filenameutf);
   return (rv);
+}
+
+JNIEXPORT void JNICALL
+Java_Genders_cleanup (JNIEnv *env, jobject obj)
+{
+  genders_t handle;
+  jclass genders_cls;
+  jfieldID gh_addr_fid;
+
+  if (_get_handle (env, obj, &handle) < 0)
+    goto cleanup;
+
+  genders_handle_destroy (handle);
+
+  genders_cls = (*env)->GetObjectClass (env, obj);
+
+  if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
+    {
+      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
+      goto cleanup;
+    } 
+
+  (*env)->SetLongField (env, obj, gh_addr_fid, 0);
+
+ cleanup:
+  return;
 }

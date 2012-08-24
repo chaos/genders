@@ -72,6 +72,8 @@ class Genders
 
     public native int parse(String filename);
 
+    public native void cleanup();
+
     static
     {
 	System.loadLibrary("Genders");
