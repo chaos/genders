@@ -101,7 +101,7 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
+Java_gov_llnl_lc_chaos_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
 {
   const jbyte *filenameutf = NULL;
   jint rv = -1;
@@ -152,7 +152,7 @@ _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_getnumnodes (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getnumnodes (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   int rv = -1;
@@ -171,7 +171,7 @@ Java_Genders_getnumnodes (JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_getnumattrs (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getnumattrs (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   int rv = -1;
@@ -190,7 +190,7 @@ Java_Genders_getnumattrs (JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_getmaxattrs (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getmaxattrs (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   int rv = -1;
@@ -209,7 +209,7 @@ Java_Genders_getmaxattrs (JNIEnv *env, jobject obj)
 }
 
 JNIEXPORT jstring JNICALL
-Java_Genders_getnodename (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getnodename (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   char *nodenamebuf = NULL;
@@ -302,13 +302,13 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getnodes__ (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getnodes__ (JNIEnv *env, jobject obj)
 {
   return (_getnodes (env, obj, NULL, NULL));
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
 {
   const jbyte *attrutf = NULL;
   jobjectArray rv = NULL;
@@ -330,7 +330,7 @@ Java_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring at
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
+Java_gov_llnl_lc_chaos_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
 {
   const jbyte *attrutf = NULL;
   const jbyte *valutf = NULL;
@@ -414,13 +414,13 @@ _getattr (JNIEnv *env, jobject obj, const char *node)
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getattr__ (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getattr__ (JNIEnv *env, jobject obj)
 {
   return (_getattr (env, obj, NULL));
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node)
+Java_gov_llnl_lc_chaos_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node)
 {
   const jbyte *nodeutf;
   jobjectArray rv = NULL;
@@ -440,7 +440,7 @@ Java_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring nod
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_getattr_1all (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   char **attrlist = NULL;
@@ -536,7 +536,7 @@ _getattrval (JNIEnv *env, jobject obj, const char *node, const char *attr)
 }
 
 JNIEXPORT jstring JNICALL
-Java_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
 {
   const jbyte *attrutf;
   jstring rv = NULL;
@@ -556,7 +556,7 @@ Java_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring 
 }
 
 JNIEXPORT jstring JNICALL
-Java_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
 {
   const jbyte *nodeutf;
   const jbyte *attrutf;
@@ -610,7 +610,7 @@ _testattr (JNIEnv *env, jobject obj, const char *node, const char *attr)
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_testattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
 {
   const jbyte *attrutf = NULL;
   jboolean rv = JNI_FALSE;
@@ -630,7 +630,7 @@ Java_Genders_testattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring at
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testattr__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_testattr__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
 {
   const jbyte *nodeutf = NULL;
   const jbyte *attrutf = NULL;
@@ -684,7 +684,7 @@ _testattrval (JNIEnv *env, jobject obj, const char *node, const char *attr, cons
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
+Java_gov_llnl_lc_chaos_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr, jstring val)
 {
   const jbyte *attrutf = NULL;
   const jbyte *valutf = NULL;
@@ -713,7 +713,7 @@ Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, j
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr, jstring val)
+Java_gov_llnl_lc_chaos_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr, jstring val)
 {
   const jbyte *nodeutf = NULL;
   const jbyte *attrutf = NULL;
@@ -751,7 +751,7 @@ Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_Strin
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
+Java_gov_llnl_lc_chaos_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
 {
   genders_t handle;
   const jbyte *nodeutf = NULL;
@@ -785,7 +785,7 @@ Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
+Java_gov_llnl_lc_chaos_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
 {
   genders_t handle;
   const jbyte *attrutf = NULL;
@@ -819,7 +819,7 @@ Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
+Java_gov_llnl_lc_chaos_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 {
   genders_t handle;
   const jbyte *attrutf = NULL;
@@ -862,7 +862,7 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
 }
 
 JNIEXPORT jobjectArray JNICALL
-Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
+Java_gov_llnl_lc_chaos_Genders_query (JNIEnv *env, jobject obj, jstring query)
 {
   genders_t handle;
   const jbyte *queryutf = NULL;
@@ -948,7 +948,7 @@ _testquery (JNIEnv *env, jobject obj, const char *node, const char *query)
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
+Java_gov_llnl_lc_chaos_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring query)
 {
   const jbyte *queryutf = NULL;
   jboolean rv = JNI_FALSE;
@@ -968,7 +968,7 @@ Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring q
 }
 
 JNIEXPORT jboolean JNICALL
-Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring query)
+Java_gov_llnl_lc_chaos_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring query)
 {
   const jbyte *nodeutf = NULL;
   const jbyte *queryutf = NULL;
@@ -1018,13 +1018,13 @@ _parse (JNIEnv *env, jobject obj, const char *filename)
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_parse__ (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_parse__ (JNIEnv *env, jobject obj)
 {
   return (_parse (env, obj, NULL));
 }
 
 JNIEXPORT jint JNICALL
-Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filename)
+Java_gov_llnl_lc_chaos_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filename)
 {
   const jbyte *filenameutf = NULL;
   jint rv = -1;
@@ -1044,7 +1044,7 @@ Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filen
 }
 
 JNIEXPORT void JNICALL
-Java_Genders_cleanup (JNIEnv *env, jobject obj)
+Java_gov_llnl_lc_chaos_Genders_cleanup (JNIEnv *env, jobject obj)
 {
   genders_t handle;
   jclass genders_cls;

@@ -1,68 +1,6 @@
-class GendersException extends Exception 
-{
-    public GendersException(String msg)
-    {
-	super(msg);
-    }
-}
+package gov.llnl.lc.chaos;
 
-class GendersExceptionOpen extends GendersException
-{
-    public GendersExceptionOpen(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionRead extends GendersException
-{
-    public GendersExceptionRead(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionParse extends GendersException
-{
-    public GendersExceptionParse(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionParameters extends GendersException
-{
-    public GendersExceptionParameters(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionNotfound extends GendersException
-{
-    public GendersExceptionNotfound(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionSyntax extends GendersException
-{
-    public GendersExceptionSyntax(String msg)
-    {
-	super(msg);
-    }
-}
-
-class GendersExceptionInternal extends GendersException
-{
-    public GendersExceptionInternal(String msg)
-    {
-	super(msg);
-    }
-}
-
-class Genders
+public class Genders
 {
     private long gh_addr = 0;
 
@@ -70,18 +8,12 @@ class Genders
 
     public Genders()
     {
-	if (genders_constructor(null) < 0)
-	    {
-		System.out.println("genders_constructor_default");
-	    }
+	genders_constructor(null);
     }
 
     public Genders(String filename)
     {
-	if (genders_constructor(filename) < 0)
-	    {
-		System.out.println("genders_constructor_filename");
-	    }
+	genders_constructor(filename);
     }
 
     public native int getnumnodes() throws GendersException;
