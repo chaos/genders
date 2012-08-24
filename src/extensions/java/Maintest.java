@@ -98,27 +98,9 @@ class Maintest
 	}
 
 	try {
-	    vals = gh.getval();
-	    for (String tmp : vals)
-		System.out.println("getval : " + tmp); 
-	}
-	catch (Exception e) {
-	    System.out.println("getattr hype355: " + e);
-	}
-
-	try {
 	    attrs = gh.getattr("hype355");
 	    for (String tmp : attrs)
 		System.out.println("getattr hype355: " + tmp); 
-	}
-	catch (Exception e) {
-	    System.out.println("getattr hype355: " + e);
-	}
-
-	try {
-	    vals = gh.getval("hype355");
-	    for (String tmp : vals)
-		System.out.println("getval hype355: " + tmp); 
 	}
 	catch (Exception e) {
 	    System.out.println("getattr hype355: " + e);

@@ -102,10 +102,6 @@ class Genders
 
     public native String[] getattr(String node) throws GendersException;
 
-    public native String[] getval() throws GendersException;
-
-    public native String[] getval(String node) throws GendersException;
-
     public native String[] getattr_all() throws GendersException;
 
     public native String getattrval(String attr) throws GendersException;

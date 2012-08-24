@@ -362,13 +362,11 @@ Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobj
 }
 
 static  jobjectArray
-_getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
+_getattr (JNIEnv *env, jobject obj, const char *node)
 {
   genders_t handle;
   char **attrlist = NULL;
   int attrlistlen;
-  char **vallist = NULL;
-  int vallistlen;
   jclass string_class = NULL;
   jobjectArray jlist = NULL;
   jobjectArray rv = NULL;
@@ -384,13 +382,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
       goto cleanup;
     }
 
-  if ((vallistlen = genders_vallist_create (handle, &vallist)) < 0)
-    {
-      _throw_exception (env, obj, genders_errnum (handle));
-      goto cleanup;
-    }
-
-  if ((attrslen = genders_getattr (handle, attrlist, vallist, attrlistlen, node)) < 0)
+  if ((attrslen = genders_getattr (handle, attrlist, NULL, attrlistlen, node)) < 0)
     {
       _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
@@ -405,7 +397,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
     {
       jstring tmpstr;
       
-      if (!(tmpstr = (*env)->NewStringUTF(env, return_vallist ? vallist[i] : attrlist[i])))
+      if (!(tmpstr = (*env)->NewStringUTF(env, attrlist[i])))
 	goto cleanup;
 
       (*env)->SetObjectArrayElement (env, jlist, i, tmpstr);
@@ -417,7 +409,6 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
   if (!rv && jlist)
     (*env)->DeleteLocalRef (env, jlist);
   genders_attrlist_destroy (handle, attrlist);
-  genders_vallist_destroy (handle, vallist);
   (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
@@ -425,7 +416,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
 JNIEXPORT jobjectArray JNICALL
 Java_Genders_getattr__ (JNIEnv *env, jobject obj)
 {
-  return (_getattr (env, obj, NULL, 0));
+  return (_getattr (env, obj, NULL));
 }
 
 JNIEXPORT jobjectArray JNICALL
@@ -440,33 +431,7 @@ Java_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring nod
 	goto cleanup;
     }
 
-  rv = _getattr (env, obj, nodeutf, 0);
-
- cleanup:
-  if (node && nodeutf)
-    (*env)->ReleaseStringUTFChars(env, node, nodeutf);
-  return (rv);
-}
-
-JNIEXPORT jobjectArray JNICALL
-Java_Genders_getval__ (JNIEnv *env, jobject obj)
-{
-  return (_getattr (env, obj, NULL, 1));
-}
-
-JNIEXPORT jobjectArray JNICALL
-Java_Genders_getval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node)
-{
-  const jbyte *nodeutf;
-  jobjectArray rv = NULL;
-
-  if (node)
-    {
-      if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	goto cleanup;
-    }
-
-  rv = _getattr (env, obj, nodeutf, 1);
+  rv = _getattr (env, obj, nodeutf);
 
  cleanup:
   if (node && nodeutf)
