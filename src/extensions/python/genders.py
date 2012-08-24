@@ -152,23 +152,6 @@ class Genders:
         else:
             rv = []
         return rv
-    def getval(self, node=None):
-        """
-        Returns a list of values for the specified node.  The list of
-        values returned maps to the list of attributes returned by
-        getattr If the node is not specified, the local node's
-        attributes returned.
-        """
-        try:
-            str = self.__lgh.getval(node)
-        except SystemError:
-            raise Genders.__find_exception(self)
-           
-        if str:
-            rv = str.split(',')
-        else:
-            rv = []
-        return rv
     def getattr_all(self):
         """
         Returns a list of all attributes listed in the genders file.
@@ -285,7 +268,6 @@ if __name__ == '__main__':
     print "getnodes:", gh.getnodes("foofdfd")
     print "getnodes:", gh.getnodes("mgmt")
     print "getattr:", gh.getattr()         
-    print "getval:", gh.getval()         
 
     try:
         print "getattr:", gh.getattr("fdafdsfdsa")

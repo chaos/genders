@@ -1,7 +1,3 @@
-2012-08-23  Albert Chu  <chu11@llnl.gov>
-
-	* src/extensions/python/genders.py: Support getval function.
-	
 2012-08-15  Albert Chu  <chu11@llnl.gov>
 
 	* tagged genders-1-20-1
