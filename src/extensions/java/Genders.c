@@ -335,7 +335,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
   int attrlistlen;
   char **vallist = NULL;
   int vallistlen;
-  jclass string_class;
+  jclass string_class = NULL;
   jobjectArray jlist = NULL;
   jobjectArray rv = NULL;
   int attrslen;
@@ -390,6 +390,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
     (*env)->DeleteLocalRef (env, jlist);
   genders_attrlist_destroy (handle, attrlist);
   genders_vallist_destroy (handle, vallist);
+  (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
 
@@ -457,7 +458,7 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
   genders_t handle;
   char **attrlist = NULL;
   int attrlistlen;
-  jclass string_class;
+  jclass string_class = NULL;
   jobjectArray jattrlist = NULL;
   jobjectArray rv = NULL;
   int attrslen;
@@ -504,6 +505,7 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
  cleanup:
   if (!rv && jattrlist)
     (*env)->DeleteLocalRef (env, jattrlist);
+  (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
 
@@ -933,7 +935,7 @@ Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
   const jbyte *queryutf = NULL;
   char **nodelist = NULL;
   int nodelistlen;
-  jclass string_class;
+  jclass string_class = NULL;
   jobjectArray jnodelist = NULL;
   jobjectArray rv = NULL;
   int nodeslen;
@@ -992,6 +994,7 @@ Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
   genders_nodelist_destroy (handle, nodelist);
   if (query && queryutf)
     (*env)->ReleaseStringUTFChars(env, query, queryutf);
+  (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
 
