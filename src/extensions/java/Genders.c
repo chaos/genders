@@ -3,9 +3,70 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <assert.h>
+
 #include <genders.h>
 
 #include "Genders.h"
+
+static void
+_throw_exception (JNIEnv *env, jobject obj, int errnum)
+{
+  jclass gexcept_class = NULL;
+
+  if (errnum == GENDERS_ERR_OPEN)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionOpen")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_OPEN));
+    }
+  else if (errnum == GENDERS_ERR_READ)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionRead")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_READ));
+    }
+  else if (errnum == GENDERS_ERR_PARSE)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionParse")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_PARSE));
+    }
+  else if (errnum == GENDERS_ERR_PARAMETERS)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionParameters")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_PARAMETERS));
+    }
+  else if (errnum == GENDERS_ERR_NOTFOUND)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionNotfound")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_NOTFOUND));
+    }
+  else if (errnum == GENDERS_ERR_SYNTAX)
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionSyntax")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_SYNTAX));
+    }
+  else
+    {
+      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionInternal")))
+	goto cleanup;
+
+      (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_INTERNAL));
+    }
+
+ cleanup:
+  (*env)->DeleteLocalRef (env, gexcept_class);
+}
 
 static int
 _constructor (JNIEnv *env, jobject obj, const char *filename)
@@ -17,23 +78,20 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
 
   if (!(handle = genders_handle_create ()))
     {
-      fprintf (stderr, "genders_handle_create: %s\n", strerror (errno));
+      _throw_exception (env, obj, GENDERS_ERR_INTERNAL);
       goto cleanup;
     }
 
   if (genders_load_data (handle, filename) < 0)
     {
-      fprintf (stderr, "genders_load_data: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
   if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
-    {
-      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
-      goto cleanup;
-    } 
+    goto cleanup;
 
   (*env)->SetLongField (env, obj, gh_addr_fid, (long)handle);
 
@@ -51,10 +109,7 @@ Java_Genders_genders_1constructor (JNIEnv *env, jobject obj, jstring filename)
   if (filename)
     {
       if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
       
       rv = _constructor (env, obj, filenameutf);
 
@@ -79,16 +134,13 @@ _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
   genders_cls = (*env)->GetObjectClass (env, obj);
 
   if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
-    {
-      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
-      goto cleanup;
-    }
+    goto cleanup;
   
   jgh_addr_addr = (*env)->GetLongField (env, obj, gh_addr_fid);
 
   if (!jgh_addr_addr)
     {
-      fprintf (stderr, "NULL handle\n");
+      _throw_exception (env, obj, GENDERS_ERR_INTERNAL);
       goto cleanup;
     }
 
@@ -110,7 +162,7 @@ Java_Genders_getnumnodes (JNIEnv *env, jobject obj)
 
   if ((rv = genders_getnumnodes (handle)) < 0)
     {
-      fprintf (stderr, "genders_getnumnodes: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -129,7 +181,7 @@ Java_Genders_getnumattrs (JNIEnv *env, jobject obj)
 
   if ((rv = genders_getnumattrs (handle)) < 0)
     {
-      fprintf (stderr, "genders_getnumattrs: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -148,7 +200,7 @@ Java_Genders_getmaxattrs (JNIEnv *env, jobject obj)
 
   if ((rv = genders_getmaxattrs (handle)) < 0)
     {
-      fprintf (stderr, "genders_getmaxattrs: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -170,13 +222,13 @@ Java_Genders_getnodename (JNIEnv *env, jobject obj)
 
   if ((maxnodenamelen = genders_getmaxnodelen (handle)) < 0)
     {
-      fprintf (stderr, "genders_getmaxnodelen : %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if (!(nodenamebuf = (char *)malloc (maxnodenamelen + 1)))
     {
-      fprintf (stderr, "malloc: %s\n", strerror (errno));
+      _throw_exception (env, obj, GENDERS_ERR_INTERNAL);
       goto cleanup;
     }
 
@@ -184,15 +236,12 @@ Java_Genders_getnodename (JNIEnv *env, jobject obj)
 
   if (genders_getnodename (handle, nodenamebuf, maxnodenamelen + 1) < 0)
     {
-      fprintf (stderr, "genders_getnodename: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if (!(jnodename = (*env)->NewStringUTF(env, nodenamebuf)))
-    {
-      fprintf (stderr, "NewStringUTF\n");
-      goto cleanup;
-    }
+    goto cleanup;
 
   rv = jnodename;
  cleanup:
@@ -217,33 +266,27 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 
   if ((nodelistlen = genders_nodelist_create (handle, &nodelist)) < 0)
     {
-      fprintf (stderr, "genders_nodelist_create: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if ((nodeslen = genders_getnodes (handle, nodelist, nodelistlen, attr, val)) < 0)
     {
-      fprintf (stderr, "genders_getnodes: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
   if (!(jnodelist = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
-    {
-      fprintf (stderr, "NewObjectArray\n");
-      goto cleanup;
-    }
+    goto cleanup;
 
   for (i = 0; i < nodeslen; i++)
     {
       jstring tmpstr;
       
       if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
-	{
-	  fprintf (stderr, "NewStringUTF\n");
-	  goto cleanup;
-	}
+	goto cleanup;
 
       (*env)->SetObjectArrayElement (env, jnodelist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
@@ -273,10 +316,7 @@ Java_Genders_getnodes__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring at
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getnodes (env, obj, attrutf, NULL);
@@ -299,19 +339,13 @@ Java_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobj
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (val)
     {
       if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getnodes (env, obj, attrutf, valutf);
@@ -346,39 +380,33 @@ _getattr (JNIEnv *env, jobject obj, const char *node, int return_vallist)
 
   if ((attrlistlen = genders_attrlist_create (handle, &attrlist)) < 0)
     {
-      fprintf (stderr, "genders_attrlist_create: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if ((vallistlen = genders_vallist_create (handle, &vallist)) < 0)
     {
-      fprintf (stderr, "genders_vallist_create: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if ((attrslen = genders_getattr (handle, attrlist, vallist, attrlistlen, node)) < 0)
     {
-      fprintf (stderr, "genders_getattr: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
   if (!(jlist = (*env)->NewObjectArray(env, attrslen, string_class, NULL)))
-    {
-      fprintf (stderr, "NewObjectArray\n");
-      goto cleanup;
-    }
+    goto cleanup;
 
   for (i = 0; i < attrslen; i++)
     {
       jstring tmpstr;
       
       if (!(tmpstr = (*env)->NewStringUTF(env, return_vallist ? vallist[i] : attrlist[i])))
-	{
-	  fprintf (stderr, "NewStringUTF\n");
-	  goto cleanup;
-	}
+	goto cleanup;
 
       (*env)->SetObjectArrayElement (env, jlist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
@@ -409,10 +437,7 @@ Java_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring nod
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getattr (env, obj, nodeutf, 0);
@@ -438,10 +463,7 @@ Java_Genders_getval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getattr (env, obj, nodeutf, 1);
@@ -469,33 +491,27 @@ Java_Genders_getattr_1all (JNIEnv *env, jobject obj)
 
   if ((attrlistlen = genders_attrlist_create (handle, &attrlist)) < 0)
     {
-      fprintf (stderr, "genders_attrlist_create: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if ((attrslen = genders_getattr_all (handle, attrlist, attrlistlen)) < 0)
     {
-      fprintf (stderr, "genders_getattr_all: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
   if (!(jattrlist = (*env)->NewObjectArray(env, attrslen, string_class, NULL)))
-    {
-      fprintf (stderr, "NewObjectArray\n");
-      goto cleanup;
-    }
+    goto cleanup;
 
   for (i = 0; i < attrslen; i++)
     {
       jstring tmpstr;
       
       if (!(tmpstr = (*env)->NewStringUTF(env, attrlist[i])))
-	{
-	  fprintf (stderr, "NewStringUTF\n");
-	  goto cleanup;
-	}
+	goto cleanup;
 
       (*env)->SetObjectArrayElement (env, jattrlist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
@@ -524,13 +540,13 @@ _getattrval (JNIEnv *env, jobject obj, const char *node, const char *attr)
 
   if ((maxvallen = genders_getmaxvallen (handle)) < 0)
     {
-      fprintf (stderr, "genders_getmaxvallen : %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if (!(valbuf = (char *)malloc (maxvallen + 1)))
     {
-      fprintf (stderr, "malloc: %s\n", strerror (errno));
+      _throw_exception (env, obj, GENDERS_ERR_INTERNAL);
       goto cleanup;
     }
 
@@ -538,17 +554,14 @@ _getattrval (JNIEnv *env, jobject obj, const char *node, const char *attr)
 
   if ((ret = genders_testattr (handle, node, attr, valbuf, maxvallen + 1)) < 0)
     {
-      fprintf (stderr, "genders_testattr: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if (ret)
     {
       if (!(jval = (*env)->NewStringUTF(env, valbuf)))
-	{
-	  fprintf (stderr, "NewStringUTF\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
   
   rv = jval;
@@ -566,10 +579,7 @@ Java_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring 
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getattrval (env, obj, NULL, attrutf);
@@ -590,19 +600,13 @@ Java_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jo
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _getattrval (env, obj, nodeutf, attrutf);
@@ -627,7 +631,7 @@ _testattr (JNIEnv *env, jobject obj, const char *node, const char *attr)
 
   if ((ret = genders_testattr (handle, node, attr, NULL, 0)) < 0)
     {
-      fprintf (stderr, "genders_testattr: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -649,10 +653,7 @@ Java_Genders_testattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring at
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testattr (env, obj, NULL, attrutf);
@@ -673,19 +674,13 @@ Java_Genders_testattr__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobj
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testattr (env, obj, nodeutf, attrutf);
@@ -710,7 +705,7 @@ _testattrval (JNIEnv *env, jobject obj, const char *node, const char *attr, cons
 
   if ((ret = genders_testattrval (handle, node, attr, val)) < 0)
     {
-      fprintf (stderr, "genders_testattrval: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -733,19 +728,13 @@ Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, j
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (val)
     {
       if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testattrval (env, obj, NULL, attrutf, valutf);
@@ -769,28 +758,19 @@ Java_Genders_testattrval__Ljava_lang_String_2Ljava_lang_String_2Ljava_lang_Strin
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (val)
     {
       if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testattrval (env, obj, nodeutf, attrutf, valutf);
@@ -819,15 +799,12 @@ Java_Genders_isnode (JNIEnv *env, jobject obj, jstring node)
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if ((ret = genders_isnode (handle, nodeutf)) < 0)
     {
-      fprintf (stderr, "genders_isnode: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -856,15 +833,12 @@ Java_Genders_isattr (JNIEnv *env, jobject obj, jstring attr)
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if ((ret = genders_isattr (handle, attrutf)) < 0)
     {
-      fprintf (stderr, "genders_isattr: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -894,24 +868,18 @@ Java_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr, jstring val)
   if (attr)
     {
       if (!(attrutf = (*env)->GetStringUTFChars(env, attr, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (val)
     {
       if (!(valutf = (*env)->GetStringUTFChars(env, val, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if ((ret = genders_isattrval (handle, attrutf, valutf)) < 0)
     {
-      fprintf (stderr, "genders_isattr: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -947,41 +915,32 @@ Java_Genders_query (JNIEnv *env, jobject obj, jstring query)
   if (query)
     {
       if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if ((nodelistlen = genders_nodelist_create (handle, &nodelist)) < 0)
     {
-      fprintf (stderr, "genders_nodelist_create: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   if ((nodeslen = genders_query (handle, nodelist, nodelistlen, queryutf)) < 0)
     {
-      fprintf (stderr, "genders_query: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
   string_class = (*env)->FindClass(env, "java/lang/String");
 
   if (!(jnodelist = (*env)->NewObjectArray(env, nodeslen, string_class, NULL)))
-    {
-      fprintf (stderr, "NewObjectArray\n");
-      goto cleanup;
-    }
+    goto cleanup;
 
   for (i = 0; i < nodeslen; i++)
     {
       jstring tmpstr;
       
       if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
-	{
-	  fprintf (stderr, "NewStringUTF\n");
-	  goto cleanup;
-	}
+	goto cleanup;
 
       (*env)->SetObjectArrayElement (env, jnodelist, i, tmpstr);
       (*env)->DeleteLocalRef (env, tmpstr);
@@ -1010,7 +969,7 @@ _testquery (JNIEnv *env, jobject obj, const char *node, const char *query)
 
   if ((ret = genders_testquery (handle, node, query)) < 0)
     {
-      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -1032,10 +991,7 @@ Java_Genders_testquery__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring q
   if (query)
     {
       if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testquery (env, obj, NULL, queryutf);
@@ -1056,19 +1012,13 @@ Java_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, job
   if (node)
     {
       if (!(nodeutf = (*env)->GetStringUTFChars(env, node, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   if (query)
     {
       if (!(queryutf = (*env)->GetStringUTFChars(env, query, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _testquery (env, obj, nodeutf, queryutf);
@@ -1093,7 +1043,7 @@ _parse (JNIEnv *env, jobject obj, const char *filename)
 
   if ((ret = genders_parse (handle, filename, NULL)) < 0)
     {
-      fprintf (stderr, "genders_testquery: %s\n", genders_errormsg (handle));
+      _throw_exception (env, obj, genders_errnum (handle));
       goto cleanup;
     }
 
@@ -1117,10 +1067,7 @@ Java_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filen
   if (filename)
     {
       if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
-	{
-	  fprintf (stderr, "GetStringUTFChars error\n");
-	  goto cleanup;
-	}
+	goto cleanup;
     }
 
   rv = _parse (env, obj, filenameutf);
@@ -1146,10 +1093,7 @@ Java_Genders_cleanup (JNIEnv *env, jobject obj)
   genders_cls = (*env)->GetObjectClass (env, obj);
 
   if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
-    {
-      fprintf (stderr, "gh_addr_fid GetFieldID error\n");
-      goto cleanup;
-    } 
+    goto cleanup;
 
   (*env)->SetLongField (env, obj, gh_addr_fid, 0);
 
