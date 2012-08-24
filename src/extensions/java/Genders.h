@@ -73,6 +73,38 @@ JNIEXPORT jobjectArray JNICALL Java_Genders_getnodes__Ljava_lang_String_2Ljava_l
 
 /*
  * Class:     Genders
+ * Method:    getattr
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getattr__
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getattr
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getattr__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
+ * Method:    getval
+ * Signature: ()[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getval__
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     Genders
+ * Method:    getval
+ * Signature: (Ljava/lang/String;)[Ljava/lang/String;
+ */
+JNIEXPORT jobjectArray JNICALL Java_Genders_getval__Ljava_lang_String_2
+  (JNIEnv *, jobject, jstring);
+
+/*
+ * Class:     Genders
  * Method:    getattr_all
  * Signature: ()[Ljava/lang/String;
  */

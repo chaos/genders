@@ -34,7 +34,13 @@ class Genders
 
     public native String[] getnodes(String attr, String val);
 
-    // getattr
+    public native String[] getattr();
+
+    public native String[] getattr(String node);
+
+    public native String[] getval();
+
+    public native String[] getval(String node);
 
     public native String[] getattr_all();
 

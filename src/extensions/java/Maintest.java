@@ -36,6 +36,23 @@ class Maintest
 	    System.out.println("GetNodes cfhost=hypei  Node: " + tmp);
 
 	String attrs[];
+	String vals[];
+
+	attrs = gh.getattr();
+	for (String tmp : attrs)
+	    System.out.println("getattr : " + tmp); 
+
+	vals = gh.getval();
+	for (String tmp : vals)
+	    System.out.println("getval : " + tmp); 
+
+	attrs = gh.getattr("hype355");
+	for (String tmp : attrs)
+	    System.out.println("getattr hype355: " + tmp); 
+
+	vals = gh.getval("hype355");
+	for (String tmp : vals)
+	    System.out.println("getval hype355: " + tmp); 
 
 	attrs = gh.getattr_all();
 	for (String tmp : attrs)
