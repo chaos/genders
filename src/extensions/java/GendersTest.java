@@ -2,7 +2,7 @@ import gov.llnl.lc.chaos.Genders;
 import gov.llnl.lc.chaos.GendersException;
 import gov.llnl.lc.chaos.GendersExceptionNotfound;
 
-class Maintest
+class GendersTest
 {
     public static void main(String[] args)
     {
