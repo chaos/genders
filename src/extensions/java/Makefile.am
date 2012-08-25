@@ -35,12 +35,8 @@ all: $(GENDERS_JAVA_FILES)
 genders_header: all
 	$(JAVAH) -o src/Gendersjni.h gov.llnl.lc.chaos.Genders
 
-install: all
-	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir/java
-	$(INSTALL) -m 644 $(builddir)/gov/llnl/lc/chaos/Genders.jar $(DESTDIR)$(datadir)/java
-
 install-data-local: all
-	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir/java
+	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir)/java
 	$(INSTALL) -m 644 $(builddir)/gov/llnl/lc/chaos/Genders.jar $(DESTDIR)$(datadir)/java
 
 uninstall:
