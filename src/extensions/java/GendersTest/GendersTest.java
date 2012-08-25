@@ -6,7 +6,7 @@ class GendersTest
 {
     public static void main(String[] args)
     {
-	Genders gh = new Genders("./testgenders");
+	Genders gh = new Genders("GendersTest/testgenders");
 
 	try {
 	    System.out.println("NumNodes = " + gh.getnumnodes());
@@ -262,11 +262,11 @@ class GendersTest
 	    errcount = gh.parse();
 	    System.out.println("Parse default: " + errcount);
 
-	    errcount = gh.parse("./testgenders");
-	    System.out.println("Parse ./testgenders: " + errcount);
+	    errcount = gh.parse("GendersTest/testgenders");
+	    System.out.println("Parse GendersTest/testgenders: " + errcount);
 
-	    errcount = gh.parse("./errtestgenders");
-	    System.out.println("Parse ./errtestgenders: " + errcount);
+	    errcount = gh.parse("GendersTest/errtestgenders");
+	    System.out.println("Parse GendersTest/errtestgenders: " + errcount);
 	}
 	catch (Exception e) {
 	    System.out.println("exception: " + e);

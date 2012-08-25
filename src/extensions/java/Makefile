@@ -11,11 +11,11 @@ all:
 	gcc src/Genders.c -fPIC -shared -o src/libGenders.so -l genders
 
 test:
-	javac -classpath . GendersTest.java
-	java -Djava.library.path=src/ -classpath . GendersTest
+	javac -classpath . GendersTest/GendersTest.java
+	java -Djava.library.path=src/ -classpath ".:GendersTest" GendersTest
 
 clean:
 	rm -f gov/llnl/lc/chaos/*.class
 	rm -f src/libGenders.so
 	rm -f src/Genders.h
-	rm -f *.class
+	rm -f GendersTest/*.class
