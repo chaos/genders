@@ -1,6 +1,7 @@
 all:
 	javac gov/llnl/lc/chaos/Genders.java
 	javac gov/llnl/lc/chaos/GendersException.java
+	javac gov/llnl/lc/chaos/GendersExceptionOpen.java
 	javac gov/llnl/lc/chaos/GendersExceptionRead.java
 	javac gov/llnl/lc/chaos/GendersExceptionParse.java
 	javac gov/llnl/lc/chaos/GendersExceptionParameters.java
