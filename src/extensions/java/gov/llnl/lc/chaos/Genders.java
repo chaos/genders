@@ -68,6 +68,6 @@ public class Genders
 
     static
     {
-	System.loadLibrary("Genders");
+	System.loadLibrary("Gendersjni");
     }
 }

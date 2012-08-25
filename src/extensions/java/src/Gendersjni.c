@@ -7,7 +7,7 @@
 
 #include <genders.h>
 
-#include "Genders.h"
+#include "Gendersjni.h"
 
 static void
 _throw_exception (JNIEnv *env, jobject obj, int errnum)
