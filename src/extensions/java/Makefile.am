@@ -1,3 +1,4 @@
+if WITH_JAVA_EXTENSIONS
 all:
 	javac gov/llnl/lc/chaos/Genders.java
 	javac gov/llnl/lc/chaos/GendersException.java
@@ -20,3 +21,4 @@ clean:
 	rm -f src/libGenders.so
 	rm -f src/Genders.h
 	rm -f GendersTest/*.class
+endif

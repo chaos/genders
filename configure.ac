@@ -74,6 +74,8 @@ AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG([PERL], [perl])
 AC_PATH_PROG([PYTHON], [python])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
+AC_PATH_PROG([JAVAC], [javac])
+AC_PATH_PROG([JAVA], [java])
 AC_DEBUG
 
 ##
@@ -190,6 +192,12 @@ AM_CONDITIONAL(WITH_PYTHON_EXTENSIONS, [test "$ac_with_python_extensions" = "yes
 AC_CPLUSPLUS_EXTENSIONS
 AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" = "yes"])
 
+#
+# Check for java stuff
+#
+AC_JAVA_EXTENSIONS
+AM_CONDITIONAL(WITH_JAVA_EXTENSIONS, [test "$ac_with_java_extensions" = "yes"])
+
 ##
 # Checks for typedefs, structures, and compiler characteristics.
 ##
@@ -231,6 +239,7 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Genders/Genders.pm \
   src/extensions/python/Makefile \
   src/extensions/python/genderssetup.py \
+  src/extensions/java/Makefile \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \
