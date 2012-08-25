@@ -1,6 +1,4 @@
-import gov.llnl.lc.chaos.Genders;
-import gov.llnl.lc.chaos.GendersException;
-import gov.llnl.lc.chaos.GendersExceptionNotfound;
+import gov.llnl.lc.chaos.*;
 
 class GendersTest
 {
