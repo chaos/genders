@@ -16,49 +16,49 @@ _throw_exception (JNIEnv *env, jobject obj, int errnum)
 
   if (errnum == GENDERS_ERR_OPEN)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionOpen")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionOpen")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_OPEN));
     }
   else if (errnum == GENDERS_ERR_READ)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionRead")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionRead")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_READ));
     }
   else if (errnum == GENDERS_ERR_PARSE)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionParse")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionParse")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_PARSE));
     }
   else if (errnum == GENDERS_ERR_PARAMETERS)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionParameters")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionParameters")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_PARAMETERS));
     }
   else if (errnum == GENDERS_ERR_NOTFOUND)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionNotfound")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionNotfound")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_NOTFOUND));
     }
   else if (errnum == GENDERS_ERR_SYNTAX)
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionSyntax")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionSyntax")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_SYNTAX));
     }
   else
     {
-      if (!(gexcept_class = (*env)->FindClass (env, "GendersExceptionInternal")))
+      if (!(gexcept_class = (*env)->FindClass (env, "gov/llnl/lc/chaos/GendersExceptionInternal")))
 	goto cleanup;
 
       (*env)->ThrowNew (env, gexcept_class, genders_strerror (GENDERS_ERR_INTERNAL));
