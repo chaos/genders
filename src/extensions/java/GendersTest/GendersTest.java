@@ -13,7 +13,7 @@ class GendersTest
 	    System.out.println("Getnodname = " + gh.getnodename());
 	}
 	catch (Exception e) {
-	    System.out.println("getattr hype355: " + e);
+	    System.out.println("exception: " + e);
 	}
 
 	String[] nodes;
