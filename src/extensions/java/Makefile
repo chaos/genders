@@ -7,13 +7,15 @@ all:
 	javac gov/llnl/lc/chaos/GendersExceptionNotfound.java
 	javac gov/llnl/lc/chaos/GendersExceptionSyntax.java
 	javac gov/llnl/lc/chaos/GendersExceptionInternal.java
-	javac -classpath . GendersTest.java
 	javah -o src/Genders.h gov.llnl.lc.chaos.Genders
 	gcc src/Genders.c -fPIC -shared -o src/libGenders.so -l genders
-	java -Djava.library.path=src/ GendersTest
+
+test:
+	javac -classpath . GendersTest.java
+	java -Djava.library.path=src/ -classpath . GendersTest
 
 clean:
 	rm -f gov/llnl/lc/chaos/*.class
+	rm -f src/libGenders.so
+	rm -f src/Genders.h
 	rm -f *.class
-	rm -f Genders.h
-	rm -f libGenders.so
