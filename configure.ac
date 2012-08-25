@@ -75,6 +75,7 @@ AC_PATH_PROG([PERL], [perl])
 AC_PATH_PROG([PYTHON], [python])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
 AC_PATH_PROG([JAVAC], [javac])
+AC_PATH_PROG([JAVAH], [javah])
 AC_PATH_PROG([JAVA], [java])
 AC_DEBUG
 
