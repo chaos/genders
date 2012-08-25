@@ -1,0 +1,21 @@
+##########################################################################
+# $URL: file:///var/svn/cfengine/clusters/hype/genders $
+# $Author: tdhooge $
+# $Date: 2012-06-29 17:05:40 -0700 (Fri, 29 Jun 2012) $
+# $Rev: 3594 $
+###########################################################################
+
+# Mgmt
+hype[137,355]		pdsh_all_skip,mgmt,dhcpd,sshd,tftp,named,nfs,ntpserv
+hype[137,355]		networker,crond,rsshd
+
+hype355			primgmt,opensmd,powerman,conman,sendmail,sysloghost,moab
+hype355			passwdhost=hype:hypei,sshkeyhost,cfhost=hypei,mysqld
+hype355			skummee,perfmgr,httpd,logarch
+hype137			httpd
+hype137			altmgmt
+
+# Login
+hype[136,356]		login,cups,iptables,ksshd,ksshd_client,bluenet,atd
+hype136			ipforw,skummee,mysqld
+hype[136,356]		crond,rsshd,psacct

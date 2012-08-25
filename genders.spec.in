@@ -31,6 +31,7 @@ genders API that is compatible with earlier releases of genders
 %{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
 %{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
 %{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
+%{!?_with_java_extensions: %{!?_without_java_extensions: %define _with_java_extensions --with-java-extensions}}
 
 # choose vendor arch by default
 %{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_vendor_arch --with-perl-vendor-arch}}
@@ -50,7 +51,9 @@ genders API that is compatible with earlier releases of genders
     %{?_with_python_extensions} \
     %{?_without_python_extensions} \
     %{?_with_cplusplus_extensions} \
-    %{?_without_cplusplus_extensions}
+    %{?_without_cplusplus_extensions} \
+    %{?_with_java_extensions} \
+    %{?_without_java_extensions}
 make 
 
 %install
@@ -80,10 +83,14 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_perldir}/*
 %endif
 %if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
-%{_libdir}/python*
+%{_prefix}/lib/python*
 %endif
 %if %{?_with_cplusplus_extensions:1}%{!?_with_cplusplus_extensions:0}
 %{_libdir}/libgendersplusplus.*
+%endif
+%if %{?_with_java_extensions:1}%{!?_with_java_extensions:0}
+%{_datadir}/java/*
+%{_libdir}/libGendersjni.*
 %endif
 
 %files compat
