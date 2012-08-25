@@ -6,15 +6,15 @@
 
 if WITH_JAVA_EXTENSIONS
 GENDERS_JAVA_FILES = \
-	gov/llnl/lc/chaos/Genders.java \
-	gov/llnl/lc/chaos/GendersException.java \
-	gov/llnl/lc/chaos/GendersExceptionOpen.java \
-	gov/llnl/lc/chaos/GendersExceptionRead.java \
-	gov/llnl/lc/chaos/GendersExceptionParse.java \
-	gov/llnl/lc/chaos/GendersExceptionParameters.java \
-	gov/llnl/lc/chaos/GendersExceptionNotfound.java \
-	gov/llnl/lc/chaos/GendersExceptionSyntax.java \
-	gov/llnl/lc/chaos/GendersExceptionInternal.java
+	$(srcdir)/gov/llnl/lc/chaos/Genders.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersException.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionOpen.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionRead.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionParse.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionParameters.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionNotfound.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionSyntax.java \
+	$(srcdir)/gov/llnl/lc/chaos/GendersExceptionInternal.java
 
 noinst_HEADERS  = src/Gendersjni.h
 lib_LTLIBRARIES = src/libGendersjni.la
@@ -30,7 +30,7 @@ src_libGendersjni_la_LDFLAGS = -version-info @LIBGENDERSJNI_VERSION_INFO@ $(OTHE
 
 all:
 	$(JAVAC) $(GENDERS_JAVA_FILES)
-	$(JAR) cvf gov/llnl/lc/chaos/Genders.jar gov/llnl/lc/chaos/*.class
+	$(JAR) cvf $(builddir)/gov/llnl/lc/chaos/Genders.jar $(builddir)/gov/llnl/lc/chaos/*.class
 
 genders_header:
 	$(JAVAH) -o src/Gendersjni.h gov.llnl.lc.chaos.Genders
