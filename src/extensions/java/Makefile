@@ -8,9 +8,9 @@ all:
 	javac gov/llnl/lc/chaos/GendersExceptionSyntax.java
 	javac gov/llnl/lc/chaos/GendersExceptionInternal.java
 	javac -classpath . GendersTest.java
-	javah -o Genders.h gov.llnl.lc.chaos.Genders
-	gcc Genders.c -fPIC -shared -o libGenders.so -l genders
-	java -D. -classpath . GendersTest
+	javah -o src/Genders.h gov.llnl.lc.chaos.Genders
+	gcc src/Genders.c -fPIC -shared -o src/libGenders.so -l genders
+	java -Djava.library.path=src/ GendersTest
 
 clean:
 	rm -f gov/llnl/lc/chaos/*.class
