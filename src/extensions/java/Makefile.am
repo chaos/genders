@@ -28,12 +28,23 @@ src_libGendersjni_la_LIBADD = ../../libgenders/libgenders.la
 
 src_libGendersjni_la_LDFLAGS = -version-info @LIBGENDERSJNI_VERSION_INFO@ $(OTHER_FLAGS)
 
-all:
+all: $(GENDERS_JAVA_FILES)
 	$(JAVAC) $(GENDERS_JAVA_FILES)
 	$(JAR) cvf $(builddir)/gov/llnl/lc/chaos/Genders.jar $(builddir)/gov/llnl/lc/chaos/*.class
 
-genders_header:
+genders_header: all
 	$(JAVAH) -o src/Gendersjni.h gov.llnl.lc.chaos.Genders
+
+install: all
+	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir/java
+	$(INSTALL) -m 644 $(builddir)/gov/llnl/lc/chaos/Genders.jar $(DESTDIR)$(datadir)/java
+
+install-data-local: all
+	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir/java
+	$(INSTALL) -m 644 $(builddir)/gov/llnl/lc/chaos/Genders.jar $(DESTDIR)$(datadir)/java
+
+uninstall:
+	$(RM) -f $(DESTDIR)$(datadir)/java/Genders.jar
 
 test:
 	$(JAVAC) -classpath . GendersTest/GendersTest.java
@@ -43,4 +54,10 @@ clean-local:
 	rm -f gov/llnl/lc/chaos/*.class
 	rm -f gov/llnl/lc/chaos/*.jar
 	rm -f GendersTest/*.class
+
+EXTRA_DIST = \
+	$(GENDERS_JAVA_FILES) \
+	GendersTest/GendersTest.java \
+	gov/llnl/lc/chaos/MANIFEST.MF
+
 endif
