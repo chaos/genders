@@ -13,7 +13,7 @@ class GendersTest
 	    System.out.println("Getnodname = " + gh.getnodename());
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	String[] nodes;
@@ -44,7 +44,7 @@ class GendersTest
 		System.out.println("GetNodes cfhost=hypei  Node: " + tmp);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	String attrs[];
@@ -64,7 +64,7 @@ class GendersTest
 		System.out.println("Getattr All : " + tmp);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	boolean b;
@@ -92,7 +92,7 @@ class GendersTest
 	    System.out.println("Isattrval cfhost=hypei : " + b);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	try {
@@ -131,7 +131,7 @@ class GendersTest
 	    System.out.println("TestQuery login: " + b);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	String val;
@@ -153,7 +153,7 @@ class GendersTest
 	    System.out.println("Getattrval hype355 login : " + val);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	try {
@@ -251,7 +251,7 @@ class GendersTest
 	    System.out.println("Testattrval hype356 cfhost=foobar : " + b);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	int errcount;
@@ -267,7 +267,7 @@ class GendersTest
 	    System.out.println("Parse GendersTest/errtestgenders: " + errcount);
 	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	try {
@@ -276,11 +276,8 @@ class GendersTest
 	catch (GendersExceptionNotfound e) {
 	    System.out.println("Got not found exception : " + e);
 	}
-	catch (GendersException e) {
-	    System.out.println("Got genders exception : " + e);
-	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
 
 	gh.cleanup();
@@ -288,8 +285,11 @@ class GendersTest
 	try  {
 	    System.out.println("NumNodes = " + gh.getnumnodes());
 	}
+	catch (GendersExceptionInternal e) {
+	    System.out.println("Got internal exception: " + e);
+	}
 	catch (Exception e) {
-	    System.out.println("exception: " + e);
+	    System.out.println("unexpected exception: " + e);
 	}
     }
 }

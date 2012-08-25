@@ -30,6 +30,7 @@ src_libGendersjni_la_LDFLAGS = -version-info @LIBGENDERSJNI_VERSION_INFO@ $(OTHE
 
 all:
 	$(JAVAC) $(GENDERS_JAVA_FILES)
+	$(JAR) cvf gov/llnl/lc/chaos/Genders.jar gov/llnl/lc/chaos/*.class
 
 genders_header:
 	$(JAVAH) -o src/Gendersjni.h gov.llnl.lc.chaos.Genders
@@ -40,5 +41,6 @@ test:
 
 clean-local:
 	rm -f gov/llnl/lc/chaos/*.class
+	rm -f gov/llnl/lc/chaos/*.jar
 	rm -f GendersTest/*.class
 endif
