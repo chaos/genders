@@ -282,9 +282,6 @@ class GendersTest
 	catch (Exception e) {
 	    System.out.println("exception: " + e);
 	}
-	finally {
-	    System.out.println("uncaught exception");
-	}
 
 	gh.cleanup();
 
