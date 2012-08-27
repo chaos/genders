@@ -64,8 +64,8 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %defattr(-,root,root)
 %doc README NEWS ChangeLog DISCLAIMER DISCLAIMER.UC COPYING TUTORIAL genders.sample
 %if %{?_with_java_extensions:1}%{!?_with_java_extensions:0}
-%dir %{_datadir}/doc/%{name}-javadoc/
-%doc %{_datadir}/doc/%{name}-javadoc/*
+%dir %{_datadir}/doc/%{name}-%{version}-javadoc/
+%doc %{_datadir}/doc/%{name}-%{version}-javadoc/*
 %endif
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
 # packaging must work off whatever Perl is installed.  

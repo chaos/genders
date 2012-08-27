@@ -39,9 +39,9 @@ genders_header: all
 install-data-local: all
 	$(INSTALL) -m 755 -d $(DESTDIR)$(datadir)/java
 	$(INSTALL) -m 644 $(builddir)/gov/llnl/lc/chaos/Genders.jar $(DESTDIR)$(datadir)/java
-	$(INSTALL) -m 755 -d $(DESTDIR)$(docdir)-javadoc/
+	$(INSTALL) -m 755 -d $(DESTDIR)$(docdir)-$(VERSION)-javadoc/
 # achu: Not sure of recursive install command, is there one?
-	cp -r javadoc/* $(DESTDIR)$(docdir)-javadoc
+	cp -r javadoc/* $(DESTDIR)$(docdir)-$(VERSION)-javadoc
 
 uninstall:
 	$(RM) -f $(DESTDIR)$(datadir)/java/Genders.jar
