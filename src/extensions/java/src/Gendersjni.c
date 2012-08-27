@@ -996,53 +996,6 @@ Java_gov_llnl_lc_chaos_Genders_testquery__Ljava_lang_String_2Ljava_lang_String_2
   return (rv);
 }
 
-static jint
-_parse (JNIEnv *env, jobject obj, const char *filename)
-{
-  genders_t handle;
-  jint rv = -1;
-  int ret;
-
-  if (_get_handle (env, obj, &handle) < 0)
-    goto cleanup;
-
-  if ((ret = genders_parse (handle, filename, NULL)) < 0)
-    {
-      _throw_exception (env, obj, genders_errnum (handle));
-      goto cleanup;
-    }
-
-  rv = ret;
- cleanup:
-  return (rv);
-}
-
-JNIEXPORT jint JNICALL
-Java_gov_llnl_lc_chaos_Genders_parse__ (JNIEnv *env, jobject obj)
-{
-  return (_parse (env, obj, NULL));
-}
-
-JNIEXPORT jint JNICALL
-Java_gov_llnl_lc_chaos_Genders_parse__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring filename)
-{
-  const jbyte *filenameutf = NULL;
-  jint rv = -1;
-
-  if (filename)
-    {
-      if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
-	goto cleanup;
-    }
-
-  rv = _parse (env, obj, filenameutf);
-
- cleanup:
-  if (filename && filenameutf)
-    (*env)->ReleaseStringUTFChars(env, filename, filenameutf);
-  return (rv);
-}
-
 JNIEXPORT void JNICALL
 Java_gov_llnl_lc_chaos_Genders_cleanup (JNIEnv *env, jobject obj)
 {

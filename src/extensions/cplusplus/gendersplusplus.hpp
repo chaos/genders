@@ -130,7 +130,6 @@ public:
   bool isattrval(const std::string attr, const std::string val) const;
   std::vector< std::string > query(const std::string query = "") const;
   bool testquery(const std::string query, const std::string node = "");
-  unsigned int parse(const std::string filename = "");
 private:
   void _constructor(const std::string filename);
   void _throw_exception(int errnum) const;

@@ -194,24 +194,6 @@ public class Genders
     public native boolean testquery(String node, String query) throws GendersException;
 
     /**
-     * Parse the default genders database and output debugging
-     * information parse errors.
-     *
-     * @return Number of errors found (0 for none)
-     * @throws GendersException on error
-     */ 
-    public native int parse() throws GendersException;
-
-    /**
-     * Parse the specified genders database and output debugging
-     * information parse errors.
-     *
-     * @return Number of errors found (0 for none)
-     * @throws GendersException on error
-     */ 
-    public native int parse(String filename) throws GendersException;
-
-    /**
      * Cleans up allocated memory.  Must be called to free memory from
      * underlying calls.  After this method is called, all genders
      * methods above cannot be called and will result in errors.

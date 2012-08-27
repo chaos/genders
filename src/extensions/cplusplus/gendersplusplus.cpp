@@ -427,13 +427,3 @@ bool Genders::testquery(const std::string query, const std::string node)
 
   return rv;
 }
-
-unsigned int Genders::parse(const std::string filename)
-{
-  int rv;
-
-  if ((rv = genders_parse(gh, filename.c_str(), NULL)) < 0)
-    _throw_exception(genders_errnum(gh));
-
-  return rv;
-}

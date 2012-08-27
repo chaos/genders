@@ -193,22 +193,6 @@ JNIEXPORT jboolean JNICALL Java_gov_llnl_lc_chaos_Genders_testquery__Ljava_lang_
 
 /*
  * Class:     gov_llnl_lc_chaos_Genders
- * Method:    parse
- * Signature: ()I
- */
-JNIEXPORT jint JNICALL Java_gov_llnl_lc_chaos_Genders_parse__
-  (JNIEnv *, jobject);
-
-/*
- * Class:     gov_llnl_lc_chaos_Genders
- * Method:    parse
- * Signature: (Ljava/lang/String;)I
- */
-JNIEXPORT jint JNICALL Java_gov_llnl_lc_chaos_Genders_parse__Ljava_lang_String_2
-  (JNIEnv *, jobject, jstring);
-
-/*
- * Class:     gov_llnl_lc_chaos_Genders
  * Method:    cleanup
  * Signature: ()V
  */

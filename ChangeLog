@@ -1,3 +1,10 @@
+2012-08-27  Albert Chu  <chu11@llnl.gov>
+
+	* Add javadocs to Java extensions.
+	
+	* Remove parse() routines from c++ and java extensions.  Do not
+	apply given API.
+	
 2012-08-25  Albert Chu  <chu11@llnl.gov>
 
 	* Support Java JNI extension.

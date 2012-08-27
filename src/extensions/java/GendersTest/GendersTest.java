@@ -254,22 +254,6 @@ class GendersTest
 	    System.out.println("unexpected exception: " + e);
 	}
 
-	int errcount;
-
-	try {
-	    errcount = gh.parse();
-	    System.out.println("Parse default: " + errcount);
-
-	    errcount = gh.parse("GendersTest/testgenders");
-	    System.out.println("Parse GendersTest/testgenders: " + errcount);
-
-	    errcount = gh.parse("GendersTest/errtestgenders");
-	    System.out.println("Parse GendersTest/errtestgenders: " + errcount);
-	}
-	catch (Exception e) {
-	    System.out.println("unexpected exception: " + e);
-	}
-
 	try {
 	    gh.getattr("foobarnode");
 	}
