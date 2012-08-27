@@ -89,7 +89,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_libdir}/libgendersplusplus.*
 %endif
 %if %{?_with_java_extensions:1}%{!?_with_java_extensions:0}
-%{_datadir}/java/*
+%{_javadir}/*
 %{_libdir}/libGendersjni.*
 %endif
 
