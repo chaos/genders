@@ -85,13 +85,17 @@ _constructor (JNIEnv *env, jobject obj, const char *filename)
   if (genders_load_data (handle, filename) < 0)
     {
       _throw_exception (env, obj, genders_errnum (handle));
+      genders_handle_destroy (handle);
       goto cleanup;
     }
 
   genders_cls = (*env)->GetObjectClass (env, obj);
 
   if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
-    goto cleanup;
+    {
+      genders_handle_destroy (handle);
+      goto cleanup;
+    }
 
   (*env)->SetLongField (env, obj, gh_addr_fid, (long)handle);
 
