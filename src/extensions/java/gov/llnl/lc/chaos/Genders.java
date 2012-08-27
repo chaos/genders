@@ -60,7 +60,6 @@ public class Genders
     /**
      * Returns all the nodes in the genders database
      *
-     * @return 
      * @throws GendersException on error
      */ 
     public native String[] getnodes() throws GendersException;
