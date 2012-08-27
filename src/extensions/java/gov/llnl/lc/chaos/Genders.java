@@ -1,8 +1,6 @@
 package gov.llnl.lc.chaos;
 
 /**
- * Class Name: Genders
- *
  * Java JNI extensions wrapper around libgenders C library.  Most
  * library functions behave similarly to C api functions with minor
  * exceptions documented below.
