@@ -44,7 +44,8 @@ install-data-local: all
 	cp -r javadoc/* $(DESTDIR)$(docdir)-$(VERSION)-javadoc
 
 uninstall:
-	$(RM) -f $(DESTDIR)$(datadir)/java/Genders.jar
+	rm -f $(DESTDIR)$(datadir)/java/Genders.jar
+	rm -rf $(DESTDIR)$(docdir)-$(VERSION)-javadoc/*
 
 test:
 	$(JAVAC) -classpath . GendersTest/GendersTest.java
