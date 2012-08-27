@@ -14,7 +14,7 @@ public class Genders
     /**
      * Creates a Genders object, loading the default genders database
      */
-    public Genders()
+    public Genders() throws GendersException
     {
 	genders_constructor(null);
     }
@@ -22,7 +22,7 @@ public class Genders
     /**
      * Creates a Genders object, loading the specified genders database
      */
-    public Genders(String filename)
+    public Genders(String filename) throws GendersException
     {
 	genders_constructor(filename);
     }
