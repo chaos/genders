@@ -1,3 +1,9 @@
+2013-08-02  Albert Chu  <chu11@llnl.gov>
+
+	* src/extensions/perl/Genders/Genders.pm.in,
+	src/extensions/perl/Libgenders/Libgenders.pm.in: Fix errors in
+	genders query documentation.
+	
 2012-08-27  Albert Chu  <chu11@llnl.gov>
 
 	* Add javadocs to Java extensions.

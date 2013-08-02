@@ -449,7 +449,7 @@ difference by two minus symbols ('--'), and complement by a tilde
 ('~') Operations are performed from left to right.  Parentheses may be
 used to change the order of operations.  For example, the following
 query would retrieve all nodes other than management or login nodes:
-"all-(mgmt+login)".  If the query is not specified, all nodes listed
+"~(mgmt||login)".  If the query is not specified, all nodes listed
 in the genders file are returned.
 
 =item B<$obj-E<gt>testquery($query, [$node])>

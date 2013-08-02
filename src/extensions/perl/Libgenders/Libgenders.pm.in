@@ -253,7 +253,7 @@ symbols ('&&'), difference by two minus symbols ('--'), and complement
 by a tilde ('~') Operations are performed from left to right.
 Parentheses may be used to change the order of operations.  For
 example, the following query would retrieve all nodes other than
-management or login nodes: "all-(mgmt+login)".  If $query is not
+management or login nodes: "~(mgmt||login)".  If $query is not
 specified, all nodes listed in the genders file are returned. Returns
 undef on error.
 
