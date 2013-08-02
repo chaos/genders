@@ -1,5 +1,11 @@
 2013-08-02  Albert Chu  <chu11@llnl.gov>
 
+	* src/libgenders/genders_parsing.c (_parse_line): Return parse
+	error instead of out of memory error in nodenames specified by
+	user are incorrectly formatted.
+	
+2013-08-02  Albert Chu  <chu11@llnl.gov>
+
 	* src/extensions/perl/Genders/Genders.pm.in,
 	src/extensions/perl/Libgenders/Libgenders.pm.in: Fix errors in
 	genders query documentation.

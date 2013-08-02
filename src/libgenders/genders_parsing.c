@@ -564,7 +564,19 @@ _parse_line(genders_t handle,
     }
 #endif /* !WITH_NON_SHORTENED_HOSTNAMES */
 
-  __hostlist_create(hl, nodenames);
+  __hostlist_create(hl, NULL);
+
+  if (!hostlist_push(hl, nodenames))
+    {
+      if (line_num > 0) 
+	{
+	  fprintf(stream, "Line %d: incorrectly specified nodename(s)\n", line_num);
+	  rv = 1;
+	}
+      handle->errnum = GENDERS_ERR_PARSE;
+      goto cleanup;
+    }
+
   __hostlist_iterator_create(hlitr, hl);
 
   while ((node = hostlist_next(hlitr))) 

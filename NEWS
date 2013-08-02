@@ -4,6 +4,7 @@ and admins.
 
 Changes in genders-1.22
 =======================
+ -- Report proper error on invalidly specified hostranges. 
  -- Fix documentation errors in perl extensions.
 
 Changes in genders-1.21
