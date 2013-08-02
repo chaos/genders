@@ -1384,7 +1384,7 @@ static int _parse_single_range(const char *str, struct _range *range)
         goto error;
 
     if (range->hi - range->lo + 1 > MAX_RANGE ) {
-        _error(__FILE__, __LINE__, "Too many hosts in range `%s'", orig);
+        /* _error(__FILE__, __LINE__, "Too many hosts in range `%s'", orig); */
         free(orig);
         seterrno_ret(ERANGE, 0);
     }
@@ -1394,7 +1394,7 @@ static int _parse_single_range(const char *str, struct _range *range)
     return 1;
 
   error:
-    _error(__FILE__, __LINE__, "Invalid range: `%s'", orig);
+    /* _error(__FILE__, __LINE__, "Invalid range: `%s'", orig); */
     free(orig);
     seterrno_ret(EINVAL, 0);
 }

@@ -1,5 +1,10 @@
 2013-08-02  Albert Chu  <chu11@llnl.gov>
 
+	* src/libcommon/hostlist.c (_parse_single_range): Comment out
+	debug messages.
+	
+2013-08-02  Albert Chu  <chu11@llnl.gov>
+
 	* src/libgenders/genders_parsing.c (_parse_line): Return parse
 	error instead of out of memory error in nodenames specified by
 	user are incorrectly formatted.
