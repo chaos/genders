@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.22
+=======================
+ -- Fix documentation errors in perl extensions.
+
 Changes in genders-1.21
 =======================
  -- Add Java extensions for libgenders.
