@@ -1,3 +1,8 @@
+2014-02-24  Albert Chu  <chu11@llnl.gov>
+
+	* src/testsuite/: Add new tests for unbalanced hostrange
+	nodenames.
+	
 2013-08-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/libcommon/hostlist.c (_parse_single_range): Comment out
