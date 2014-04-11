@@ -1,3 +1,9 @@
+2014-04-11  Albert Chu  <chu11@llnl.gov>
+
+	* NEWS: Update for release.
+
+	* tagged genders-1-21-1
+
 2014-02-24  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/: Add new tests for unbalanced hostrange

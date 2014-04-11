@@ -2,14 +2,11 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
-Changes in genders-1.22
+Changes in genders-1.21
 =======================
  -- Report proper error on invalidly specified hostranges. 
  -- Remove debug message outputs from convenience libraries.
  -- Fix documentation errors in perl extensions.
-
-Changes in genders-1.21
-=======================
  -- Add Java extensions for libgenders.
 
 Changes in genders-1.20
