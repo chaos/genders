@@ -2,6 +2,8 @@
 
 	* NEWS: Update for release.
 
+	* configure.ac; Update library versions appropriately.
+
 	* tagged genders-1-21-1
 
 2014-02-24  Albert Chu  <chu11@llnl.gov>
