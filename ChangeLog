@@ -1,5 +1,13 @@
 2014-04-11  Albert Chu  <chu11@llnl.gov>
 
+	* genders.spec.in : Default to not building java extensions
+
+	* META : Update release
+
+	* tagged genders-1-21-2
+
+2014-04-11  Albert Chu  <chu11@llnl.gov>
+
 	* NEWS: Update for release.
 
 	* configure.ac; Update library versions appropriately.
