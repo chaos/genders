@@ -79,7 +79,7 @@ genders_parse_error_database_t genders_parse_error_databases[] =
     {"testdatabases/genders.parse_error_no_value_after_equal_sign", 6},
     {"testdatabases/genders.parse_error_errant_commas", 5},
     {"testdatabases/genders.parse_error_all", 8},
-    {"testdatabases/genders.parse_error_hostrange_unbalanced", 10},
+    {"testdatabases/genders.parse_error_hostrange_unbalanced", 8},
     {NULL, -1},
   };
 
