@@ -1571,6 +1571,104 @@ genders_database_t genders_database_large_val =
     &genders_database_data_large_val,
   };
 
+genders_database_data_t genders_database_data_hostrange_bracket_suffix = 
+  {
+    "node1",
+    "attr1",
+    "attr2",
+    "val2",
+    6,
+    2,
+    2,
+    6,
+    5,
+    4,
+    {"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+    6,				
+    {"attr1", "attr2", NULL},
+    2,
+    {NULL,    "val2", NULL},
+    2,
+    {
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+      {
+	{"attr1", "attr2", NULL},
+	{"", "val2", NULL}, 
+	{NULL, "val2", NULL}, 
+	2,
+      },
+    },
+    6,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+	6,
+      },
+      {
+	"",
+	"",
+	{"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+	6,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+	6,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+	6,
+      },
+      {
+	"attr2",
+	"val2",
+	{"node1]", "node2]", "node3]", "node4[", "node5[", "node6[", NULL},
+	6,
+      },
+    },
+    5,
+  };
+
+genders_database_t genders_database_hostrange_bracket_suffix = 
+  {
+    "testdatabases/genders.hostrange_bracket_suffix",
+    &genders_database_data_hostrange_bracket_suffix,
+  };
+
 genders_database_t *genders_functionality_databases[] = 
   {
     &genders_database_base,
@@ -1623,6 +1721,7 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_subst_nodename_hostrange,
     &genders_database_large_attr,
     &genders_database_large_val,
+    &genders_database_hostrange_bracket_suffix,
     NULL,
   };
 

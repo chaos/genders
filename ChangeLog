@@ -2,6 +2,8 @@
 
 	* src/testsuite/: Adjust tests for unbalanced hostrange nodenames.
 
+	* src/testsuite/: Support tests with hostrange brackets in suffix.
+
 2014-04-11  Albert Chu  <chu11@llnl.gov>
 
 	* genders.spec.in : Default to not building java extensions
