@@ -1573,7 +1573,7 @@ genders_database_t genders_database_large_val =
 
 genders_database_data_t genders_database_data_hostrange_bracket_suffix = 
   {
-    "node1",
+    "node1]",
     "attr1",
     "attr2",
     "val2",
