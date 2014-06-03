@@ -1,3 +1,8 @@
+2014-06-03  Albert Chu  <chu11@llnl.gov>
+
+	* src/testsuite/: Revert unbalanced hostrange nodename tests.  Was
+	determined not to be valid.
+	
 2014-06-02  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/: Adjust tests for unbalanced hostrange nodenames.
