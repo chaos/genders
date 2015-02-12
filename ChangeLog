@@ -1,3 +1,12 @@
+2015-02-12  Albert Chu  <chu11@llnl.gov>
+
+	* src/extensions/python/genders.py (main): Add getnodename test.
+
+2015-02-12  Adam Bertsch <bertsch2@llnl.gov>
+
+	* src/extensions/python/genders.py (getnodename): Fix error in
+	return of value.
+	
 2014-06-03  Albert Chu  <chu11@llnl.gov>
 
 	* src/testsuite/: Revert unbalanced hostrange nodename tests.  Was

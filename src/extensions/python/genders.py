@@ -117,7 +117,7 @@ class Genders:
         Returns the name of the current node.
         """
         try:
-            return self.getnodename()
+            return self.__lgh.getnodename()
         except SystemError:
             raise Genders.__find_exception(self)
     def getnodes(self, attr=None, val=None):
@@ -263,6 +263,8 @@ class Genders:
 if __name__ == '__main__':
 
     gh = Genders()
+
+    print "getnodename:", gh.getnodename()
 
     print "getnodes:", gh.getnodes()
     print "getnodes:", gh.getnodes("foofdfd")
