@@ -1,5 +1,13 @@
 2015-02-12  Albert Chu  <chu11@llnl.gov>
 
+	* NEWS: Update for release.
+
+	* configure.ac; Update library versions appropriately.
+
+	* tagged genders-1-22-1
+
+2015-02-12  Albert Chu  <chu11@llnl.gov>
+
 	* src/extensions/python/genders.py (main): Add getnodename test.
 
 2015-02-12  Adam Bertsch <bertsch2@llnl.gov>
