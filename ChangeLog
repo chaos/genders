@@ -1,3 +1,8 @@
+2015-04-29  Albert Chu  <chu11@llnl.gov>
+
+	* Add contrib for genders support in cfengine 2.2.10 from Mark
+	Grondona (grondona1 at llnl dot gov).
+	
 2015-02-12  Albert Chu  <chu11@llnl.gov>
 
 	* NEWS: Update for release.

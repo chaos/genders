@@ -1,0 +1,55 @@
+From 938c28680e5cb4fe93d3cf042bb05ebb8cb08ff4 Mon Sep 17 00:00:00 2001
+From: Mark A. Grondona <mgrondona@llnl.gov>
+Date: Tue, 8 Jun 2010 16:05:01 -0700
+Subject: [PATCH 2/5] Build libltdl
+
+Add relevant macros to configure.ac to build libltdl and configure it.
+Add libltdl to Makefile.am SUBDIRS.
+---
+ Makefile.am  |    4 +++-
+ configure.ac |   11 +++++++++++
+ 2 files changed, 14 insertions(+), 1 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index aff1617..70874c5 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -4,7 +4,9 @@ else
+ DOC_DIR =
+ endif
+ 
+-SUBDIRS = pub src contrib inputs $(DOC_DIR)
++ACLOCAL_AMFLAGS = "-I m4"
++
++SUBDIRS = pub libltdl src contrib inputs $(DOC_DIR)
+ 
+ EXTRA_DIST = acconfig.h doc/cfengine.8 COPYING ChangeLog INSTALL NEWS README LICENSE
+ 
+diff --git a/configure.ac b/configure.ac
+index 3a86fb3..83b3ceb 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -15,9 +15,20 @@ dnl The version in the next line is the only one to set
+ dnl
+ 
+ AM_INIT_AUTOMAKE(cfengine, 2.2.10)   dnl remember to set version
++AM_MAINTAINER_MODE
+ 
+ AM_CONFIG_HEADER(src/conf.h)
+ 
++AC_CONFIG_MACRO_DIR([libltdl/m4])
++LT_INIT
++LT_CONFIG_LTDL_DIR([libltdl])
++LTDL_INIT
++AC_LIBTOOL_DLOPEN
++AC_LIBLTDL_CONVENIENCE
++
++AC_SUBST(LTDLINCL)
++AC_SUBST(LIBLTDL)
++
+ #
+ # Add to the default list of places in LDFLAGS to compensate for
+ # ... the configure default value of LIBS on some systems
+-- 
+1.6.5.2
+

@@ -4,4 +4,4 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = php
+SUBDIRS = cfengine-2.2.10 php

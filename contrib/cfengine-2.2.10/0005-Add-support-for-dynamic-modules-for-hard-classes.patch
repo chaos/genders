@@ -1,0 +1,113 @@
+From 6410674f99cd1e1b5b669fdc6ab7cee1e74f9dfc Mon Sep 17 00:00:00 2001
+From: Mark A. Grondona <mgrondona@llnl.gov>
+Date: Tue, 8 Jun 2010 16:12:38 -0700
+Subject: [PATCH 5/5] Add support for dynamic modules for hard classes
+
+Load any DSO modules from PKGLIBDIR, and allow them to instantiate
+new hard classes via the CfRegisterHardClass() callback.
+---
+ src/nameinfo.c |   67 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 67 insertions(+), 0 deletions(-)
+
+diff --git a/src/nameinfo.c b/src/nameinfo.c
+index 8d15d10..fb79c8b 100644
+--- a/src/nameinfo.c
++++ b/src/nameinfo.c
+@@ -33,6 +33,7 @@
+ #include "cf.defs.h"
+ #include "cf.extern.h"
+ #include "../pub/global.h"
++#include "../libltdl/ltdl.h"
+ #ifdef IRIX
+ #include <sys/syssgi.h>
+ #endif
+@@ -55,6 +56,69 @@
+ 
+ /*******************************************************************/
+ 
++typedef int (*cf_mod_getclasses) (void);
++
++void CfRegisterHardClass(const char *class)
++{
++	AddClassToHeap (CanonifyName (class));
++}
++
++static int LoadModule(const char *path)
++{
++	lt_dlhandle dl;
++	const lt_dlinfo *info;
++	cf_mod_getclasses mod_getclasses;
++	int i;
++	int rc = -1;
++
++	if (!(dl = lt_dlopen (path))) {
++		fprintf (stderr, "dlopen(%s) failed.\n", path);
++		return (rc);
++	}
++
++	if ((mod_getclasses = lt_dlsym (dl, "cfagent_module_getclasses")))
++		mod_getclasses ();
++
++	lt_dlclose (dl);
++
++	return (0);
++}
++
++static void LoadModules(const char *dir)
++{
++	DIR *dirp = NULL;
++	struct dirent *entry = NULL;
++	char path[4096];
++	char *p;
++
++	memset (path, 0, sizeof (path));
++
++	lt_dlinit();
++
++	if (!(dirp = opendir (dir)))
++		return;
++
++	strncpy(path, dir, 4095);
++	p = path + strlen (dir);
++	*(p++) = '/';
++
++	while ((entry = readdir(dirp))) {
++		int len = strlen(entry->d_name);
++
++		if (strcmp (entry->d_name + len - 3, ".so") != 0)
++			continue;
++
++		strcpy (p, entry->d_name);
++		LoadModule (path);
++	}
++
++	closedir (dirp);
++
++	lt_dlexit();
++}
++
++/*******************************************************************/
++
+ void GetNameInfo()
+ 
+ { int i,found = false;
+@@ -145,6 +209,8 @@ for (i = 0; CLASSATTRIBUTES[i][0] != '\0'; i++)
+       }
+    }
+ 
++LoadModules(PKGLIBDIR);
++
+ if ((sp = malloc(strlen(VSYSNAME.nodename)+1)) == NULL)
+    {
+    FatalError("malloc failure in initialize()");
+@@ -171,6 +237,7 @@ AddClassToHeap(CanonifyName(sp));
+ 
+ free(sp); /* Release the ressource */
+ 
++
+  
+ if ((tloc = time((time_t *)NULL)) == -1)
+    {
+-- 
+1.6.5.2
+

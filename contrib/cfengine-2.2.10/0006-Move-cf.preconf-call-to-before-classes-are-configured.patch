@@ -1,0 +1,42 @@
+From e97a615d419908a5e557c667d05f5ced1e3fd624 Mon Sep 17 00:00:00 2001
+From: Mark A. Grondona <mgrondona@llnl.gov>
+Date: Thu, 31 Jan 2013 15:11:30 -0800
+Subject: [PATCH] Move cf.preconf call to before classes are configured
+
+In cases where the actions of cf.preconf or other pre-script can affect
+the establishment of hard classes (e.g. move a genders file into place
+or establish new NIS groups), it would be better to run the preconf script
+before these classes are initialized in cfagent.
+
+There does not appear to be a good reason for the current practice of
+running the cf.preconf script *after* hard classes are already established,
+so this change moves that call a few lines up.
+
+Fixes TOSS-1912.
+---
+ src/cfagent.c |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/src/cfagent.c b/src/cfagent.c
+index d4fc8fd..e3a45ac 100644
+--- a/src/cfagent.c
++++ b/src/cfagent.c
+@@ -142,6 +142,7 @@ signal (SIGUSR2,HandleSignal);
+ Initialize(argc,argv); 
+ SetReferenceTime(true);
+ SetStartTime(false);
++PreNetConfig();
+  
+ if (! NOHARDCLASSES)
+    {
+@@ -151,7 +152,6 @@ if (! NOHARDCLASSES)
+    GetEnvironment();
+    }
+ 
+-PreNetConfig();
+ ReadRCFile();   /* Should come before parsing so that it can be overridden */
+ 
+ if (IsPrivileged() && !MINUSF && !PRSCHEDULE)
+-- 
+1.5.4.5
+

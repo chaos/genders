@@ -255,6 +255,7 @@ AC_CONFIG_FILES( \
   src/testsuite/libgenders/testdatabases/Makefile \
   compat/Makefile \
   contrib/Makefile \
+  contrib/cfengine-2.2.10/Makefile \
   contrib/php/Makefile \
   man/Makefile \
   man/compat/Makefile \

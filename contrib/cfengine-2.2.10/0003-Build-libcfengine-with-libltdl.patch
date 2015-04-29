@@ -1,0 +1,38 @@
+From a94e998bda68dc68b16d7b2b482f295bd9c5ec01 Mon Sep 17 00:00:00 2001
+From: Mark A. Grondona <mgrondona@llnl.gov>
+Date: Tue, 8 Jun 2010 16:09:39 -0700
+Subject: [PATCH 3/5] Build libcfengine with libltdl
+
+---
+ src/Makefile.am |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/Makefile.am b/src/Makefile.am
+index db8bdb3..97470ac 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,9 +1,9 @@
+-AM_CFLAGS = $(GCC_CFLAG) @CFLAGS@
++AM_CFLAGS = $(GCC_CFLAG) -DPKGLIBDIR=\"$(pkglibdir)\" @CFLAGS@
+ AM_YFLAGS = -d
+ LEXLIB = @LEXLIB@
+-LDADD = libcfengine.la $(BERKELEY_DB_LDFLAGSD) $(BERKELEY_DB_LIB) $(OPENSSL_LIB_LDFLAGS) $(OPENSSL_LIB_LIB)
++LDADD = libcfengine.la $(BERKELEY_DB_LDFLAGSD) $(BERKELEY_DB_LIB) $(OPENSSL_LIB_LDFLAGS) $(OPENSSL_LIB_LIB) $(LIBLTDL)
+ INCLUDES = $(BERKELEY_DB_CFLAGS) $(OPENSSL_LIB_CPPFLAGS)
+-AM_LDFLAGS = $(BERKELEY_DB_LDFLAGS) $(OPENSSL_LIB_LDFLAGS) @LDFLAGS@
++AM_LDFLAGS = -Wl,--export-dynamic $(BERKELEY_DB_LDFLAGS) $(OPENSSL_LIB_LDFLAGS) @LDFLAGS@
+ 
+ sbin_PROGRAMS = cfagent cfservd cfrun cfkey cfenvd cfenvgraph cfexecd cfshow cfetool cfetoolgraph
+ 
+@@ -15,7 +15,7 @@ lib_LTLIBRARIES = libcfengine.la
+ 
+ libcfengine_la_LDFLAGS = -version-info 1:0:0 -no-undefined
+ libcfengine_la_LIBADD = $(BERKELEY_DB_LDFLAGSD) $(BERKELEY_DB_LIB) $(OPENSSL_LIB_LDFLAGS) $(OPENSSL_LIB_LIB)
+-libcfengine_la_CFLAGS = $(AM_CFLAGS)
++libcfengine_la_CFLAGS = $(INCLTDL) $(AM_CFLAGS)
+ 
+ # Separate out a library
+ 
+-- 
+1.6.5.2
+
