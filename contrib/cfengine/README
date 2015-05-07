@@ -1,0 +1,9 @@
+Genders support in cfengine
+
+Compile with
+
+$(CC) $(CFLAGS) -fPIC -shared -o genders.so genders.c -lgenders
+
+cfengine also needs to be patched w/ appropriate dynamic library
+support.  You'll find several patches for cfengine specific versions
+in this directory.

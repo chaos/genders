@@ -4,4 +4,6 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = cfengine php
+SUBDIRS = cfengine-2.2.10 cfengine-3.3.0
+
+EXTRA_DIST = README genders.c

@@ -1,6 +1,14 @@
+2015-05-07  Albert Chu  <chu11@llnl.gov>
+
+	* Add contrib for dynamic library support in cfengine 3.3.0 from John
+	Westlund (john dot a dot westlund at intel dot com).
+
+	* Add contrib for cfengine genders module from Mark
+	Grondona (grondona1 at llnl dot gov).
+	
 2015-04-29  Albert Chu  <chu11@llnl.gov>
 
-	* Add contrib for genders support in cfengine 2.2.10 from Mark
+	* Add contrib for dynamic library support in cfengine 2.2.10 from Mark
 	Grondona (grondona1 at llnl dot gov).
 	
 2015-02-12  Albert Chu  <chu11@llnl.gov>

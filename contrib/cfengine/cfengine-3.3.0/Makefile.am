@@ -1,7 +1,10 @@
 ##*****************************************************************************
-## $Id: Makefile.am,v 1.1 2007-10-03 20:20:13 chu11 Exp $
+## $Id: Makefile.am,v 1.1 2007-10-03 20:20:14 chu11 Exp $
 ##*****************************************************************************
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-SUBDIRS = cfengine php
+EXTRA_DIST = \
+	Makefile.am \
+	0001-shared-library-support.patch
+

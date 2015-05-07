@@ -6,7 +6,6 @@
 
 EXTRA_DIST = \
 	Makefile.am \
-	README \
 	0001-Run-libtoolize-copy.patch \
 	0002-Build-libltdl.patch \
 	0003-Build-libcfengine-with-libltdl.patch \

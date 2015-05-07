@@ -1,0 +1,138 @@
+diff -ru a/src/Makefile.am b/src/Makefile.am
+--- a/src/Makefile.am	2012-04-10 01:20:40.000000000 -0700
++++ b/src/Makefile.am	2015-05-04 14:22:45.000000000 -0700
+@@ -1,4 +1,4 @@
+-AM_CFLAGS = $(GCC_CFLAG) $(NOVA_CFLAGS) $(CONSTELLATION_CFLAGS) @CFLAGS@
++AM_CFLAGS = $(GCC_CFLAG) -DPKGLIBDIR=\"$(pkglibdir)\" $(NOVA_CFLAGS) $(CONSTELLATION_CFLAGS) @CFLAGS@
+ AM_YFLAGS = -d
+ LDADD = libpromises.la
+ 
+diff -ru a/src/Makefile.in b/src/Makefile.in
+--- a/src/Makefile.in	2012-04-10 01:20:49.000000000 -0700
++++ b/src/Makefile.in	2015-05-04 14:44:28.000000000 -0700
+@@ -483,7 +483,7 @@
+ top_builddir = @top_builddir@
+ top_srcdir = @top_srcdir@
+ workdir = @workdir@
+-AM_CFLAGS = $(GCC_CFLAG) $(NOVA_CFLAGS) $(CONSTELLATION_CFLAGS) @CFLAGS@
++AM_CFLAGS = $(GCC_CFLAG) -DPKGLIBDIR=\"$(pkglibdir)\" $(NOVA_CFLAGS) $(CONSTELLATION_CFLAGS) @CFLAGS@
+ AM_YFLAGS = -d
+ LDADD = libpromises.la
+ 
+diff -ru a/src/generic_agent.c b/src/generic_agent.c
+--- a/src/generic_agent.c	2012-04-10 01:20:40.000000000 -0700
++++ b/src/generic_agent.c	2015-05-05 13:29:27.000000000 -0700
+@@ -1832,6 +1832,8 @@
+     printf("\n");
+     printf("Copyright (C) CFEngine AS 2008-%d\n", BUILD_YEAR);
+     printf("See Licensing at http://cfengine.com/3rdpartylicenses\n");
++    printf("\n");
++    printf(".so module directory: %s\n", PKGLIBDIR);
+ }
+ 
+ /*******************************************************************/
+diff -ru a/src/sysinfo.c b/src/sysinfo.c
+--- a/src/sysinfo.c	2012-04-10 01:20:40.000000000 -0700
++++ b/src/sysinfo.c	2015-05-05 13:20:47.000000000 -0700
+@@ -33,6 +33,7 @@
+ 
+ #include "cf3.defs.h"
+ #include "cf3.extern.h"
++#include <ltdl.h>
+ 
+ #ifdef IRIX
+ # include <sys/syssgi.h>
+@@ -63,6 +64,10 @@
+ static void CreateClassesFromCanonification(char *canonified);
+ static void GetCPUInfo(void);
+ 
++void CfRegisterHardClass(const char *class);
++static int LoadModule(const char *path);
++static void LoadModules(const char *dir);
++
+ /*******************************************************************/
+ 
+ void CalculateDomainName(const char *nodename, const char *dnsname, char *fqname, char *uqname, char *domain)
+@@ -248,6 +253,10 @@
+         }
+     }
+ 
++CfDebug("Cfengine: load modules\n");
++LoadModules(PKGLIBDIR);
++CfDebug("Cfengine: modules loaded\n");
++
+ /*
+  * solarisx86 is a historically defined class for Solaris on x86. We have to
+  * define it manually now.
+@@ -2120,3 +2129,71 @@
+     }
+ 
+ }
++
++/*******************************************************************/
++ 
++typedef int (*cf_mod_getclasses) (void);
++
++void CfRegisterHardClass(const char *class)
++{
++        CreateClassesFromCanonification (CanonifyName (class));
++}
++
++static int LoadModule(const char *path)
++{
++        lt_dlhandle dl;
++        const lt_dlinfo *info;
++        cf_mod_getclasses mod_getclasses;
++        int i;
++        int rc = -1;
++
++        if (!(dl = lt_dlopen (path))) {
++                fprintf (stderr, "dlopen(%s) failed.\n", path);
++                return (rc);
++        }
++
++        if ((mod_getclasses = lt_dlsym (dl, "cfagent_module_getclasses")))
++                mod_getclasses ();
++
++        lt_dlclose (dl);
++
++        return (0);
++}
++
++static void LoadModules(const char *dir)
++{
++        DIR *dirp = NULL;
++        struct dirent *entry = NULL;
++        char path[4096];
++        char *p;
++
++        memset (path, 0, sizeof (path));
++
++        lt_dlinit();
++
++        if (!(dirp = opendir (dir)))
++                return;
++
++        strncpy(path, dir, 4095);
++        p = path + strlen (dir);
++        *(p++) = '/';
++
++        CfDebug("Cfengine: module search path: %s\n", p);
++
++        while ((entry = readdir(dirp))) {
++                CfDebug("Cfengine: searching %s\n", entry->d_name);
++                int len = strlen(entry->d_name);
++
++                if (strcmp (entry->d_name + len - 3, ".so") != 0)
++                        continue;
++
++                strcpy (p, entry->d_name);
++                LoadModule (path);
++        }
++
++        closedir (dirp);
++
++        lt_dlexit();
++}
++
++/*******************************************************************/
