@@ -33,6 +33,10 @@ This package includes:
     Laboratory.  This is probably of no use to anyone else.  See
     gendlib(3).
 
+* Additional extensions
+  - Additional extensions for Genders with C++, Java, and Python are
+    also available.  See packages in src/extensions.
+
 Comments, patches, fixes, suggestions are always welcome.  Please read
 DISCLAIMER and COPYING for copyright and license information.
 
