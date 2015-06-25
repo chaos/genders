@@ -1,7 +1,7 @@
 /*****************************************************************************\
  *  $Id: genders_test_query_tests.c,v 1.9 2010-03-24 21:26:05 chu11 Exp $
  *****************************************************************************
- *  Copyright (C) 2007-2011 Lawrence Livermore National Security, LLC.
+ *  Copyright (C) 2007-2015 Lawrence Livermore National Security, LLC.
  *  Copyright (C) 2001-2007 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
