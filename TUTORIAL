@@ -9,6 +9,7 @@
                                June 19, 2000
 
                 (Revised by Albert Chu - May 2003, April 2004) 
+                (Revised by Ben Casses - July 2015) 
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "Genders" software package,
@@ -102,7 +103,9 @@ The -f option specifies a genders file path other than the default.
 The -q, -c, -n, or -s options followed by an attribute name cause a list of
 nodes having the specified attribute to be printed on stdout, formatted
 according to the option specified: -q is host range, -c is comma-separated, 
--n is newline separated, and -s is space separated.  
+-n is newline separated, and -s is space separated.  Note that node names with
+suffixes cannot be compressed to hostlist format; -q is equivalent
+to -c if a suffix is present. 
 
 If none of the formatting options are specified, nodeattr returns a zero
 value if the local node has the specified attribute, else nonzero.  The -v
