@@ -9,6 +9,7 @@
                                June 19, 2000
 
                 (Revised by Albert Chu - May 2003, April 2004) 
+                (Revised by Ben Casses - July 2015) 
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "Genders" software package,
@@ -85,6 +86,9 @@ foo01,foo02,foo03,foo04,foo05:    foo[01-05]
 foo3,foo7,foo9,foo11:             foo[3,7,9-11]
 fooi,fooj,foo0,foo1,foo2:         fooi,fooj,foo[0-2]
 
+Host ranges with suffixes, i.e. foo[0-2]x, are generally supported, but behavior
+may differ.
+
 Nodeattr Usage
 
 A program called nodeattr is used to query data in the genders file.  Because
@@ -101,8 +105,8 @@ The -f option specifies a genders file path other than the default.
 
 The -q, -c, -n, or -s options followed by an attribute name cause a list of
 nodes having the specified attribute to be printed on stdout, formatted
-according to the option specified: -q is host range, -c is comma-separated, 
--n is newline separated, and -s is space separated.  
+according to the option specified: -q (default) is host range, -c is
+comma-separated, -n is newline separated, and -s is space separated.
 
 If none of the formatting options are specified, nodeattr returns a zero
 value if the local node has the specified attribute, else nonzero.  The -v
