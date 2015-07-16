@@ -75,14 +75,9 @@ arguments,
 reads the genders file and outputs a list of nodes that match the
 specified query.  The nodes are listed in hostlist format, comma
 separated lists, newline separated lists, or space separated lists
-respectively.  If unspecified, hostlist format is returned by default unless
-nodenames have a suffix in which case comma separated list is the default.  Node
-names with suffixes, i.e. "example1a,example2a,example3a" cannot be compressed
-to hostlist format.  The 
+respectively.  The
 .I "-q"
-is equivalent to the
-.I "-c"
-option if a suffix is present.  Genders queries will query the genders database for a set
+form is returned by default.  Genders queries will query the genders database for a set
 of nodes based on the union, intersection, difference, or complement of genders
 attributes and values.  The set operation union is represented by two pipe
 symbols ('||'), intersection by two ampersand symbols ('&&'), difference by two
