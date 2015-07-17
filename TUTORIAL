@@ -105,8 +105,8 @@ The -f option specifies a genders file path other than the default.
 
 The -q, -c, -n, or -s options followed by an attribute name cause a list of
 nodes having the specified attribute to be printed on stdout, formatted
-according to the option specified: -q is host range, -c is comma-separated, 
--n is newline separated, and -s is space separated.
+according to the option specified: -q (default) is host range, -c is
+comma-separated, -n is newline separated, and -s is space separated.
 
 If none of the formatting options are specified, nodeattr returns a zero
 value if the local node has the specified attribute, else nonzero.  The -v
