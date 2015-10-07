@@ -512,7 +512,7 @@ uninstall-man: uninstall-man3
 @WITH_PERL_EXTENSIONS_TRUE@	$(POD2MAN) Genders.pm Genders.$(PERLMAN3EXT)
 
 @WITH_PERL_EXTENSIONS_TRUE@install-data-hook:
-@WITH_PERL_EXTENSIONS_TRUE@	chmod 444 $(DESTDIR)/$(prefix)/$(INSTALLARCH)/Genders.pm
+@WITH_PERL_EXTENSIONS_TRUE@	chmod 444 $(DESTDIR)$(prefix)/$(INSTALLARCH)/Genders.pm
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

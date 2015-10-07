@@ -23,7 +23,7 @@ Genders.$(PERLMAN3EXT):
 man3_MANS = Genders.$(PERLMAN3EXT)
 
 install-data-hook:
-	chmod 444 $(DESTDIR)/$(prefix)/$(INSTALLARCH)/Genders.pm
+	chmod 444 $(DESTDIR)$(prefix)/$(INSTALLARCH)/Genders.pm
 endif
 
 EXTRA_DIST = Genders.pm

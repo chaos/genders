@@ -405,13 +405,13 @@ uninstall-am:
 @WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py build
 
 @WITH_PYTHON_EXTENSIONS_TRUE@install:
-@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)/$(prefix) --exec-prefix=$(PYTHON_DESTDIR)/$(exec_prefix)
+@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 @WITH_PYTHON_EXTENSIONS_TRUE@pure_install:
-@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)/$(prefix) --exec-prefix=$(PYTHON_DESTDIR)/$(exec_prefix)
+@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 @WITH_PYTHON_EXTENSIONS_TRUE@install-data-local:
-@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)/$(prefix) --exec-prefix=$(PYTHON_DESTDIR)/$(exec_prefix)
+@WITH_PYTHON_EXTENSIONS_TRUE@	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 @WITH_PYTHON_EXTENSIONS_TRUE@clean: 
 @WITH_PYTHON_EXTENSIONS_TRUE@	rm -rf build
