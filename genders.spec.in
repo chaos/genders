@@ -1,7 +1,7 @@
 Name:    @PROJECT@ 
 Version: @VERSION@
 Release: @RELEASE@
-Summary: Static cluster configuration database.
+Summary: Static cluster configuration database
 Group: System Environment/Base
 License: GPL
 Source: %{name}-%{version}.tar.gz
@@ -23,7 +23,7 @@ into a plain text file, it becomes possible to change the
 configuration of a cluster by modifying only one file.
 
 %package compat
-Summary: compatability library 
+Summary: Compatibility library 
 Group: System Environment/Base
 %description compat
 genders API that is compatible with earlier releases of genders
