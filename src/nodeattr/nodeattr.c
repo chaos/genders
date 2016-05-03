@@ -272,7 +272,7 @@ main(int argc, char *argv[])
         char *query;
 
         if (Aopt)
-            list_nodes(gp, NULL, NULL, qfmt); 
+            list_nodes(gp, NULL, excludequery, qfmt); 
         else {
             query = argv[optind++];
             list_nodes(gp, query, excludequery, qfmt);
