@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.23
+=======================
+ -- nodeattr -A now supports -X exclusions
+
 Changes in genders-1.22
 =======================
  -- Fix getnodename errors in Python plugin.
