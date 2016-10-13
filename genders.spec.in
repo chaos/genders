@@ -2,6 +2,7 @@ Name:    @PROJECT@
 Version: @VERSION@
 Release: @RELEASE@
 Summary: Static cluster configuration database
+URL: https://github.com/chaos/genders
 Group: System Environment/Base
 License: GPL
 Source: %{name}-%{version}.tar.gz
@@ -10,6 +11,7 @@ BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: python
 BuildRequires: python-devel
+BuildRequires: libtool
 BuildRoot: %{_tmppath}/%{name}-%{version}
 
 %description
