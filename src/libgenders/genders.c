@@ -818,6 +818,104 @@ genders_getattr_all(genders_t handle, char *attrs[], int len)
   return rv;  
 }
 
+int
+genders_getflatattrsvals( genders_t handle, char *node, char *output_string ) {
+    /*
+     * for a given node, and for all attrs deposit a flat string of sorted
+     * 'attr"="val', or 'attr', in the case of no val
+     *
+     * deposits "\0" if no attrs
+     */
+    genders_node_t n;
+    genders_attrvals_container_t avc;
+    ListIterator attrlist_itr = NULL;
+    ListIterator attrvals_itr = NULL;
+    ListIterator attrvallist_itr = NULL;
+    List attrsvalslist = NULL;
+    char *anattrvalpair;
+    int attrlen, maxlen, flatstringpos, numattrs;
+
+    __list_create( attrsvalslist, free );
+
+    /* room for '=' and '\0' */
+    maxlen = handle->maxattrlen + 2 + handle->maxvallen;
+
+    if (!(n = hash_find(handle->node_index, node))) {
+        handle->errnum = GENDERS_ERR_NOTFOUND;
+        goto cleanup;
+    }
+
+    /* all attrval containers in the node */
+    __list_iterator_create(attrlist_itr, n->attrlist);
+    while ((avc = list_next(attrlist_itr))) {
+
+        genders_attrval_t av;
+
+        /* all a-v pairs in this attrval container */
+        __list_iterator_create(attrvals_itr, avc->attrvals);
+        while ((av = list_next(attrvals_itr))) {
+
+            if (! (anattrvalpair = (char *)malloc( maxlen * sizeof( char ) ))){
+                handle->errnum = GENDERS_ERR_OUTMEM;
+                goto cleanup;
+            }
+
+            attrlen = strlen(av->attr);
+            memcpy( anattrvalpair, av->attr, attrlen );
+
+            if ( av->val ) {
+                *(anattrvalpair + attrlen) = '=';
+                /* also grab the '\0' */
+                memcpy( anattrvalpair+attrlen+1, av->val, strlen(av->val)+1 );
+            } else
+                *(anattrvalpair + attrlen) = '\0';
+
+            __list_append( attrsvalslist, anattrvalpair );
+
+        }
+        __list_iterator_destroy( attrvals_itr );
+
+    }
+    __list_iterator_destroy( attrlist_itr );
+
+    list_sort( attrsvalslist, (ListCmpF)strcmp );
+    numattrs = list_count( attrsvalslist );
+
+    flatstringpos = 0;
+    __list_iterator_create( attrvallist_itr, attrsvalslist );
+    while ((anattrvalpair = list_next(attrvallist_itr))) {
+
+        memcpy( output_string+flatstringpos, anattrvalpair,
+             strlen(anattrvalpair) );
+        flatstringpos += strlen( anattrvalpair );
+
+        /* multiple empty attrs will result in multiple commas,
+         * I don't think that's worse than hiding them */
+        *(output_string + flatstringpos) = ',';
+        flatstringpos++;
+
+    }
+    __list_iterator_destroy( attrvallist_itr );
+
+    /* kill that last comma 
+     * also creates an empty string if no attrs */
+    *(output_string + flatstringpos - 1) = '\0';
+
+    free( anattrvalpair );
+    __list_destroy( attrsvalslist );
+
+    return numattrs;
+    cleanup:
+        __list_destroy( attrsvalslist );
+        __list_iterator_destroy( attrvallist_itr );
+        __list_iterator_destroy( attrvals_itr );
+        __list_iterator_destroy( attrvallist_itr );
+        if ( anattrvalpair )
+            free( anattrvalpair );
+        return -1;
+
+}
+
 int 
 genders_testattr(genders_t handle, 
 		 const char *node, 

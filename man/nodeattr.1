@@ -61,6 +61,9 @@ nodeattr \- query genders file
 .B nodeattr
 .I "[-f genders] --compress"
 .br
+.B nodeattr
+.I "[-f genders] --compress-hosts"
+.br
 .SH DESCRIPTION
 When invoked with the 
 .I "-q"
@@ -169,6 +172,13 @@ of your genders database, the resulting database may be longer or
 shorter.  This option may be useful as a beginning step to compressing
 an existing genders database.
 .LP
+The 
+.I "--compress-hosts"
+is similar to 
+.I "--compress"
+except that it groups all hosts with identical attribute sets.  Each host will
+only appear on one line of the output.  This is useful for comparing the genders
+of two nodes that are expected to be the same.
 Attribute names may optionally appear in the genders file with an
 equal sign followed by a value.
 .B Nodeattr

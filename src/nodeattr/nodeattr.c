@@ -53,7 +53,7 @@
 #define GETOPT(ac,av,opt,lopt) getopt(ac,av,opt)
 #endif
 
-#define OPTIONS "cnsqX:AvQVUlf:kd:e"
+#define OPTIONS "cnsqX:AvQVUlf:kd:e:CH"
 
 /* an impossible attribute */
 #define NOATTRSFLAG "=,,=,,=,,=,,="
@@ -76,6 +76,8 @@ static struct option longopts[] = {
     { "diff", 1, 0, 'd'},
     { "expand", 0, 0, 'e'},
     { "compress", 0, 0, 'C'},
+    { "compress-attrs", 0, 0, 'C'},
+    { "compress-hosts", 0, 0, 'H'},
     { 0,0,0,0 },
 };
 #endif
@@ -91,6 +93,7 @@ static void usage(void);
 static void diff_genders(char *db1, char *db2);
 static void expand(genders_t gp);
 static void compress(genders_t gp);
+static void compress_hosts(genders_t gp);
 
 /* Utility functions */
 static int _gend_error_exit(genders_t gp, char *msg);
@@ -110,7 +113,7 @@ main(int argc, char *argv[])
 {
     int c, errors;
     int Aopt = 0, lopt = 0, qopt = 0, Xopt = 0, vopt = 0, Qopt = 0,
-      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0, eopt = 0, Copt = 0;
+      Vopt = 0, Uopt = 0, kopt = 0, dopt = 0, eopt = 0, Copt = 0, Hopt = 0;
     char *filename = GENDERS_DEFAULT_FILE;
     char *dfilename = NULL;
     char *excludequery = NULL;
@@ -173,6 +176,9 @@ main(int argc, char *argv[])
         case 'C':   /* --compress */
             Copt = 1;
             break;
+        case 'H':   /* --compress-hosts */
+            Hopt = 1;
+            break;
         default:
             usage();
             break;
@@ -182,7 +188,7 @@ main(int argc, char *argv[])
     /* check parameter inputs */
 
     /* specify correct option combinations */
-    if ((qopt + Qopt + Vopt + lopt + kopt + dopt + eopt + Copt) > 1)
+    if ((qopt + Qopt + Vopt + lopt + kopt + dopt + eopt + Copt + Hopt) > 1)
         usage();
 
     if ((qopt
@@ -192,7 +198,8 @@ main(int argc, char *argv[])
          || kopt
          || dopt
          || eopt
-         || Copt)
+         || Copt
+         || Hopt)
         && vopt)
         usage();
 
@@ -202,6 +209,10 @@ main(int argc, char *argv[])
     }
 
     if (!qopt && Xopt)
+        usage();
+
+    /* you only get 1 compression style */
+    if (Copt && Hopt)
         usage();
 
     if (!Vopt && Uopt)
@@ -219,6 +230,7 @@ main(int argc, char *argv[])
             && !dopt
             && !eopt
             && !Copt
+            && !Hopt
             && (optind != (argc - 1) && optind != (argc - 2)))
         || (Qopt && (optind != (argc - 1) && optind != (argc - 2)))
         || (Vopt && optind != (argc - 1))
@@ -226,7 +238,8 @@ main(int argc, char *argv[])
         || (kopt && optind != argc)
         || (dopt && optind != argc)
         || (eopt && optind != argc)
-        || (Copt && optind != argc))
+        || (Copt && optind != argc)
+        || (Hopt && optind != argc))
         usage();
 
     /* genders database diff */
@@ -264,6 +277,12 @@ main(int argc, char *argv[])
     /* compress */
     if (Copt) {
         compress(gp);
+        exit(0);
+    }
+
+    /* compress hosts*/
+    if (Hopt) {
+        compress_hosts(gp);
         exit(0);
     }
 
@@ -536,6 +555,7 @@ usage(void)
         "or     nodeattr [-f genders] -d genders\n"
         "or     nodeattr [-f genders] --expand\n"
         "or     nodeattr [-f genders] --compress\n"
+        "or     nodeattr [-f genders] --compress-hosts\n"
             );
     exit(1);
 }
@@ -984,10 +1004,55 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
     }
 }
 
+static void 
+_hash_allattrvals(hash_t hattr, char *node, char *attrsvals) {
+
+    struct hosts_data *hd = NULL;
+    char *hashkey = NULL;
+    
+    assert(hattr && node);
+
+    if (!(hd = hash_find(hattr, attrsvals))) {
+
+        if (!(hd = (struct hosts_data *)malloc(sizeof(struct hosts_data)))) {
+            fprintf(stderr, "malloc: %s\n", strerror(errno));
+            exit(1);
+        }
+
+        /* copy the attrsvals string for a new key */
+        if (!(hashkey = (char *)malloc(strlen(attrsvals)+1))) {
+            fprintf(stderr, "malloc: %s\n", strerror(errno));
+            exit(1);
+        }
+        memcpy( hashkey, attrsvals, strlen(attrsvals)+1);
+
+        hd->key = hashkey;
+
+        if (!(hd->hl = hostlist_create(NULL))) {
+            fprintf(stderr, "hostlist_create: %s\n", strerror(errno));
+            exit(1);
+        }
+
+        if (!hash_insert(hattr, hd->key, hd)) {
+            fprintf(stderr, "hash_insert: %s\n", strerror(errno));
+            exit(1);
+        }
+    }
+
+    if (!hostlist_push(hd->hl, node)) {
+        fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    /* hd and hashkey are destroyed with hash_destroy(hattr) */
+     
+}
+
 static int
 _hash_hostrange(void *data, const void *key, void *arg)
 {
     struct hosts_data *hd = (struct hosts_data *)data;
+
     hash_t *hrange = (hash_t *)arg;
     char hostrange[HOSTLIST_BUFLEN + 1];
     struct attr_list *al;
@@ -1219,6 +1284,129 @@ compress(genders_t gp)
     genders_nodelist_destroy(gp, nodes);
     genders_attrlist_destroy(gp, attrs);
     genders_vallist_destroy(gp, vals);
+    hash_destroy(hattr);
+    hash_destroy(hrange);
+    list_destroy(hlist);
+}
+
+static void
+compress_hosts(genders_t gp)
+{
+    char **nodes; 
+    char *attrsvals;
+    int nodeslen;
+    int nodescount;
+    int numnodes, numattrs;
+    int maxattrsvalslen; 
+    hash_t hattr = NULL;
+    hash_t hrange = NULL;
+    List hlist = NULL;
+    struct store_hostrange_data shd;
+    int i;
+
+    /* I am similar to compress except I key off of a combined sorted attrs+vals
+     * string.  The result is that each node only appears on one line of the
+     * output with all peers that have the same set of (RAW) attrs and vals
+     */
+
+    /* The basic idea behind this algorithm is that we will find every
+     * host that contains an attr or attr=val combination.
+     *
+     * Then, we will find every attr or attr=val combination with the
+     * same sets of hosts, than output a compressed hostrange output
+     * for those hosts with every appropriate attr/attr=val.
+     */
+
+    /* need to treat values w/ raw inputs in order to compress */
+    if (genders_set_flags(gp, GENDERS_FLAG_RAW_VALUES) < 0)
+        _gend_error_exit(gp, "genders_set_flags");
+
+    if ((numnodes = genders_getnumnodes(gp)) < 0)
+        _gend_error_exit(gp, "genders_getnumnodes");
+
+    if ((numattrs = genders_getnumattrs(gp)) < 0)
+        _gend_error_exit(gp, "genders_getnumattrs");
+
+    /* numattrs + 1, in case numattrs == 0
+     *
+     * just a guess that there are around 2*numattrs
+     * unique attrs+vals sets represented in your average genders file
+     */
+    if (!(hattr = hash_create((numattrs + 1)*2, 
+                              (hash_key_f)hash_key_string,
+                              (hash_cmp_f)strcmp,
+                              _hosts_data_del))) {
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
+        _gend_error_exit(gp, "genders_nodelist_create");
+
+    if ((nodescount = genders_getnodes(gp, nodes, nodeslen, NULL, NULL)) < 0)
+        _gend_error_exit(gp, "genders_getnodes");
+
+    /* assume that each attr and val is max len, leave room for '=' and
+     * (',' or terminating '\0')
+     */
+    maxattrsvalslen = ( genders_getmaxattrlen(gp) + 2 + genders_getmaxvallen(gp) ) * numattrs;
+    if (!(attrsvals = (char *)malloc( maxattrsvalslen * sizeof(char)))) {
+        fprintf(stderr, "memory: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    for (i = 0; i < nodescount; i++) {
+
+        if (genders_getflatattrsvals( gp, nodes[i], attrsvals) < 0 )
+            _gend_error_exit(gp, "genders_getflatattrsvals");
+
+        if (strlen(attrsvals)) {
+            _hash_allattrvals(hattr, nodes[i], attrsvals);
+        } else {
+            _hash_allattrvals(hattr, nodes[i], NOATTRSFLAG);
+        }
+    }
+
+    /* Now, find all the common attributes for a particular hostrange
+     *
+     * for compress_nodes : Leaving this even though they're already grouped
+     * because it also compresses the hostrange and reverses the hash
+     */
+    if (!(hrange = hash_create(numnodes, 
+                              (hash_key_f)hash_key_string,
+                              (hash_cmp_f)strcmp,
+                              _attr_list_del))) {
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    if (hash_for_each(hattr, _hash_hostrange, &hrange) < 0) {
+        fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    if (!(hlist = list_create(NULL))) {
+        fprintf(stderr, "list_create: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    shd.hlist = hlist;
+    shd.maxhostrangelen = 0;
+
+    if (hash_for_each(hrange, _store_hostrange, &shd) < 0) {
+        fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    list_sort(hlist, _hostrange_cmp);
+
+    if (list_for_each(hlist, _output_hostrange, &shd.maxhostrangelen) < 0) {
+        fprintf(stderr, "list_for_each: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    free(attrsvals);
+    genders_nodelist_destroy(gp, nodes);
     hash_destroy(hattr);
     hash_destroy(hrange);
     list_destroy(hlist);

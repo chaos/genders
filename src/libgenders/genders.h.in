@@ -326,6 +326,18 @@ int genders_getattr(genders_t handle,
  */
 int genders_getattr_all(genders_t handle, char *attrs[], int len);
 
+/*
+ * genders_getflatattrsvals
+ *
+ * Writes all attrs (and "="val where present), as a single, sorted, comma
+ * delimited, null terminated string to output_string.
+ *
+ * Caller is responsible for providing an output_string long enough.
+ *
+ * Returns number of attributes on success, -1 on failure
+ */
+int genders_getflatattrsvals(genders_t gp, char *node, char *output_string);
+
 /* 
  * genders_testattr
  *

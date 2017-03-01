@@ -1,3 +1,9 @@
+2017-03-01  Ben Casses <casses1@llnl.gov>
+
+	* src/nodeattr/: Support --compress-hosts option.
+
+	* src/libgenders/: added genders_getflatattrsvals for --compress-hosts
+
 2015-05-07  Albert Chu  <chu11@llnl.gov>
 
 	* Add contrib for dynamic library support in cfengine 3.3.0 from John
