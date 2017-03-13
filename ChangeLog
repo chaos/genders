@@ -1,3 +1,7 @@
+2017-03-09  Ben Casses <casses1@llnl.gov>
+
+	* src/nodeattr/: added --compress-hosts and hidden --compress-attrs option.
+
 2015-05-07  Albert Chu  <chu11@llnl.gov>
 
 	* Add contrib for dynamic library support in cfengine 3.3.0 from John
