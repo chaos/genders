@@ -1325,7 +1325,7 @@ _flatten_attrsvals(genders_t gp, const char *node, char **attrs, char **vals,
         }
     }
 
-    list_sort(avlist, (ListCmpF) strcmp );
+    list_sort(avlist, (ListCmpF) strcmp);
 
     flatstringpos = 0;
     if (!(attrvallist_itr = list_iterator_create(avlist))) {
@@ -1421,6 +1421,8 @@ compress_hosts(genders_t gp)
 
     /* Assume that each attr and val is max possible length, leave room for '='
      * and (',' or terminating '\0').  */
+    /* Potential integer overflow here, but a genders file that big would
+     * have other problems, not checking.*/
     maxattrsvalslen = (genders_getmaxattrlen(gp) + 2
                        + genders_getmaxvallen(gp)) * numattrs;
     if (!(attrsvals = (char *) malloc(maxattrsvalslen * sizeof(char)))) {

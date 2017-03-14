@@ -181,7 +181,7 @@ between databases.
 .LP
 The
 .I "--compress"
-is opposite of the
+option is the opposite of the
 .I "--expand"
 option.  It will output a new identical genders database with
 hostranges of nodes with identical attributes.  Depending on the setup
@@ -191,9 +191,15 @@ an existing genders database.
 .LP
 The
 .I "--compress-hosts"
-is similar to
+option is similar to the
 .I "--compress"
-except that it combines attributes for each node first and then groups nodes
+option.  With
+.I "--compress"
+a given attr only appears once.  With
+.I "--compress-hosts"
+a given node only appears once. The
+.I "--compress-hosts"
+option combines attributes for each node first and then groups nodes
 with identical attribute sets rather than creating a group of nodes for each
 attribute and then merging common groups.  This is useful for identifying
 "different" nodes.  For example:
@@ -205,17 +211,19 @@ for the genders file:
     cluster[2,5,10]     attr4
     cluster[7,20]       attr5
 .LP
-The nodeattr
-.I
+The
+.B
+nodeattr
 --compress
-produces:
+command produces:
     cluster[2,5,10] attr4
     cluster[10,20]  attr3
     cluster[7,20]   attr5
     cluster[1-20]   attr1,attr2
 .LP
-Where nodeattr
-.I
+Where
+.B
+nodeattr
 --compress-hosts
 produces:
     cluster[1,3-4,6,8-9,11-19] attr1,attr2
@@ -226,21 +234,17 @@ produces:
 .LP
 In the
 .I "--compress"
-output, cluster7 appears in the third and fourth lines.  It is a member of
+output, cluster7 appears in the third and fourth lines because it is a member of
 ranges with attr1,attr2 and ranges with attr5.  In the
 .I "--compress-hosts"
 output, cluster7 appears on a new line because there are no other nodes with
-the same combination of attributes.  With
-.I "--compress"
-a given attr only appears once.  With
-.I "--compress-hosts"
-a given node only appears once.
+the same combination of attributes.
 .LP
 The
 .I "--compress-attrs"
-is identical to
+option is identical to
 .I "--compress"
-\&.  It was added for convenience when
+\&.  It was added for consistency when
 .I "--compress-hosts"
 was added.
 .SH EXAMPLES
