@@ -89,7 +89,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_perldir}/*
 %endif
 %if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
-%{_libdir}/python*
+%{_exec_prefix}/lib*/python*
 %endif
 %if %{?_with_cplusplus_extensions:1}%{!?_with_cplusplus_extensions:0}
 %{_libdir}/libgendersplusplus.*
