@@ -86,6 +86,7 @@ AC_PATH_PROG([JAVAH], [javah])
 AC_PATH_PROG([JAVA], [java])
 AC_PATH_PROG([JAR], [jar])
 AC_PATH_PROG([JAVADOC], [javadoc])
+AC_PATH_PROG([JAVADOC], [lua])
 AC_DEBUG
 
 ##
@@ -208,6 +209,21 @@ AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" 
 AC_JAVA_EXTENSIONS
 AM_CONDITIONAL(WITH_JAVA_EXTENSIONS, [test "$ac_with_java_extensions" = "yes"])
 
+
+#
+# expand lua
+#
+AX_PROG_LUA
+AX_LUA_HEADERS
+AX_LUA_LIBS
+
+#
+# Check for lua
+#
+
+AC_LUA_EXTENSIONS
+AM_CONDITIONAL(WITH_LUA_EXTENSIONS, [test "$ac_with_lua_extensions" = "yes"])
+
 ##
 # Checks for typedefs, structures, and compiler characteristics.
 ##
@@ -248,6 +264,7 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Genders/Makefile \
   src/extensions/perl/Genders/Genders.pm \
   src/extensions/python/Makefile \
+  src/extensions/lua/Makefile \
   src/extensions/python/genderssetup.py \
   src/extensions/java/Makefile \
   src/testsuite/Makefile \
