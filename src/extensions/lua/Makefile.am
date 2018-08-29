@@ -4,18 +4,18 @@
 
 
 if WITH_LUA_EXTENSIONS
-luaexec_LTLIBRARIES       = libgenders.la
 
-libgenders_la_CFLAGS = @LUA_INCLUDE@
+luaexec_LTLIBRARIES = genders.la
 
-libgenders_la_SOURCES = genderslua.c
+genders_la_SOURCES = genderslua.c
 
-libgenders_la_LIBADD = ../../libgenders/libgenders.la
+genders_la_CFLAGS =  @LUA_INCLUDE@ -I../../libgenders/
 
-libgenders_la_LDFLAGS = -version-info @LUA_LIB@ @LIBGENDERSLUA_VERSION_INFO@ $(OTHER_FLAGS)
+genders_la_LDFLAGS = -module -avoid-version
 
-#../../libgenders/libgenderslua.la: force-dependency-check
-#	@cd `dirname $@` && make `basename $@`
-#force-dependency-check:
+genders_la_LIBADD = ../../libgenders/libgenders.la $(OTHER_FLAGS) @LUA_LIB@
+
 
 endif
+
+EXTRA_DIST = genderslua.c

@@ -279,7 +279,7 @@ static int lgenders_isattrval(lua_State *L) {
 	return 1;
 }
 
-static const struct luaL_Reg libgenderslua_methods[] = {
+static const struct luaL_Reg genders_methods[] = {
 	{"getnumattrs",lgenders_getnumattrs},
 	{"getnumnodes",lgenders_getnumnodes},
 	{"getnodes",lgenders_getnodes},
@@ -293,13 +293,13 @@ static const struct luaL_Reg libgenderslua_methods[] = {
 	{NULL,NULL},
 };
 
-static const struct luaL_Reg libgenderslua_functions[] = {
+static const struct luaL_Reg genders_functions[] = {
 	{ "new", lgenders_new },
 	{ NULL,  NULL}
 };
 
 
-int luaopen_libgenderslua(lua_State *L) {
+int luaopen_genders(lua_State *L) {
 	/* Create the metatable and put it on the stack. */
 	luaL_newmetatable(L, "LGenders");
 	/* Duplicate the metatable on the stack (We know have 2). */
@@ -313,11 +313,11 @@ int luaopen_libgenderslua(lua_State *L) {
 	lua_setfield(L, -2, "__index");
 
 	/* Set the methods to the metatable that should be accessed via object:func */
-	luaL_setfuncs(L, libgenderslua_methods, 0);
+	luaL_setfuncs(L, genders_methods, 0);
 
 	/* Register the object.func functions into the table that is at the top of the
 	* stack. */
-	luaL_newlib(L, libgenderslua_functions);
+	luaL_newlib(L, genders_functions);
 
 	return 1;
 }
