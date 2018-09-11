@@ -203,7 +203,6 @@ static int lgenders_getattr(lua_State *L) {
 	}
 	lua_newtable(L);
 	for(i = 0; i < size_attr; i++) {
-		printf("attr: %s <-> val %s\n",attr_list[i],val_list[i]);
 		lua_pushstring(L, attr_list[i]);
 		lua_pushstring(L, val_list[i]);
 		lua_settable(L, -3);
@@ -229,7 +228,7 @@ static int lgenders_isnode(lua_State *L) {
 	if(nr_args == 2)
 		node = luaL_checkstring(L,2); 
 	else
-		luaL_error(L,"is_node must be called with one argument");
+		luaL_error(L,"isnode must be called with one argument");
 	ret_code = genders_isnode(dbh->handle,node);
 	if(ret_code == -1) {
 		g_error = strdup(genders_errormsg(dbh->handle));
@@ -248,7 +247,7 @@ static int lgenders_isattr(lua_State *L) {
 	if(nr_args == 2)
 		attr = luaL_checkstring(L,2); 
 	else
-		luaL_error(L,"is_attr must be called with one argument");
+		luaL_error(L,"isattr must be called with one argument");
 	ret_code = genders_isattr(dbh->handle,attr);
 	if(ret_code == -1) {
 		g_error = strdup(genders_errormsg(dbh->handle));
@@ -269,7 +268,7 @@ static int lgenders_isattrval(lua_State *L) {
 		val = luaL_checkstring(L,3); 
 	}
 	else
-		luaL_error(L,"is_attrval must be called with two arguments");
+		luaL_error(L,"isattrval must be called with two arguments");
 	ret_code = genders_isattrval(dbh->handle,attr,val);
 	if(ret_code == -1) {
 		g_error = strdup(genders_errormsg(dbh->handle));
