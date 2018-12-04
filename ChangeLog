@@ -1,10 +1,16 @@
-2016-05-05  Ben Casses <casses1@llnl.gov>
+2018-12-04  Ben Casses <casses1@llnl.gov>
+
+	* catching up on old pulls
+
+	* tag 1-24-1
 
 	* src/nodeattr/nodeattr.c (main): User can now use -X to exclude from -A.
 
 	* META : Update release
 
-	* tagged genders-1-23
+2017-03-09  Ben Casses <casses1@llnl.gov>
+
+	* src/nodeattr/: added --compress-hosts and hidden --compress-attrs option.
 
 2015-05-07  Albert Chu  <chu11@llnl.gov>
 
