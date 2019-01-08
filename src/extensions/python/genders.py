@@ -25,11 +25,11 @@ Genders database parsing and querying
 #  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
 
-import exceptions
+from __future__ import print_function
 import sys
 import libgenders
 
-class Genders_Err:
+class Genders_Err(Exception):
     """
     Genders Error Exception Base Class
     """
@@ -264,35 +264,35 @@ if __name__ == '__main__':
 
     gh = Genders()
 
-    print "getnodename:", gh.getnodename()
+    print("getnodename:", gh.getnodename())
 
-    print "getnodes:", gh.getnodes()
-    print "getnodes:", gh.getnodes("foofdfd")
-    print "getnodes:", gh.getnodes("mgmt")
-    print "getattr:", gh.getattr()         
+    print("getnodes:", gh.getnodes())
+    print("getnodes:", gh.getnodes("foofdfd"))
+    print("getnodes:", gh.getnodes("mgmt"))
+    print("getattr:", gh.getattr())
 
     try:
-        print "getattr:", gh.getattr("fdafdsfdsa")
+        print("getattr:", gh.getattr("fdafdsfdsa"))
     except Genders_Err_NotFound:
-        print "got genders exception", sys.exc_info()[0], sys.exc_info()[1]
+        print("got genders exception", sys.exc_info()[0], sys.exc_info()[1])
     except:
-        print "unexpected exception:", sys.exc_info()[0], sys.exc_info()[1], sys.exc_info[2]
+        print("unexpected exception:", sys.exc_info()[0], sys.exc_info()[1], sys.exc_info[2])
 
-    print "getattr_all:", gh.getattr_all()
-    print "isnode <blank>:", gh.isnode()
-    print "isnode foo:", gh.isnode("foo")
-    print "isattr foo:", gh.isattr("foo")
-    print "isattr mgmt:", gh.isattr("mgmt")
-    print "isattrval cpu=14:", gh.isattrval("cpu", "14")
-    print "isattrval cpu=14:", gh.isattrval("cpu", "16")
-    print "query:", gh.query("mgmt")
-    print "query:", gh.query("mgmt||login")
-    print "query:", gh.query()
-    print "query:", gh.query("bdjfkdsalfdsafds")
+    print("getattr_all:", gh.getattr_all())
+    print("isnode <blank>:", gh.isnode())
+    print("isnode foo:", gh.isnode("foo"))
+    print("isattr foo:", gh.isattr("foo"))
+    print("isattr mgmt:", gh.isattr("mgmt"))
+    print("isattrval cpu=14:", gh.isattrval("cpu", "14"))
+    print("isattrval cpu=14:", gh.isattrval("cpu", "16"))
+    print("query:", gh.query("mgmt"))
+    print("query:", gh.query("mgmt||login"))
+    print("query:", gh.query())
+    print("query:", gh.query("bdjfkdsalfdsafds"))
 
     try:
-        print "query:", gh.query("&&||!!!~~")
+        print("query:", gh.query("&&||!!!~~"))
     except Genders_Err_Syntax:
-        print "got genders exception", sys.exc_info()[0], sys.exc_info()[1]
+        print("got genders exception", sys.exc_info()[0], sys.exc_info()[1])
     except:
-        print "unexpected exception:", sys.exc_info()[0], sys.exc_info()[1], sys.exc_info[2]
+        print("unexpected exception:", sys.exc_info()[0], sys.exc_info()[1], sys.exc_info[2])
