@@ -1197,8 +1197,8 @@ compress(genders_t gp)
                           (hash_key_f)hash_key_string,
                           (hash_cmp_f)strcmp,
                           _hosts_data_del))) {
-    fprintf(stderr, "hash_create: %s\n", strerror(errno));
-    exit(1);
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+        exit(1);
     }
 
     if ((nodeslen = genders_nodelist_create(gp, &nodes)) < 0)
