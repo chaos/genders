@@ -51,11 +51,16 @@ typedef struct {
   int genders_err_internal;
 } Libgenders;
 
+/* support Python earlier than 2.6 */
+#ifndef Py_TYPE
+#define Py_TYPE(ob) (((PyObject*)(ob))->ob_type)
+#endif
+
 static void
 Libgenders_dealloc(Libgenders* self)
 {
   genders_handle_destroy(self->gh);
-  self->ob_type->tp_free((PyObject*)self);
+  Py_TYPE(self)->tp_free((PyObject*)self);
 }
 
 static PyObject *
@@ -802,10 +807,14 @@ static PyMethodDef Libgenders_methods[] = {
   {NULL},  /* Sentinel */
 };
 
+/* support Python 2.5 or earlier while still avoiding "missing braces around initializer" warning */
+#ifndef PyVarObject_HEAD_INIT
+#define PyVarObject_HEAD_INIT(type, size) \
+    PyObject_HEAD_INIT(type) size,
+#endif
 
 static PyTypeObject LibgendersType = {
-  PyObject_HEAD_INIT(NULL)
-  0,				/*ob_size*/
+  PyVarObject_HEAD_INIT(NULL, 0)  /*type, ob_size*/
   "libgenders.Libgenders",	/*tp_name*/
   sizeof(Libgenders),	        /*tp_basicsize*/
   0,				/*tp_itemsize*/
@@ -845,24 +854,54 @@ static PyTypeObject LibgendersType = {
   Libgenders_new,			/* tp_new */
 };
 
+#if PY_MAJOR_VERSION >= 3
+static struct PyModuleDef moduledef = {
+  PyModuleDef_HEAD_INIT,
+  "libgenders",          /* m_name */
+  "Libgenders module for genders database querying.",  /* m_doc */
+  -1,                    /* m_size */
+  Libgenders_methods,    /* m_methods */
+  NULL,                  /* m_reload */
+  NULL,                  /* m_traverse */
+  NULL,                  /* m_clear */
+  NULL,                  /* m_free */
+};
+
+#define INITERROR return NULL
+
+PyMODINIT_FUNC
+PyInit_libgenders(void)
+
+#else  /* Python 2 */
+#define INITERROR return
+
 #ifndef PyMODINIT_FUNC /* declarations for DLL import/export */
 #define PyMODINIT_FUNC void
 #endif
 
 PyMODINIT_FUNC
 initlibgenders(void) 
+#endif
 {
   PyObject* m;
 
   if (PyType_Ready(&LibgendersType) < 0)
-    return;
+    INITERROR;
 
+#if PY_MAJOR_VERSION >= 3
+  m = PyModule_Create(&moduledef);
+#else  /* Python 2 */
   m = Py_InitModule3("libgenders", Libgenders_methods,
 		     "Libgenders module for genders database querying.");
+#endif
 
   if (m == NULL)
-    return;
+    INITERROR;
 
   Py_INCREF(&LibgendersType);
   PyModule_AddObject(m, "Libgenders", (PyObject *)&LibgendersType);
+
+#if PY_MAJOR_VERSION >= 3
+  return m;
+#endif
 }
