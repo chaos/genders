@@ -986,6 +986,13 @@ list_attrs(genders_t gp, char *node)
         _gend_error_exit(gp, "genders_vallist_create");
     if ((numattrs = genders_getnumattrs(gp)) < 0)
         _gend_error_exit(gp, "genders_getnumattrs");
+
+    /* numattrs + 1, in case numattrs == 0
+     *
+     * (numattrs + 1) * 4, is an estimate on attribute=value pair
+     * types, b/c we are keying off attr=val pairs, not just the
+     * attribute name.
+     */
     if (!(hattrval = hash_create((numattrs + 1)*4,
                             (hash_key_f)hash_key_string,
                             (hash_cmp_f)strcmp,
@@ -1015,10 +1022,7 @@ list_attrs(genders_t gp, char *node)
         if ((count = genders_getattr_all(gp, attrs, len)) < 0)
             _gend_error_exit(gp, "genders_getattr_all");
         for (i = 0; i < count; i++)
-            if (node && strlen(vals[i]) > 0)
-                printf("%s=%s\n", attrs[i], vals[i]);
-            else
-                printf("%s\n", attrs[i]);
+            printf("%s\n", attrs[i]);
     }
     genders_attrlist_destroy(gp, attrs);
     genders_vallist_destroy(gp, vals);
