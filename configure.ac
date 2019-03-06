@@ -7,11 +7,11 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders], [1.22])
+AC_INIT([genders],[1.25])
 AC_META
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_TARGET
 
 ##
 # Automake support.
@@ -73,7 +73,7 @@ AC_SUBST([PYTHONGENDERS_VERSION])
 ##
 AC_PROG_CC
 AC_PROG_CXX
-AC_PROG_LIBTOOL
+LT_INIT
 AC_PROG_MAKE_SET
 AM_PROG_LEX
 AC_PROG_YACC
@@ -95,8 +95,7 @@ AC_DEBUG
 ##
 AC_MSG_CHECKING(for --with-force-yacc )
 AC_ARG_WITH(force-yacc,
-   AC_HELP_STRING([--with-force-yacc],
-                  [force yacc to be used]),
+   AS_HELP_STRING([--with-force-yacc],[force yacc to be used]),
    [ case "$withval" in
    yes)
        ac_force_yacc=yes
@@ -120,8 +119,7 @@ fi
 ##
 AC_MSG_CHECKING(for --with-non-shortened-hostnames)
 AC_ARG_WITH(non-shortened-hostnames,
-   AC_HELP_STRING([--with-non-shortened-hostnames],
-                  [allow non-shortened hostnames with periods]),
+   AS_HELP_STRING([--with-non-shortened-hostnames],[allow non-shortened hostnames with periods]),
    [ case "$withval" in
    yes)
        ac_non_shortened_hostnames=yes

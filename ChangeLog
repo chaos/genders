@@ -4,6 +4,10 @@
 
 	* tag 1-24-1
 
+	* src/nodeattr/nodeattr.c (main): User can now use -X to exclude from -A.
+
+	* META : Update release
+
 2017-03-09  Ben Casses <casses1@llnl.gov>
 
 	* src/nodeattr/: added --compress-hosts and hidden --compress-attrs option.

@@ -512,32 +512,6 @@ list_attr_val(genders_t gp, char *attr, int Uopt)
 }
 
 static void 
-list_attrs(genders_t gp, char *node)
-{
-    char **attrs, **vals;
-    int len, vlen, count, i;
-
-    if ((len = genders_attrlist_create(gp, &attrs)) < 0)
-        _gend_error_exit(gp, "genders_attrlist_create");
-    if ((vlen = genders_vallist_create(gp, &vals)) < 0)
-        _gend_error_exit(gp, "genders_vallist_create");
-    if (node) {
-        if ((count = genders_getattr(gp, attrs, vals, len, node)) < 0)
-            _gend_error_exit(gp, "genders_getattr");
-    } else {
-        if ((count = genders_getattr_all(gp, attrs, len)) < 0)
-            _gend_error_exit(gp, "genders_getattr_all");
-    }
-    for (i = 0; i < count; i++)
-        if (node && strlen(vals[i]) > 0)
-            printf("%s=%s\n", attrs[i], vals[i]);
-        else
-            printf("%s\n", attrs[i]);
-    genders_attrlist_destroy(gp, attrs);
-    genders_vallist_destroy(gp, vals);
-}
-
-static void 
 usage(void)
 {
     fprintf(stderr,
@@ -934,14 +908,11 @@ _hosts_data_del(void *data)
     free(hd);
 }
 
-static void
-_attr_list_del(void *data)
+static int
+_print_key(void *data, const void *key, void *arg)
 {
-    struct attr_list *al = (struct attr_list *)data;
-
-    free(al->hostrange);
-    list_destroy(al->l);
-    free(al);
+    printf("%s\n", (char *)key);
+    return(0);
 }
 
 static void
@@ -998,6 +969,74 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
         fprintf(stderr, "hostlist_push: %s\n", strerror(errno));
         exit(1);
     }
+}
+
+static void 
+list_attrs(genders_t gp, char *node)
+{
+    char **attrs, **vals;
+    char *anode = NULL;
+    int numattrs, len, vlen, count, i;
+    hash_t hattrval = NULL;
+    hostlist_t nodelist;
+
+    if ((len = genders_attrlist_create(gp, &attrs)) < 0)
+        _gend_error_exit(gp, "genders_attrlist_create");
+    if ((vlen = genders_vallist_create(gp, &vals)) < 0)
+        _gend_error_exit(gp, "genders_vallist_create");
+    if ((numattrs = genders_getnumattrs(gp)) < 0)
+        _gend_error_exit(gp, "genders_getnumattrs");
+
+    /* numattrs + 1, in case numattrs == 0
+     *
+     * (numattrs + 1) * 4, is an estimate on attribute=value pair
+     * types, b/c we are keying off attr=val pairs, not just the
+     * attribute name.
+     */
+    if (!(hattrval = hash_create((numattrs + 1)*4,
+                            (hash_key_f)hash_key_string,
+                            (hash_cmp_f)strcmp,
+                            _hosts_data_del))) {
+        fprintf(stderr, "hash_create: %s\n", strerror(errno));
+        exit(1);
+    }
+
+    /* a single node or a list of nodes */
+    if (node) {
+        nodelist = hostlist_create(node);
+        while ((anode = hostlist_pop(nodelist))) {
+            if ((count = genders_getattr(gp, attrs, vals, len, anode)) < 0)
+                _gend_error_exit(gp, "genders_getattr");
+            for (i = 0; i < count; i++)
+                _hash_attrval(hattrval, anode, attrs[i], vals[i]);
+            free(anode);
+        }
+        
+        if (hash_for_each(hattrval, _print_key, NULL) < 0) {
+            fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
+            exit(1);
+        }
+        hostlist_destroy(nodelist);
+    /* all nodes */
+    } else {
+        if ((count = genders_getattr_all(gp, attrs, len)) < 0)
+            _gend_error_exit(gp, "genders_getattr_all");
+        for (i = 0; i < count; i++)
+            printf("%s\n", attrs[i]);
+    }
+    genders_attrlist_destroy(gp, attrs);
+    genders_vallist_destroy(gp, vals);
+    hash_destroy(hattrval);
+}
+
+static void
+_attr_list_del(void *data)
+{
+    struct attr_list *al = (struct attr_list *)data;
+
+    free(al->hostrange);
+    list_destroy(al->l);
+    free(al);
 }
 
 static int
@@ -1159,9 +1198,9 @@ compress(genders_t gp)
      * attribute name.
      */
     if (!(hattr = hash_create((numattrs + 1)*4, 
-                              (hash_key_f)hash_key_string,
-                              (hash_cmp_f)strcmp,
-                              _hosts_data_del))) {
+                          (hash_key_f)hash_key_string,
+                          (hash_cmp_f)strcmp,
+                          _hosts_data_del))) {
         fprintf(stderr, "hash_create: %s\n", strerror(errno));
         exit(1);
     }
