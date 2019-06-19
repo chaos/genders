@@ -4,15 +4,13 @@
 ## Process this file with automake to produce Makefile.in.
 ##*****************************************************************************
 
-noinst_HEADERS = fd.h \
-		 hash.h \
+noinst_HEADERS = hash.h \
 		 hostlist.h \
 		 list.h \
 		 thread.h
 
 noinst_LTLIBRARIES = libcommon.la
-libcommon_la_SOURCES = fd.c \
-		       hash.c \
+libcommon_la_SOURCES = hash.c \
 		       hostlist.c \
 		       list.c  \
 		       thread.c
