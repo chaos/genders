@@ -1,3 +1,13 @@
+2019-06-19  Ben Casses <casses1@llnl.gov>
+
+	* merged PR from @sdm900 for faster parsing
+
+	* removed now unused fd.c & fd.h
+
+	* updated version
+
+	* updated copyrights
+
 2018-12-04  Ben Casses <casses1@llnl.gov>
 
 	* catching up on old pulls
