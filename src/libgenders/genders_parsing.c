@@ -45,38 +45,9 @@
 #include "genders_api.h"
 #include "genders_constants.h"
 #include "genders_util.h"
-#include "fd.h"
 #include "hash.h"
 #include "hostlist.h"
 #include "list.h"
-
-/* 
- * _readline
- *
- * Read a line from the genders file
- *
- * Returns line length on success, -1 on error
- */
-static int 
-_readline(genders_t handle, int fd, char *buf, int buflen) 
-{
-  int len; 
-
-  if ((len = fd_read_line(fd, buf, buflen)) < 0) 
-    {
-      handle->errnum = GENDERS_ERR_READ;
-      return -1;
-    }
-  
-  /* buflen - 1 b/c fd_read_line guarantees null termination */
-  if (len >= (buflen - 1)) 
-    {
-      handle->errnum = GENDERS_ERR_PARSE;
-      return -1;
-    }
-
-  return len;
-}
 
 /* 
  * _insert_node
@@ -673,22 +644,32 @@ _genders_open_and_parse(genders_t handle,
    * change our minds later concerning whether and empty genders file
    * is acceptable.
    */
-  int len, errcount = 0, fd = -1, rv = -1, line_count = 1, parsed_nodes = 0;
+  int len, errcount = 0, rv = -1, line_count = 1, parsed_nodes = 0;
   char buf[GENDERS_BUFLEN];
 
   if (!filename || !strlen(filename))
     filename = GENDERS_DEFAULT_FILE;
 
-  if ((fd = open(filename, O_RDONLY)) < 0) 
+  FILE *f = fopen(filename, "r");
+  if (!f)
     {
       handle->errnum = GENDERS_ERR_OPEN;
       goto cleanup;
     }
 
   /* parse line by line */
-  while ((len = _readline(handle, fd, buf, GENDERS_BUFLEN)) > 0) 
+  while (fgets(buf, GENDERS_BUFLEN, f))
     {
       int bug_count;
+
+      len = strlen(buf);
+
+      if (buf[len-1] != '\n')
+        {
+          len = -1;
+          handle->errnum = GENDERS_ERR_OVERFLOW;
+          break;
+        }
 
       if ((bug_count = _parse_line(handle, 
 				   numattrs,
@@ -715,6 +696,12 @@ _genders_open_and_parse(genders_t handle,
 	    errcount++;
 	  line_count++;
 	}
+    }
+
+  if (!feof(f))
+    {
+      handle->errnum = GENDERS_ERR_PARSE;
+      goto cleanup;
     }
 
   if (len < 0) 
@@ -756,6 +743,8 @@ _genders_open_and_parse(genders_t handle,
   rv = (debug) ? errcount : 0;
  cleanup:
   /* ignore potential error, just return results */
-  close(fd);
+  if (f)
+    fclose(f);
+
   return rv;
 }
