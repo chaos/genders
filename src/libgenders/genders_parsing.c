@@ -743,6 +743,8 @@ _genders_open_and_parse(genders_t handle,
   rv = (debug) ? errcount : 0;
  cleanup:
   /* ignore potential error, just return results */
-  fclose(f);
+  if (f)
+    fclose(f);
+
   return rv;
 }
