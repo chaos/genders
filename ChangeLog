@@ -3,6 +3,8 @@
 	* src/libgenders/genders_parsing.c: Fix corner case in which lines
 	without newlines are assumed invald.
 
+	* tag genders-1-27-1
+
 2019-06-19  Ben Casses <casses1@llnl.gov>
 
 	* merged PR from @sdm900 for faster parsing

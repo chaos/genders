@@ -7,7 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders],[1.26])
+AC_INIT([genders],[1.27])
 AC_META
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
