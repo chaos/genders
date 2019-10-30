@@ -664,10 +664,11 @@ _genders_open_and_parse(genders_t handle,
 
       len = strlen(buf);
 
-      if (buf[len-1] != '\n')
+      /* -1 for NUL char */
+      if (len >= (GENDERS_BUFLEN - 1))
         {
           len = -1;
-          handle->errnum = GENDERS_ERR_OVERFLOW;
+          handle->errnum = GENDERS_ERR_PARSE;
           break;
         }
 
