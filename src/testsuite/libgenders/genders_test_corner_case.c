@@ -206,7 +206,7 @@ genders_load_data_corner_case(int verbose)
   int errcount = 0;
   genders_load_data_corner_case_t *tests = &genders_load_data_corner_case_tests[0];
 
-  /* Special case for test #3.  It depends on if the default genders file
+  /* Special case tests.  It depends on if the default genders file
    * exists on the system and the tester has access to it.
    */
   {
@@ -214,8 +214,10 @@ genders_load_data_corner_case(int verbose)
 
     if (stat(GENDERS_DEFAULT_FILE, &buf) < 0)
       {
-	tests[3].expected_return_value = -1;
-	tests[3].expected_errnum = GENDERS_ERR_OPEN;
+	tests[4].expected_return_value = -1;
+	tests[4].expected_errnum = GENDERS_ERR_OPEN;
+	tests[5].expected_return_value = -1;
+	tests[5].expected_errnum = GENDERS_ERR_OPEN;
       }
   }
 
@@ -1629,23 +1631,31 @@ genders_parse_corner_case(int verbose)
   int stderr_save;
   int dev_null;
 
-  /* Special case for tests 6,7,18,19.  It depends on if the default
-   * genders file exists on the system and the tester has access to
-   * it.
+  /* Special case for tests.  It depends on if the default genders
+   * file exists on the system and the tester has access to it.
    */
   {
     struct stat buf;
 
     if (stat(GENDERS_DEFAULT_FILE, &buf) < 0)
       {
-	tests[6].expected_return_value = -1;
-	tests[6].expected_errnum = GENDERS_ERR_OPEN;
-	tests[7].expected_return_value = -1;
-	tests[7].expected_errnum = GENDERS_ERR_OPEN;
-	tests[18].expected_return_value = -1;
-	tests[18].expected_errnum = GENDERS_ERR_OPEN;
-	tests[19].expected_return_value = -1;
-	tests[19].expected_errnum = GENDERS_ERR_OPEN;
+	tests[8].expected_return_value = -1;
+	tests[8].expected_errnum = GENDERS_ERR_OPEN;
+	tests[9].expected_return_value = -1;
+	tests[9].expected_errnum = GENDERS_ERR_OPEN;
+	tests[10].expected_return_value = -1;
+	tests[10].expected_errnum = GENDERS_ERR_OPEN;
+	tests[11].expected_return_value = -1;
+	tests[11].expected_errnum = GENDERS_ERR_OPEN;
+
+	tests[24].expected_return_value = -1;
+	tests[24].expected_errnum = GENDERS_ERR_OPEN;
+	tests[25].expected_return_value = -1;
+	tests[25].expected_errnum = GENDERS_ERR_OPEN;
+	tests[26].expected_return_value = -1;
+	tests[26].expected_errnum = GENDERS_ERR_OPEN;
+	tests[27].expected_return_value = -1;
+	tests[27].expected_errnum = GENDERS_ERR_OPEN;
       }
   }
 
