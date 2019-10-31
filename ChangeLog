@@ -1,3 +1,8 @@
+2019-10-31  Albert Chu  <chu11@llnl.gov>
+
+	* src/libgenders/Makefile.am: Add make target for
+	query_parse.tab.c.
+
 2019-10-30  Albert Chu  <chu11@llnl.gov>
 
 	* src/libgenders/genders_parsing.c: Fix corner case in which lines
