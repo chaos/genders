@@ -190,7 +190,7 @@ public class Genders
 
     /**
      * Returns nodes specified via the specified query.  Signify union
-     * with '||', intersection with '&&', * difference with '--', and
+     * with '||', intersection with '&amp;&amp;', * difference with '--', and
      * complement with '~'.  Operations are performed left to
      * right. Parentheses can be used to change the order of
      * operations.
