@@ -17,5 +17,5 @@ AC_DEFUN([AC_LUA_EXTENSIONS],
          ;;
      esac ]
   )
-  AC_MSG_RESULT(${ac_with_lua_extensions=yes})
+  AC_MSG_RESULT(${ac_with_lua_extensions=no})
 ])

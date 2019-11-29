@@ -208,20 +208,23 @@ AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" 
 AC_JAVA_EXTENSIONS
 AM_CONDITIONAL(WITH_JAVA_EXTENSIONS, [test "$ac_with_java_extensions" = "yes"])
 
-
+#
+# Check for lua, which means create commanline conditional
+#
+AC_LUA_EXTENSIONS
+AM_CONDITIONAL(WITH_LUA_EXTENSIONS, [test "$ac_with_lua_extensions" = "yes"])
 #
 # expand lua
 #
-AX_PROG_LUA
+if test "x$ac_with_lua_extensions" = "xyes" ; then
+# beware, the ACTION-IF-NOT-FOUND is not working
+AX_PROG_LUA([5.3],,,:)
+# The test of headers fail, if LUA_VERSION is empty
+if test LUA_VERSION ; then
 AX_LUA_HEADERS
 AX_LUA_LIBS
-
-#
-# Check for lua
-#
-
-AC_LUA_EXTENSIONS
-AM_CONDITIONAL(WITH_LUA_EXTENSIONS, [test "$ac_with_lua_extensions" = "yes"])
+fi
+fi
 
 ##
 # Checks for typedefs, structures, and compiler characteristics.
