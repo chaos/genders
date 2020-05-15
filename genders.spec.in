@@ -9,10 +9,45 @@ Source: %{name}-%{version}.tar.gz
 Requires: perl
 BuildRequires: bison flex
 BuildRequires: perl(ExtUtils::MakeMaker)
-BuildRequires: python
-BuildRequires: python-devel
 BuildRequires: libtool
 BuildRoot: %{_tmppath}/%{name}-%{version}
+
+%{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
+%{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
+%{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
+%{!?_with_java_extensions: %{!?_without_java_extensions: %define _without_java_extensions --without-java-extensions}}
+
+# choose vendor arch by default
+%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_vendor_arch --with-perl-vendor-arch}}
+
+# If python extensions are requested, then build versions
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+
+# Helper variable that tells us how many builds we have to do 
+%global _numbuilds 0
+
+# build for python 2 unless speficially requested otherwise
+%{!?_with_python2: %define _with_python2 1}
+%if 0%{?_with_python2}
+BuildRequires: python2
+BuildRequires: python2-devel
+%global _numbuilds %(expr %{expand: %{_numbuilds}} + 1)
+%endif
+
+# build for python 3 unless speficially requested otherwise
+%{!?_with_python3: %define _with_python3 1}
+%if 0%{?_with_python3}
+BuildRequires: python3
+BuildRequires: python3-devel
+%global _numbuilds %(expr %{expand: %{_numbuilds}} + 1)
+%endif
+
+%else
+# Helper variable that tells us how many builds we have to do 
+%global _numbuilds 1
+%define _with_python2 0
+%define _with_python3 0
+%endif
 
 %description
 Genders is a static cluster configuration database used for cluster
@@ -24,24 +59,56 @@ sense the variations of cluster nodes. By abstracting this information
 into a plain text file, it becomes possible to change the
 configuration of a cluster by modifying only one file.
 
+%if 0%{?_with_python2}
+%package python
+Summary: python2 bindings
+Group: System Environment/Base
+%description python
+python2 bindings
+%endif
+
+%if 0%{?_with_python3}
+%package python%{python3_version_nodots}
+Summary: python3 bindings
+Group: System Environment/Base
+%description python%{python3_version_nodots}
+python3 bindings
+%endif
+
 %package compat
 Summary: Compatibility library 
 Group: System Environment/Base
 %description compat
 genders API that is compatible with earlier releases of genders
 
-%{!?_with_perl_extensions: %{!?_without_perl_extensions: %define _with_perl_extensions --with-perl-extensions}}
-%{!?_with_python_extensions: %{!?_without_python_extensions: %define _with_python_extensions --with-python-extensions}}
-%{!?_with_cplusplus_extensions: %{!?_without_cplusplus_extensions: %define _with_cplusplus_extensions --with-cplusplus-extensions}}
-%{!?_with_java_extensions: %{!?_without_java_extensions: %define _without_java_extensions --without-java-extensions}}
-
-# choose vendor arch by default
-%{!?_with_perl_site_arch: %{!?_with_perl_vendor_arch: %define _with_perl_vendor_arch --with-perl-vendor-arch}}
-
 %prep
-%setup  -q -n %{name}-%{version}
+%if 0%{!?_numbuilds} || 0%{?_numbuilds} == 0
+echo -e "Python extensions were requested, but none will be built.\n\
+Are _with_python2 and _with_python3 both disabled?"
+exit 1
+%endif
+
+%setup -q -n %{name}-%{version}
+
+%if 0%{?_with_python3}
+%{__rm} -rf %{py3dir}
+%{__cp} -a . %{py3dir}
+%endif
 
 %build
+
+%if 0%{?_with_python2} || 0%{!?_with_python3}
+# Ensure that AC_PATH_PROG is set for python2
+export PYTHON=%{__python2}
+# Ensure we change into the build directory
+pushd .
+%else
+# Ensure that AC_PATH_PROG is set for python3
+export PYTHON=%{__python3}
+# Ensure we change into the build directory
+pushd %{py3dir}
+%endif
+
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
     --with-extension-destdir="$RPM_BUILD_ROOT" \
     %{?_with_perl_extensions} \
@@ -57,10 +124,69 @@ genders API that is compatible with earlier releases of genders
     %{?_with_java_extensions} \
     %{?_without_java_extensions}
 make 
+popd
+
+%if 0%{?_numbuilds} && 0%{?_numbuilds} > 1 && 0%{?_with_python3}
+
+# We know that we have one more build *and* that this must be for python3
+
+# Ensure that AC_PATH_PROG is set for python3
+export PYTHON=%{__python3}
+
+# Ensure we change into the build directory
+pushd %{py3dir}
+%configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
+    --with-extension-destdir="$RPM_BUILD_ROOT" \
+    %{?_with_perl_extensions} \
+    %{?_without_perl_extensions} \
+    %{?_with_perl_site_arch} \
+    %{?_without_perl_site_arch} \
+    %{?_with_perl_vendor_arch} \
+    %{?_without_perl_vendor_arch} \
+    %{?_with_python_extensions} \
+    %{?_without_python_extensions} \
+    %{?_with_cplusplus_extensions} \
+    %{?_without_cplusplus_extensions} \
+    %{?_with_java_extensions} \
+    %{?_without_java_extensions}
+make 
+popd
+
+%endif
 
 %install
+
+# Clean up any old remnanants
 rm -rf $RPM_BUILD_ROOT
+
+%if 0%{?_with_python2} || 0%{!?_with_python3}
+# Ensure that AC_PATH_PROG is set for python2
+export PYTHON=%{__python2}
+# Ensure we change into the build directory
+pushd .
+%else
+# Ensure that AC_PATH_PROG is set for python3
+export PYTHON=%{__python3}
+# Ensure we change into the build directory
+pushd %{py3dir}
+%endif
+
 DESTDIR="$RPM_BUILD_ROOT" make install 
+popd
+
+%if 0%{?_numbuilds} && 0%{?_numbuilds} > 1 && 0%{?_with_python3}
+# We know that we have one more build *and* that this must be for python3
+
+# Ensure that AC_PATH_PROG is set for python3
+export PYTHON=%{__python3}
+
+# Ensure we change into the build directory
+pushd %{py3dir}
+DESTDIR="$RPM_BUILD_ROOT" make install
+popd
+
+%endif
+
 
 %files
 %defattr(-,root,root)
@@ -88,9 +214,6 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_mandir}/man3/Genders*
 %{_perldir}/*
 %endif
-%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
-%{_exec_prefix}/lib*/python*
-%endif
 %if %{?_with_cplusplus_extensions:1}%{!?_with_cplusplus_extensions:0}
 %{_libdir}/libgendersplusplus.*
 %endif
@@ -104,4 +227,15 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 %{_mandir}/man3/gendlib*
 %{_prefix}/lib/genders/*
 
+%if 0%{?_with_python2}
+%files python
+%defattr(-,root,root)
+%{_libdir}/python2*
+%endif
 
+
+%if 0%{?_with_python3}
+%files python%{python3_version_nodots}
+%defattr(-,root,root)
+%{_libdir}/python3*
+%endif
