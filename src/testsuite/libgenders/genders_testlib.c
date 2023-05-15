@@ -696,7 +696,7 @@ genders_return_value_errnum_attrval_list_check(char *funcname,
     }
 
   /* Step 2: For each expected attr, find the index of the attr in the
-   * attrlist and compare it to the approprite val.
+   * attrlist and compare it to the appropriate val.
    */
   if (err == 0)
     {

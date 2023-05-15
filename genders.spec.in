@@ -26,7 +26,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}
 # Helper variable that tells us how many builds we have to do 
 %global _numbuilds 0
 
-# build for python 2 unless speficially requested otherwise
+# build for python 2 unless specifically requested otherwise
 %{!?_with_python2: %define _with_python2 1}
 %if 0%{?_with_python2}
 BuildRequires: python2
@@ -34,7 +34,7 @@ BuildRequires: python2-devel
 %global _numbuilds %(expr %{expand: %{_numbuilds}} + 1)
 %endif
 
-# build for python 3 unless speficially requested otherwise
+# build for python 3 unless specifically requested otherwise
 %{!?_with_python3: %define _with_python3 1}
 %if 0%{?_with_python3}
 BuildRequires: python3

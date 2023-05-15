@@ -28,7 +28,7 @@ This package includes:
     a genders database.  See nodeattr(1).
 
 * gendlib.pl
-  - Genders Perl API for backwards compatability.  For the most part,
+  - Genders Perl API for backwards compatibility.  For the most part,
     this is used exclusively at Lawrence Livermore National
     Laboratory.  This is probably of no use to anyone else.  See
     gendlib(3).

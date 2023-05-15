@@ -85,13 +85,13 @@ Genders::get_clusters()
 .IP
 Return a list with the local cluster name as the first and only
 element.  get_clusters() returns a list instead of a scalar for
-backwards compatability.  If the local cluster name is not known, null
+backwards compatibility.  If the local cluster name is not known, null
 is returned.
 .LP
 Genders::gendexp($exp, [$node])
 .IP
 Evaluate expression involving genders attributes and return the result
-of the evaluation.  Any legal perl expresion using numeric constants,
+of the evaluation.  Any legal perl expression using numeric constants,
 genders attributes (which are converted into $variables), and the following
 operators is valid:  !, ||, &&, *, +, -, /.  If $node is not specified,
 assume the local host.
