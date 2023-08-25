@@ -104,7 +104,7 @@ Libgenders - Perl extension for libgenders
 =head1 DESCRIPTION
 
 This package provides a perl interface to the genders C API (see
-libgenders(3)).  The perl interface is simliar to the genders C API,
+libgenders(3)).  The perl interface is similar to the genders C API,
 with some necessary changes due to the inherent differences between C
 and perl.  Some of the functions from the C API cannot be accessed via
 this perl interface, some new functions were created, the behavior of

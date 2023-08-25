@@ -185,7 +185,7 @@ _insert_attr(genders_t handle,
 }
 
 /* 
- * _attr_node_processsing
+ * _attr_node_processing
  *
  * Determine if an attr in the attrvallist already exists for the
  * node.  If not insert into the attr_index and node attrlist_index.
@@ -195,12 +195,12 @@ _insert_attr(genders_t handle,
  * If line_num == 0, returns 0 on success, -1 on error
  */
 static int
-_attr_node_processsing(genders_t handle, 
-                       genders_node_t n, 
-		       genders_attrvals_container_t avc,
-                       hash_t *attr_index,
-                       int line_num,
-                       FILE *stream)
+_attr_node_processing(genders_t handle, 
+                      genders_node_t n, 
+                      genders_attrvals_container_t avc,
+                      hash_t *attr_index,
+                      int line_num,
+                      FILE *stream)
 {
   ListIterator attrvals_itr = NULL;
   List tmpattrlist = NULL;
@@ -574,12 +574,12 @@ _parse_line(genders_t handle,
       
       if (avc) 
 	{
-	  if ((rv = _attr_node_processsing(handle,
-                                           n,
-                                           avc,
-                                           attr_index,
-                                           line_num,
-                                           stream)) != 0)
+	  if ((rv = _attr_node_processing(handle,
+                                          n,
+                                          avc,
+                                          attr_index,
+                                          line_num,
+                                          stream)) != 0)
 	    goto cleanup;
 
           __list_append(n->attrlist, avc);

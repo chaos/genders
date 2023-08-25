@@ -201,7 +201,7 @@ int genders_getmaxvallen(genders_t handle);
  *
  * Allocate an array of character strings to store node names in.
  *
- * Returns number of elements the list can store on succcess, -1 on failure
+ * Returns number of elements the list can store on success, -1 on failure
  */
 int genders_nodelist_create(genders_t handle, char ***nodelist);
 
@@ -228,7 +228,7 @@ int genders_nodelist_destroy(genders_t handle, char **nodelist);
  *
  * Allocate an array of character strings to store attribute names in.
  *
- * Returns number of elements the list can store on succcess, -1 on failure
+ * Returns number of elements the list can store on success, -1 on failure
  */
 int genders_attrlist_create(genders_t handle, char ***attrlist);
 
@@ -255,7 +255,7 @@ int genders_attrlist_destroy(genders_t handle, char **attrlist);
  *
  * Allocate an array of character strings to store values in.
  *
- * Returns number of elements the list can store on succcess, -1 on failure
+ * Returns number of elements the list can store on success, -1 on failure
  */
 int genders_vallist_create(genders_t handle, char ***vallist);
 

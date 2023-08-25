@@ -228,7 +228,7 @@ _build_comma_separated_string(int maxitemlen, char **itemlist, int itemlistlen)
   int i;
 
   /* achu: As far as I can tell, there is no (present) way to
-   * (reasonbly and easily) return a Python list instead of a single
+   * (reasonably and easily) return a Python list instead of a single
    * object.  If there is a way, I can't find it and/or it's advanced Python stuff.
    *
    * Until I learn of a way, I'll return a giant comma separated
