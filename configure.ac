@@ -79,7 +79,7 @@ AM_PROG_LEX
 AC_PROG_YACC
 AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG([PERL], [perl])
-AC_PATH_PROG([PYTHON], [python])
+AC_PATH_PROG([PYTHON], [python3])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
 AC_PATH_PROG([JAVAC], [javac])
 AC_PATH_PROG([JAVAH], [javah])
