@@ -20,5 +20,5 @@ AC_DEFUN([AC_JAVA_EXTENSIONS],
          ;;
      esac ]
   )
-  AC_MSG_RESULT(${ac_with_java_extensions=yes})
+  AC_MSG_RESULT(${ac_with_java_extensions=no})
 ])
