@@ -25,7 +25,7 @@ AM_MAINTAINER_MODE
 # libgenders versioning
 #
 # If the library source code has changed at all since the last update,
-# then increment c:r: c:r+1:).                                                                                     
+# then increment c:r: c:r+1:).
 #
 # If any interfaces have been added, removed, or changed since the
 # last update, increment current, and set revision to 0.
@@ -33,9 +33,9 @@ AM_MAINTAINER_MODE
 # If any interfaces have been added since the last public release,
 # then increment age.
 #
-# If any interfaces have been removed or changed since the last public                                                
+# If any interfaces have been removed or changed since the last public
 # release, then set age to 0.
-#                                               
+#
 LIBGENDERS_CURRENT=3
 LIBGENDERS_REVISION=3
 LIBGENDERS_AGE=3
@@ -79,7 +79,7 @@ AM_PROG_LEX
 AC_PROG_YACC
 AM_CONDITIONAL(WITH_GNU_LD, test "$with_gnu_ld" = "yes")
 AC_PATH_PROG([PERL], [perl])
-AC_PATH_PROG([PYTHON], [python])
+AC_PATH_PROG([PYTHON], [python3])
 AC_PATH_PROG([POD2MAN], [pod2man], [/usr/bin/pod2man], [$PATH:/usr/perl5/bin/])
 AC_PATH_PROG([JAVAC], [javac])
 AC_PATH_PROG([JAVAH], [javah])
@@ -107,7 +107,7 @@ AC_ARG_WITH(force-yacc,
        ac_force_yacc=no
        ;;
    esac ]
-) 
+)
 AC_MSG_RESULT(${ac_force_yacc=no})
 if test "$ac_force_yacc" = yes; then
   YACC=yacc
@@ -131,7 +131,7 @@ AC_ARG_WITH(non-shortened-hostnames,
        ac_non_shortened_hostnames=no
        ;;
    esac ]
-) 
+)
 AC_MSG_RESULT(${ac_non_shortened_hostnames=no})
 
 if test x"${ac_non_shortened_hostnames}" = xyes; then
