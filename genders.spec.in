@@ -1,6 +1,6 @@
-Name:    @PROJECT@ 
+Name:    @PACKAGE@ 
 Version: @VERSION@
-Release: @RELEASE@
+Release: 1
 Summary: Static cluster configuration database
 URL: https://github.com/chaos/genders
 Group: System Environment/Base
