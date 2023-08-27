@@ -7,12 +7,12 @@ AC_DEFUN([AC_GENDERS_FILE],
   GENDERS_DEFAULT_FILE="\"/etc/genders\""
   AC_MSG_CHECKING([for genders default file path])
   AC_ARG_WITH([genders-file],
-    AS_HELP_STRING([--with-genders-file=PATH], 
+    AS_HELP_STRING([--with-genders-file=PATH],
                    [define default genders file]),
     [ case "$withval" in
         no)  ;;
         yes) ;;
-        *)   GENDERS_DEFAULT_FILE="\"$withval\"" 
+        *)   GENDERS_DEFAULT_FILE="\"$withval\""
       esac
     ]
   )

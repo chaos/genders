@@ -127,12 +127,12 @@ Libgenders_load_data(Libgenders *self, PyObject *args)
     _genders_exception_check(self);
     goto cleanup;
   }
-  
+
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
-  
+
  cleanup:
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -254,7 +254,7 @@ _build_comma_separated_string(int maxitemlen, char **itemlist, int itemlistlen)
 
   if (!(rv = Py_BuildValue("s", stringbuf)))
     goto cleanup;
-  
+
  cleanup:
   free(stringbuf);
   return rv;
@@ -301,12 +301,12 @@ Libgenders_getnodes(Libgenders *self, PyObject *args)
     if (!(rv = Py_BuildValue("z", NULL)))
       goto cleanup;
   }
-  
+
  cleanup:
   errnum = genders_errnum(self->gh);
   genders_nodelist_destroy(self->gh, nodelist);
   genders_set_errnum(self->gh, errnum);
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -353,12 +353,12 @@ Libgenders_getattr(Libgenders *self, PyObject *args)
     if (!(rv = Py_BuildValue("z", NULL)))
       goto cleanup;
   }
-  
+
  cleanup:
   errnum = genders_errnum(self->gh);
   genders_attrlist_destroy(self->gh, attrlist);
   genders_set_errnum(self->gh, errnum);
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -399,12 +399,12 @@ Libgenders_getattr_all(Libgenders *self)
     if (!(rv = Py_BuildValue("z", NULL)))
       goto cleanup;
   }
-  
+
  cleanup:
   errnum = genders_errnum(self->gh);
   genders_attrlist_destroy(self->gh, attrlist);
   genders_set_errnum(self->gh, errnum);
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -461,7 +461,7 @@ Libgenders_getattrval(Libgenders *self, PyObject *args)
     PyErr_NoMemory();
     goto cleanup;
   }
- 
+
   memset(valbuf, '\0', maxvallen + 1);
 
   if ((ret = genders_testattr(self->gh, node, attr, valbuf, maxvallen + 1)) < 0) {
@@ -477,10 +477,10 @@ Libgenders_getattrval(Libgenders *self, PyObject *args)
     if (!(rv = Py_BuildValue("z", NULL)))
       goto cleanup;
   }
-  
+
  cleanup:
   free(valbuf);
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -525,7 +525,7 @@ Libgenders_testattrval(Libgenders *self, PyObject *args)
 
   if (!(rv = Py_BuildValue("i", ret)))
     goto cleanup;
-  
+
  cleanup:
   return rv;
 }
@@ -644,7 +644,7 @@ Libgenders_query(Libgenders *self, PyObject *args)
 
   if (nodelen) {
     int maxnodelen;
-    
+
     if ((maxnodelen = genders_getmaxnodelen(self->gh)) < 0) {
       _genders_exception_check(self);
       goto cleanup;
@@ -659,12 +659,12 @@ Libgenders_query(Libgenders *self, PyObject *args)
     if (!(rv = Py_BuildValue("z", NULL)))
       goto cleanup;
   }
-  
+
  cleanup:
   errnum = genders_errnum(self->gh);
   genders_nodelist_destroy(self->gh, nodelist);
   genders_set_errnum(self->gh, errnum);
-  return rv; 
+  return rv;
 }
 
 static PyObject *
@@ -880,7 +880,7 @@ PyInit_libgenders(void)
 #endif
 
 PyMODINIT_FUNC
-initlibgenders(void) 
+initlibgenders(void)
 #endif
 {
   PyObject* m;

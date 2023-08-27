@@ -52,7 +52,7 @@ zend_module_entry genders_module_entry = {
 	genders_functions,
 	PHP_MINIT(genders),
 	PHP_MSHUTDOWN(genders),
-	PHP_RINIT(genders),	
+	PHP_RINIT(genders),
 	PHP_RSHUTDOWN(genders),
 	PHP_MINFO(genders),
 	NO_VERSION_YET,

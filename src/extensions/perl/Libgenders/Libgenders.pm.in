@@ -6,20 +6,20 @@
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
 #  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
 #  UCRL-CODE-2003-004.
-#  
+#
 #  This file is part of Genders, a cluster configuration database.
 #  For details, see <http://www.llnl.gov/linux/genders/>.
-#  
+#
 #  Genders is free software; you can redistribute it and/or modify it under
 #  the terms of the GNU General Public License as published by the Free
 #  Software Foundation; either version 2 of the License, or (at your option)
 #  any later version.
-#  
+#
 #  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
 #  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 #  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 #  details.
-#  
+#
 #  You should have received a copy of the GNU General Public License along
 #  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
@@ -98,7 +98,7 @@ Libgenders - Perl extension for libgenders
 
  $handle->genders_query([$query])
  $handle->genders_testquery($query, [$node])
- 
+
  $handle->genders_parse([$filename]);
 
 =head1 DESCRIPTION
@@ -142,7 +142,7 @@ Returns the error code most recently set.
 
 =item B<$handle-E<gt>genders_strerror($errnum)>
 
-Returns a string describing the error code $errnum.  
+Returns a string describing the error code $errnum.
 
 =item B<$handle-E<gt>genders_errormsg()>
 
@@ -275,7 +275,7 @@ success, -1 on error.
 =head2 Error Codes/Constants
 
 The same error codes and constants listed in /usr/include/genders.h
-can be accessed through the following functions: 
+can be accessed through the following functions:
 
  Libgenders::GENDERS_ERR_SUCCESS
  Libgenders::GENDERS_ERR_NULLHANDLE

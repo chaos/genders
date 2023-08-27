@@ -36,7 +36,7 @@ typedef enum {
   GENDERS_HANDLE_UNLOADED = 1,
   GENDERS_HANDLE_UNLOADED_DESTROYED = 2,
   GENDERS_HANDLE_LOADED = 3,
-  GENDERS_HANDLE_LOADED_DESTROYED = 4 
+  GENDERS_HANDLE_LOADED_DESTROYED = 4
 } genders_handle_type_t;
 
 typedef enum {
@@ -125,21 +125,21 @@ int genders_string_check(char *funcname,
 			 int verbose);
 
 int genders_return_value_check(char *funcname,
-			       int num, 
+			       int num,
 			       int expected_return_value,
 			       int ret,
 			       char *msg,
 			       int verbose);
 
 int genders_errnum_check(char *funcname,
-			 int num, 
+			 int num,
 			 int expected_errnum,
 			 int errnum,
 			 char *msg,
 			 int verbose);
 
 int genders_return_value_errnum_check(char *funcname,
-				      int num, 
+				      int num,
 				      int expected_return_value,
 				      int expected_errnum,
 				      int return_value,
@@ -148,7 +148,7 @@ int genders_return_value_errnum_check(char *funcname,
 				      int verbose);
 
 int genders_return_value_pointer_errnum_check(char *funcname,
-					      int num, 
+					      int num,
 					      int expected_return_value,
 					      int expected_errnum,
 					      void *return_value,
@@ -157,7 +157,7 @@ int genders_return_value_pointer_errnum_check(char *funcname,
 					      int verbose);
 
 int genders_return_value_errnum_string_check(char *funcname,
-					     int num, 
+					     int num,
 					     int expected_return_value,
 					     int expected_errnum,
 					     char *expected_string,
@@ -168,7 +168,7 @@ int genders_return_value_errnum_string_check(char *funcname,
 					     int verbose);
 
 int genders_return_value_errnum_list_check(char *funcname,
-					   int num, 
+					   int num,
 					   int expected_return_value,
 					   int expected_errnum,
 					   char *expected_list[],
@@ -182,7 +182,7 @@ int genders_return_value_errnum_list_check(char *funcname,
 					   int verbose);
 
 int genders_return_value_errnum_attrval_list_check(char *funcname,
-						   int num, 
+						   int num,
 						   int expected_return_value,
 						   int expected_errnum,
 						   char *expected_attrlist[],

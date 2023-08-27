@@ -127,27 +127,27 @@
 
 #define GENDERS_MAX(x,y) ((x > y) ? x : y)
 
-/* 
- * List API Helper Functions 
+/*
+ * List API Helper Functions
  */
 
-/* 
+/*
  * _genders_list_is_all
  *
  * Returns 1
  */
-int _genders_list_is_all(void *x, void *key); 
+int _genders_list_is_all(void *x, void *key);
 
-/* 
+/*
  * _genders_list_is_str
  *
  * x points to a string
- *  
+ *
  * Returns 1 if string x is equal to key, 0 otherwise
  */
-int _genders_list_is_str(void *x, void *key); 
+int _genders_list_is_str(void *x, void *key);
 
-/* 
+/*
  * _genders_list_is_attr_in_attrvals
  *
  * x points to a genders_attrval_t
@@ -156,32 +156,32 @@ int _genders_list_is_str(void *x, void *key);
  */
 int _genders_list_is_attr_in_attrvals(void *x, void *key);
 
-/* 
+/*
  * _genders_list_free_genders_node
  *
  * Free genders_node_t structure
  */
-void _genders_list_free_genders_node(void *x); 
+void _genders_list_free_genders_node(void *x);
 
-/* 
+/*
  * _genders_list_free_genders_attrval
  *
  * Free genders_attrval_t structure
  */
-void _genders_list_free_genders_attrval(void *x); 
+void _genders_list_free_genders_attrval(void *x);
 
-/* 
+/*
  * _genders_list_free_genders_attrvalllist
  *
  * Free list of genders_attrval_t structures
  */
 void _genders_list_free_attrvallist(void *x);
 
-/* 
- * Common helper functions 
+/*
+ * Common helper functions
  */
 
-/*  
+/*
  * _genders_handle_error_check
  *
  * Check if handle is proper
@@ -190,7 +190,7 @@ void _genders_list_free_attrvallist(void *x);
  */
 int _genders_handle_error_check(genders_t handle);
 
-/* 
+/*
  * _genders_unloaded_handle_error_check
  *
  * Check if handle is proper and unloaded
@@ -199,7 +199,7 @@ int _genders_handle_error_check(genders_t handle);
  */
 int _genders_unloaded_handle_error_check(genders_t handle);
 
-/* 
+/*
  * _genders_loaded_handle_error_check
  *
  * Check if handle is proper and loaded
@@ -208,46 +208,46 @@ int _genders_unloaded_handle_error_check(genders_t handle);
  */
 int _genders_loaded_handle_error_check(genders_t handle);
 
-/* 
+/*
  * _genders_put_in_array
  *
  * Put str in list, doing appropriate checks
  *
  * Return 0 on success, -1 on error
  */
-int _genders_put_in_array(genders_t handle, 
-			  char *str, 
-			  char **list, 
-			  int index, 
+int _genders_put_in_array(genders_t handle,
+			  char *str,
+			  char **list,
+			  int index,
 			  int len);
 
-/* 
+/*
  * _genders_get_valptr
  *
  * Return av->val or handle->valbuf depending on if substitution if required.
  *
  * Return 0 on success, -1 on error
  */
-int _genders_get_valptr(genders_t handle, 
-			genders_node_t n, 
-			genders_attrval_t av, 
+int _genders_get_valptr(genders_t handle,
+			genders_node_t n,
+			genders_attrval_t av,
 			char **val,
 			int *subst_occurred);
 
-/* 
+/*
  * _genders_find_attrval
  *
  * Find genders_attrval_t with attr or attr=val in a node
  *
  * Return 0 on success, -1 on error
  */
-int _genders_find_attrval(genders_t handle, 
-			  genders_node_t n, 
-			  const char *attr, 
+int _genders_find_attrval(genders_t handle,
+			  genders_node_t n,
+			  const char *attr,
 			  const char *val,
 			  genders_attrval_t *avptr);
 
-/* 
+/*
  * _genders_rehash
  *
  * Rehash the specified hash into a larger hash.  Both hash_ptr and

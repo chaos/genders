@@ -34,7 +34,7 @@
 #include "hash.h"
 #include "list.h"
 
-/* 
+/*
  * _genders_open_and_parse
  *
  * Common file open and file parsing function for genders_load_data

@@ -49,7 +49,7 @@ static int functionality_tests = 0;
 static void
 _usage(void)
 {
-  fprintf(stderr, 
+  fprintf(stderr,
 	  "Usage: genders_test [OPTIONS]\n"
 	  "-h        output usage\n"
 	  "-v        verbose output (can be used multiple times)\n"
@@ -60,7 +60,7 @@ _usage(void)
   exit(1);
 }
 
-static void 
+static void
 _cmdline_parse(int argc, char **argv)
 {
   int c;
@@ -100,7 +100,7 @@ _corner_case(GendersCornerCaseFunc func, char *funcname)
   if (verbose > 2)
     {
       fprintf(stderr, "***************************************************\n");
-      fprintf(stderr, "* Testing \"%s\" corner cases\n", funcname);                
+      fprintf(stderr, "* Testing \"%s\" corner cases\n", funcname);
       fprintf(stderr, "***************************************************\n");
     }
 
@@ -118,7 +118,7 @@ static int
 _test_corner_cases(void)
 {
   int errtotal = 0;
-  
+
   errtotal += _corner_case(genders_handle_create_corner_case, "genders_handle_create");
   errtotal += _corner_case(genders_handle_destroy_corner_case, "genders_handle_destroy");
   errtotal += _corner_case(genders_load_data_corner_case, "genders_load_data");
@@ -147,14 +147,14 @@ _test_corner_cases(void)
   errtotal += _corner_case(genders_getnodes_corner_case, "genders_getnodes");
   errtotal += _corner_case(genders_getattr_corner_case, "genders_getattr");
   errtotal += _corner_case(genders_getattr_all_corner_case, "genders_getattr_all");
-  errtotal += _corner_case(genders_testattr_corner_case, "genders_testattr"); 
+  errtotal += _corner_case(genders_testattr_corner_case, "genders_testattr");
   errtotal += _corner_case(genders_testattrval_corner_case, "genders_testattrval");
   errtotal += _corner_case(genders_isnode_corner_case, "genders_isnode");
   errtotal += _corner_case(genders_isattr_corner_case, "genders_isattr");
   errtotal += _corner_case(genders_isattrval_corner_case, "genders_isattrval");
   errtotal += _corner_case(genders_index_attrvals_corner_case, "genders_index_attrvals");
   errtotal += _corner_case(genders_query_corner_case, "genders_query");
-  errtotal += _corner_case(genders_testquery_corner_case, "genders_testquery"); 
+  errtotal += _corner_case(genders_testquery_corner_case, "genders_testquery");
   errtotal += _corner_case(genders_parse_corner_case, "genders_parse");
   errtotal += _corner_case(genders_set_errnum_corner_case, "genders_set_errnum");
   errtotal += _corner_case(genders_copy_corner_case, "genders_copy");
@@ -170,7 +170,7 @@ _functionality(GendersCornerCaseFunc func, char *funcname)
   if (verbose > 2)
     {
       fprintf(stderr, "***************************************************\n");
-      fprintf(stderr, "* Testing \"%s\" functionality\n", funcname);                
+      fprintf(stderr, "* Testing \"%s\" functionality\n", funcname);
       fprintf(stderr, "***************************************************\n");
     }
 
@@ -188,7 +188,7 @@ static int
 _test_functionality(void)
 {
   int errtotal = 0;
-  
+
   errtotal += _functionality(genders_handle_create_functionality, "genders_handle_create");
   errtotal += _functionality(genders_handle_destroy_functionality, "genders_handle_destroy");
   errtotal += _functionality(genders_load_data_functionality, "genders_load_data");
@@ -217,7 +217,7 @@ _test_functionality(void)
   errtotal += _functionality(genders_getnodes_functionality, "genders_getnodes");
   errtotal += _functionality(genders_getattr_functionality, "genders_getattr");
   errtotal += _functionality(genders_getattr_all_functionality, "genders_getattr_all");
-  errtotal += _functionality(genders_testattr_functionality, "genders_testattr"); 
+  errtotal += _functionality(genders_testattr_functionality, "genders_testattr");
   errtotal += _functionality(genders_testattrval_functionality, "genders_testattrval");
   errtotal += _functionality(genders_isnode_functionality, "genders_isnode");
   errtotal += _functionality(genders_isattr_functionality, "genders_isattr");
@@ -247,7 +247,7 @@ main(int argc, char **argv)
 	fprintf(stderr, "Total Corner Case Failures: %d\n", errcount);
       errtotal += errcount;
     }
-  
+
   if (all_tests || functionality_tests)
     {
       errcount = _test_functionality();
@@ -257,8 +257,8 @@ main(int argc, char **argv)
       errtotal += errcount;
     }
 
-  if (all_tests 
-      || corner_case_tests 
+  if (all_tests
+      || corner_case_tests
       || functionality_tests)
     {
       if ((verbose && errtotal)

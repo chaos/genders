@@ -29,7 +29,7 @@
 
 #include "genders_test_query_tests.h"
 
-char *genders_query_parse_error_tests[] = 
+char *genders_query_parse_error_tests[] =
   {
     "~",
     "(",
@@ -51,8 +51,8 @@ char *genders_query_parse_error_tests[] =
 genders_query_tests_t genders_query_functionality_tests_query_1_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"attr1",
@@ -129,7 +129,7 @@ genders_query_tests_t genders_query_functionality_tests_query_1_tests =
 	{"node2", "node4", "node6", "node8", NULL},
 	4,
       },
-      /* 
+      /*
        * Empty sets
        */
       {
@@ -253,8 +253,8 @@ genders_query_tests_t genders_query_functionality_tests_query_1_tests =
 	0,
       },
 
-      /* 
-       * Complex tests - all nodes 
+      /*
+       * Complex tests - all nodes
        */
       /* binary operations */
       {
@@ -399,8 +399,8 @@ genders_query_tests_t genders_query_functionality_tests_query_1_tests =
 	{"node1", "node2", "node3", "node4", "node5", "node6", "node7", "node8", NULL},
 	8,
       },
-      /* 
-       * Complex tests - half nodes 
+      /*
+       * Complex tests - half nodes
        */
       {
 	"attr1&&attr3",
@@ -716,7 +716,7 @@ genders_query_tests_t genders_query_functionality_tests_query_1_tests =
 	"attr2=val2&&attr10=val10",
 	{"node2", "node4", "node6", "node8", NULL},
 	4,
-      }, 
+      },
       {
 	"attr1--attr7",
 	{"node2", "node4", "node6", "node8", NULL},
@@ -877,19 +877,19 @@ genders_query_tests_t genders_query_functionality_tests_query_1_tests =
     }
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_1 = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_1 =
   {
     "testdatabases/genders.query_1",
     &genders_query_functionality_tests_query_1_tests,
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_1_comma = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_1_comma =
   {
     "testdatabases/genders.query_1_comma",
     &genders_query_functionality_tests_query_1_tests,
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_1_hostrange = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_1_hostrange =
   {
     "testdatabases/genders.query_1_hostrange",
     &genders_query_functionality_tests_query_1_tests,
@@ -897,9 +897,9 @@ genders_query_functionality_tests_t genders_query_functionality_tests_query_1_ho
 
 genders_query_tests_t genders_query_functionality_tests_query_2_tests =
   {
-    { 
-      /* 
-       * Simple tests 
+    {
+      /*
+       * Simple tests
        */
       {
 	"attr1",
@@ -996,7 +996,7 @@ genders_query_tests_t genders_query_functionality_tests_query_2_tests =
 	{"node8", NULL},
 	1,
       },
-      /* 
+      /*
        * Empty sets
        */
       {
@@ -1219,8 +1219,8 @@ genders_query_tests_t genders_query_functionality_tests_query_2_tests =
 	{NULL},
 	0,
       },
-      /* 
-       * Complex tests - all nodes 
+      /*
+       * Complex tests - all nodes
        */
       {
 	"attr2=valB||attr2=valC",
@@ -1608,8 +1608,8 @@ genders_query_tests_t genders_query_functionality_tests_query_2_tests =
 	{"node1", "node2", "node3", "node4", "node5", "node6", "node7", "node8", NULL},
 	8,
       },
-      /* 
-       * Complex tests - half nodes 
+      /*
+       * Complex tests - half nodes
        */
       {
 	"attr3=valD||attr3=valE",
@@ -2081,8 +2081,8 @@ genders_query_tests_t genders_query_functionality_tests_query_2_tests =
 	{"node2", "node4", "node6", "node8", NULL},
 	4,
       },
-      /* 
-       * Complex tests - quarter nodes 
+      /*
+       * Complex tests - quarter nodes
        */
       {
 	"attr1&&attr3=valD",
@@ -2432,19 +2432,19 @@ genders_query_tests_t genders_query_functionality_tests_query_2_tests =
     }
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_2 = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_2 =
   {
     "testdatabases/genders.query_2",
     &genders_query_functionality_tests_query_2_tests,
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_2_comma = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_2_comma =
   {
     "testdatabases/genders.query_2_comma",
     &genders_query_functionality_tests_query_2_tests,
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_2_hostrange = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_2_hostrange =
   {
     "testdatabases/genders.query_2_hostrange",
     &genders_query_functionality_tests_query_2_tests,
@@ -2453,8 +2453,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_query_2_ho
 genders_query_tests_t genders_query_functionality_tests_query_special_chars_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"attr%percent",
@@ -2590,7 +2590,7 @@ genders_query_tests_t genders_query_functionality_tests_query_special_chars_test
     }
   };
 
-genders_query_functionality_tests_t genders_query_functionality_tests_query_special_chars = 
+genders_query_functionality_tests_t genders_query_functionality_tests_query_special_chars =
   {
     "testdatabases/genders.query_special_chars",
     &genders_query_functionality_tests_query_special_chars_tests,
@@ -2599,8 +2599,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_query_spec
 genders_query_tests_t genders_query_functionality_tests_bugzilla414_1_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"a&&b",
@@ -2624,8 +2624,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla41
 genders_query_tests_t genders_query_functionality_tests_bugzilla414_2_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"~b",
@@ -2649,8 +2649,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla41
 genders_query_tests_t genders_query_functionality_tests_bugzilla414_3_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"~b",
@@ -2674,8 +2674,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla41
 genders_query_tests_t genders_query_functionality_tests_bugzilla414_4_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"a&&b",
@@ -2699,8 +2699,8 @@ genders_query_functionality_tests_t genders_query_functionality_tests_bugzilla41
 genders_query_tests_t genders_query_functionality_tests_bugzilla414_5_tests =
   {
     {
-      /* 
-       * Simple tests 
+      /*
+       * Simple tests
        */
       {
 	"a&&b",

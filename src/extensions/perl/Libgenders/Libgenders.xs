@@ -38,149 +38,149 @@
 
 #include <genders.h>
 
-MODULE = Libgenders             PACKAGE = Libgenders            
+MODULE = Libgenders             PACKAGE = Libgenders
 
 PROTOTYPES: ENABLE
 
 int
 GENDERS_ERR_SUCCESS (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_SUCCESS;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_NULLHANDLE (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_NULLHANDLE;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_OPEN (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_OPEN;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_READ (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_READ;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_PARSE (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_PARSE;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_NOTLOADED (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_NOTLOADED;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_ISLOADED (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_ISLOADED;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_OVERFLOW (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_OVERFLOW;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_PARAMETERS (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_PARAMETERS;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_NULLPTR (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_NULLPTR;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_NOTFOUND (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_NOTFOUND;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_OUTMEM (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_OUTMEM;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_SYNTAX (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_SYNTAX;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_MAGIC (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_MAGIC;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_INTERNAL (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_INTERNAL;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 GENDERS_ERR_ERRNUMRANGE (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_ERR_ERRNUMRANGE;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
-char * 
+char *
 GENDERS_DEFAULT_FILE (sv=&PL_sv_undef)
-    SV *sv    
+    SV *sv
     CODE:
         RETVAL = GENDERS_DEFAULT_FILE;
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 void
 DESTROY(handle)
-    genders_t handle    
+    genders_t handle
     CODE:
        (void)genders_handle_destroy(handle);
 
@@ -211,7 +211,7 @@ genders_errnum(handle)
 
 char *
 genders_strerror(handle, errnum)
-    genders_t handle    
+    genders_t handle
     int errnum
     CODE:
         RETVAL = genders_strerror(errnum);
@@ -250,21 +250,21 @@ genders_getnumattrs(handle)
         RETVAL
 
 SV *
-genders_getnodename(handle) 
+genders_getnodename(handle)
     genders_t handle
     PREINIT:
         int len;
         char *buf = NULL;
     CODE:
-        if ((len = genders_getmaxnodelen(handle)) < 0) 
+        if ((len = genders_getmaxnodelen(handle)) < 0)
             goto handle_error;
 
-        if (!(buf = (char *)malloc(len+1))) 
+        if (!(buf = (char *)malloc(len+1)))
             goto handle_error;
 
         memset(buf, '\0', len+1);
 
-        if (genders_getnodename(handle, buf, len+1) < 0) 
+        if (genders_getnodename(handle, buf, len+1) < 0)
             goto handle_error;
 
         RETVAL = newSVpv(buf, 0);
@@ -281,15 +281,15 @@ genders_getnodename(handle)
         RETVAL
 
 AV *
-genders_getnodes(handle, attr=NULL, val=NULL) 
+genders_getnodes(handle, attr=NULL, val=NULL)
     genders_t handle
     char *attr
     char *val
     PREINIT:
         int len, num, errnum, i;
-        char **nlist = NULL; 
+        char **nlist = NULL;
     CODE:
-        if ((len = genders_nodelist_create(handle, &nlist)) < 0) 
+        if ((len = genders_nodelist_create(handle, &nlist)) < 0)
             goto handle_error;
 
         if ((num = genders_getnodes(handle, nlist, len, attr, val)) < 0)
@@ -298,7 +298,7 @@ genders_getnodes(handle, attr=NULL, val=NULL)
         RETVAL = newAV();
         for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(nlist[i], 0));
-        
+
         if (genders_nodelist_destroy(handle, nlist) < 0)
             goto handle_error;
 
@@ -316,7 +316,7 @@ genders_getnodes(handle, attr=NULL, val=NULL)
 
         the_end:
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 AV *
 genders_getattr(handle, node=NULL)
@@ -324,15 +324,15 @@ genders_getattr(handle, node=NULL)
     char *node
     PREINIT:
         int len, num, errnum, i;
-        char **alist = NULL; 
-        char **vlist = NULL; 
+        char **alist = NULL;
+        char **vlist = NULL;
         AV *attrs;
         AV *vals;
     CODE:
-        if ((len = genders_attrlist_create(handle, &alist)) < 0) 
+        if ((len = genders_attrlist_create(handle, &alist)) < 0)
             goto handle_error;
 
-        if ((len = genders_vallist_create(handle, &vlist)) < 0) 
+        if ((len = genders_vallist_create(handle, &vlist)) < 0)
             goto handle_error;
 
         if ((num = genders_getattr(handle, alist, vlist, len, node)) < 0)
@@ -345,11 +345,11 @@ genders_getattr(handle, node=NULL)
         vals = newAV();
         for (i = 0; i < num; i++)
             av_push(vals, newSVpv(vlist[i], 0));
-        
+
         RETVAL = newAV();
         av_push(RETVAL, newRV_noinc((SV *)attrs));
         av_push(RETVAL, newRV_noinc((SV *)vals));
-    
+
         if (genders_attrlist_destroy(handle, alist) < 0)
             goto handle_error;
 	alist = NULL;
@@ -368,7 +368,7 @@ genders_getattr(handle, node=NULL)
             (void)genders_vallist_destroy(handle, vlist);
 
             genders_set_errnum(handle, errnum);
-           
+
             XSRETURN_UNDEF;
 
         the_end:
@@ -380,9 +380,9 @@ genders_getattr_all(handle)
     genders_t handle
     PREINIT:
         int len, num, errnum, i;
-        char **alist = NULL; 
+        char **alist = NULL;
     CODE:
-        if ((len = genders_attrlist_create(handle, &alist)) < 0) 
+        if ((len = genders_attrlist_create(handle, &alist)) < 0)
             goto handle_error;
 
         if ((num = genders_getattr_all(handle, alist, len)) < 0)
@@ -391,16 +391,16 @@ genders_getattr_all(handle)
         RETVAL = newAV();
         for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(alist[i], 0));
-        
+
         if (genders_attrlist_destroy(handle, alist) < 0)
             goto handle_error;
 
         goto the_end;
-                    
+
         handle_error:
 
             errnum = genders_errnum(handle);
-        
+
             (void)genders_attrlist_destroy(handle, alist);
 
             genders_set_errnum(handle, errnum);
@@ -409,7 +409,7 @@ genders_getattr_all(handle)
 
         the_end:
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 SV *
 genders_getattrval(handle, attr, node=NULL)
@@ -421,10 +421,10 @@ genders_getattrval(handle, attr, node=NULL)
         char *buf = NULL;
     CODE:
 
-        if ((len = genders_getmaxvallen(handle)) < 0) 
+        if ((len = genders_getmaxvallen(handle)) < 0)
             goto handle_error;
 
-        if (!(buf = (char *)malloc(len+1))) 
+        if (!(buf = (char *)malloc(len+1)))
             goto handle_error;
 
         memset(buf, '\0', len+1);
@@ -432,9 +432,9 @@ genders_getattrval(handle, attr, node=NULL)
         if ((rv = genders_testattr(handle, node, attr, buf, len+1)) < 0)
             goto handle_error;
 
-        if (rv == 1 && strlen(buf) > 0) 
+        if (rv == 1 && strlen(buf) > 0)
             RETVAL = newSVpv(buf, 0);
-        else 
+        else
             RETVAL = newSVpv("", 0);
 
         free(buf);
@@ -444,7 +444,7 @@ genders_getattrval(handle, attr, node=NULL)
 
             free(buf);
             XSRETURN_UNDEF;
-        
+
         the_end:
     OUTPUT:
         RETVAL
@@ -457,7 +457,7 @@ genders_testattr(handle, attr, node=NULL)
     CODE:
         RETVAL = genders_testattrval(handle, node, attr, NULL);
     OUTPUT:
-        RETVAL      
+        RETVAL
 
 int
 genders_testattrval(handle, attr, val, node=NULL)
@@ -468,7 +468,7 @@ genders_testattrval(handle, attr, val, node=NULL)
     CODE:
         RETVAL = genders_testattrval(handle, node, attr, val);
     OUTPUT:
-        RETVAL      
+        RETVAL
 
 int
 genders_isnode(handle, node=NULL)
@@ -498,14 +498,14 @@ genders_isattrval(handle, attr, val)
     OUTPUT:
         RETVAL
 
-int 
+int
 genders_index_attrvals(handle, attr)
     genders_t handle
     char *attr
     CODE:
         RETVAL = genders_index_attrvals(handle, attr);
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 AV *
 genders_query(handle, query=NULL)
@@ -513,9 +513,9 @@ genders_query(handle, query=NULL)
     char *query
     PREINIT:
         int len, num, errnum, i;
-        char **nlist = NULL; 
+        char **nlist = NULL;
     CODE:
-        if ((len = genders_nodelist_create(handle, &nlist)) < 0) 
+        if ((len = genders_nodelist_create(handle, &nlist)) < 0)
             goto handle_error;
 
         if ((num = genders_query(handle, nlist, len, query)) < 0)
@@ -524,7 +524,7 @@ genders_query(handle, query=NULL)
         RETVAL = newAV();
         for (i = 0; i < num; i++)
             av_push(RETVAL, newSVpv(nlist[i], 0));
-        
+
         if (genders_nodelist_destroy(handle, nlist) < 0)
             goto handle_error;
 
@@ -542,7 +542,7 @@ genders_query(handle, query=NULL)
 
         the_end:
     OUTPUT:
-        RETVAL    
+        RETVAL
 
 int
 genders_testquery(handle, query, node=NULL)
@@ -552,7 +552,7 @@ genders_testquery(handle, query, node=NULL)
     CODE:
         RETVAL = genders_testquery(handle, node, query);
     OUTPUT:
-        RETVAL      
+        RETVAL
 
 int
 genders_parse(handle, filename=NULL)

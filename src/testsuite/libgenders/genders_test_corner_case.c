@@ -51,8 +51,8 @@
 #define MAXHOSTNAMELEN    64
 #endif /* MAXHOSTNAMELEN */
 
-static genders_t 
-genders_unloaded_handle(void) 
+static genders_t
+genders_unloaded_handle(void)
 {
   genders_t handle = genders_handle_create();
   if (!handle)
@@ -60,7 +60,7 @@ genders_unloaded_handle(void)
   return handle;
 }
 
-static genders_t 
+static genders_t
 genders_destroyed_unloaded_handle(void)
 {
   genders_t handle = genders_handle_create();
@@ -72,8 +72,8 @@ genders_destroyed_unloaded_handle(void)
   return handle;
 }
 
-static genders_t 
-genders_loaded_handle(void) 
+static genders_t
+genders_loaded_handle(void)
 {
   genders_t handle = genders_handle_create();
   if (!handle)
@@ -83,7 +83,7 @@ genders_loaded_handle(void)
   return handle;
 }
 
-static genders_t 
+static genders_t
 genders_destroyed_loaded_handle(void)
 {
   genders_t handle = genders_handle_create();
@@ -175,7 +175,7 @@ genders_handle_destroy_corner_case(int verbose)
   int errcount = 0;
   genders_handle_destroy_corner_case_t *tests = &genders_handle_destroy_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int return_value, errnum;
@@ -221,7 +221,7 @@ genders_load_data_corner_case(int verbose)
       }
   }
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *filename;
@@ -254,14 +254,14 @@ genders_errnum_corner_case(int verbose)
   int errcount = 0;
   genders_errnum_corner_case_t *tests = &genders_errnum_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int err, return_value;
 
       handle = genders_handle_get(tests[i].param1);
       return_value = genders_errnum(handle);
- 
+
       err = genders_return_value_check("genders_errnum",
 				       tests[i].num,
 				       tests[i].expected_return_value,
@@ -284,7 +284,7 @@ genders_strerror_corner_case(int verbose)
   int errcount = 0;
   genders_strerror_corner_case_t *tests = &genders_strerror_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *pointer;
@@ -294,7 +294,7 @@ genders_strerror_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       expected_pointer = genders_errormsg(handle);
       pointer = genders_strerror(tests[i].expected_errnum_string);
- 
+
       err = genders_pointer_check("genders_errormsg",
 				  tests[i].num,
 				  expected_pointer,
@@ -318,7 +318,7 @@ genders_errormsg_corner_case(int verbose)
   int errcount = 0;
   genders_errormsg_corner_case_t *tests = &genders_errormsg_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *pointer;
@@ -328,7 +328,7 @@ genders_errormsg_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       expected_pointer = genders_strerror(tests[i].expected_errnum_string);
       pointer = genders_errormsg(handle);
- 
+
       err = genders_pointer_check("genders_errormsg",
 				  tests[i].num,
 				  expected_pointer,
@@ -341,7 +341,7 @@ genders_errormsg_corner_case(int verbose)
       genders_handle_cleanup(handle);
       i++;
     }
-  
+
   return errcount;
 }
 
@@ -358,8 +358,8 @@ genders_perror_corner_case(int verbose)
     genders_err_exit("dup: %s", strerror(errno));
   if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
     genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
-  
-  while (!(tests[i].num < 0)) 
+
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int err, errnum;
@@ -396,7 +396,7 @@ genders_get_flags_corner_case(int verbose)
   int errcount = 0;
   genders_get_flags_corner_case_t *tests = &genders_get_flags_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       unsigned int flags;
@@ -431,7 +431,7 @@ genders_set_flags_corner_case(int verbose)
   int errcount = 0;
   genders_set_flags_corner_case_t *tests = &genders_set_flags_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       unsigned int flags;
@@ -459,7 +459,7 @@ genders_set_flags_corner_case(int verbose)
 }
 
 static int
-_genders_getfunc_corner_case(GendersGetFunc func, 
+_genders_getfunc_corner_case(GendersGetFunc func,
 			     char *funcname,
 			     int num,
 			     genders_handle_type_t param1,
@@ -496,7 +496,7 @@ genders_getnumnodes_corner_case(int verbose)
   int errcount = 0;
   genders_getnumnodes_corner_case_t *tests = &genders_getnumnodes_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getnumnodes,
 					       "genders_getnumnodes",
@@ -518,7 +518,7 @@ genders_getnumattrs_corner_case(int verbose)
   int errcount = 0;
   genders_getnumattrs_corner_case_t *tests = &genders_getnumattrs_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getnumattrs,
 					       "genders_getnumattrs",
@@ -540,7 +540,7 @@ genders_getmaxattrs_corner_case(int verbose)
   int errcount = 0;
   genders_getmaxattrs_corner_case_t *tests = &genders_getmaxattrs_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getmaxattrs,
 					       "genders_getmaxattrs",
@@ -583,7 +583,7 @@ genders_getmaxnodelen_corner_case(int verbose)
       tests[3].expected_return_value = strlen(buffer);
   }
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getmaxnodelen,
 					       "genders_getmaxnodelen",
@@ -605,7 +605,7 @@ genders_getmaxattrlen_corner_case(int verbose)
   int errcount = 0;
   genders_getmaxattrlen_corner_case_t *tests = &genders_getmaxattrlen_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getmaxattrlen,
 					       "genders_getmaxattrlen",
@@ -627,7 +627,7 @@ genders_getmaxvallen_corner_case(int verbose)
   int errcount = 0;
   genders_getmaxvallen_corner_case_t *tests = &genders_getmaxvallen_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_getfunc_corner_case(genders_getmaxvallen,
 					       "genders_getmaxvallen",
@@ -664,7 +664,7 @@ _genders_list_create_corner_case(GendersListCreateFunc funccreate,
   listptr = (param2 == GENDERS_POINTER_NULL) ? NULL : &list;
   return_value = funccreate(handle, listptr);
   errnum = genders_errnum(handle);
-      
+
   err = genders_return_value_errnum_check(funcname,
 					  num,
 					  expected_return_value,
@@ -722,7 +722,7 @@ _genders_list_clear_corner_case(GendersListCreateFunc funccreate,
   handle = genders_handle_get(param1);
   return_value = funcclear(handle, list);
   errnum = genders_errnum(handle);
-      
+
   err = genders_return_value_errnum_check(funcname,
 					  num,
 					  expected_return_value,
@@ -740,7 +740,7 @@ _genders_list_clear_corner_case(GendersListCreateFunc funccreate,
 	genders_err_exit("genders_handle_destroy: %s", genders_errormsg(gh));
     }
   genders_handle_cleanup(handle);
-  
+
   return err;
 }
 
@@ -778,7 +778,7 @@ _genders_list_destroy_corner_case(GendersListCreateFunc funccreate,
   handle = genders_handle_get(param1);
   return_value = funcdestroy(handle, list);
   errnum = genders_errnum(handle);
-      
+
   err = genders_return_value_errnum_check(funcname,
 					  num,
 					  expected_return_value,
@@ -810,7 +810,7 @@ genders_nodelist_create_corner_case(int verbose)
   int errcount = 0;
   genders_nodelist_create_corner_case_t *tests = &genders_nodelist_create_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_create_corner_case(genders_nodelist_create,
 						   genders_nodelist_destroy,
@@ -834,7 +834,7 @@ genders_nodelist_clear_corner_case(int verbose)
   int errcount = 0;
   genders_nodelist_clear_corner_case_t *tests = &genders_nodelist_clear_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_clear_corner_case(genders_nodelist_create,
 						  genders_nodelist_clear,
@@ -859,7 +859,7 @@ genders_nodelist_destroy_corner_case(int verbose)
   int errcount = 0;
   genders_nodelist_destroy_corner_case_t *tests = &genders_nodelist_destroy_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_destroy_corner_case(genders_nodelist_create,
 						    genders_nodelist_destroy,
@@ -883,7 +883,7 @@ genders_attrlist_create_corner_case(int verbose)
   int errcount = 0;
   genders_attrlist_create_corner_case_t *tests = &genders_attrlist_create_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_create_corner_case(genders_attrlist_create,
 						   genders_attrlist_destroy,
@@ -907,7 +907,7 @@ genders_attrlist_clear_corner_case(int verbose)
   int errcount = 0;
   genders_attrlist_clear_corner_case_t *tests = &genders_attrlist_clear_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_clear_corner_case(genders_attrlist_create,
 						  genders_attrlist_clear,
@@ -932,7 +932,7 @@ genders_attrlist_destroy_corner_case(int verbose)
   int errcount = 0;
   genders_attrlist_destroy_corner_case_t *tests = &genders_attrlist_destroy_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_destroy_corner_case(genders_attrlist_create,
 						    genders_attrlist_destroy,
@@ -956,7 +956,7 @@ genders_vallist_create_corner_case(int verbose)
   int errcount = 0;
   genders_vallist_create_corner_case_t *tests = &genders_vallist_create_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_create_corner_case(genders_vallist_create,
 						   genders_vallist_destroy,
@@ -980,7 +980,7 @@ genders_vallist_clear_corner_case(int verbose)
   int errcount = 0;
   genders_vallist_clear_corner_case_t *tests = &genders_vallist_clear_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_clear_corner_case(genders_vallist_create,
 						  genders_vallist_clear,
@@ -1005,7 +1005,7 @@ genders_vallist_destroy_corner_case(int verbose)
   int errcount = 0;
   genders_vallist_destroy_corner_case_t *tests = &genders_vallist_destroy_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       errcount += _genders_list_destroy_corner_case(genders_vallist_create,
 						    genders_vallist_destroy,
@@ -1029,7 +1029,7 @@ genders_getnodename_corner_case(int verbose)
   int errcount = 0;
   genders_getnodename_corner_case_t *tests = &genders_getnodename_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int return_value, errnum, len;
@@ -1072,7 +1072,7 @@ genders_getnodes_corner_case(int verbose)
   if ((list_len = genders_nodelist_create(gh, &list)) < 0)
     genders_err_exit("genders_nodelist_create: %s", genders_errormsg(gh));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int return_value, errnum, len;
@@ -1138,7 +1138,7 @@ genders_getattr_corner_case(int verbose)
   if (genders_vallist_create(gh, &vallist) < 0)
     genders_err_exit("genders_vallist_create: %s", genders_errormsg(gh));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char **attrlistptr;
@@ -1198,7 +1198,7 @@ genders_getattr_all_corner_case(int verbose)
   if ((attrlist_len = genders_attrlist_create(gh, &attrlist)) < 0)
     genders_err_exit("genders_attrlist_create: %s", genders_errormsg(gh));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char **attrlistptr;
@@ -1247,7 +1247,7 @@ genders_testattr_corner_case(int verbose)
   if (!(valbuf = (char *)malloc(maxvallen + 1)))
     genders_err_exit("malloc: %s", strerror(errno));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *nodeptr, *attrptr, *valptr;
@@ -1301,7 +1301,7 @@ genders_testattrval_corner_case(int verbose)
   int errcount = 0;
   genders_testattrval_corner_case_t *tests = &genders_testattrval_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *nodeptr, *attrptr, *valptr;
@@ -1356,7 +1356,7 @@ genders_isnode_corner_case(int verbose)
   int errcount = 0;
   genders_isnode_corner_case_t *tests = &genders_isnode_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *nodeptr;
@@ -1370,7 +1370,7 @@ genders_isnode_corner_case(int verbose)
 	nodeptr = "";
       else
 	nodeptr = genders_database_corner_case.data->node;
-      
+
       return_value = genders_isnode(handle, nodeptr);
       errnum = genders_errnum(handle);
 
@@ -1397,7 +1397,7 @@ genders_isattr_corner_case(int verbose)
   int errcount = 0;
   genders_isattr_corner_case_t *tests = &genders_isattr_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *attrptr;
@@ -1438,7 +1438,7 @@ genders_isattrval_corner_case(int verbose)
   int errcount = 0;
   genders_isattrval_corner_case_t *tests = &genders_isattrval_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *attrptr, *valptr;
@@ -1486,7 +1486,7 @@ genders_index_attrvals_corner_case(int verbose)
   int errcount = 0;
   genders_index_attrvals_corner_case_t *tests = &genders_index_attrvals_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *attrptr;
@@ -1534,7 +1534,7 @@ genders_query_corner_case(int verbose)
   if ((list_len = genders_nodelist_create(gh, &list)) < 0)
     genders_err_exit("genders_nodelist_create: %s", genders_errormsg(gh));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int return_value, errnum, len;
@@ -1581,7 +1581,7 @@ genders_testquery_corner_case(int verbose)
   int errcount = 0;
   genders_testquery_corner_case_t *tests = &genders_testquery_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *nodeptr, *queryptr;
@@ -1605,7 +1605,7 @@ genders_testquery_corner_case(int verbose)
 
       return_value = genders_testquery(handle, nodeptr, queryptr);
       errnum = genders_errnum(handle);
-      
+
       errcount += genders_return_value_errnum_check("genders_testquery",
 						    tests[i].num,
 						    tests[i].expected_return_value,
@@ -1614,7 +1614,7 @@ genders_testquery_corner_case(int verbose)
 						    errnum,
 						    NULL,
 						    verbose);
-      
+
       genders_handle_cleanup(handle);
       i++;
     }
@@ -1664,7 +1664,7 @@ genders_parse_corner_case(int verbose)
   if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
     genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       char *filename;
@@ -1706,7 +1706,7 @@ genders_set_errnum_corner_case(int verbose)
   int errcount = 0;
   genders_set_errnum_corner_case_t *tests = &genders_set_errnum_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       int err, errnum;
@@ -1714,7 +1714,7 @@ genders_set_errnum_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       genders_set_errnum(handle, tests[i].param2);
       errnum = genders_errnum(handle);
- 
+
       err = genders_errnum_check("genders_set_errnum",
 				 tests[i].num,
 				 tests[i].expected_errnum,
@@ -1737,7 +1737,7 @@ genders_copy_corner_case(int verbose)
   int errcount = 0;
   genders_copy_corner_case_t *tests = &genders_copy_corner_case_tests[0];
 
-  while (!(tests[i].num < 0)) 
+  while (!(tests[i].num < 0))
     {
       genders_t handle;
       genders_t return_value;
@@ -1746,7 +1746,7 @@ genders_copy_corner_case(int verbose)
       handle = genders_handle_get(tests[i].param1);
       return_value = genders_copy(handle);
       errnum = genders_errnum(handle);
- 
+
       errcount += genders_return_value_pointer_errnum_check("genders_copy",
 							    tests[i].num,
 							    tests[i].expected_return_value,
@@ -1755,7 +1755,7 @@ genders_copy_corner_case(int verbose)
 							    errnum,
 							    NULL,
 							    verbose);
-      
+
       genders_handle_cleanup(handle);
       i++;
     }

@@ -62,7 +62,7 @@ typedef struct {
   int expected_errnum;
 } genders_handle_pointer_length_corner_case_t;
 
-typedef genders_handle_corner_case_t genders_handle_destroy_corner_case_t; 
+typedef genders_handle_corner_case_t genders_handle_destroy_corner_case_t;
 
 typedef struct {
   int num;
@@ -70,7 +70,7 @@ typedef struct {
   genders_filename_type_t param2;
   int expected_return_value;
   int expected_errnum;
-} genders_load_data_corner_case_t; 
+} genders_load_data_corner_case_t;
 
 typedef struct {
   int num;
@@ -102,7 +102,7 @@ typedef struct {
   genders_flag_type_t param2;
   int expected_return_value;
   int expected_errnum;
-} genders_set_flags_corner_case_t; 
+} genders_set_flags_corner_case_t;
 
 typedef genders_handle_corner_case_t genders_getnumnodes_corner_case_t;
 typedef genders_handle_corner_case_t genders_getnumattrs_corner_case_t;

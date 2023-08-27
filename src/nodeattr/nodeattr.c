@@ -6,20 +6,20 @@
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
  *  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
  *  UCRL-CODE-2003-004.
- *  
+ *
  *  This file is part of Genders, a cluster configuration database.
  *  For details, see <http://www.llnl.gov/linux/genders/>.
- *  
+ *
  *  Genders is free software; you can redistribute it and/or modify it under
  *  the terms of the GNU General Public License as published by the Free
  *  Software Foundation; either version 2 of the License, or (at your option)
  *  any later version.
- *  
+ *
  *  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
  *  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  *  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
  *  details.
- *  
+ *
  *  You should have received a copy of the GNU General Public License along
  *  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 \*****************************************************************************/
@@ -37,7 +37,7 @@
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif /* HAVE_UNISTD_H */
-#if HAVE_GETOPT_H 
+#if HAVE_GETOPT_H
 #include <getopt.h>
 #endif /* HAVE_GETOPT_H */
 #include <errno.h>
@@ -163,7 +163,7 @@ main(int argc, char *argv[])
         case 'f':   /* --filename */
             filename = optarg;
             break;
-        case 'k':   /* --check */ 
+        case 'k':   /* --check */
             kopt = 1;
             break;
         case 'd':   /* --diff */
@@ -215,9 +215,9 @@ main(int argc, char *argv[])
         usage();
 
     /* specified correctly number of arguments */
-    if ((qopt 
+    if ((qopt
          && ((!Aopt && optind != (argc - 1))
-             || (Aopt && optind != argc))) 
+             || (Aopt && optind != argc)))
         || (!qopt
             && !Qopt
             && !Vopt
@@ -287,7 +287,7 @@ main(int argc, char *argv[])
         char *query;
 
         if (Aopt)
-            list_nodes(gp, NULL, excludequery, qfmt); 
+            list_nodes(gp, NULL, excludequery, qfmt);
         else {
             query = argv[optind++];
             list_nodes(gp, query, excludequery, qfmt);
@@ -356,7 +356,7 @@ main(int argc, char *argv[])
     exit(0);
 }
 
-static void 
+static void
 list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
 {
     char **nodes;
@@ -386,10 +386,10 @@ list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
 
     if (excludequery) {
         genders_nodelist_clear(gp, nodes);
-      
+
         if ((count = genders_query(gp, nodes, len, excludequery)) < 0)
             _gend_error_exit(gp, excludequery);
-    
+
         /* Do not check return code for == 0, node may not exist in hostlist */
         for (i = 0; i < count; i++)
             hostlist_delete(hl, nodes[i]);
@@ -405,7 +405,7 @@ list_nodes(genders_t gp, char *query, char *excludequery, fmt_t qfmt)
     hostlist_destroy(hl);
 }
 
-static int 
+static int
 test_attr(genders_t gp, char *node, char *attr, int vopt)
 {
     char *val = NULL;
@@ -414,7 +414,7 @@ test_attr(genders_t gp, char *node, char *attr, int vopt)
 
     if ((wantval = strchr(attr, '=')))  /* attr can actually be "attr=val" */
         *wantval++ ='\0';
-   
+
     if (vopt || wantval)
         val = _val_create(gp); /* full of nulls initially */
 
@@ -432,7 +432,7 @@ test_attr(genders_t gp, char *node, char *attr, int vopt)
     return res;
 }
 
-static int 
+static int
 test_query(genders_t gp, char *node, char *query)
 {
     int res;
@@ -450,7 +450,7 @@ list_attr_val(genders_t gp, char *attr, int Uopt)
     char *val;
     int maxvallen, nlen, ncount, i, ret;
     unsigned int val_count = 0;
-    
+
     /* achu: There is currently no library operation that offers
      * anything to easily access this information.  So we have to
      * iterate to do it.
@@ -473,10 +473,10 @@ list_attr_val(genders_t gp, char *attr, int Uopt)
 
     for (i = 0; i < ncount; i++) {
         memset(val, '\0', maxvallen + 1);
-        if ((ret = genders_testattr(gp, 
+        if ((ret = genders_testattr(gp,
                                     nodes[i],
-                                    attr, 
-                                    val, 
+                                    attr,
+                                    val,
                                     maxvallen + 1)) < 0)
             _gend_error_exit(gp, "genders_testattr");
         if (ret && strlen(val)) {
@@ -499,7 +499,7 @@ list_attr_val(genders_t gp, char *attr, int Uopt)
             }
         }
     }
-    
+
     for (i = 0; i < val_count; i++) {
         printf("%s\n", myvallist[i]);
     }
@@ -511,7 +511,7 @@ list_attr_val(genders_t gp, char *attr, int Uopt)
     free(val);
 }
 
-static void 
+static void
 usage(void)
 {
     fprintf(stderr,
@@ -519,7 +519,7 @@ usage(void)
         "or     nodeattr [-f genders] [-q|-c|-n|-s] -A\n"
         "or     nodeattr [-f genders] [-v] [node] attr[=val]\n"
         "or     nodeattr [-f genders] -Q [node] query\n"
-        "or     nodeattr [-f genders] -V [-U] attr\n"   
+        "or     nodeattr [-f genders] -V [-U] attr\n"
         "or     nodeattr [-f genders] -l [node]\n"
         "or     nodeattr [-f genders] -k\n"
         "or     nodeattr [-f genders] -d genders\n"
@@ -608,7 +608,7 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
             errcount++;
         }
     }
-    
+
     /* Test #3: For each node, are the attributes and values identical */
 
     if ((maxvals = genders_vallist_create(gh, &vals)) < 0)
@@ -628,7 +628,7 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
     for (i = 0; i < numnodes; i++) {
 
         /* Don't bother if the node doesn't exist, this issue has been
-         * output already 
+         * output already
          */
         if ((rv = genders_isnode(dgh, nodes[i])) < 0)
             _gend_error_exit(dgh, "genders_isnode");
@@ -648,15 +648,15 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
         if (genders_vallist_clear(dgh, dvals) < 0)
             _gend_error_exit(dgh, "genders_vallist_clear");
 
-        if ((numattrs = genders_getattr(gh, 
-                                        attrs, 
-                                        vals, 
-                                        maxattrs, 
+        if ((numattrs = genders_getattr(gh,
+                                        attrs,
+                                        vals,
+                                        maxattrs,
                                         nodes[i])) < 0)
           _gend_error_exit(gh, "genders_getattr");
-        
+
         for (j = 0; j < numattrs; j++) {
-          
+
             /* Don't bother if the attribute doesn't exist, this issue
              * has been output already
              */
@@ -667,17 +667,17 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
                 continue;
 
             memset(dvalbuf, '\0', dmaxvallen + 1);
-          
-            if ((rv = genders_testattr(dgh, 
-                                       nodes[i], 
-                                       attrs[j], 
-                                       dvalbuf, 
+
+            if ((rv = genders_testattr(dgh,
+                                       nodes[i],
+                                       attrs[j],
+                                       dvalbuf,
                                        dmaxvallen + 1)) < 0)
                 _gend_error_exit(dgh, "genders_testattr");
 
             if (!rv) {
                 fprintf(stderr, "%s: Node \"%s\" does not "
-                        "contain attribute \"%s\"\n", 
+                        "contain attribute \"%s\"\n",
                         dfilename, nodes[i], attrs[j]);
                 errcount++;
                 continue;
@@ -714,13 +714,13 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
          * case.  Only for existence of attributes.
          */
 
-        if ((dnumattrs = genders_getattr(dgh, 
-                                         dattrs, 
-                                         dvals, 
-                                         dmaxattrs, 
+        if ((dnumattrs = genders_getattr(dgh,
+                                         dattrs,
+                                         dvals,
+                                         dmaxattrs,
                                          nodes[i])) < 0)
           _gend_error_exit(dgh, "genders_getattr");
-        
+
         for (j = 0; j < dnumattrs; j++) {
 
             /* Don't bother if the attribute doesn't exist, this issue
@@ -732,22 +732,22 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
             if (!rv)
                 continue;
 
-            if ((rv = genders_testattr(gh, 
-                                       nodes[i], 
-                                       dattrs[j], 
+            if ((rv = genders_testattr(gh,
+                                       nodes[i],
+                                       dattrs[j],
                                        NULL,
                                        0)) < 0)
                 _gend_error_exit(gh, "genders_testattr");
-            
+
             if (!rv) {
                 if (strlen(dvals[j])) {
                     fprintf(stderr, "%s: Node \"%s\" contains "
-                            "an additional attribute value pair \"%s=%s\"\n", 
+                            "an additional attribute value pair \"%s=%s\"\n",
                             dfilename, nodes[i], dattrs[j], dvals[j]);
                 }
                 else {
                     fprintf(stderr, "%s: Node \"%s\" contains "
-                            "an additional attribute \"%s\"\n", 
+                            "an additional attribute \"%s\"\n",
                             dfilename, nodes[i], dattrs[j]);
                 }
                 errcount++;
@@ -766,7 +766,7 @@ _diff(genders_t gh, genders_t dgh, char *filename, char *dfilename)
     return errcount;
 }
 
-static void 
+static void
 diff_genders(char *filename, char *dfilename)
 {
     genders_t gh, dgh;
@@ -782,10 +782,10 @@ diff_genders(char *filename, char *dfilename)
         fprintf(stderr, "nodeattr: out of memory\n");
         exit(1);
     }
-    
+
     if (genders_load_data(gh, filename) < 0)
         _gend_error_exit(gh, filename);
-    
+
     if (genders_load_data(dgh, dfilename) < 0)
         _gend_error_exit(dgh, dfilename);
 
@@ -854,7 +854,7 @@ expand(genders_t gp)
 
         if ((attrscount = genders_getattr(gp, attrs, vals, attrslen, node)) < 0)
             _gend_error_exit(gp, "genders_getattr");
-        
+
         printf("%s", node);
         if (attrscount) {
             unsigned int numspace = maxnodenamelen - strlen(node);
@@ -868,7 +868,7 @@ expand(genders_t gp)
                 printf(",");
 
             if (strlen(vals[j]))
-                printf("%s=%s", attrs[j], vals[j]); 
+                printf("%s=%s", attrs[j], vals[j]);
             else
                 printf("%s", attrs[j]);
         }
@@ -921,7 +921,7 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
     struct hosts_data *hd = NULL;
     char *hashkey = NULL;
     int keylen, attrlen, vallen;
-    
+
     assert(hattr && node && attr && val);
 
     attrlen = strlen(attr);
@@ -934,7 +934,7 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
 
     /* for NUL char */
     keylen++;
-    
+
     if (!(hashkey = (char *)malloc(keylen))) {
         fprintf(stderr, "malloc: %s\n", strerror(errno));
         exit(1);
@@ -971,7 +971,7 @@ _hash_attrval(hash_t hattr, char *node, char *attr, char *val)
     }
 }
 
-static void 
+static void
 list_attrs(genders_t gp, char *node)
 {
     char **attrs, **vals;
@@ -1011,7 +1011,7 @@ list_attrs(genders_t gp, char *node)
                 _hash_attrval(hattrval, anode, attrs[i], vals[i]);
             free(anode);
         }
-        
+
         if (hash_for_each(hattrval, _print_key, NULL) < 0) {
             fprintf(stderr, "hash_for_each: %s\n", strerror(errno));
             exit(1);
@@ -1061,12 +1061,12 @@ _hash_hostrange(void *data, const void *key, void *arg)
             fprintf(stderr, "malloc: %s\n", strerror(errno));
             exit(1);
         }
-        
+
         if (!(al->hostrange = strdup(hostrange))) {
             fprintf(stderr, "strdup: %s\n", strerror(errno));
             exit(1);
         }
-        
+
         if (!(al->l = list_create(NULL))) {
             fprintf(stderr, "list_create: %s\n", strerror(errno));
             exit(1);
@@ -1135,14 +1135,14 @@ _output_hostrange(void *x, void *arg)
     for (i = 0; i < numspace; i++)
         printf(" ");
     printf(" ");
-    
+
     lcount = list_count(al->l);
 
     if (!(litr = list_iterator_create(al->l))) {
         fprintf(stderr, "list_iterator_create: %s\n", strerror(errno));
         exit(1);
     }
-    
+
     while ((attrval = list_next(litr))) {
 
         if (!strcmp(attrval, NOATTRSFLAG))
@@ -1197,7 +1197,7 @@ compress(genders_t gp)
      * types, b/c we are keying off attr=val pairs, not just the
      * attribute name.
      */
-    if (!(hattr = hash_create((numattrs + 1)*4, 
+    if (!(hattr = hash_create((numattrs + 1)*4,
                           (hash_key_f)hash_key_string,
                           (hash_cmp_f)strcmp,
                           _hosts_data_del))) {
@@ -1231,14 +1231,14 @@ compress(genders_t gp)
             _hash_attrval(hattr, nodes[i], NOATTRSFLAG, "");
             continue;
         }
-        
+
         for (j = 0 ; j < attrscount; j++)
             _hash_attrval(hattr, nodes[i], attrs[j], vals[j]);
     }
 
     /* Now, find all the common attributes for a particular hostrange */
 
-    if (!(hrange = hash_create(numnodes, 
+    if (!(hrange = hash_create(numnodes,
                               (hash_key_f)hash_key_string,
                               (hash_cmp_f)strcmp,
                               _attr_list_del))) {
@@ -1356,7 +1356,7 @@ _flatten_attrsvals(genders_t gp, const char *node, char **attrs, char **vals,
         if (*vals[i]) {
             *(avstring + attrlen) = '=';
             memcpy(avstring + attrlen + 1, vals[i], strlen(vals[i]) + 1);
-        } 
+        }
 
         if (!list_append(avlist, avstring)) {
             fprintf(stderr, "list_insert: %s\n", strerror(errno));
@@ -1389,7 +1389,7 @@ _flatten_attrsvals(genders_t gp, const char *node, char **attrs, char **vals,
     else
         *output_buffer = '\0';
 
-    return(0); 
+    return(0);
 
     cleanup:
     if (avlist)
@@ -1409,13 +1409,13 @@ compress_hosts(genders_t gp)
     char **attrs, **vals;
     int attrslen, valslen;
     int attrscount;
-    int numattrs;  
+    int numattrs;
     int nodeslen;
     int nodescount;
-    int numnodes; 
+    int numnodes;
     int maxattrsvalslen;
-    hash_t hattr = NULL; 
-    hash_t hrange = NULL; 
+    hash_t hattr = NULL;
+    hash_t hrange = NULL;
     List hlist = NULL;
     struct store_hostrange_data shd;
     int i;
@@ -1436,7 +1436,7 @@ compress_hosts(genders_t gp)
 
     if ((attrslen = genders_attrlist_create(gp, &attrs)) < 0)
         _gend_error_exit(gp, "genders_attrlist_create");
-    
+
     if ((valslen = genders_vallist_create(gp, &vals)) < 0)
         _gend_error_exit(gp, "genders_vallist_create");
 
@@ -1492,7 +1492,7 @@ compress_hosts(genders_t gp)
                                     attrsvals) < 0)
                     _gend_error_exit(gp, "_flatten_attrsvals");
                 _hash_allattrvals(hattr, nodes[i], attrsvals);
-            } else 
+            } else
                 _hash_allattrvals(hattr, nodes[i], NOATTRSFLAG);
     }
 
@@ -1544,10 +1544,10 @@ compress_hosts(genders_t gp)
  ** Utility functions
  **/
 
-static int 
+static int
 _gend_error_exit(genders_t gp, char *msg)
 {
-    fprintf(stderr, "nodeattr: %s: %s\n", 
+    fprintf(stderr, "nodeattr: %s: %s\n",
         msg, genders_strerror(genders_errnum(gp)));
     if (genders_errnum(gp) == GENDERS_ERR_PARSE) {
 #if HAVE_GETOPT_LONG
@@ -1584,7 +1584,7 @@ _rangestr(hostlist_t hl, fmt_t qfmt)
      */
     if (qfmt == FMT_HOSTLIST) {
         while (hostlist_ranged_string(hl, size, str) < 0) {
-            free(str); 
+            free(str);
             size += size;
             str = (char *)_safe_malloc(size);
         }
@@ -1593,7 +1593,7 @@ _rangestr(hostlist_t hl, fmt_t qfmt)
         char *p;
 
         while (hostlist_deranged_string(hl, size, str) < 0) {
-            free(str); 
+            free(str);
             size += size;
             str = (char *)_safe_malloc(size);
         }
@@ -1612,7 +1612,7 @@ _val_create(genders_t gp)
     int maxvallen;
     char *val;
 
-    if ((maxvallen = genders_getmaxvallen(gp)) < 0) 
+    if ((maxvallen = genders_getmaxvallen(gp)) < 0)
         _gend_error_exit(gp, "genders_getmaxvallen");
     val = (char *)_safe_malloc(maxvallen + 1);
 
@@ -1627,7 +1627,7 @@ _node_create(genders_t gp)
     int maxnodelen;
     char *node;
 
-    if ((maxnodelen = genders_getmaxnodelen(gp)) < 0) 
+    if ((maxnodelen = genders_getmaxnodelen(gp)) < 0)
         _gend_error_exit(gp, "genders_getmaxnodelen");
     node = (char *)_safe_malloc(maxnodelen + 1);
     return node;
@@ -1640,7 +1640,7 @@ _attr_create(genders_t gp)
     int maxattrlen;
     char *attr;
 
-    if ((maxattrlen = genders_getmaxattrlen(gp)) < 0) 
+    if ((maxattrlen = genders_getmaxattrlen(gp)) < 0)
         _gend_error_exit(gp, "genders_getmaxattrlen");
     attr = (char *)_safe_malloc(maxattrlen + 1);
     return attr;
@@ -1655,13 +1655,13 @@ _to_gendname(genders_t gp, char *val)
     int len;
     char *node = NULL;
 
-    if ((len = genders_nodelist_create(gp, &nodes)) < 0) 
+    if ((len = genders_nodelist_create(gp, &nodes)) < 0)
         _gend_error_exit(gp, "genders_nodelist_create");
 
     if ((count = genders_getnodes(gp, nodes, len, "altname", val)) < 0) {
         genders_nodelist_destroy(gp, nodes);
         _gend_error_exit(gp, val);
-    } 
+    }
     if (count > 1)
         fprintf(stderr, "nodeattr: altname=%s appears more than once!\n", val);
 

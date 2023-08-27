@@ -6,7 +6,7 @@ AC_DEFUN([AC_JAVA_EXTENSIONS],
 [
   AC_MSG_CHECKING(for --with-java-extensions)
   AC_ARG_WITH(java-extensions,
-     AS_HELP_STRING([--with-java-extensions=], 
+     AS_HELP_STRING([--with-java-extensions=],
                     [enable or disable java extensions build]),
      [ case "$withval" in
      yes)

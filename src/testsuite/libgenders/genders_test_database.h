@@ -88,7 +88,7 @@ typedef struct {
   } node_attrvals[GENDERS_DATABASE_MAXNODES];
   int node_attrvals_len;
   /* attrval_nodes
-   * - Lists nodes based on attr or attr=val combinations. 
+   * - Lists nodes based on attr or attr=val combinations.
    * - For use with genders_getnodes, genders_query, and genders_testquery
    */
   struct {

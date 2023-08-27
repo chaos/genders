@@ -32,6 +32,6 @@
 #define GENDERS_BUFLEN            65536
 
 /* Impossible to have a genders value with spaces */
-#define GENDERS_NOVALUE           "  NOVAL  "   
+#define GENDERS_NOVALUE           "  NOVAL  "
 
 #endif /* _GENDERS_CONSTANTS_H */
