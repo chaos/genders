@@ -321,7 +321,7 @@ genders_pointer_exist_check(char *funcname,
   assert(funcname && pointer_str);
 
   if ((expected_null == GENDERS_POINTER_NULL && pointer != NULL)
-      || (!expected_null == GENDERS_POINTER_NON_NULL && pointer == NULL))
+      || (expected_null == GENDERS_POINTER_NON_NULL && pointer == NULL))
     {
       if (verbose)
 	{

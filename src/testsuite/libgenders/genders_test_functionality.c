@@ -1009,7 +1009,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
 {
   genders_t handle;
   char **list;
-  int err, list_len, return_value, errnum, retval = 0;
+  int err, list_len, return_value, errnum;
 
   assert(funccreate && funcclear && funcdestroy && funcname);
 
@@ -1044,7 +1044,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_destroy: %s", genders_errormsg(handle));
 
-  return retval;
+  return err;
 }
 
 static int
@@ -3192,8 +3192,6 @@ genders_copy_functionality(int verbose)
 
 	  err += errcount;
 	}
-
-    cleanup_and_try_next_database:
 
       if (genders_nodelist_destroy(handleorig, nodelistorig) < 0)
 	genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handleorig));
