@@ -6,7 +6,7 @@ AC_DEFUN([AC_PYTHON_EXTENSIONS],
 [
   AC_MSG_CHECKING(for --with-python-extensions)
   AC_ARG_WITH(python-extensions,
-     AC_HELP_STRING([--with-python-extensions=], 
+     AS_HELP_STRING([--with-python-extensions=], 
                     [enable or disable python extensions build]),
      [ case "$withval" in
      yes)

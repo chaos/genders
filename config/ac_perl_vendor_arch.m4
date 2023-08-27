@@ -6,7 +6,7 @@ AC_DEFUN([AC_PERL_VENDOR_ARCH],
 [
   AC_MSG_CHECKING(for --with-perl-vendor-arch)
   AC_ARG_WITH(perl-vendor-arch,
-     AC_HELP_STRING([--with-perl-vendor-arch=], 
+     AS_HELP_STRING([--with-perl-vendor-arch=], 
                     [enable or disable perl extensions install in vendor arch]),
      [ case "$withval" in
      yes)
