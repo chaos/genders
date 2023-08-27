@@ -94,7 +94,7 @@ _genders_list_free_attrvallist(void *x)
 {
   genders_attrvals_container_t avc;
 
-  avc = (List)x;
+  avc = (genders_attrvals_container_t)x;
   __list_destroy(avc->attrvals);
   free(avc);
 }
