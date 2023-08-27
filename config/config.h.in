@@ -93,12 +93,6 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define the project name. */
-#undef PROJECT
-
-/* Define the project's release. */
-#undef RELEASE
-
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 

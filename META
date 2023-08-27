@@ -1,9 +1,0 @@
-##
-# $Id: META,v 1.53 2010-03-24 21:32:37 chu11 Exp $
-##
-# Metadata for RPM/TAR makefile targets
-##
-  Meta:		1
-  Name:		genders
-  Version:	1.28
-  Release:	1

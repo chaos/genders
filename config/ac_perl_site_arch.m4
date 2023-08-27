@@ -6,7 +6,7 @@ AC_DEFUN([AC_PERL_SITE_ARCH],
 [
   AC_MSG_CHECKING(for --with-perl-site-arch)
   AC_ARG_WITH(perl-site-arch,
-     AC_HELP_STRING([--with-perl-site-arch=], 
+     AS_HELP_STRING([--with-perl-site-arch=], 
                     [enable or disable perl extensions install in site arch]),
      [ case "$withval" in
      yes)

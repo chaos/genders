@@ -96,7 +96,6 @@ am__aclocal_m4_deps = $(top_srcdir)/config/ac_cplusplus_extensions.m4 \
 	$(top_srcdir)/config/ac_extension_destdir.m4 \
 	$(top_srcdir)/config/ac_genders_file.m4 \
 	$(top_srcdir)/config/ac_java_extensions.m4 \
-	$(top_srcdir)/config/ac_meta.m4 \
 	$(top_srcdir)/config/ac_perl_extensions.m4 \
 	$(top_srcdir)/config/ac_perl_site_arch.m4 \
 	$(top_srcdir)/config/ac_perl_vendor_arch.m4 \
@@ -246,11 +245,9 @@ PERLGENDERS_VERSION = @PERLGENDERS_VERSION@
 PERLMAN3EXT = @PERLMAN3EXT@
 PERL_ARCH_INSTALL = @PERL_ARCH_INSTALL@
 POD2MAN = @POD2MAN@
-PROJECT = @PROJECT@
 PYTHON = @PYTHON@
 PYTHONGENDERS_VERSION = @PYTHONGENDERS_VERSION@
 RANLIB = @RANLIB@
-RELEASE = @RELEASE@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@

@@ -7,8 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders],[1.28])
-AC_META
+AC_INIT([genders],[1.28.1])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
 AC_CANONICAL_TARGET
@@ -16,8 +15,8 @@ AC_CANONICAL_TARGET
 ##
 # Automake support.
 ##
-AM_INIT_AUTOMAKE(tar-ustar)
-AM_CONFIG_HEADER([config/config.h])
+AM_INIT_AUTOMAKE([tar-ustar subdir-objects])
+AC_CONFIG_HEADERS([config/config.h])
 AM_MAINTAINER_MODE
 
 # Update this information before a public release only!
