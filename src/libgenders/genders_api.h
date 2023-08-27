@@ -35,7 +35,7 @@
 #define GENDERS_MAGIC_NUM                0xdeadbeef
 
 /* Impossible to have a genders value with spaces */
-#define GENDERS_NOVALUE                  "  NOVAL  "   
+#define GENDERS_NOVALUE                  "  NOVAL  "
 
 #define GENDERS_NODE_INDEX_INIT_SIZE     2048
 
@@ -43,7 +43,7 @@
 
 #define GENDERS_ATTRLIST_INDEX_INIT_SIZE 128
 
-/* 
+/*
  * struct genders_node
  *
  * stores node name and a list of pointers to attrval lists containing
@@ -61,10 +61,10 @@ struct genders_node {
 };
 typedef struct genders_node *genders_node_t;
 
-/* 
+/*
  * struct genders_attrval
  *
- * stores attribute name and its value (if no value, val == NULL) 
+ * stores attribute name and its value (if no value, val == NULL)
  */
 struct genders_attrval {
   char *attr;
@@ -86,15 +86,15 @@ struct genders_attrvals_container {
 };
 typedef struct genders_attrvals_container *genders_attrvals_container_t;
 
-/* 
+/*
  * struct genders
- * 
+ *
  * Genders handle, caches all information loaded from a genders
  * database.  Consider the following genders database
  *
  * nodename[1-2]  attrname1=val1,attrname2=val2
  * nodename1      attrname3=val3,attrname4
- * nodename2      attrname5   
+ * nodename2      attrname5
  * nodename3      attrname6
  *
  * After the genders database has been loaded using genders_load_data,
@@ -104,7 +104,7 @@ typedef struct genders_attrvals_container *genders_attrvals_container_t;
  * errnum = current error code
  * is_loaded = 1
  * numnodes = 3
- * numattrs = 6 
+ * numattrs = 6
  * maxattrs = 4
  * maxnodelen = 9
  * maxattrlen = 5
@@ -136,9 +136,9 @@ typedef struct genders_attrvals_container *genders_attrvals_container_t;
  *      attr4.attr = attrname4, attr4.val = NULL
  *      attr5.attr = attrname5, attr5.val = NULL
  *      attr6.attr = attrname6, attr6.val = NULL
- * attrslist = attrname1 -> attrname2 -> attrname3 -> attrname4 -> 
+ * attrslist = attrname1 -> attrname2 -> attrname3 -> attrname4 ->
  *             attrname5 -> attrname6 -> \0
- * valbuf -> buffer of length 5 (maxvallen + 1) 
+ * valbuf -> buffer of length 5 (maxvallen + 1)
  *
  * node_index = hash table with
  *              KEY(nodename1): node1
@@ -151,10 +151,10 @@ typedef struct genders_attrvals_container *genders_attrvals_container_t;
  *              KEY(attrname3): node1
  *              KEY(attrname4): node1
  *              KEY(attrname5): node2
- *              KEY(attrname6): node3 
+ *              KEY(attrname6): node3
  */
 struct genders {
-  int magic;                                /* magic number */ 
+  int magic;                                /* magic number */
   int errnum;                               /* error code */
   int is_loaded;                            /* genders loaded flag */
   unsigned int flags;                       /* flags for alternate behavior */

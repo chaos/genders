@@ -35,7 +35,7 @@ if test "$PHP_GENDERS" != "no"; then
       done
     fi
   fi
- 
+
   if test -z "$GENDERS_DIR"; then
     AC_MSG_RESULT([not found])
     AC_MSG_ERROR([Please reinstall the genders distribution])
@@ -55,7 +55,7 @@ if test "$PHP_GENDERS" != "no"; then
   ],[
     -L$GENDERS_DIR/lib -lm -ldl
   ])
- 
+
   PHP_SUBST(GENDERS_SHARED_LIBADD)
 
   PHP_NEW_EXTENSION(genders, genders.c, $ext_shared)

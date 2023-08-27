@@ -97,7 +97,7 @@ genders_handle_destroy_functionality(int verbose)
 
   return_value = genders_handle_destroy(handle);
   errnum = genders_errnum(handle);
-  
+
   err = genders_return_value_errnum_check("genders_handle_destroy",
 					  num,
 					  0,
@@ -123,7 +123,7 @@ genders_handle_destroy_functionality(int verbose)
 
   return_value = genders_handle_destroy(handle);
   errnum = genders_errnum(handle);
-  
+
   err = genders_return_value_errnum_check("genders_handle_destroy",
 					  num,
 					  0,
@@ -181,7 +181,7 @@ genders_load_data_functionality(int verbose)
 	i++;
       }
   }
-  
+
   /* Part B: Load functionality test databases without errors */
   {
     int i = 0;
@@ -206,7 +206,7 @@ genders_load_data_functionality(int verbose)
 						errnum,
 						databases[i]->filename,
 						verbose);
-	
+
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
 
@@ -229,17 +229,17 @@ genders_errnum_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, genders_database_base.filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
   for (i = GENDERS_ERR_SUCCESS; i <= GENDERS_ERR_ERRNUMRANGE; i++)
     {
       int errnum, err;
 
       genders_set_errnum(handle, i);
       errnum = genders_errnum(handle);
-	
+
       err = genders_errnum_check("genders_errnum",
 				 num,
 				 i,
@@ -266,10 +266,10 @@ genders_strerror_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, genders_database_base.filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
   for (i = GENDERS_ERR_SUCCESS; i <= GENDERS_ERR_ERRNUMRANGE; i++)
     {
       char *expected_string, *string;
@@ -278,7 +278,7 @@ genders_strerror_functionality(int verbose)
       genders_set_errnum(handle, i);
       expected_string = genders_errormsg(handle);
       string = genders_strerror(i);
-	
+
       err = genders_string_check("genders_strerror",
 				 num,
 				 expected_string,
@@ -308,10 +308,10 @@ genders_errormsg_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, genders_database_base.filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
   for (i = GENDERS_ERR_SUCCESS; i <= GENDERS_ERR_ERRNUMRANGE; i++)
     {
       char *expected_string, *string;
@@ -320,7 +320,7 @@ genders_errormsg_functionality(int verbose)
       expected_string = genders_strerror(i);
       genders_set_errnum(handle, i);
       string = genders_errormsg(handle);
-	
+
       err = genders_string_check("genders_errormsg",
 				 num,
 				 expected_string,
@@ -354,10 +354,10 @@ genders_perror_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, genders_database_base.filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
   for (i = GENDERS_ERR_SUCCESS; i <= GENDERS_ERR_ERRNUMRANGE; i++)
     {
       char *expected_string;
@@ -368,7 +368,7 @@ genders_perror_functionality(int verbose)
 
       if (pipe(fds) < 0)
 	genders_err_exit("pipe: %s", strerror(errno));
-      
+
       genders_set_errnum(handle, i);
       expected_string = genders_strerror(i);
 
@@ -409,7 +409,7 @@ genders_perror_functionality(int verbose)
 
       if (pipe(fds) < 0)
 	genders_err_exit("pipe: %s", strerror(errno));
-      
+
       genders_set_errnum(handle, i);
       expected_string = genders_strerror(i);
 
@@ -462,7 +462,7 @@ _genders_get_flags_functionality_common(genders_t handle,
 
   if (genders_set_flags(handle, flag) < 0)
     genders_err_exit("genders_set_flags: %s", genders_errormsg(handle));
-	
+
   return_value = genders_get_flags(handle, &tmpflags);
   errnum = genders_errnum(handle);
 
@@ -474,7 +474,7 @@ _genders_get_flags_functionality_common(genders_t handle,
 					  errnum,
 					  flag_str,
 					  verbose);
-  
+
   errcount += err;
   (*num)++;
 
@@ -500,14 +500,14 @@ genders_get_flags_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   err = _genders_get_flags_functionality_common(handle,
 						&num,
 						GENDERS_FLAG_DEFAULT,
 						"GENDERS_FLAG_DEFAULT",
 						verbose);
   errcount += err;
-  
+
   err = _genders_get_flags_functionality_common(handle,
 						&num,
 						GENDERS_FLAG_RAW_VALUES,
@@ -536,7 +536,7 @@ _genders_set_flags_functionality_common(genders_t handle,
 
   return_value = genders_set_flags(handle, flag);
   errnum = genders_errnum(handle);
-  
+
   err = genders_return_value_errnum_check("genders_set_flags",
 					  (*num),
 					  0,
@@ -545,13 +545,13 @@ _genders_set_flags_functionality_common(genders_t handle,
 					  errnum,
 					  flag_str,
 					  verbose);
-  
+
   errcount += err;
   (*num)++;
-  
+
   if (genders_get_flags(handle, &tmpflags) < 0)
     genders_err_exit("genders_get_flags: %s", genders_errormsg(handle));
-  
+
   err = genders_flag_check("genders_set_flags",
 			   (*num),
 			   flag,
@@ -584,15 +584,15 @@ _genders_set_flags_raw_values(int *num,
   if (genders_load_data(handle, database->filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
 
-  if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0) 
+  if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0)
     genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handle));
-      
-  if ((vallist_len = genders_vallist_create(handle, &vallist)) < 0) 
+
+  if ((vallist_len = genders_vallist_create(handle, &vallist)) < 0)
     genders_err_exit("genders_vallist_create: %s", genders_errormsg(handle));
 
   if (genders_set_flags(handle, GENDERS_FLAG_RAW_VALUES) < 0)
     genders_err_exit("genders_set_flags: %s", genders_errormsg(handle));
- 
+
   /* Note: we're cheating, vals_string represents the substituted
    * values, vals_input represents the raw values.  This is not what
    * is typically done.
@@ -603,7 +603,7 @@ _genders_set_flags_raw_values(int *num,
 				 vallist,
 				 attrlist_len,
 				 database->data->node);
-  
+
   errnum = genders_errnum(handle);
 
   err = genders_return_value_errnum_attrval_list_check("genders_set_flags",
@@ -637,9 +637,9 @@ _genders_set_flags_raw_values(int *num,
 				 vallist,
 				 attrlist_len,
 				 database->data->node);
-  
+
   errnum = genders_errnum(handle);
-  
+
   err = genders_return_value_errnum_attrval_list_check("genders_set_flags",
 						       (*num),
 						       database->data->node_attrvals[0].attrslen,
@@ -678,7 +678,7 @@ genders_set_flags_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-   
+
   /* Part 1: Test Basics */
 
   err = _genders_set_flags_functionality_common(handle,
@@ -687,7 +687,7 @@ genders_set_flags_functionality(int verbose)
 						"GENDERS_FLAG_DEFAULT",
 						verbose);
   errcount += err;
-  
+
   err = _genders_set_flags_functionality_common(handle,
 						&num,
 						GENDERS_FLAG_RAW_VALUES,
@@ -709,7 +709,7 @@ genders_set_flags_functionality(int verbose)
 }
 
 static int
-_genders_getfunc_functionality(GendersGetFunc func, 
+_genders_getfunc_functionality(GendersGetFunc func,
 			       char *funcname,
 			       char *filename,
 			       int num,
@@ -720,7 +720,7 @@ _genders_getfunc_functionality(GendersGetFunc func,
 {
   genders_t handle;
   int return_value, errnum, err;
-	
+
   assert(func && funcname && filename);
 
   if (!(handle = genders_handle_create()))
@@ -731,7 +731,7 @@ _genders_getfunc_functionality(GendersGetFunc func,
 
   return_value = func(handle);
   errnum = genders_errnum(handle);
-		 
+
   err = genders_return_value_errnum_check(funcname,
 					  num,
 					  expected_return_value,
@@ -758,16 +758,16 @@ genders_getnumnodes_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_getfunc_functionality(genders_getnumnodes,
 					   "genders_getnumnodes",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   databases[i]->data->numnodes,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -787,16 +787,16 @@ genders_getnumattrs_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_getfunc_functionality(genders_getnumattrs,
 					   "genders_getnumattrs",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   databases[i]->data->numattrs,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -816,16 +816,16 @@ genders_getmaxattrs_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_getfunc_functionality(genders_getmaxattrs,
 					   "genders_getmaxattrs",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   databases[i]->data->maxattrs,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -866,7 +866,7 @@ genders_getmaxnodelen_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err, maxnodelen;
-      
+
       if (hostnamelen > databases[i]->data->maxnodelen)
 	maxnodelen = hostnamelen;
       else
@@ -874,12 +874,12 @@ genders_getmaxnodelen_functionality(int verbose)
       err = _genders_getfunc_functionality(genders_getmaxnodelen,
 					   "genders_getmaxnodelen",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   maxnodelen,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -899,16 +899,16 @@ genders_getmaxattrlen_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_getfunc_functionality(genders_getmaxattrlen,
 					   "genders_getmaxattrlen",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   databases[i]->data->maxattrlen,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -928,16 +928,16 @@ genders_getmaxvallen_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_getfunc_functionality(genders_getmaxvallen,
 					   "genders_getmaxvallen",
 					   databases[i]->filename,
-					   num, 
+					   num,
 					   databases[i]->data->maxvallen,
 					   GENDERS_ERR_SUCCESS,
 					   databases[i]->filename,
 					   verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -960,18 +960,18 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
   genders_t handle;
   char **list;
   int return_value, errnum, retval = 0;
-  
+
   assert(funccreate && funcdestroy && funcname);
-  
+
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-  
+
   return_value = funccreate(handle, &list);
   errnum = genders_errnum(handle);
-  
+
   retval = genders_return_value_errnum_check(funcname,
 					     num,
 					     expected_return_value,
@@ -980,7 +980,7 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
 					     errnum,
 					     msg,
 					     verbose);
-  
+
   if (expected_return_value >= 0
       && expected_return_value == retval
       && errnum == GENDERS_ERR_SUCCESS)
@@ -988,10 +988,10 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
       if (funcdestroy(handle, list) < 0)
 	genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
     }
-  
+
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_destroy");
-  
+
   return retval;
 }
 
@@ -1015,7 +1015,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
 
@@ -1024,12 +1024,12 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
 
   return_value = funcclear(handle, list);
   errnum = genders_errnum(handle);
-  
+
   err = genders_return_value_errnum_list_check(funcname,
 					       num,
 					       0,
 					       GENDERS_ERR_SUCCESS,
-					       NULL, 
+					       NULL,
 					       0,
 					       return_value,
 					       errnum,
@@ -1043,7 +1043,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
     genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_destroy: %s", genders_errormsg(handle));
-  
+
   return retval;
 }
 
@@ -1066,7 +1066,7 @@ _genders_list_destroy_functionality(GendersListCreateFunc funccreate,
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
 
@@ -1075,7 +1075,7 @@ _genders_list_destroy_functionality(GendersListCreateFunc funccreate,
 
   return_value = funcdestroy(handle, list);
   errnum = genders_errnum(handle);
-      
+
   retval = genders_return_value_errnum_check(funcname,
 					     num,
 					     expected_return_value,
@@ -1103,17 +1103,17 @@ genders_nodelist_create_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_create_functionality(genders_nodelist_create,
 					       genders_nodelist_destroy,
 					       "genders_nodelist_create",
 					       databases[i]->filename,
-					       num, 
+					       num,
 					       databases[i]->data->numnodes,
 					       GENDERS_ERR_SUCCESS,
 					       databases[i]->filename,
 					       verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1133,18 +1133,18 @@ genders_nodelist_clear_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_clear_functionality(genders_nodelist_create,
 					      genders_nodelist_clear,
 					      genders_nodelist_destroy,
 					      "genders_nodelist_clear",
 					      databases[i]->filename,
-					      num, 
+					      num,
 					      0,
 					      GENDERS_ERR_SUCCESS,
 					      databases[i]->filename,
 					      verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1164,17 +1164,17 @@ genders_nodelist_destroy_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_destroy_functionality(genders_nodelist_create,
 						genders_nodelist_destroy,
 						"genders_nodelist_destroy",
 						databases[i]->filename,
-						num, 
+						num,
 						0,
 						GENDERS_ERR_SUCCESS,
 						databases[i]->filename,
 						verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1194,17 +1194,17 @@ genders_attrlist_create_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_create_functionality(genders_attrlist_create,
 					       genders_attrlist_destroy,
 					       "genders_attrlist_create",
 					       databases[i]->filename,
-					       num, 
+					       num,
 					       databases[i]->data->numattrs,
 					       GENDERS_ERR_SUCCESS,
 					       databases[i]->filename,
 					       verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1224,18 +1224,18 @@ genders_attrlist_clear_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_clear_functionality(genders_nodelist_create,
 					      genders_nodelist_clear,
 					      genders_nodelist_destroy,
 					      "genders_nodelist_clear",
 					      databases[i]->filename,
-					      num, 
+					      num,
 					      0,
 					      GENDERS_ERR_SUCCESS,
 					      databases[i]->filename,
 					      verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1255,17 +1255,17 @@ genders_attrlist_destroy_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_destroy_functionality(genders_attrlist_create,
 						genders_attrlist_destroy,
 						"genders_attrlist_destroy",
 						databases[i]->filename,
-						num, 
+						num,
 						0,
 						GENDERS_ERR_SUCCESS,
 						databases[i]->filename,
 						verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1285,17 +1285,17 @@ genders_vallist_create_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_create_functionality(genders_vallist_create,
 					       genders_vallist_destroy,
 					       "genders_vallist_create",
 					       databases[i]->filename,
-					       num, 
+					       num,
 					       databases[i]->data->numattrs,
 					       GENDERS_ERR_SUCCESS,
 					       databases[i]->filename,
 					       verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1315,18 +1315,18 @@ genders_vallist_clear_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_clear_functionality(genders_vallist_create,
 					      genders_vallist_clear,
 					      genders_vallist_destroy,
 					      "genders_vallist_clear",
 					      databases[i]->filename,
-					      num, 
+					      num,
 					      0,
 					      GENDERS_ERR_SUCCESS,
 					      databases[i]->filename,
 					      verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1346,17 +1346,17 @@ genders_vallist_destroy_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int err;
-      
+
       err = _genders_list_destroy_functionality(genders_vallist_create,
 						genders_vallist_destroy,
 						"genders_vallist_destroy",
 						databases[i]->filename,
-						num, 
+						num,
 						0,
 						GENDERS_ERR_SUCCESS,
 						databases[i]->filename,
 						verbose);
-      
+
       errcount += err;
       num++;
       i++;
@@ -1388,18 +1388,18 @@ genders_getnodename_functionality(int verbose)
     {
       char testbuf[MAXHOSTNAMELEN+1];
       int return_value, errnum, err;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
+
       return_value = genders_getnodename(handle, testbuf, MAXHOSTNAMELEN);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_string_check("genders_getnodename",
-						     num, 
+						     num,
 						     0,
 						     GENDERS_ERR_SUCCESS,
 						     nodenamebuf,
@@ -1408,10 +1408,10 @@ genders_getnodename_functionality(int verbose)
 						     testbuf,
 						     databases[i]->filename,
 						     verbose);
-      
+
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       errcount += err;
       num++;
       i++;
@@ -1433,25 +1433,25 @@ genders_getnodes_functionality(int verbose)
     {
       int j, nodelist_len, return_value, errnum, err;
       char **nodelist;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
-      if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+
+      if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0)
 	genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
-	  
+
       for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
 	{
-	  return_value = genders_getnodes(handle, 
+	  return_value = genders_getnodes(handle,
 					  nodelist,
 					  nodelist_len,
 					  databases[i]->data->attrval_nodes[j].attr,
 					  databases[i]->data->attrval_nodes[j].val);
 	  errnum = genders_errnum(handle);
-	    
+
 	  err = genders_return_value_errnum_list_check("genders_getnodes",
 						       num,
 						       databases[i]->data->attrval_nodes[j].nodeslen,
@@ -1465,7 +1465,7 @@ genders_getnodes_functionality(int verbose)
 						       GENDERS_COMPARISON_MATCH,
 						       databases[i]->filename,
 						       verbose);
-	  
+
 	  errcount += err;
 	}
 
@@ -1476,7 +1476,7 @@ genders_getnodes_functionality(int verbose)
 				      GENDERS_DATABASE_INVALID_ATTR,
 				      NULL);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_check("genders_getnodes",
 					      num,
 					      0,
@@ -1496,7 +1496,7 @@ genders_getnodes_functionality(int verbose)
 					  databases[i]->data->attr_with_val,
 					  GENDERS_DATABASE_INVALID_VAL);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_getnodes",
 						  num,
 						  0,
@@ -1512,7 +1512,7 @@ genders_getnodes_functionality(int verbose)
 	genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }
@@ -1533,26 +1533,26 @@ genders_getattr_functionality(int verbose)
     {
       int j, attrlist_len, vallist_len, return_value, errnum, err;
       char **attrlist, **vallist;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
-      if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0) 
+
+      if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0)
 	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handle));
-      
-      if ((vallist_len = genders_vallist_create(handle, &vallist)) < 0) 
+
+      if ((vallist_len = genders_vallist_create(handle, &vallist)) < 0)
 	genders_err_exit("genders_vallist_create: %s", genders_errormsg(handle));
-      
+
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
 	  err = 0;
-	  return_value = genders_getattr(handle, 
-					 attrlist, 
-					 vallist, 
-					 attrlist_len, 
+	  return_value = genders_getattr(handle,
+					 attrlist,
+					 vallist,
+					 attrlist_len,
 					 databases[i]->data->nodes[j]);
 	  errnum = genders_errnum(handle);
 
@@ -1582,7 +1582,7 @@ genders_getattr_functionality(int verbose)
 					 attrlist_len,
 					 GENDERS_DATABASE_INVALID_NODE);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_getattr",
 						  num,
 						  -1,
@@ -1600,7 +1600,7 @@ genders_getattr_functionality(int verbose)
 	genders_err_exit("genders_vallist_destroy: %s", genders_errormsg(handle));
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-	
+
       num++;
       i++;
     }
@@ -1621,19 +1621,19 @@ genders_getattr_all_functionality(int verbose)
     {
       int attrlist_len, return_value, errnum, err;
       char **attrlist;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
-      if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0) 
+
+      if ((attrlist_len = genders_attrlist_create(handle, &attrlist)) < 0)
 	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handle));
-      
+
       return_value = genders_getattr_all(handle, attrlist, attrlist_len);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_list_check("genders_getattr_all",
 						   num,
 						   databases[i]->data->numattrs,
@@ -1652,7 +1652,7 @@ genders_getattr_all_functionality(int verbose)
 	genders_err_exit("genders_attrlist_destroy: %s", genders_errormsg(handle));
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       errcount += err;
       num++;
       i++;
@@ -1669,37 +1669,37 @@ genders_testattr_functionality(int verbose)
   int num = 0;
   int i = 0;
   genders_database_t **databases = &genders_functionality_databases[0];
-  
+
   while (databases[i] != NULL)
     {
       int j, maxvallen, return_value, errnum, err;
       char *valbuf;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
       if ((maxvallen = genders_getmaxvallen(handle)) < 0)
 	genders_err_exit("genders_getmaxvallen: %s", genders_errormsg(handle));
       if (!(valbuf = (char *)malloc(maxvallen + 1)))
 	genders_err_exit("malloc: %s", strerror(errno));
-      
+
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
 	  int k;
 	  for (k = 0; k < databases[i]->data->node_attrvals[j].attrslen; k++)
 	    {
-	      return_value = genders_testattr(handle, 
+	      return_value = genders_testattr(handle,
 					      databases[i]->data->nodes[j],
 					      databases[i]->data->node_attrvals[j].attrs[k],
 					      valbuf,
 					      maxvallen + 1);
 	      errnum = genders_errnum(handle);
-	      
+
 	      err = genders_return_value_errnum_string_check("genders_testattr",
-							     num, 
+							     num,
 							     1,
 							     GENDERS_ERR_SUCCESS,
 							     databases[i]->data->node_attrvals[j].vals_string[k],
@@ -1708,11 +1708,11 @@ genders_testattr_functionality(int verbose)
 							     valbuf,
 							     databases[i]->filename,
 							     verbose);
-		
+
 	      errcount += err;
 	    }
 	}
-      
+
       /* Test invalid node */
       if (databases[i]->data->node && databases[i]->data->attr_with_val)
 	{
@@ -1722,7 +1722,7 @@ genders_testattr_functionality(int verbose)
 					  valbuf,
 					  maxvallen + 1);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_testattr",
 						  num,
 						  -1,
@@ -1735,13 +1735,13 @@ genders_testattr_functionality(int verbose)
 	}
 
       /* Test invalidate attribute */
-      return_value = genders_testattr(handle, 
+      return_value = genders_testattr(handle,
 				      databases[i]->data->node,
 				      GENDERS_DATABASE_INVALID_ATTR,
 				      valbuf,
 				      maxvallen + 1);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_check("genders_testattr",
 					      num,
                                               (databases[i]->data->node) ? 0 : -1,
@@ -1755,7 +1755,7 @@ genders_testattr_functionality(int verbose)
       free(valbuf);
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }
@@ -1775,24 +1775,24 @@ genders_testattrval_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int j, return_value, errnum, err;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
+
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
 	  int k;
 	  for (k = 0; k < databases[i]->data->node_attrvals[j].attrslen; k++)
 	    {
-	      return_value = genders_testattrval(handle, 
+	      return_value = genders_testattrval(handle,
 						 databases[i]->data->nodes[j],
 						 databases[i]->data->node_attrvals[j].attrs[k],
 						 databases[i]->data->node_attrvals[j].vals_input[k]);
 	      errnum = genders_errnum(handle);
-	      
+
 	      err = genders_return_value_errnum_check("genders_testattrval",
 						      num,
 						      1,
@@ -1804,7 +1804,7 @@ genders_testattrval_functionality(int verbose)
 	      errcount += err;
 	    }
 	}
-      
+
       /* Test invalid node */
       if (databases[i]->data->node && databases[i]->data->attr_with_val && databases[i]->data->val)
 	{
@@ -1813,7 +1813,7 @@ genders_testattrval_functionality(int verbose)
 					     databases[i]->data->attr_with_val,
 					     databases[i]->data->val);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_testattrval",
 						  num,
 						  -1,
@@ -1828,12 +1828,12 @@ genders_testattrval_functionality(int verbose)
       /* Test attr without val */
       if (databases[i]->data->attr_without_val && databases[i]->data->val)
 	{
-	  return_value = genders_testattrval(handle, 
+	  return_value = genders_testattrval(handle,
 					     databases[i]->data->node,
 					     databases[i]->data->attr_without_val,
 					     databases[i]->data->val);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_testattrval",
 						  num,
 						  0,
@@ -1844,16 +1844,16 @@ genders_testattrval_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-      
+
       /* Test attr with val, but invalid val */
       if (databases[i]->data->attr_with_val)
 	{
-	  return_value = genders_testattrval(handle, 
+	  return_value = genders_testattrval(handle,
 					     databases[i]->data->node,
 					     databases[i]->data->attr_with_val,
 					     GENDERS_DATABASE_INVALID_VAL);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_testattrval",
 						  num,
 						  0,
@@ -1862,7 +1862,7 @@ genders_testattrval_functionality(int verbose)
 						  errnum,
 						  databases[i]->filename,
 						  verbose);
-	  
+
 	  errcount += err;
 	}
 
@@ -1888,18 +1888,18 @@ genders_isnode_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int j, return_value, errnum, err;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
+
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
 	  return_value = genders_isnode(handle, databases[i]->data->nodes[j]);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_isnode",
 						  num,
 						  1,
@@ -1910,11 +1910,11 @@ genders_isnode_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-      
+
       /* Test invalid node */
       return_value = genders_isnode(handle, GENDERS_DATABASE_INVALID_NODE);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_check("genders_isnode",
 					      num,
 					      0,
@@ -1927,7 +1927,7 @@ genders_isnode_functionality(int verbose)
 
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }
@@ -1947,18 +1947,18 @@ genders_isattr_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int j, return_value, errnum, err;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-	
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
+
       for (j = 0; j < databases[i]->data->attrslen; j++)
 	{
 	  return_value = genders_isattr(handle, databases[i]->data->attrs[j]);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_isattr",
 						  num,
 						  1,
@@ -1969,11 +1969,11 @@ genders_isattr_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-      
+
       /* Test invalid attr */
       return_value = genders_isattr(handle, GENDERS_DATABASE_INVALID_ATTR);
       errnum = genders_errnum(handle);
-      
+
       err = genders_return_value_errnum_check("genders_isattr",
 					      num,
 					      0,
@@ -1983,10 +1983,10 @@ genders_isattr_functionality(int verbose)
 					      databases[i]->filename,
 					      verbose);
       errcount += err;
-      
+
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }
@@ -2006,23 +2006,23 @@ genders_isattrval_functionality(int verbose)
   while (databases[i] != NULL)
     {
       int j, return_value, errnum, err;
-      
+
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
       for (j = 0; j < databases[i]->data->attrslen; j++)
 	{
 	  if (!databases[i]->data->vals[j])
 	    continue;
 
-	  return_value = genders_isattrval(handle, 
+	  return_value = genders_isattrval(handle,
 					   databases[i]->data->attrs[j],
 					   databases[i]->data->vals[j]);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_isattrval",
 						  num,
 						  1,
@@ -2033,15 +2033,15 @@ genders_isattrval_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-      
+
       /* Test attr without val */
       if (databases[i]->data->attr_without_val && databases[i]->data->val)
 	{
-	  return_value = genders_isattrval(handle, 
+	  return_value = genders_isattrval(handle,
 					   databases[i]->data->attr_without_val,
 					   databases[i]->data->val);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_isattrval",
 						  num,
 						  0,
@@ -2052,15 +2052,15 @@ genders_isattrval_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-      
+
       /* Test attr with val, but invalid val */
       if (databases[i]->data->attr_with_val)
 	{
-	  return_value = genders_isattrval(handle, 
+	  return_value = genders_isattrval(handle,
 					   databases[i]->data->attr_with_val,
 					   GENDERS_DATABASE_INVALID_VAL);
 	  errnum = genders_errnum(handle);
-	  
+
 	  err = genders_return_value_errnum_check("genders_isattrval",
 						  num,
 						  0,
@@ -2071,10 +2071,10 @@ genders_isattrval_functionality(int verbose)
 						  verbose);
 	  errcount += err;
 	}
-	  
+
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-	  
+
       num++;
       i++;
     }
@@ -2103,18 +2103,18 @@ genders_index_attrvals_functionality(int verbose)
 
       if (!(handle = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handle, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-      
+
       for (j = 0; j < databases[i]->data->attrslen; j++)
 	{
 	  err = 0;
 	  return_value = genders_index_attrvals(handle, databases[i]->data->attrs[j]);
 	  errnum = genders_errnum(handle);
-      
+
 	  err += genders_return_value_errnum_check("genders_index_attrvals",
-						   num, 
+						   num,
 						   0,
 						   GENDERS_ERR_SUCCESS,
 						   return_value,
@@ -2129,18 +2129,18 @@ genders_index_attrvals_functionality(int verbose)
 	      char **nodelist;
 	      int nodelist_len;
 
-	      if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+	      if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0)
 		genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
-	  
+
 	      for (k = 0; k < databases[i]->data->attrval_nodes_len; k++)
 		{
-		  return_value = genders_getnodes(handle, 
+		  return_value = genders_getnodes(handle,
 						  nodelist,
 						  nodelist_len,
 						  databases[i]->data->attrval_nodes[k].attr,
 						  databases[i]->data->attrval_nodes[k].val);
 		  errnum = genders_errnum(handle);
-		  
+
 		  err += genders_return_value_errnum_list_check("genders_index_attrvals:genders_getnodes",
 								num,
 								databases[i]->data->attrval_nodes[k].nodeslen,
@@ -2163,7 +2163,7 @@ genders_index_attrvals_functionality(int verbose)
 					      GENDERS_DATABASE_INVALID_ATTR,
 					      NULL);
 	      errnum = genders_errnum(handle);
-	      
+
 	      err += genders_return_value_errnum_check("genders_index_attrvals:genders_getnodes",
 						       num,
 						       0,
@@ -2182,7 +2182,7 @@ genders_index_attrvals_functionality(int verbose)
 						  databases[i]->data->attr_with_val,
 						  GENDERS_DATABASE_INVALID_VAL);
 		  errnum = genders_errnum(handle);
-		  
+
 		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_getnodes",
 							   num,
 							   0,
@@ -2205,12 +2205,12 @@ genders_index_attrvals_functionality(int verbose)
 		{
 		  if (!databases[i]->data->vals[k])
 		    continue;
-		  
-		  return_value = genders_isattrval(handle, 
+
+		  return_value = genders_isattrval(handle,
 						   databases[i]->data->attrs[k],
 						   databases[i]->data->vals[k]);
 		  errnum = genders_errnum(handle);
-		  
+
 		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
 							   num,
 							   1,
@@ -2220,15 +2220,15 @@ genders_index_attrvals_functionality(int verbose)
 							   databases[i]->filename,
 							   verbose);
 		}
-	      
+
 	      /* Test attr without val */
 	      if (databases[i]->data->attr_without_val && databases[i]->data->val)
 		{
-		  return_value = genders_isattrval(handle, 
+		  return_value = genders_isattrval(handle,
 						   databases[i]->data->attr_without_val,
 						   databases[i]->data->val);
 		  errnum = genders_errnum(handle);
-		  
+
 		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
 							   num,
 							   0,
@@ -2238,15 +2238,15 @@ genders_index_attrvals_functionality(int verbose)
 							   databases[i]->filename,
 							   verbose);
 		}
-      
+
 	      /* Test attr with val, but invalid val */
 	      if (databases[i]->data->attr_with_val)
 		{
-		  return_value = genders_isattrval(handle, 
+		  return_value = genders_isattrval(handle,
 						   databases[i]->data->attr_with_val,
 						   GENDERS_DATABASE_INVALID_VAL);
 		  errnum = genders_errnum(handle);
-		  
+
 		  err += genders_return_value_errnum_check("genders_index_attrvals:genders_isattrval",
 							   num,
 							   0,
@@ -2257,13 +2257,13 @@ genders_index_attrvals_functionality(int verbose)
 							   verbose);
 		}
 	    }
-	  
+
 	  errcount += err;
 	}
-      
+
       if (genders_handle_destroy(handle) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }
@@ -2284,16 +2284,16 @@ genders_query_functionality(int verbose)
     int nodelist_len, return_value, errnum, err;
     char **nodelist;
     int i = 0;
-      
+
     if (!(handle = genders_handle_create()))
       genders_err_exit("genders_handle_create");
-	
+
     if (genders_load_data(handle, genders_database_base.filename) < 0)
       genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
-    if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+
+    if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0)
       genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
-	
+
     while (genders_query_parse_error_tests[i] != NULL)
       {
 	return_value = genders_query(handle,
@@ -2301,7 +2301,7 @@ genders_query_functionality(int verbose)
 				     nodelist_len,
 				     genders_query_parse_error_tests[i]);
 	errnum = genders_errnum(handle);
-	
+
 	sprintf(msgbuf, "\"%s\"", genders_query_parse_error_tests[i]);
 	err = genders_return_value_errnum_check("genders_query",
 						num,
@@ -2331,21 +2331,21 @@ genders_query_functionality(int verbose)
       {
 	int j, nodelist_len, return_value, errnum, err;
 	char **nodelist;
-      
+
 	if (!(handle = genders_handle_create()))
 	  genders_err_exit("genders_handle_create");
-	
+
 	if (genders_load_data(handle, databases[i]->filename) < 0)
 	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
-	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+
+	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0)
 	  genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
-	
+
 	for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
 	  {
 	    char querybuf[GENDERS_QUERY_BUFLEN];
 	    char *queryptr;
-	    
+
 	    /* Construct simple query */
 	    if (databases[i]->data->attrval_nodes[j].attr
 		&& strlen(databases[i]->data->attrval_nodes[j].attr))
@@ -2362,13 +2362,13 @@ genders_query_functionality(int verbose)
 	      }
 	    else
 	      queryptr = NULL;
-	     
-	    return_value = genders_query(handle, 
+
+	    return_value = genders_query(handle,
 					 nodelist,
 					 nodelist_len,
 					 queryptr);
 	    errnum = genders_errnum(handle);
-	    
+
 	    err = genders_return_value_errnum_list_check("genders_query",
 							 num,
 							 databases[i]->data->attrval_nodes[j].nodeslen,
@@ -2382,17 +2382,17 @@ genders_query_functionality(int verbose)
 							 GENDERS_COMPARISON_MATCH,
 							 databases[i]->filename,
 							 verbose);
-	    
+
 	    errcount += err;
 	  }
-	
+
 	/* Test invalid attr */
-	return_value = genders_query(handle, 
+	return_value = genders_query(handle,
 				     nodelist,
 				     nodelist_len,
 				     GENDERS_DATABASE_INVALID_ATTR);
 	errnum = genders_errnum(handle);
-	
+
 	err = genders_return_value_errnum_check("genders_query",
 						num,
 						0,
@@ -2407,7 +2407,7 @@ genders_query_functionality(int verbose)
 	if (databases[i]->data->attr_with_val)
 	  {
 	    char querybuf[GENDERS_QUERY_BUFLEN];
-	    
+
 	    memset(querybuf, '\0', GENDERS_QUERY_BUFLEN);
 	    strcpy(querybuf, databases[i]->data->attr_with_val);
 	    strcat(querybuf, "=");
@@ -2418,8 +2418,8 @@ genders_query_functionality(int verbose)
 					 nodelist_len,
 					 querybuf);
 	    errnum = genders_errnum(handle);
-	  
-            sprintf(msgbuf, "%s: \"%s\"", 
+
+            sprintf(msgbuf, "%s: \"%s\"",
                     databases[i]->filename,
                     querybuf);
 
@@ -2438,7 +2438,7 @@ genders_query_functionality(int verbose)
 	  genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
-	
+
 	num++;
 	i++;
       }
@@ -2454,26 +2454,26 @@ genders_query_functionality(int verbose)
       {
 	int j, nodelist_len, return_value, errnum, err;
 	char **nodelist;
-      
+
 	if (!(handle = genders_handle_create()))
 	  genders_err_exit("genders_handle_create");
-	
+
 	if (genders_load_data(handle, databases[i]->filename) < 0)
 	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
-	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0) 
+
+	if ((nodelist_len = genders_nodelist_create(handle, &nodelist)) < 0)
 	  genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handle));
-	
+
 	j = 0;
 	while (databases[i]->tests->tests[j].query != NULL)
 	  {
-	    return_value = genders_query(handle, 
+	    return_value = genders_query(handle,
 					 nodelist,
 					 nodelist_len,
 					 databases[i]->tests->tests[j].query);
 	    errnum = genders_errnum(handle);
 
-	    sprintf(msgbuf, "%s: \"%s\"", 
+	    sprintf(msgbuf, "%s: \"%s\"",
 		    databases[i]->filename,
 		    databases[i]->tests->tests[j].query);
 	    err = genders_return_value_errnum_list_check("genders_query",
@@ -2489,7 +2489,7 @@ genders_query_functionality(int verbose)
 							 GENDERS_COMPARISON_MATCH,
 							 msgbuf,
 							 verbose);
-	    
+
 	    errcount += err;
 	    j++;
 	  }
@@ -2498,7 +2498,7 @@ genders_query_functionality(int verbose)
 	  genders_err_exit("genders_nodelist_destroy: %s", genders_errormsg(handle));
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
-	
+
 	num++;
 	i++;
       }
@@ -2519,20 +2519,20 @@ genders_testquery_functionality(int verbose)
     genders_t handle;
     int return_value, errnum, err;
     int i = 0;
-      
+
     if (!(handle = genders_handle_create()))
       genders_err_exit("genders_handle_create");
-	
+
     if (genders_load_data(handle, genders_database_base.filename) < 0)
       genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
     while (genders_query_parse_error_tests[i] != NULL)
       {
 	return_value = genders_testquery(handle,
                                          "node1",
                                          genders_query_parse_error_tests[i]);
 	errnum = genders_errnum(handle);
-	
+
 	sprintf(msgbuf, "\"%s\"", genders_query_parse_error_tests[i]);
 	err = genders_return_value_errnum_check("genders_testquery",
 						num,
@@ -2559,13 +2559,13 @@ genders_testquery_functionality(int verbose)
     while (databases[i] != NULL)
       {
 	int j, return_value, errnum, err;
-      
+
 	if (!(handle = genders_handle_create()))
 	  genders_err_exit("genders_handle_create");
-	
+
 	if (genders_load_data(handle, databases[i]->filename) < 0)
 	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
 	for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
 	  {
 	    char querybuf[GENDERS_QUERY_BUFLEN];
@@ -2590,8 +2590,8 @@ genders_testquery_functionality(int verbose)
                                                      databases[i]->data->attrval_nodes[j].nodes[k],
                                                      querybuf);
                     errnum = genders_errnum(handle);
-                    
-                    sprintf(msgbuf, "%s: \"%s\"", 
+
+                    sprintf(msgbuf, "%s: \"%s\"",
                             databases[i]->filename,
                             querybuf);
                     err = genders_return_value_errnum_check("genders_testquery",
@@ -2601,7 +2601,7 @@ genders_testquery_functionality(int verbose)
                                                             return_value,
                                                             errnum,
                                                             msgbuf,
-                                                            verbose);                    
+                                                            verbose);
                     errcount += err;
                   }
               }
@@ -2613,8 +2613,8 @@ genders_testquery_functionality(int verbose)
                                                  databases[i]->data->attrval_nodes[j].nodes[k],
                                                  GENDERS_DATABASE_INVALID_ATTR);
                 errnum = genders_errnum(handle);
-	
-                sprintf(msgbuf, "%s: \"%s\"", 
+
+                sprintf(msgbuf, "%s: \"%s\"",
                         databases[i]->filename,
                         GENDERS_DATABASE_INVALID_ATTR);
                 err = genders_return_value_errnum_check("genders_testquery",
@@ -2631,18 +2631,18 @@ genders_testquery_functionality(int verbose)
                 if (databases[i]->data->attr_with_val)
                   {
                     char querybuf2[GENDERS_QUERY_BUFLEN];
-                    
+
                     memset(querybuf2, '\0', GENDERS_QUERY_BUFLEN);
                     strcpy(querybuf2, databases[i]->data->attr_with_val);
                     strcat(querybuf2, "=");
                     strcat(querybuf2, GENDERS_DATABASE_INVALID_VAL);
-                    
+
                     return_value = genders_testquery(handle,
                                                      databases[i]->data->attrval_nodes[j].nodes[k],
                                                      querybuf2);
                     errnum = genders_errnum(handle);
-                    
-                    sprintf(msgbuf, "%s: \"%s\"", 
+
+                    sprintf(msgbuf, "%s: \"%s\"",
                             databases[i]->filename,
                             querybuf2);
                     err = genders_return_value_errnum_check("genders_testquery",
@@ -2660,7 +2660,7 @@ genders_testquery_functionality(int verbose)
 
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
-	
+
 	num++;
 	i++;
       }
@@ -2675,13 +2675,13 @@ genders_testquery_functionality(int verbose)
     while (databases[i] != NULL)
       {
 	int j, return_value, errnum, err;
-      
+
 	if (!(handle = genders_handle_create()))
 	  genders_err_exit("genders_handle_create");
-	
+
 	if (genders_load_data(handle, databases[i]->filename) < 0)
 	  genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
 	j = 0;
 	while (databases[i]->tests->tests[j].query != NULL)
 	  {
@@ -2691,15 +2691,15 @@ genders_testquery_functionality(int verbose)
 
                 for (k = 0; k < databases[i]->tests->tests[j].nodeslen; k++)
                   {
-                    return_value = genders_testquery(handle, 
+                    return_value = genders_testquery(handle,
                                                      databases[i]->tests->tests[j].nodes[k],
                                                      databases[i]->tests->tests[j].query);
                     errnum = genders_errnum(handle);
 
-                    sprintf(msgbuf, "%s: \"%s\"", 
+                    sprintf(msgbuf, "%s: \"%s\"",
                             databases[i]->filename,
                             databases[i]->tests->tests[j].query);
-                    
+
                     err = genders_return_value_errnum_check("genders_testquery",
                                                             num,
                                                             1,
@@ -2711,13 +2711,13 @@ genders_testquery_functionality(int verbose)
                     errcount += err;
                   }
               }
-	    
+
 	    j++;
 	  }
 
 	if (genders_handle_destroy(handle) < 0)
 	  genders_err_exit("genders_handle_destroy");
-	
+
 	num++;
 	i++;
       }
@@ -2738,7 +2738,7 @@ genders_parse_functionality(int verbose)
     genders_err_exit("dup: %s", strerror(errno));
   if ((dev_null = open(_PATH_DEVNULL, O_APPEND)) < 0)
     genders_err_exit("open: %s: %s", _PATH_DEVNULL, strerror(errno));
-  
+
   /* Part A: Successfully find parse errors */
   {
     int i = 0;
@@ -2831,17 +2831,17 @@ genders_set_errnum_functionality(int verbose)
 
   if (!(handle = genders_handle_create()))
     genders_err_exit("genders_handle_create");
-  
+
   if (genders_load_data(handle, genders_database_base.filename) < 0)
     genders_err_exit("genders_load_data: %s", genders_errormsg(handle));
-	
+
   for (i = GENDERS_ERR_SUCCESS; i <= GENDERS_ERR_ERRNUMRANGE; i++)
     {
       int errnum, err;
 
       genders_set_errnum(handle, i);
       errnum = genders_errnum(handle);
-	
+
       err = genders_errnum_check("genders_set_errnum",
 				 num,
 				 i,
@@ -2890,10 +2890,10 @@ genders_copy_functionality(int verbose)
       int errnum;
       int err = 0;
       int j, k;
-      
+
       if (!(handleorig = genders_handle_create()))
 	genders_err_exit("genders_handle_create");
-      
+
       if (genders_load_data(handleorig, databases[i]->filename) < 0)
 	genders_err_exit("genders_load_data: %s", genders_errormsg(handleorig));
 
@@ -2909,9 +2909,9 @@ genders_copy_functionality(int verbose)
 						      errnum,
 						      databases[i]->filename,
 						      verbose);
-      
+
       errcount +=err;
-      
+
       if (err)
 	goto try_next_database;
 
@@ -2921,90 +2921,90 @@ genders_copy_functionality(int verbose)
 	genders_err_exit("genders_getnumnodes: %s", genders_errormsg(handleorig));
       if ((numnodescopy = genders_getnumnodes(handlecopy)) < 0)
 	genders_err_exit("genders_getnumnodes: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       numnodesorig,
 				       numnodescopy,
 				       "numnodes",
 				       verbose);
-      
+
       err += errcount;
 
       if ((numattrsorig = genders_getnumattrs(handleorig)) < 0)
 	genders_err_exit("genders_getnumattrs: %s", genders_errormsg(handleorig));
       if ((numattrscopy = genders_getnumattrs(handlecopy)) < 0)
 	genders_err_exit("genders_getnumattrs: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       numattrsorig,
 				       numattrscopy,
 				       "numattrs",
 				       verbose);
-      
+
       err += errcount;
 
       if ((maxattrsorig = genders_getmaxattrs(handleorig)) < 0)
 	genders_err_exit("genders_getmaxattrs: %s", genders_errormsg(handleorig));
       if ((maxattrscopy = genders_getmaxattrs(handlecopy)) < 0)
 	genders_err_exit("genders_getmaxattrs: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       maxattrsorig,
 				       maxattrscopy,
 				       "maxattrs",
 				       verbose);
-      
+
       err += errcount;
 
       if ((maxnodelenorig = genders_getmaxnodelen(handleorig)) < 0)
 	genders_err_exit("genders_getmaxnodelen: %s", genders_errormsg(handleorig));
       if ((maxnodelencopy = genders_getmaxnodelen(handlecopy)) < 0)
 	genders_err_exit("genders_getmaxnodelen: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       maxnodelenorig,
 				       maxnodelencopy,
 				       "maxnodelen",
 				       verbose);
-      
+
       err += errcount;
 
       if ((maxattrlenorig = genders_getmaxattrlen(handleorig)) < 0)
 	genders_err_exit("genders_getmaxattrlen: %s", genders_errormsg(handleorig));
       if ((maxattrlencopy = genders_getmaxattrlen(handlecopy)) < 0)
 	genders_err_exit("genders_getmaxattrlen: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       maxattrlenorig,
 				       maxattrlencopy,
 				       "maxattrlen",
 				       verbose);
-      
+
       err += errcount;
 
       if ((maxvallenorig = genders_getmaxvallen(handleorig)) < 0)
 	genders_err_exit("genders_getmaxvallen: %s", genders_errormsg(handleorig));
       if ((maxvallencopy = genders_getmaxvallen(handlecopy)) < 0)
 	genders_err_exit("genders_getmaxvallen: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       maxvallenorig,
 				       maxvallencopy,
 				       "maxvallen",
 				       verbose);
-      
+
       err += errcount;
 
-      if ((nodelist_lenorig = genders_nodelist_create(handleorig, &nodelistorig)) < 0) 
+      if ((nodelist_lenorig = genders_nodelist_create(handleorig, &nodelistorig)) < 0)
 	genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handleorig));
 
-      if ((nodelist_lencopy = genders_nodelist_create(handlecopy, &nodelistcopy)) < 0) 
+      if ((nodelist_lencopy = genders_nodelist_create(handlecopy, &nodelistcopy)) < 0)
 	genders_err_exit("genders_nodelist_create: %s", genders_errormsg(handlecopy));
 
       err = genders_return_value_check("genders_copy",
@@ -3013,13 +3013,13 @@ genders_copy_functionality(int verbose)
 				       nodelist_lencopy,
 				       "nodelist_len",
 				       verbose);
-      
+
       err += errcount;
 
-      if ((attrlist_lenorig = genders_attrlist_create(handleorig, &attrlistorig)) < 0) 
+      if ((attrlist_lenorig = genders_attrlist_create(handleorig, &attrlistorig)) < 0)
 	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handleorig));
 
-      if ((attrlist_lencopy = genders_attrlist_create(handlecopy, &attrlistcopy)) < 0) 
+      if ((attrlist_lencopy = genders_attrlist_create(handlecopy, &attrlistcopy)) < 0)
 	genders_err_exit("genders_attrlist_create: %s", genders_errormsg(handlecopy));
 
       err = genders_return_value_check("genders_copy",
@@ -3028,22 +3028,22 @@ genders_copy_functionality(int verbose)
 				       attrlist_lencopy,
 				       "attrlist_len",
 				       verbose);
-      
+
       err += errcount;
 
-      if ((vallist_lenorig = genders_vallist_create(handleorig, &vallistorig)) < 0) 
+      if ((vallist_lenorig = genders_vallist_create(handleorig, &vallistorig)) < 0)
 	genders_err_exit("genders_vallist_create: %s", genders_errormsg(handleorig));
 
-      if ((vallist_lencopy = genders_vallist_create(handlecopy, &vallistcopy)) < 0) 
+      if ((vallist_lencopy = genders_vallist_create(handlecopy, &vallistcopy)) < 0)
 	genders_err_exit("genders_vallist_create: %s", genders_errormsg(handlecopy));
-	    
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       vallist_lenorig,
 				       vallist_lencopy,
 				       "vallist_len",
 				       verbose);
-      
+
       err += errcount;
 
       if ((nodelist_countorig = genders_getnodes(handleorig,
@@ -3059,14 +3059,14 @@ genders_copy_functionality(int verbose)
 						 NULL,
 						 NULL)) < 0)
 	genders_err_exit("genders_getnodes: %s", genders_errormsg(handlecopy));
-     
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       nodelist_countorig,
 				       nodelist_countcopy,
 				       "nodelist_count",
 				       verbose);
-      
+
       err += errcount;
 
       for (j = 0; j < nodelist_countorig; j++)
@@ -3092,28 +3092,28 @@ genders_copy_functionality(int verbose)
 
 	      if (genders_attrlist_clear(handleorig, attrlistorig) < 0)
 		genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handleorig));
-	      
+
 	      if (genders_attrlist_clear(handlecopy, attrlistcopy) < 0)
 		genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handlecopy));
-	      
+
 	      if (genders_vallist_clear(handleorig, vallistorig) < 0)
 		genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handleorig));
-	      
+
 	      if (genders_vallist_clear(handlecopy, vallistcopy) < 0)
 		genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handlecopy));
-	      
+
 	      countorig = genders_getattr(handleorig,
 					  attrlistorig,
 					  vallistorig,
 					  attrlist_lenorig,
 					  nodelistorig[j]);
-	      
+
 	      countcopy = genders_getattr(handlecopy,
 					  attrlistcopy,
 					  vallistcopy,
 					  attrlist_lencopy,
 					  nodelistcopy[j]);
-	      
+
 	      err = genders_return_value_check("genders_copy",
 					       num,
 					       countorig,
@@ -3136,7 +3136,7 @@ genders_copy_functionality(int verbose)
 						 "copy",
 						 "getattr attr listing",
 						 verbose);
-		      
+
 		      err += errcount;
 
 		      err = genders_string_check("genders_copy",
@@ -3147,13 +3147,13 @@ genders_copy_functionality(int verbose)
 						 "copy",
 						 "getattr val listing",
 						 verbose);
-		      
+
 		      err += errcount;
 		    }
 		}
 	    }
 	}
-      
+
       if (genders_attrlist_clear(handleorig, attrlistorig) < 0)
 	genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handleorig));
 
@@ -3169,16 +3169,16 @@ genders_copy_functionality(int verbose)
 						    attrlistcopy,
 						    attrlist_lencopy)) < 0)
 	genders_err_exit("genders_getattr_all: %s", genders_errormsg(handlecopy));
-      
+
       err = genders_return_value_check("genders_copy",
 				       num,
 				       attrlist_countorig,
 				       attrlist_countcopy,
 				       "attrlist_count",
 				       verbose);
-      
+
       err += errcount;
-      
+
       for (j = 0; j < attrlist_countorig; j++)
 	{
 	  err = genders_string_check("genders_copy",
@@ -3216,7 +3216,7 @@ genders_copy_functionality(int verbose)
     try_next_database:
       if (genders_handle_destroy(handleorig) < 0)
 	genders_err_exit("genders_handle_destroy");
-      
+
       num++;
       i++;
     }

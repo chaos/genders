@@ -6,20 +6,20 @@
 .\"  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
 .\"  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
 .\"  UCRL-CODE-2003-004.
-.\"  
+.\"
 .\"  This file is part of Genders, a cluster configuration database.
 .\"  For details, see <http://www.llnl.gov/linux/genders/>.
-.\"  
+.\"
 .\"  Genders is free software; you can redistribute it and/or modify it under
 .\"  the terms of the GNU General Public License as published by the Free
 .\"  Software Foundation; either version 2 of the License, or (at your option)
 .\"  any later version.
-.\"  
+.\"
 .\"  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
 .\"  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 .\"  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 .\"  details.
-.\"  
+.\"
 .\"  You should have received a copy of the GNU General Public License along
 .\"  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 .\"############################################################################
@@ -37,7 +37,7 @@ by \fIfilename\fR.  If \fIfilename\fR is NULL,
 \fBgenders_load_data()\fR will attempt to read and parse the default
 genders file defined by \fBGENDERS_DEFAULT_FILE\fR. \fIhandle\fR is a
 genders handle created by
-.BR genders_handle_create (3).  
+.BR genders_handle_create (3).
 
 After \fBgenders_load_data()\fR is called, information about the
 genders file is stored in the genders handle passed in.  This
@@ -50,8 +50,8 @@ default genders file if \fIfilename\fR is NULL).
 On success, 0 is returned.  On error, -1 is returned, and an error
 code is returned in \fIhandle\fR.  The error code can be retrieved via
 .BR genders_errnum (3)
-, and a description of the error code can be retrieved via 
-.BR genders_strerror (3).  
+, and a description of the error code can be retrieved via
+.BR genders_strerror (3).
 Error codes are defined in genders.h.
 .br
 .SH ERRORS
@@ -71,8 +71,8 @@ Error reading the genders file indicated by \fIfilename\fR.
 The genders file indicated by \fIfilename\fR is incorrectly formatted.
 .TP
 .B GENDERS_ERR_ISLOADED
-.BR genders_load_data (3) 
-has already been called with \fIhandle\fR.  
+.BR genders_load_data (3)
+has already been called with \fIhandle\fR.
 .TP
 .B GENDERS_ERR_OVERFLOW
 A line in the genders database exceeds the maximum allowed length.
@@ -81,13 +81,13 @@ A line in the genders database exceeds the maximum allowed length.
 .BR malloc (3)
 has failed internally, system is out of memory.
 .TP
-.B GENDERS_ERR_MAGIC 
+.B GENDERS_ERR_MAGIC
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
 point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).
 .TP
 .B GENDERS_ERR_INTERNAL
-An internal system error has occurred.  
+An internal system error has occurred.
 .br
 .SH FILES
 /usr/include/genders.h

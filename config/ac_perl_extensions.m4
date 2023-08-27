@@ -9,7 +9,7 @@ AC_DEFUN([AC_PERL_EXTENSIONS],
 [
   AC_MSG_CHECKING(for --with-perl-extensions)
   AC_ARG_WITH(perl-extensions,
-     AS_HELP_STRING([--with-perl-extensions=], 
+     AS_HELP_STRING([--with-perl-extensions=],
                     [enable or disable perl extensions build]),
      [ case "$withval" in
      yes)

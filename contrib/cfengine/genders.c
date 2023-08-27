@@ -16,7 +16,7 @@ static int genders_file_exists (const char *genders_file)
 	if (genders_file == NULL)
 		genders_file = GENDERS_DEFAULT_FILE;
 
-	if ((stat (genders_file, &st) < 0) && 
+	if ((stat (genders_file, &st) < 0) &&
 		((errno == ENOENT) || (errno == ENOTDIR)))
 		return 0;
 

@@ -114,7 +114,7 @@ Java_gov_llnl_lc_chaos_Genders_genders_1constructor (JNIEnv *env, jobject obj, j
     {
       if (!(filenameutf = (*env)->GetStringUTFChars(env, filename, NULL)))
 	goto cleanup;
-      
+
       rv = _constructor (env, obj, filenameutf);
 
     }
@@ -139,7 +139,7 @@ _get_handle (JNIEnv *env, jobject obj, genders_t *handle)
 
   if (!(gh_addr_fid = (*env)->GetFieldID (env, genders_cls, "gh_addr", "J")))
     goto cleanup;
-  
+
   jgh_addr_addr = (*env)->GetLongField (env, obj, gh_addr_fid);
 
   if (!jgh_addr_addr)
@@ -288,7 +288,7 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
   for (i = 0; i < nodeslen; i++)
     {
       jstring tmpstr;
-      
+
       if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
 	goto cleanup;
 
@@ -400,7 +400,7 @@ _getattr (JNIEnv *env, jobject obj, const char *node)
   for (i = 0; i < attrslen; i++)
     {
       jstring tmpstr;
-      
+
       if (!(tmpstr = (*env)->NewStringUTF(env, attrlist[i])))
 	goto cleanup;
 
@@ -478,7 +478,7 @@ Java_gov_llnl_lc_chaos_Genders_getattr_1all (JNIEnv *env, jobject obj)
   for (i = 0; i < attrslen; i++)
     {
       jstring tmpstr;
-      
+
       if (!(tmpstr = (*env)->NewStringUTF(env, attrlist[i])))
 	goto cleanup;
 
@@ -532,7 +532,7 @@ _getattrval (JNIEnv *env, jobject obj, const char *node, const char *attr)
       if (!(jval = (*env)->NewStringUTF(env, valbuf)))
 	goto cleanup;
     }
-  
+
   rv = jval;
  cleanup:
   free (valbuf);
@@ -907,7 +907,7 @@ Java_gov_llnl_lc_chaos_Genders_query (JNIEnv *env, jobject obj, jstring query)
   for (i = 0; i < nodeslen; i++)
     {
       jstring tmpstr;
-      
+
       if (!(tmpstr = (*env)->NewStringUTF(env, nodelist[i])))
 	goto cleanup;
 

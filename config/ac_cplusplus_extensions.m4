@@ -6,7 +6,7 @@ AC_DEFUN([AC_CPLUSPLUS_EXTENSIONS],
 [
   AC_MSG_CHECKING(for --with-cplusplus-extensions)
   AC_ARG_WITH(cplusplus-extensions,
-     AS_HELP_STRING([--with-cplusplus-extensions=], 
+     AS_HELP_STRING([--with-cplusplus-extensions=],
                     [enable or disable c++ extensions build]),
      [ case "$withval" in
      yes)

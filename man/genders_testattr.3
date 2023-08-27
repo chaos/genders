@@ -6,26 +6,26 @@
 .\"  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
 .\"  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
 .\"  UCRL-CODE-2003-004.
-.\"  
+.\"
 .\"  This file is part of Genders, a cluster configuration database.
 .\"  For details, see <http://www.llnl.gov/linux/genders/>.
-.\"  
+.\"
 .\"  Genders is free software; you can redistribute it and/or modify it under
 .\"  the terms of the GNU General Public License as published by the Free
 .\"  Software Foundation; either version 2 of the License, or (at your option)
 .\"  any later version.
-.\"  
+.\"
 .\"  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
 .\"  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 .\"  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 .\"  details.
-.\"  
+.\"
 .\"  You should have received a copy of the GNU General Public License along
 .\"  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 .\"############################################################################
 .TH GENDERS_TESTATTR 3 "August 2003" "LLNL" "LIBGENDERS"
 .SH NAME
-genders_testattr \- test if a node has an attribute  
+genders_testattr \- test if a node has an attribute
 .SH SYNOPSIS
 .B #include <genders.h>
 .sp
@@ -64,8 +64,8 @@ For both \fBgenders_testattr()\fR and \fBgenders_testattrval()\fR, -1
 is returned on error, and an error code is returned in \fIhandle\fR.
 The error code can be retrieved via
 .BR genders_errnum (3)
-, and a description of the error code can be retrieved via 
-.BR genders_strerror (3).  
+, and a description of the error code can be retrieved via
+.BR genders_strerror (3).
 Error codes are defined in genders.h.
 .br
 .SH ERRORS
@@ -84,14 +84,14 @@ The buffer pointed to by \fIval\fR is not large enough to store the
 attribute value.
 .TP
 .B GENDERS_ERR_PARAMETERS
-An incorrect parameter has been passed in.  
+An incorrect parameter has been passed in.
 .TP
 .B GENDERS_ERR_NOTFOUND
 The node pointed to by \fInode\fR cannot be found in the genders file
 or if \fInode\fR=NULL, the machine genders is running on is not listed
 in the genders database.
 .TP
-.B GENDERS_ERR_MAGIC 
+.B GENDERS_ERR_MAGIC
 \fIhandle\fR has an incorrect magic number.  \fIhandle\fR does not
 point to a genders handle or \fIhandle\fR has been destroyed by
 .BR genders_handle_destroy (3).

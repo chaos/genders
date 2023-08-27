@@ -6,20 +6,20 @@
 #  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
 #  Written by Jim Garlick <garlick@llnl.gov> and Albert Chu <chu11@llnl.gov>.
 #  UCRL-CODE-2003-004.
-#  
+#
 #  This file is part of Genders, a cluster configuration database.
 #  For details, see <http://www.llnl.gov/linux/genders/>.
-#  
+#
 #  Genders is free software; you can redistribute it and/or modify it under
 #  the terms of the GNU General Public License as published by the Free
 #  Software Foundation; either version 2 of the License, or (at your option)
 #  any later version.
-#  
+#
 #  Genders is distributed in the hope that it will be useful, but WITHOUT ANY
 #  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 #  FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
 #  details.
-#  
+#
 #  You should have received a copy of the GNU General Public License along
 #  with Genders.  If not, see <http://www.gnu.org/licenses/>.
 #############################################################################
@@ -34,9 +34,9 @@ our $VERSION = "@PERLGENDERS_VERSION@";
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT_OK = qw(&_errormsg $GENDERS_DEFAULT_FILE $debugkey $handlekey);
-our %EXPORT_TAGS = ( 'all' => [ qw(&_errormsg 
-                                   $GENDERS_DEFAULT_FILE 
-                                   $debugkey 
+our %EXPORT_TAGS = ( 'all' => [ qw(&_errormsg
+                                   $GENDERS_DEFAULT_FILE
+                                   $debugkey
                                    $handlekey) ] );
 
 our $GENDERS_DEFAULT_FILE = Libgenders->GENDERS_DEFAULT_FILE;
@@ -61,9 +61,9 @@ sub new {
     my $self = {};
     my $handle;
     my $rv;
-    
+
     $self->{$debugkey} = 0;
-    
+
     $handle = Libgenders->genders_handle_create();
     if (!defined($handle)) {
         _errormsg($self, "genders_handle_create()");
@@ -76,7 +76,7 @@ sub new {
     if ($rv < 0) {
         _errormsg($self, "genders_load_data()");
         return undef;
-    } 
+    }
 
     bless ($self, $class);
     return $self;
@@ -197,7 +197,7 @@ sub testattr {
             _errormsg($self, "genders_testattr()");
             return 0;
         }
-        return $rv; 
+        return $rv;
     }
     else {
         return 0;
@@ -217,7 +217,7 @@ sub testattrval {
             _errormsg($self, "genders_testattrval()");
             return 0;
         }
-        return $rv; 
+        return $rv;
     }
     else {
         return 0;
@@ -235,7 +235,7 @@ sub isnode {
             _errormsg($self, "genders_isnode()");
             return 0;
         }
-        return $rv; 
+        return $rv;
     }
     else {
         return 0;
@@ -318,7 +318,7 @@ sub testquery {
             _errormsg($self, "genders_testquery()");
             return 0;
         }
-        return $rv; 
+        return $rv;
     }
     else {
         return 0;
@@ -458,7 +458,7 @@ Returns 1 if the specified node meets the conditions of the specified
 query, 0 if it does not.  If the node is not specified, the local node
 is checked.
 
-=back 
+=back
 
 =head1 AUTHOR
 

@@ -8,7 +8,7 @@ AC_DEFUN([AC_EXTENSION_DESTDIR],
 [
   AC_MSG_CHECKING(for --with-extension-destdir )
   AC_ARG_WITH(extension-destdir,
-     AS_HELP_STRING([--with-extension-destdir=path], 
+     AS_HELP_STRING([--with-extension-destdir=path],
                     [define extension modules install prefix]),
      [ case "$withval" in
      yes)
