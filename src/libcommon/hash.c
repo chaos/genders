@@ -8,7 +8,7 @@
  *  UCRL-CODE-2003-004.
  *
  *  This file is part of Genders, a cluster configuration database.
- *  For details, see <http://www.llnl.gov/linux/genders/>.
+ *  For details, see <https://github.com/chaos/genders>.
  *
  *  The code in this file began with the code in the LSD-Tools project.
  *  See below for original copyright information.
