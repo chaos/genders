@@ -6,7 +6,7 @@
  *  UCRL-CODE-2003-004.
  *
  *  This file is part of Genders, a cluster configuration database.
- *  For details, see <http://www.llnl.gov/linux/genders/>.
+ *  For details, see <https://github.com/chaos/genders>.
  *
  *  Genders is free software; you can redistribute it and/or modify it under
  *  the terms of the GNU General Public License as published by the Free
