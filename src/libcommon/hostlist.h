@@ -1,5 +1,7 @@
 /*****************************************************************************\
- *  $Id: hostlist.h,v 1.3 2008-01-29 19:09:05 chu11 Exp $
+ *  $Id$
+ *****************************************************************************
+ *  $LSDId: hostlist.h 7428 2008-05-23 16:08:31Z grondo $
  *****************************************************************************
  *  Copyright (C) 2002 The Regents of the University of California.
  *  Produced at Lawrence Livermore National Laboratory (cf, DISCLAIMER).
@@ -26,6 +28,8 @@
 
 #ifndef _HOSTLIST_H
 #define _HOSTLIST_H
+
+#include <unistd.h>
 
 /* Notes:
  *
