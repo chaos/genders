@@ -51,18 +51,18 @@ extern "C" {
 #define GENDERS_ERR_ERRNUMRANGE  15
 
 /* Flags for alternate genders before
- * 
+ *
  * RAW_VALUES - Do not perform any substitution, such as with "%n" or
  * "%%", when returning attribute values.
  */
 #define GENDERS_FLAG_DEFAULT     0x00000000
 #define GENDERS_FLAG_RAW_VALUES  0x00000001
 
-#define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@   
+#define GENDERS_DEFAULT_FILE     @GENDERS_DEFAULT_FILE@
 
 typedef struct genders *genders_t;
 
-/* 
+/*
  * genders_handle_create
  *
  * Creates and initialize a genders handle. 
@@ -71,33 +71,33 @@ typedef struct genders *genders_t;
  */
 genders_t genders_handle_create(void);
 
-/* 
- * genders_handle_destroy 
- * 
+/*
+ * genders_handle_destroy
+ *
  * Destroy a genders handle.
  *
  * Returns 0 on success, -1 on failure
  */
 int genders_handle_destroy(genders_t handle);
 
-/* 
- * genders_load_data 
- * 
+/*
+ * genders_load_data
+ *
  * Opens/reads/parses the specified genders file.  If filename is
  * NULL, attempts to read default genders file.
  *
- * Returns 0 on success, -1 on failure  
+ * Returns 0 on success, -1 on failure
  */
 int genders_load_data(genders_t handle, const char *filename);
 
-/* 
+/*
  * genders_errnum
  *
  * Returns an error code associated with a handle .
  */
 int genders_errnum(genders_t handle);
 
-/* 
+/*
  * genders_strerror
  *
  * Returns a pointer to NUL-terminated statically allocated string
@@ -105,22 +105,22 @@ int genders_errnum(genders_t handle);
  */
 char *genders_strerror(int errnum);
 
-/* 
+/*
  * genders_errormsg
- * 
+ *
  * Returns a pointer to a NUL-terminated statically allocated string
  * describing the most recent error that occurred.
  */
 char *genders_errormsg(genders_t handle);
 
-/* 
+/*
  * genders_perror
  *
  * Produces a message on standard error describing the most recent
  * error that occurred.
  */
 void genders_perror(genders_t handle, const char *msg);
- 
+
 /*
  * genders_get_flags
  *
@@ -140,63 +140,63 @@ int genders_get_flags(genders_t handle, unsigned int *flags);
  */
 int genders_set_flags(genders_t handle, unsigned int flags);
 
-/* 
+/*
  * genders_getnumnodes
  *
  * Get the number of nodes read from the genders file.
  *
- * Returns number of nodes on success, -1 on failure 
+ * Returns number of nodes on success, -1 on failure
  */
 int genders_getnumnodes(genders_t handle);
 
-/* 
+/*
  * genders_getnumattrs
  *
  * Get the number of attributes read from the genders file
  *
- * Returns number of attributes on success, -1 on failure 
+ * Returns number of attributes on success, -1 on failure
  */
 int genders_getnumattrs(genders_t handle);
 
-/* 
+/*
  * genders_getmaxattrs
  *
  * Get the max number of attributes read of any one node in the
  * genders file.
  *
- * Returns number of attributes on success, -1 on failure 
+ * Returns number of attributes on success, -1 on failure
  */
 int genders_getmaxattrs(genders_t handle);
 
-/* 
+/*
  * genders_getmaxnodelen
  *
  * Get the max node name length of any one node in the genders file.
  *
- * Returns maximum node length on success, -1 on failure 
+ * Returns maximum node length on success, -1 on failure
  */
 int genders_getmaxnodelen(genders_t handle);
 
-/* 
+/*
  * genders_getmaxattrlen
  *
  * Get the max attribute name length of any one attribute in the
  * genders file.
  *
- * Returns maximum attribute length on success, -1 on failure 
+ * Returns maximum attribute length on success, -1 on failure
  */
 int genders_getmaxattrlen(genders_t handle);
 
-/* 
+/*
  * genders_getmaxvallen
  *
  * Get the max value length of any one value in the genders file.
  *
- * Returns maximum value length on success, -1 on failure 
+ * Returns maximum value length on success, -1 on failure
  */
 int genders_getmaxvallen(genders_t handle);
 
-/* 
+/*
  * genders_nodelist_create
  *
  * Allocate an array of character strings to store node names in.
@@ -205,7 +205,7 @@ int genders_getmaxvallen(genders_t handle);
  */
 int genders_nodelist_create(genders_t handle, char ***nodelist);
 
-/* 
+/*
  * genders_nodelist_clear
  *
  * Clears the data stored in a previously created node list.
@@ -214,7 +214,7 @@ int genders_nodelist_create(genders_t handle, char ***nodelist);
  */
 int genders_nodelist_clear(genders_t handle, char **nodelist);
 
-/* 
+/*
  * genders_nodelist_destroy
  *
  * Frees memory of a previously created node list.
@@ -223,7 +223,7 @@ int genders_nodelist_clear(genders_t handle, char **nodelist);
  */
 int genders_nodelist_destroy(genders_t handle, char **nodelist);
 
-/* 
+/*
  * genders_attrlist_create
  *
  * Allocate an array of character strings to store attribute names in.
@@ -232,7 +232,7 @@ int genders_nodelist_destroy(genders_t handle, char **nodelist);
  */
 int genders_attrlist_create(genders_t handle, char ***attrlist);
 
-/* 
+/*
  * genders_attrlist_clear
  *
  * Clears the data stored in a previously created attribute list.
@@ -241,7 +241,7 @@ int genders_attrlist_create(genders_t handle, char ***attrlist);
  */
 int genders_attrlist_clear(genders_t handle, char **attrlist);
 
-/* 
+/*
  * genders_attrlist_destroy
  *
  * Frees memory of a previously created attribute list.
@@ -250,7 +250,7 @@ int genders_attrlist_clear(genders_t handle, char **attrlist);
  */
 int genders_attrlist_destroy(genders_t handle, char **attrlist);
 
-/* 
+/*
  * genders_vallist_create
  *
  * Allocate an array of character strings to store values in.
@@ -259,7 +259,7 @@ int genders_attrlist_destroy(genders_t handle, char **attrlist);
  */
 int genders_vallist_create(genders_t handle, char ***vallist);
 
-/* 
+/*
  * genders_vallist_clear
  *
  * Clears the data stored in a previously created value list.
@@ -268,7 +268,7 @@ int genders_vallist_create(genders_t handle, char ***vallist);
  */
 int genders_vallist_clear(genders_t handle, char **vallist);
 
-/* 
+/*
  * genders_vallist_destroy
  *
  * Frees memory of a previously created value list.
@@ -283,11 +283,11 @@ int genders_vallist_destroy(genders_t handle, char **vallist);
  * Get the name of the current node.  Node name returned is the
  * shortened hostname.
  *
- * Returns 0 on success, -1 on failure 
+ * Returns 0 on success, -1 on failure
  */
 int genders_getnodename(genders_t handle, char *node, int len);
 
-/* 
+/*
  * genders_getnodes
  *
  * Gets list of nodes with the specified attribute.  If 'attr' is
@@ -296,13 +296,13 @@ int genders_getnodename(genders_t handle, char *node, int len);
  *
  * Returns number of matches on success, -1 on failure
  */
-int genders_getnodes(genders_t handle, 
-		     char *nodes[], 
-		     int len, 
-                     const char *attr, 
+int genders_getnodes(genders_t handle,
+		     char *nodes[],
+		     int len,
+                     const char *attr,
 		     const char *val);
 
-/* 
+/*
  * genders_getattr
  *
  * Gets list of attributes for the specified node.  If 'node' is NULL,
@@ -311,13 +311,13 @@ int genders_getnodes(genders_t handle,
  *
  * Returns number of matches on success, -1 on failure
  */
-int genders_getattr(genders_t handle, 
-		    char *attrs[], 
-		    char *vals[], 
-                    int len, 
+int genders_getattr(genders_t handle,
+		    char *attrs[],
+		    char *vals[],
+                    int len,
 		    const char *node);
 
-/* 
+/*
  * genders_getattr_all
  *
  * Gets all attributes stored in the genders file.
@@ -326,7 +326,7 @@ int genders_getattr(genders_t handle,
  */
 int genders_getattr_all(genders_t handle, char *attrs[], int len);
 
-/* 
+/*
  * genders_testattr
  *
  * Tests whether a node has an attribute.  If 'node' is NULL, tests
@@ -335,13 +335,13 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len);
  *
  * Returns 1=true, 0=false, -1=failure
  */
-int genders_testattr(genders_t handle, 
+int genders_testattr(genders_t handle,
 		     const char *node,
-                     const char *attr, 
-		     char *val, 
+                     const char *attr,
+		     char *val,
 		     int len);
 
-/* 
+/*
  * genders_testattrval
  *
  * Tests whether node has an attr=val pair.  If 'node' is NULL, tests
@@ -349,12 +349,12 @@ int genders_testattr(genders_t handle,
  *
  * Returns 1=true, 0=false, -1=failure
  */
-int genders_testattrval(genders_t handle, 
-			const char *node, 
-                        const char *attr, 
+int genders_testattrval(genders_t handle,
+			const char *node,
+                        const char *attr,
 			const char *val);
 
-/* 
+/*
  * genders_isnode
  *
  * Tests whether the node exists in the genders file.  If 'node' is
@@ -364,7 +364,7 @@ int genders_testattrval(genders_t handle,
  */
 int genders_isnode(genders_t handle, const char *node);
 
-/* 
+/*
  * genders_isattr
  *
  * Tests whether the attribute exists in the genders file.
@@ -373,7 +373,7 @@ int genders_isnode(genders_t handle, const char *node);
  */
 int genders_isattr(genders_t handle, const char *attr);
 
-/* 
+/*
  * genders_isattrval
  *
  * Tests whether an attr=val exists for some node in the genders file.
@@ -382,7 +382,7 @@ int genders_isattr(genders_t handle, const char *attr);
  */
 int genders_isattrval(genders_t handle, const char *attr, const char *val);
 
-/* 
+/*
  * genders_index_attrvals
  *
  * Internally index values for specified attribute for faster search
@@ -392,10 +392,10 @@ int genders_isattrval(genders_t handle, const char *attr, const char *val);
  * destroy an earlier index.
  *
  * Returns 0 on success, -1 on failure
- */            
+ */
 int genders_index_attrvals(genders_t handle, const char *attr);
-        
-/* 
+
+/*
  * genders_query
  *
  * Query the genders database for a set of nodes based on union,
@@ -407,7 +407,7 @@ int genders_index_attrvals(genders_t handle, const char *attr);
  * function is not threadsafe.
  *
  * Return number matches on success, -1 on error
- */ 
+ */
 int genders_query(genders_t handle, char *nodes[], int len, const char *query);
 
 /*
@@ -427,7 +427,7 @@ int genders_testquery(genders_t handle,
 		      const char *node,
                       const char *query);
 
-/* 
+/*
  * genders_parse
  *
  * Parses a genders file, and outputs parse debugging information to
@@ -438,11 +438,11 @@ int genders_testquery(genders_t handle,
  */
 int genders_parse(genders_t handle, const char *filename, FILE *stream);
 
-/* 
+/*
  * genders_set_errnum
  *
  * Set the errnum for a genders handle.
- */      
+ */
 void genders_set_errnum(genders_t handle, int errnum);
 
 /*
