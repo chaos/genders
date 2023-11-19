@@ -139,10 +139,10 @@ _genders_loaded_handle_error_check(genders_t handle)
 
 int
 _genders_put_in_array(genders_t handle,
-		      char *str,
-		      char **list,
-		      int index,
-		      int len)
+                      char *str,
+                      char **list,
+                      int index,
+                      int len)
 {
   if (index >= len)
     {
@@ -162,10 +162,10 @@ _genders_put_in_array(genders_t handle,
 
 int
 _genders_get_valptr(genders_t handle,
-		    genders_node_t n,
-		    genders_attrval_t av,
-		    char **val,
-		    int *subst_occurred)
+                    genders_node_t n,
+                    genders_attrval_t av,
+                    char **val,
+                    int *subst_occurred)
 {
   char *valptr, *nodenameptr, *valbufptr;
 
@@ -173,7 +173,7 @@ _genders_get_valptr(genders_t handle,
       || (handle->flags & GENDERS_FLAG_RAW_VALUES))
     {
       if (subst_occurred)
-	*subst_occurred = 0;
+        *subst_occurred = 0;
       *val = av->val;
       return 0;
     }
@@ -184,31 +184,31 @@ _genders_get_valptr(genders_t handle,
   while (*valptr != '\0')
     {
       if (*valptr == '%')
-	{
-	  if ((*(valptr + 1)) == '%')
-	    {
-	      *(valbufptr)++ = '%';
-	      valptr++;
-	    }
-	  else if ((*(valptr + 1)) == 'n')
-	    {
-	      if ((strlen(av->val) - 2 + strlen(n->name)) >
-		  (handle->maxvallen + 1))
-		{
-		  handle->errnum = GENDERS_ERR_INTERNAL;
-		  return -1;
-		}
+        {
+          if ((*(valptr + 1)) == '%')
+            {
+              *(valbufptr)++ = '%';
+              valptr++;
+            }
+          else if ((*(valptr + 1)) == 'n')
+            {
+              if ((strlen(av->val) - 2 + strlen(n->name)) >
+                  (handle->maxvallen + 1))
+                {
+                  handle->errnum = GENDERS_ERR_INTERNAL;
+                  return -1;
+                }
 
-	      nodenameptr = n->name;
-	      while (*nodenameptr != '\0')
-		*(valbufptr)++ = *nodenameptr++;
-	      valptr++;
-	    }
-	  else
-	    *(valbufptr)++ = *valptr;
-	}
+              nodenameptr = n->name;
+              while (*nodenameptr != '\0')
+                *(valbufptr)++ = *nodenameptr++;
+              valptr++;
+            }
+          else
+            *(valbufptr)++ = *valptr;
+        }
       else
-	*(valbufptr)++ = *valptr;
+        *(valbufptr)++ = *valptr;
 
       valptr++;
     }
@@ -221,10 +221,10 @@ _genders_get_valptr(genders_t handle,
 
 int
 _genders_find_attrval(genders_t handle,
-		      genders_node_t n,
-		      const char *attr,
-		      const char *val,
-		      genders_attrval_t *avptr)
+                      genders_node_t n,
+                      const char *attr,
+                      const char *val,
+                      genders_attrval_t *avptr)
 {
   genders_attrvals_container_t avc;
   int retval = -1;
@@ -236,28 +236,28 @@ _genders_find_attrval(genders_t handle,
       genders_attrval_t av;
 
       if ((av = list_find_first(avc->attrvals,
-				_genders_list_is_attr_in_attrvals,
-				(char *)attr)))
-	{
-	  if (!val)
-	    {
-	      *avptr = av;
+                                _genders_list_is_attr_in_attrvals,
+                                (char *)attr)))
+        {
+          if (!val)
+            {
+              *avptr = av;
               goto out;
-	    }
-	  else if (av->val)
-	    {
-	      char *valptr;
+            }
+          else if (av->val)
+            {
+              char *valptr;
 
-	      if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
-		goto cleanup;
+              if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
+                goto cleanup;
 
-	      if (!strcmp(valptr, val))
-		{
-		  *avptr = av;
+              if (!strcmp(valptr, val))
+                {
+                  *avptr = av;
                   goto out;
-		}
-	    }
-	}
+                }
+            }
+        }
     }
 
  out:
@@ -327,8 +327,8 @@ _genders_rehash(genders_t handle,
 
 int
 _genders_hash_copy(genders_t handle,
-		   hash_t *hash_src,
-		   hash_t *hash_dest)
+                   hash_t *hash_src,
+                   hash_t *hash_dest)
 {
   int hash_num;
   int retval = -1;

@@ -297,10 +297,10 @@ int genders_getnodename(genders_t handle, char *node, int len);
  * Returns number of matches on success, -1 on failure
  */
 int genders_getnodes(genders_t handle,
-		     char *nodes[],
-		     int len,
+                     char *nodes[],
+                     int len,
                      const char *attr,
-		     const char *val);
+                     const char *val);
 
 /*
  * genders_getattr
@@ -312,10 +312,10 @@ int genders_getnodes(genders_t handle,
  * Returns number of matches on success, -1 on failure
  */
 int genders_getattr(genders_t handle,
-		    char *attrs[],
-		    char *vals[],
+                    char *attrs[],
+                    char *vals[],
                     int len,
-		    const char *node);
+                    const char *node);
 
 /*
  * genders_getattr_all
@@ -336,10 +336,10 @@ int genders_getattr_all(genders_t handle, char *attrs[], int len);
  * Returns 1=true, 0=false, -1=failure
  */
 int genders_testattr(genders_t handle,
-		     const char *node,
+                     const char *node,
                      const char *attr,
-		     char *val,
-		     int len);
+                     char *val,
+                     int len);
 
 /*
  * genders_testattrval
@@ -350,9 +350,9 @@ int genders_testattr(genders_t handle,
  * Returns 1=true, 0=false, -1=failure
  */
 int genders_testattrval(genders_t handle,
-			const char *node,
+                        const char *node,
                         const char *attr,
-			const char *val);
+                        const char *val);
 
 /*
  * genders_isnode
@@ -424,7 +424,7 @@ int genders_query(genders_t handle, char *nodes[], int len, const char *query);
  * Returns 1=true, 0=false, -1=failure
  */
 int genders_testquery(genders_t handle, 
-		      const char *node,
+                      const char *node,
                       const char *query);
 
 /*
