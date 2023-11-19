@@ -216,10 +216,10 @@ int _genders_loaded_handle_error_check(genders_t handle);
  * Return 0 on success, -1 on error
  */
 int _genders_put_in_array(genders_t handle,
-			  char *str,
-			  char **list,
-			  int index,
-			  int len);
+                          char *str,
+                          char **list,
+                          int index,
+                          int len);
 
 /*
  * _genders_get_valptr
@@ -229,10 +229,10 @@ int _genders_put_in_array(genders_t handle,
  * Return 0 on success, -1 on error
  */
 int _genders_get_valptr(genders_t handle,
-			genders_node_t n,
-			genders_attrval_t av,
-			char **val,
-			int *subst_occurred);
+                        genders_node_t n,
+                        genders_attrval_t av,
+                        char **val,
+                        int *subst_occurred);
 
 /*
  * _genders_find_attrval
@@ -242,10 +242,10 @@ int _genders_get_valptr(genders_t handle,
  * Return 0 on success, -1 on error
  */
 int _genders_find_attrval(genders_t handle,
-			  genders_node_t n,
-			  const char *attr,
-			  const char *val,
-			  genders_attrval_t *avptr);
+                          genders_node_t n,
+                          const char *attr,
+                          const char *val,
+                          genders_attrval_t *avptr);
 
 /*
  * _genders_rehash
@@ -267,7 +267,7 @@ int _genders_rehash(genders_t handle,
  * Returns 0 on success, -1 on error.
  */
 int _genders_hash_copy(genders_t handle,
-		       hash_t *hash_src,
-		       hash_t *hash_dest);
+                       hash_t *hash_src,
+                       hash_t *hash_dest);
 
 #endif /* _GENDERS_COMMON_H */

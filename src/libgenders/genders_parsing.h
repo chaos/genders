@@ -43,20 +43,20 @@
  * Returns 0 on success, -1 on error
  */
 int _genders_open_and_parse(genders_t handle,
-			    const char *filename,
-			    int *numattrs,
-			    int *maxattrs,
-			    int *maxnodelen,
-			    int *maxattrlen,
-			    int *maxvallen,
-			    List nodeslist,
-			    List attrvalslist,
-			    List attrslist,
+                            const char *filename,
+                            int *numattrs,
+                            int *maxattrs,
+                            int *maxnodelen,
+                            int *maxattrlen,
+                            int *maxvallen,
+                            List nodeslist,
+                            List attrvalslist,
+                            List attrslist,
                             hash_t *node_index,
                             int *node_index_size,
                             hash_t *attr_index,
                             int *attr_index_size,
-			    int debug,
-			    FILE *stream);
+                            int debug,
+                            FILE *stream);
 
 #endif /* _GENDERS_PARSING_H */
