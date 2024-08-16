@@ -106,7 +106,7 @@ static char *_node_create(genders_t gp);
 static char *_attr_create(genders_t gp);
 #endif
 
-#define HOSTLIST_BUFLEN 1024
+#define HOSTLIST_BUFLEN 65536
 
 int
 main(int argc, char *argv[])
