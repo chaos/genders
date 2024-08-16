@@ -7,7 +7,7 @@
 ##
 # Prologue.
 ##
-AC_INIT([genders],[1.28.1])
+AC_INIT([genders],[1.29.1])
 AC_CONFIG_AUX_DIR([config])
 AC_CONFIG_SRCDIR([README])
 AC_CANONICAL_TARGET
