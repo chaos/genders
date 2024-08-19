@@ -17,13 +17,13 @@ all: genderssetup.py libgendersmodule.c genders.py
 	$(PYTHON) genderssetup.py build
 
 install:
-	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
+	$(PYTHON) genderssetup.py install --single-version-externally-managed --root=/ --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 pure_install:
-	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
+	$(PYTHON) genderssetup.py install --single-version-externally-managed --root=/ --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 install-data-local:
-	$(PYTHON) genderssetup.py install --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
+	$(PYTHON) genderssetup.py install --single-version-externally-managed --root=/ --prefix=$(PYTHON_DESTDIR)$(prefix) --exec-prefix=$(PYTHON_DESTDIR)$(exec_prefix)
 
 clean: 
 	rm -rf build

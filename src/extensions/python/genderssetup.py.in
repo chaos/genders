@@ -1,4 +1,4 @@
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 libgendersmodule = Extension('libgenders',
                              include_dirs = ['../../../config', '../../libgenders'],
