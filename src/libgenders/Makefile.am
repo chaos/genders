@@ -37,9 +37,8 @@ genders_query_parse.c: genders_query.c $(srcdir)/genders_query_parse.l
 genders_query.c: $(srcdir)/genders_query.y
 	$(YACC) -d -b genders_query $(srcdir)/genders_query.y
 
-# achu: -o option in yacc/bison is not portable, use -b instead
-genders_query.tab.c: $(srcdir)/genders_query.y
-	$(YACC) -d -b genders_query $(srcdir)/genders_query.y
+genders_query.tab.c: genders_query.c
+	touch genders_query.tab.c
 
 CLEANFILES = genders_query_parse.c genders_query.tab.c genders_query.tab.h
 
