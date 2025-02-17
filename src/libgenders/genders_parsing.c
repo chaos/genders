@@ -235,28 +235,6 @@ _attr_node_processing(genders_t handle,
       __list_append(tmpattrlist, av->attr);
     }
 
-  /* If no parse errors, insert everything as needed */
-  list_iterator_reset(attrvals_itr);
-  while ((av = list_next(attrvals_itr)))
-    {
-      /* do not use _genders_find_attrval().  If the attrval already
-       * exists within the node, we don't need the actual entry.  We
-       * just want to know if it's there or not.  We avoid some list
-       * iteration by not using it.
-       */
-      if (hash_find(n->attrlist_index, av->attr))
-        {
-          if (line_num > 0)
-            {
-              fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
-                      line_num, av->attr, n->name);
-              rv = 1;
-            }
-          handle->errnum = GENDERS_ERR_PARSE;
-          goto cleanup;
-        }
-    }
-
   list_iterator_reset(attrvals_itr);
   while ((av = list_next(attrvals_itr)))
     {
