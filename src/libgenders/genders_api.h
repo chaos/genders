@@ -37,11 +37,11 @@
 /* Impossible to have a genders value with spaces */
 #define GENDERS_NOVALUE                  "  NOVAL  "
 
-#define GENDERS_NODE_INDEX_INIT_SIZE     2048
+#define GENDERS_NODE_INDEX_INIT_SIZE     32768
 
-#define GENDERS_ATTR_INDEX_INIT_SIZE     128
+#define GENDERS_ATTR_INDEX_INIT_SIZE     512
 
-#define GENDERS_ATTRLIST_INDEX_INIT_SIZE 128
+#define GENDERS_ATTRLIST_INDEX_INIT_SIZE 512
 
 /*
  * struct genders_node
