@@ -228,29 +228,7 @@ _attr_node_processing(genders_t handle,
   genders_attrval_t av = NULL;
   int rv = -1;
 
-  /* First check for parse errors */
   __list_iterator_create(attrvals_itr, avc->attrvals);
-  while ((av = list_next(attrvals_itr)))
-    {
-      /* do not use _genders_find_attrval().  If the attrval already
-       * exists within the node, we don't need the actual entry.  We
-       * just want to know if it's there or not.  We avoid some list
-       * iteration by not using it.
-       */
-      if (hash_find(n->attrlist_index, av->attr))
-        {
-          if (line_num > 0)
-            {
-              fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
-                      line_num, av->attr, n->name);
-              rv = 1;
-            }
-          handle->errnum = GENDERS_ERR_PARSE;
-          goto cleanup;
-        }
-    }
-
-  list_iterator_reset(attrvals_itr);
   while ((av = list_next(attrvals_itr)))
     {
       List l = NULL;
@@ -271,9 +249,28 @@ _attr_node_processing(genders_t handle,
             goto cleanup;
         }
 
-      __hash_insert(n->attrlist_index,
-                    av->attr,
-                    avc);
+      if (!hash_insert(n->attrlist_index, av->attr, avc))
+        {
+          if (errno == EEXIST)
+            {
+              if (line_num > 0)
+                {
+                  fprintf(stream,
+                          "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
+                          line_num,
+                          av->attr,
+                          n->name);
+                  rv = 1;
+                }
+              handle->errnum = GENDERS_ERR_PARSE;
+              goto cleanup;
+            }
+          else if (errno == ENOMEM)
+            handle->errnum = GENDERS_ERR_OUTMEM;
+          else
+            handle->errnum = GENDERS_ERR_INTERNAL;
+          goto cleanup;
+        }
     }
 
   rv = 0;
