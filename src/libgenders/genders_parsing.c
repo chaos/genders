@@ -379,6 +379,7 @@ _parse_line(genders_t handle,
   genders_attrvals_container_t avc = NULL;
   hostlist_t hl = NULL;
   hostlist_iterator_t hlitr = NULL;
+  int ret;
 
   /* "remove" comments */
   if ((temp = strchr(line, '#')))
@@ -574,13 +575,16 @@ _parse_line(genders_t handle,
 
       if (avc)
         {
-          if ((rv = _attr_node_processing(handle,
-                                          n,
-                                          avc,
-                                          attr_index,
-                                          line_num,
-                                          stream)) != 0)
-            goto cleanup;
+          if ((ret = _attr_node_processing(handle,
+                                           n,
+                                           avc,
+                                           attr_index,
+                                           line_num,
+                                           stream)) != 0)
+            {
+              rv = ret;
+              goto cleanup;
+            }
 
           __list_append(n->attrlist, avc);
           n->attrcount += list_count(avc->attrvals);
