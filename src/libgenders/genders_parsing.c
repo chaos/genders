@@ -109,12 +109,34 @@ _insert_node(genders_t handle,
  *
  * Insert an attrval into the attrvallist.
  *
- * Returns 0 on success, -1 on error
+ * If line_num > 0, returns 1 if a duplicate exists, 0 if not, -1 on error
+ *
+ * If line_num == 0, returns 0 on success, -1 on error
  */
 static int
-_insert_attrval(genders_t handle, genders_attrvals_container_t avc, char *attr, char *val)
+_insert_attrval(genders_t handle,
+                genders_attrvals_container_t avc,
+                char *attr,
+                char *val,
+                int line_num,
+                FILE *stream)
 {
   genders_attrval_t av = NULL;
+
+  /* Check attribute already listed for this node and on same line */
+
+  if (list_find_first(avc->attrvals, _genders_list_is_attr_in_attrvals, attr))
+    {
+      int rv = -1;
+      if (line_num > 0)
+        {
+          fprintf(stream, "Line %d: duplicate attribute \"%s\" listed\n",
+                  line_num, attr);
+          rv = 1;
+        }
+      handle->errnum = GENDERS_ERR_PARSE;
+      return rv;
+    }
 
   __xmalloc(av, genders_attrval_t, sizeof(struct genders_attrval));
   av->val_contains_subst = 0;
@@ -203,61 +225,10 @@ _attr_node_processing(genders_t handle,
                       FILE *stream)
 {
   ListIterator attrvals_itr = NULL;
-  List tmpattrlist = NULL;
   genders_attrval_t av = NULL;
   int rv = -1;
 
-  __list_create(tmpattrlist, NULL);
-
-  /* First check for parse errors */
   __list_iterator_create(attrvals_itr, avc->attrvals);
-  while ((av = list_next(attrvals_itr)))
-    {
-      /* do not use _genders_find_attrval().  If the attrval already
-       * exists within the node, we don't need the actual entry.  We
-       * just want to know if it's there or not.  We avoid some list
-       * iteration by not using it.
-       */
-      /* Check attribute already listed for this node and on same line */
-      if (hash_find(n->attrlist_index, av->attr)
-          || list_find_first(tmpattrlist, _genders_list_is_str, av->attr))
-        {
-          if (line_num > 0)
-            {
-              fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
-                      line_num, av->attr, n->name);
-              rv = 1;
-            }
-          handle->errnum = GENDERS_ERR_PARSE;
-          goto cleanup;
-        }
-
-      __list_append(tmpattrlist, av->attr);
-    }
-
-  /* If no parse errors, insert everything as needed */
-  list_iterator_reset(attrvals_itr);
-  while ((av = list_next(attrvals_itr)))
-    {
-      /* do not use _genders_find_attrval().  If the attrval already
-       * exists within the node, we don't need the actual entry.  We
-       * just want to know if it's there or not.  We avoid some list
-       * iteration by not using it.
-       */
-      if (hash_find(n->attrlist_index, av->attr))
-        {
-          if (line_num > 0)
-            {
-              fprintf(stream, "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
-                      line_num, av->attr, n->name);
-              rv = 1;
-            }
-          handle->errnum = GENDERS_ERR_PARSE;
-          goto cleanup;
-        }
-    }
-
-  list_iterator_reset(attrvals_itr);
   while ((av = list_next(attrvals_itr)))
     {
       List l = NULL;
@@ -278,15 +249,33 @@ _attr_node_processing(genders_t handle,
             goto cleanup;
         }
 
-      __hash_insert(n->attrlist_index,
-                    av->attr,
-                    avc);
+      if (!hash_insert(n->attrlist_index, av->attr, avc))
+        {
+          if (errno == EEXIST)
+            {
+              if (line_num > 0)
+                {
+                  fprintf(stream,
+                          "Line %d: duplicate attribute \"%s\" listed for node \"%s\"\n",
+                          line_num,
+                          av->attr,
+                          n->name);
+                  rv = 1;
+                }
+              handle->errnum = GENDERS_ERR_PARSE;
+              goto cleanup;
+            }
+          else if (errno == ENOMEM)
+            handle->errnum = GENDERS_ERR_OUTMEM;
+          else
+            handle->errnum = GENDERS_ERR_INTERNAL;
+          goto cleanup;
+        }
     }
 
   rv = 0;
  cleanup:
   __list_iterator_destroy(attrvals_itr);
-  __list_destroy(tmpattrlist);
   return rv;
 }
 
@@ -379,6 +368,7 @@ _parse_line(genders_t handle,
   genders_attrvals_container_t avc = NULL;
   hostlist_t hl = NULL;
   hostlist_iterator_t hlitr = NULL;
+  int ret;
 
   /* "remove" comments */
   if ((temp = strchr(line, '#')))
@@ -487,14 +477,11 @@ _parse_line(genders_t handle,
                   goto cleanup;
                 }
 
-              /* achu: No need to check if there are duplicate
-               * attributes within this line of the file.  Will be
-               * caught during duplicate attribute checks within each
-               * node below.
-               */
-
-              if (_insert_attrval(handle, avc, attr, val) < 0)
-                goto cleanup;
+              if ((ret = _insert_attrval(handle, avc, attr, val, line_num, stream)) != 0)
+                {
+                  rv = ret;
+                  goto cleanup;
+                }
 
               if ((insert_count = _insert_attr(handle,
                                                attrslist,
@@ -574,13 +561,16 @@ _parse_line(genders_t handle,
 
       if (avc)
         {
-          if ((rv = _attr_node_processing(handle,
-                                          n,
-                                          avc,
-                                          attr_index,
-                                          line_num,
-                                          stream)) != 0)
-            goto cleanup;
+          if ((ret = _attr_node_processing(handle,
+                                           n,
+                                           avc,
+                                           attr_index,
+                                           line_num,
+                                           stream)) != 0)
+            {
+              rv = ret;
+              goto cleanup;
+            }
 
           __list_append(n->attrlist, avc);
           n->attrcount += list_count(avc->attrvals);
