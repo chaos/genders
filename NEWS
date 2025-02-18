@@ -2,6 +2,10 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.30
+=======================
+ -- Fix multiple performance bottlenecks in libgenders parsing.
+
 Changes in genders-1.29
 =======================
  -- Increase internal buffer in nodeattr for large cluster hostranges.
