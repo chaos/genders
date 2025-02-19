@@ -250,6 +250,8 @@ AC_CONFIG_FILES( \
   src/testsuite/Makefile \
   src/testsuite/libgenders/Makefile \
   src/testsuite/libgenders/testdatabases/Makefile \
+  src/testsuite/performance/Makefile \
+  src/testsuite/performance/testdatabases/Makefile \
   compat/Makefile \
   contrib/Makefile \
   contrib/cfengine/Makefile \
