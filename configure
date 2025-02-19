@@ -17503,7 +17503,7 @@ done
 ##
 # Epilogue.
 ##
-ac_config_files="$ac_config_files genders.spec Makefile src/Makefile src/libcommon/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h src/extensions/Makefile src/extensions/cplusplus/Makefile src/extensions/perl/Makefile src/extensions/perl/Libgenders/Makefile src/extensions/perl/Libgenders/Libgenders.pm src/extensions/perl/Genders/Makefile src/extensions/perl/Genders/Genders.pm src/extensions/python/Makefile src/extensions/python/genderssetup.py src/extensions/java/Makefile src/testsuite/Makefile src/testsuite/libgenders/Makefile src/testsuite/libgenders/testdatabases/Makefile compat/Makefile contrib/Makefile contrib/cfengine/Makefile contrib/cfengine/cfengine-2.2.10/Makefile contrib/cfengine/cfengine-3.3.0/Makefile contrib/php/Makefile man/Makefile man/compat/Makefile"
+ac_config_files="$ac_config_files genders.spec Makefile src/Makefile src/libcommon/Makefile src/libgenders/Makefile src/nodeattr/Makefile src/libgenders/genders.h src/extensions/Makefile src/extensions/cplusplus/Makefile src/extensions/perl/Makefile src/extensions/perl/Libgenders/Makefile src/extensions/perl/Libgenders/Libgenders.pm src/extensions/perl/Genders/Makefile src/extensions/perl/Genders/Genders.pm src/extensions/python/Makefile src/extensions/python/genderssetup.py src/extensions/java/Makefile src/testsuite/Makefile src/testsuite/libgenders/Makefile src/testsuite/libgenders/testdatabases/Makefile src/testsuite/performance/Makefile src/testsuite/performance/testdatabases/Makefile compat/Makefile contrib/Makefile contrib/cfengine/Makefile contrib/cfengine/cfengine-2.2.10/Makefile contrib/cfengine/cfengine-3.3.0/Makefile contrib/php/Makefile man/Makefile man/compat/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18663,6 +18663,8 @@ do
     "src/testsuite/Makefile") CONFIG_FILES="$CONFIG_FILES src/testsuite/Makefile" ;;
     "src/testsuite/libgenders/Makefile") CONFIG_FILES="$CONFIG_FILES src/testsuite/libgenders/Makefile" ;;
     "src/testsuite/libgenders/testdatabases/Makefile") CONFIG_FILES="$CONFIG_FILES src/testsuite/libgenders/testdatabases/Makefile" ;;
+    "src/testsuite/performance/Makefile") CONFIG_FILES="$CONFIG_FILES src/testsuite/performance/Makefile" ;;
+    "src/testsuite/performance/testdatabases/Makefile") CONFIG_FILES="$CONFIG_FILES src/testsuite/performance/testdatabases/Makefile" ;;
     "compat/Makefile") CONFIG_FILES="$CONFIG_FILES compat/Makefile" ;;
     "contrib/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
     "contrib/cfengine/Makefile") CONFIG_FILES="$CONFIG_FILES contrib/cfengine/Makefile" ;;
