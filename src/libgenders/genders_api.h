@@ -37,29 +37,19 @@
 /* Impossible to have a genders value with spaces */
 #define GENDERS_NOVALUE                  "  NOVAL  "
 
-#define GENDERS_NODE_INDEX_INIT_SIZE     32768
-
 #define GENDERS_ATTR_INDEX_INIT_SIZE     512
 
-#define GENDERS_ATTRLIST_INDEX_INIT_SIZE 512
-
 /*
- * struct genders_node
+ * struct genders_hosts
  *
- * stores node name and a list of pointers to attrval lists containing
- * the attributes and values of this node.  The pointers point to
- * lists stored within the attrvalslist parameter of the genders
- * handle.  The attrlist_index is hash that enables faster lookups
- * into the attrlist.
+ * stores a hostlist and a set of attrvals that belong to that hostlist
  */
-struct genders_node {
-  char *name;
-  List attrlist;
-  int attrcount;
-  hash_t attrlist_index;
-  int attrlist_index_size;
+struct genders_hosts {
+  hostlist_t hl;
+  hash_t attrval_index;
+  int attrval_index_size;
 };
-typedef struct genders_node *genders_node_t;
+typedef struct genders_hosts *genders_hosts_t;
 
 /*
  * struct genders_attrval
@@ -74,28 +64,14 @@ struct genders_attrval {
 typedef struct genders_attrval *genders_attrval_t;
 
 /*
- * struct genders_attrvals_container
- *
- * stores attrvals list and an index indicating its location.
- * Implemented predominantly to make genders_copy() easier to
- * implement.
- */
-struct genders_attrvals_container {
-  List attrvals;
-  unsigned int index;
-};
-typedef struct genders_attrvals_container *genders_attrvals_container_t;
-
-/*
  * struct genders
  *
  * Genders handle, caches all information loaded from a genders
  * database.  Consider the following genders database
  *
- * nodename[1-2]  attrname1=val1,attrname2=val2
- * nodename1      attrname3=val3,attrname4
- * nodename2      attrname5
- * nodename3      attrname6
+ * nodename[1-3]  attrname1=val1,attrname2=val2
+ * nodename[2-3]  attrname3=val3,attrname4
+ * nodename4      attrname5
  *
  * After the genders database has been loaded using genders_load_data,
  * the lists and data in the handle can be viewed like the following:
@@ -109,48 +85,32 @@ typedef struct genders_attrvals_container *genders_attrvals_container_t;
  * maxattrlen = 5
  * maxvallen = 4
  * nodename = localhost
- * nodeslist = node1 -> node2 -> node3 -> \0
- *    node1.name = nodename1, node1.attrlist = listptr1 -> listptr2 -> \0
- *    node1.attrlist_index = hash table with
- *          KEY(attr1): listptr1
- *          KEY(attr2): listptr1
- *          KEY(attr3): listptr2
- *          KEY(attr4): listptr2
- *    node2.name = nodename2, node2.attrlist = listptr1 -> listptr3 -> \0
- *    node2.attrlist_index = hash table with
- *          KEY(attr1): listptr1
- *          KEY(attr2): listptr1
- *          KEY(attr5): listptr3
- *    node3.name = nodename3, node3.attrlist = listptr4 -> \0
- *    node3.attrlist_index = hash table with
- *          KEY(attr6): listptr4
- * attrvalslist = listptr1 -> listptr2 -> listptr3 -> listptr4 -> \0
- *    listptr1 = attr1 -> attr2 -> \0
- *    listptr2 = attr3 -> attr4 -> \0
- *    listptr3 = attr5 -> \0
- *    listptr4 = attr6 -> \0
- *      attr1.attr = attrname1, attr1.val = val1
- *      attr2.attr = attrname2, attr2.val = val2
- *      attr3.attr = attrname3, attr3.val = val3
- *      attr4.attr = attrname4, attr4.val = NULL
- *      attr5.attr = attrname5, attr5.val = NULL
- *      attr6.attr = attrname6, attr6.val = NULL
- * attrslist = attrname1 -> attrname2 -> attrname3 -> attrname4 ->
- *             attrname5 -> attrname6 -> \0
+ *
+ * hosts = hosts1 -> hosts2 -> hosts3 -> \0
+ *    hosts1.hl = "nodename[1-3]"
+ *    hosts1.attr_index = hash w/
+ *      hosts1.attr_index["attrname1"] = val1
+ *      hosts1.attr_index["attrname2"] = val2
+ *
+ *    hosts2.hl = "nodename[2-3]"
+ *    hosts2.attr_index = hash w/
+ *      hosts2.attr_index["attrname3"] = val3
+ *      hosts2.attr_index["attrname3"] = val4
+ *
+ *    hosts3.hl = "nodename4"
+ *    hosts3.attr_index = hash w/
+ *      hosts3.attr_index["attrname5"] = NULL
+ *
+ * hostnames - "nodename[1-4]"
+ *
+ * attrs - hash w/
+ *   attrs["attrname1"] = "attrname1"
+ *   attrs["attrname2"] = "attrname2"
+ *   attrs["attrname3"] = "attrname3"
+ *   attrs["attrname4"] = "attrname4"
+ *   attrs["attrname5"] = "attrname5"
+ *
  * valbuf -> buffer of length 5 (maxvallen + 1)
- *
- * node_index = hash table with
- *              KEY(nodename1): node1
- *              KEY(nodename2): node2
- *              KEY(nodename3): node3
- *
- * attr_index = hash table with
- *              KEY(attrname1): node1 -> node2
- *              KEY(attrname2): node1 -> node2
- *              KEY(attrname3): node1
- *              KEY(attrname4): node1
- *              KEY(attrname5): node2
- *              KEY(attrname6): node3
  */
 struct genders {
   int magic;                                /* magic number */
@@ -163,17 +123,14 @@ struct genders {
   int maxattrlen;                           /* max attr name length */
   int maxvallen;                            /* max value name length */
   char nodename[GENDERS_MAXHOSTNAMELEN+1];  /* local hostname */
-  List nodeslist;                           /* Lists of genders_node */
-  List attrvalslist;                        /* Lists of ptrs to Lists of genders_attrvals */
-  List attrslist;                           /* List of unique attribute strings */
+  List genders_hosts;                       /* List of genders_hosts */
+  hostlist_t hostnames;                     /* hostlist w/ all hostnames */
+  hash_t attrs;                             /* Hash of unique attribute strings */
+  int attrs_size;
   char *valbuf;                             /* Buffer for value substitution */
-  hash_t node_index;                        /* Index table for quicker node access */
-  int node_index_size;                      /* Index size for node_index */
-  hash_t attr_index;                        /* Index table for quicker search times */
-  int attr_index_size;                      /* Index size for attr_index */
   hash_t attrval_index;                     /* Index table for quicker search times */
   char *attrval_index_attr;                 /* Current indexed attr in attrval_index */
-  List attrval_buflist;                     /* List to store val buffers to be free */
+  List attrval_buflist;                     /* List to store val buffers to be freed */
 };
 
 #endif /* _GENDERS_API_H */
