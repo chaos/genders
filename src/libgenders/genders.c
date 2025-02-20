@@ -1301,7 +1301,6 @@ _genders_copy_nodeslist(genders_t handle, genders_t handlecopy)
  */
 static int _genders_copy_fill_node_index(genders_t handle, genders_t handlecopy)
 {
-  List l = NULL;
   ListIterator itr = NULL;
   genders_node_t n;
   int rv = -1;
@@ -1312,8 +1311,6 @@ static int _genders_copy_fill_node_index(genders_t handle, genders_t handlecopy)
 
   rv = 0;
  cleanup:
-  if (rv < 0)
-    __list_destroy(l);
   __list_iterator_destroy(itr);
   return rv;
 }
