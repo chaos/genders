@@ -118,6 +118,7 @@ public:
   ~Genders();
   unsigned int getnumnodes() const;
   unsigned int getnumattrs() const;
+  [[deprecated("use getnumattrs()")]]
   unsigned int getmaxattrs() const;
   std::string getnodename() const;
   std::vector< std::string > getnodes(const std::string attr = "", const std::string val = "") const;

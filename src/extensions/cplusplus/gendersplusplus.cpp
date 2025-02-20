@@ -169,7 +169,7 @@ unsigned int Genders::getmaxattrs() const
 {
   int rv;
 
-  if ((rv = genders_getmaxattrs(gh)) < 0)
+  if ((rv = genders_getnumattrs(gh)) < 0)
     _throw_exception(genders_errnum(gh));
 
   return rv;

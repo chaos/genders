@@ -158,15 +158,8 @@ int genders_getnumnodes(genders_t handle);
  */
 int genders_getnumattrs(genders_t handle);
 
-/*
- * genders_getmaxattrs
- *
- * Get the max number of attributes read of any one node in the
- * genders file.
- *
- * Returns number of attributes on success, -1 on failure
- */
-int genders_getmaxattrs(genders_t handle);
+/* deprecated - calls genders_getnumattrs() */
+int genders_getmaxattrs(genders_t handle) __attribute__((deprecated));
 
 /*
  * genders_getmaxnodelen

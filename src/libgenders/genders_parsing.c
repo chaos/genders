@@ -343,7 +343,6 @@ strsep (char **stringp, const char *delim)
 static int
 _parse_line(genders_t handle,
             int *numattrs,
-            int *maxattrs,
             int *maxnodelen,
             int *maxattrlen,
             int *maxvallen,
@@ -570,7 +569,6 @@ _parse_line(genders_t handle,
 
       if (!line_num)
         {
-          (*maxattrs) = GENDERS_MAX(n->attrcount, (*maxattrs));
           (*maxnodelen) = GENDERS_MAX(strlen(node), (*maxnodelen));
           line_maxnodelen = GENDERS_MAX(strlen(node), line_maxnodelen);
         }
@@ -608,7 +606,6 @@ int
 _genders_open_and_parse(genders_t handle,
                         const char *filename,
                         int *numattrs,
-                        int *maxattrs,
                         int *maxnodelen,
                         int *maxattrlen,
                         int *maxvallen,
@@ -652,7 +649,6 @@ _genders_open_and_parse(genders_t handle,
 
       if ((bug_count = _parse_line(handle,
                                    numattrs,
-                                   maxattrs,
                                    maxnodelen,
                                    maxattrlen,
                                    maxvallen,

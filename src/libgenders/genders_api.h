@@ -105,7 +105,6 @@ typedef struct genders_attrvals_container *genders_attrvals_container_t;
  * is_loaded = 1
  * numnodes = 3
  * numattrs = 6
- * maxattrs = 4
  * maxnodelen = 9
  * maxattrlen = 5
  * maxvallen = 4
@@ -160,7 +159,6 @@ struct genders {
   unsigned int flags;                       /* flags for alternate behavior */
   int numnodes;                             /* number of nodes */
   int numattrs;                             /* number of attrs */
-  int maxattrs;                             /* max attrs for any one node */
   int maxnodelen;                           /* max node name length */
   int maxattrlen;                           /* max attr name length */
   int maxvallen;                            /* max value name length */

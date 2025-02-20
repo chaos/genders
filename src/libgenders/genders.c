@@ -84,7 +84,6 @@ _initialize_handle_info(genders_t handle)
   handle->flags = GENDERS_FLAG_DEFAULT;
   handle->numnodes = 0;
   handle->numattrs = 0;
-  handle->maxattrs = 0;
   handle->maxnodelen = 0;
   handle->maxattrlen = 0;
   handle->maxvallen = 0;
@@ -187,7 +186,6 @@ genders_load_data(genders_t handle, const char *filename)
   if (_genders_open_and_parse(handle,
                               filename,
                               &handle->numattrs,
-                              &handle->maxattrs,
                               &handle->maxnodelen,
                               &handle->maxattrlen,
                               &handle->maxvallen,
@@ -341,11 +339,7 @@ genders_getnumattrs(genders_t handle)
 int
 genders_getmaxattrs(genders_t handle)
 {
-  if (_genders_loaded_handle_error_check(handle) < 0)
-    return -1;
-
-  handle->errnum = GENDERS_ERR_SUCCESS;
-  return handle->maxattrs;
+  return genders_getnumattrs(handle);
 }
 
 int
@@ -1169,7 +1163,6 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
 {
   int errcount, rv = -1;
   int debugnumattrs = 0;
-  int debugmaxattrs = 0;
   int debugmaxnodelen = 0;
   int debugmaxattrlen = 0;
   int debugmaxvallen = 0;
@@ -1204,7 +1197,6 @@ genders_parse(genders_t handle, const char *filename, FILE *stream)
   if ((errcount = _genders_open_and_parse(handle,
                                           filename,
                                           &debugnumattrs,
-                                          &debugmaxattrs,
                                           &debugmaxnodelen,
                                           &debugmaxattrlen,
                                           &debugmaxvallen,
@@ -1579,7 +1571,6 @@ genders_copy(genders_t handle)
   handlecopy->flags = handle->flags;
   handlecopy->numnodes = handle->numnodes;
   handlecopy->numattrs = handle->numattrs;
-  handlecopy->maxattrs = handle->maxattrs;
   handlecopy->maxnodelen = handle->maxnodelen;
   handlecopy->maxattrlen = handle->maxattrlen;
   handlecopy->maxvallen = handle->maxvallen;
