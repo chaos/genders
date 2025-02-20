@@ -43,9 +43,9 @@ attribute values list.
 
 To avoid passing in a list that is not large enough to store all the
 attributes and attribute values,
-.BR genders_getmaxattrs (3)
-should be used to determine the minimum number of elements \fIattrs\fR
-and \fIvals\fR should be able to store.
+.BR genders_getnumattrs (3)
+should be used to get the maximum possible number of elements \fIattrs\fR
+and \fIvals\fR could have.
 .BR genders_attrlist_create (3)
 and
 .BR genders_vallist_create (3)
@@ -96,5 +96,5 @@ point to a genders handle or \fIhandle\fR has been destroyed by
 /usr/include/genders.h
 .SH SEE ALSO
 libgenders(3), genders_handle_create(3), genders_load_data(3),
-genders_getmaxattrs(3), genders_attrlist_create(3),
+genders_getnumattrs(3), genders_attrlist_create(3),
 genders_vallist_create(3), genders_errnum(3), genders_strerror(3)

@@ -20,7 +20,6 @@ man3_MANS = \
 	genders_perror.3 \
 	genders_getnumnodes.3 \
 	genders_getnumattrs.3 \
-	genders_getmaxattrs.3 \
 	genders_getmaxnodelen.3 \
 	genders_getmaxattrlen.3 \
 	genders_getmaxvallen.3 \
@@ -60,7 +59,6 @@ EXTRA_DIST = \
 	genders_perror.3 \
 	genders_getnumnodes.3 \
 	genders_getnumattrs.3 \
-	genders_getmaxattrs.3 \
 	genders_getmaxnodelen.3 \
 	genders_getmaxattrlen.3 \
 	genders_getmaxvallen.3 \
