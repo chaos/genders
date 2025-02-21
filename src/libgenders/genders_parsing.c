@@ -169,7 +169,7 @@ _insert_attrval(genders_t handle,
  *
  * Insert an attr into the attrlist and attr_index
  *
- * Returns 0 on success, -1 on error
+ * Returns 1 if inserted an attr, 0 if not, -1 on error
  */
 static int
 _insert_attr(genders_t handle,
