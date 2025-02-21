@@ -590,7 +590,7 @@ genders_database_data_t genders_database_data_test_2 =
     "val2",
     4,
     8,
-    4,
+    8,                          /* maxattrs deprecated, same as numattrs */
     5,
     5,
     4,
@@ -746,7 +746,7 @@ genders_database_data_t genders_database_data_test_3 =
     "val2",
     4,
     16,
-    4,
+    16,                    /* maxattrs deprecated, same as numattrs */
     5,
     6,
     5,
@@ -967,7 +967,7 @@ genders_database_data_t genders_database_data_test_4 =
     "val2",
     8,
     8,
-    4,
+    8,                          /* maxattrs deprecated, same as numattrs */
     5,
     5,
     4,
