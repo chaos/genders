@@ -340,10 +340,6 @@ strsep (char **stringp, const char *delim)
  *
  * Returns -1 on error, 1 if there was a parse error, 0 if no errors
  */
-/* achu: 'parsed_nodes' is no longer needed, but leave it here if we
- * change our minds later concerning whether and empty genders file
- * is acceptable.
- */
 static int
 _parse_line(genders_t handle,
             int *numattrs,
@@ -360,8 +356,7 @@ _parse_line(genders_t handle,
             int *attr_index_size,
             char *line,
             int line_num,
-            FILE *stream,
-            int *parsed_nodes)
+            FILE *stream)
 {
   char *temp, *nodenames, *node = NULL;
   int max_n_subst_vallen = 0, line_maxnodelen = 0, rv = -1;
@@ -395,9 +390,6 @@ _parse_line(genders_t handle,
   /* get node name(s) */
   if (!(nodenames = strsep(&line, " \t\0")))
     return 0;
-
-  /* Something resembling a node was found */
-  *parsed_nodes = 1;
 
   /* if strsep() sets line == NULL, line has no attributes */
   if (line)
@@ -630,11 +622,7 @@ _genders_open_and_parse(genders_t handle,
                         int debug,
                         FILE *stream)
 {
-  /* achu: 'parsed_nodes' is no longer needed, but leave it here if we
-   * change our minds later concerning whether and empty genders file
-   * is acceptable.
-   */
-  int len, errcount = 0, rv = -1, line_count = 1, parsed_nodes = 0;
+  int len, errcount = 0, rv = -1, line_count = 1;
   char buf[GENDERS_BUFLEN];
 
   if (!filename || !strlen(filename))
@@ -677,8 +665,7 @@ _genders_open_and_parse(genders_t handle,
                                    attr_index_size,
                                    buf,
                                    (debug) ? line_count : 0,
-                                   stream,
-                                   &parsed_nodes)) < 0)
+                                   stream)) < 0)
         goto cleanup;
 
       if (debug)
@@ -705,31 +692,6 @@ _genders_open_and_parse(genders_t handle,
         }
       goto cleanup;
     }
-
-#if 0
-
-  /* achu: Later discussions lead several developers to conclude an
-   * empty genders file should be acceptable.  I'll leave this code
-   * here for legacy documentation.
-   */
-
-  if (list_count(nodeslist) == 0)
-    {
-      if (debug)
-        {
-          fprintf(stream, "No nodes successfully parsed\n");
-
-          /* Only increase the parse error count if the file is truly
-           * empty.
-           */
-          if (!parsed_nodes)
-            errcount++;
-          rv = errcount;
-        }
-      handle->errnum = GENDERS_ERR_PARSE;
-      goto cleanup;
-    }
-#endif
 
   rv = (debug) ? errcount : 0;
  cleanup:
