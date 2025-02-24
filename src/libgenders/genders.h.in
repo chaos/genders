@@ -360,7 +360,7 @@ int genders_testattrval(genders_t handle,
  * Tests whether the node exists in the genders file.  If 'node' is
  * NULL, tests the current node.
  *
- * Returns 1=true , 0=false, -1=failure
+ * Returns 1=true, 0=false, -1=failure
  */
 int genders_isnode(genders_t handle, const char *node);
 
@@ -369,7 +369,7 @@ int genders_isnode(genders_t handle, const char *node);
  *
  * Tests whether the attribute exists in the genders file.
  *
- * Returns 1=true , 0=false, -1=failure
+ * Returns 1=true, 0=false, -1=failure
  */
 int genders_isattr(genders_t handle, const char *attr);
 
@@ -378,7 +378,7 @@ int genders_isattr(genders_t handle, const char *attr);
  *
  * Tests whether an attr=val exists for some node in the genders file.
  *
- * Returns 1=true , 0=false, -1=failure
+ * Returns 1=true, 0=false, -1=failure
  */
 int genders_isattrval(genders_t handle, const char *attr, const char *val);
 
