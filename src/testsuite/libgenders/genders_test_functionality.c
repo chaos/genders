@@ -1445,6 +1445,9 @@ genders_getnodes_functionality(int verbose)
 
       for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
 	{
+          if (genders_nodelist_clear(handle, nodelist) < 0)
+            genders_err_exit("genders_nodelist_clear: %s", genders_errormsg(handle));
+
 	  return_value = genders_getnodes(handle,
 					  nodelist,
 					  nodelist_len,
@@ -1548,6 +1551,12 @@ genders_getattr_functionality(int verbose)
 
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
+          if (genders_attrlist_clear(handle, attrlist) < 0)
+            genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handle));
+
+          if (genders_vallist_clear(handle, vallist) < 0)
+            genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handle));
+
 	  err = 0;
 	  return_value = genders_getattr(handle,
 					 attrlist,
