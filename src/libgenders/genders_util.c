@@ -47,25 +47,6 @@ _genders_list_is_all(void *x, void *key)
   return 1;
 }
 
-int
-_genders_list_is_str(void *x, void *key)
-{
-  if (!strcmp((char *)x, (char *)key))
-    return 1;
-  return 0;
-}
-
-int
-_genders_list_is_attr_in_attrvals(void *x, void *key)
-{
-  genders_attrval_t av;
-
-  av = (genders_attrval_t)x;
-  if (!strcmp(av->attr, (char *)key))
-    return 1;
-  return 0;
-}
-
 void
 _genders_list_free_genders_hosts(void *x)
 {
@@ -75,17 +56,6 @@ _genders_list_free_genders_hosts(void *x)
   __hostlist_destroy(gh->hl);
   __hash_destroy(gh->attrval_index);
   free(gh);
-}
-
-void
-_genders_list_free_genders_attrval(void *x)
-{
-  genders_attrval_t av;
-
-  av = (genders_attrval_t)x;
-  free(av->attr);
-  free(av->val);
-  free(av);
 }
 
 int

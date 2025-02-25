@@ -139,36 +139,11 @@
 int _genders_list_is_all(void *x, void *key);
 
 /*
- * _genders_list_is_str
- *
- * x points to a string
- *
- * Returns 1 if string x is equal to key, 0 otherwise
- */
-int _genders_list_is_str(void *x, void *key);
-
-/*
- * _genders_list_is_attr_in_attrvals
- *
- * x points to a genders_attrval_t
- *
- * Returns 1 if attr in 'x' is equal to key, 0 otherwise
- */
-int _genders_list_is_attr_in_attrvals(void *x, void *key);
-
-/*
  * _genders_list_free_genders_hosts
  *
  * Free genders_hosts_t structure
  */
 void _genders_list_free_genders_hosts(void *x);
-
-/*
- * _genders_list_free_genders_attrval
- *
- * Free genders_attrval_t structure
- */
-void _genders_list_free_genders_attrval(void *x);
 
 /*
  * Hash API Helper Functions
