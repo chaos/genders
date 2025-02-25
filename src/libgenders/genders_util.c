@@ -324,24 +324,3 @@ _genders_rehash(genders_t handle,
     __hash_destroy(new_hash);
   return retval;
 }
-
-int
-_genders_hash_copy(genders_t handle,
-                   hash_t *hash_src,
-                   hash_t *hash_dest)
-{
-  int hash_num;
-  int retval = -1;
-
-  hash_num = hash_count(*hash_src);
-
-  if (hash_for_each(*hash_src, _hash_reinsert, hash_dest) != hash_num)
-    {
-      handle->errnum = GENDERS_ERR_INTERNAL;
-      goto cleanup;
-    }
-
-  retval = 0;
- cleanup:
-  return retval;
-}
