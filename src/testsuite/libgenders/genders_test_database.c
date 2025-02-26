@@ -552,9 +552,33 @@ genders_database_t genders_database_test_1_comma =
     &genders_database_data_test_1,
   };
 
+genders_database_t genders_database_test_1_comma_split1 =
+  {
+    "testdatabases/genders.test_1_comma_split1",
+    &genders_database_data_test_1,
+  };
+
+genders_database_t genders_database_test_1_comma_split2 =
+  {
+    "testdatabases/genders.test_1_comma_split2",
+    &genders_database_data_test_1,
+  };
+
 genders_database_t genders_database_test_1_hostrange =
   {
     "testdatabases/genders.test_1_hostrange",
+    &genders_database_data_test_1,
+  };
+
+genders_database_t genders_database_test_1_hostrange_split1 =
+  {
+    "testdatabases/genders.test_1_hostrange_split1",
+    &genders_database_data_test_1,
+  };
+
+genders_database_t genders_database_test_1_hostrange_split2 =
+  {
+    "testdatabases/genders.test_1_hostrange_split2",
     &genders_database_data_test_1,
   };
 
@@ -1605,7 +1629,11 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_base_whitespace_between_nodes_and_attrs,
     &genders_database_test_1,
     &genders_database_test_1_comma,
+    &genders_database_test_1_comma_split1,
+    &genders_database_test_1_comma_split2,
     &genders_database_test_1_hostrange,
+    &genders_database_test_1_hostrange_split1,
+    &genders_database_test_1_hostrange_split2,
     &genders_database_test_2,
     &genders_database_test_2_comma,
     &genders_database_test_2_hostrange,
