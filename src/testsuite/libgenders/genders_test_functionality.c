@@ -958,7 +958,7 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
 				   int verbose)
 {
   genders_t handle;
-  char **list;
+  char **list = NULL;
   int return_value, errnum, retval = 0;
 
   assert(funccreate && funcdestroy && funcname);
@@ -981,13 +981,8 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
 					     msg,
 					     verbose);
 
-  if (expected_return_value >= 0
-      && expected_return_value == retval
-      && errnum == GENDERS_ERR_SUCCESS)
-    {
-      if (funcdestroy(handle, list) < 0)
-	genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
-    }
+  if (funcdestroy(handle, list) < 0)
+    genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
 
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_destroy");
