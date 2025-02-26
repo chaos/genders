@@ -652,30 +652,10 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
-# noinst_PROGRAMS      = genders_test
-# noinst_HEADERS       = genders_test_corner_case.h \
-# 	               genders_test_database.h \
-# 		       genders_test_functionality.h \
-# 		       genders_test_query_tests.h \
-# 		       genders_testlib.h
-# genders_test_CFLAGS  = -I../../libgenders -I../../../config/
-# genders_test_SOURCES = genders_test.c \
-#                        genders_test_corner_case.c \
-#                        genders_test_corner_case_tests.c \
-#                        genders_test_database.c \
-# 		       genders_test_functionality.c \
-# 		       genders_test_query_tests.c \
-# 		       genders_testlib.c
-# genders_test_LDADD   = ../../libgenders/libgenders.la
-
-../../nodeattr/nodeattr: force-dependency-check
-	@cd `dirname $@` && make `basename $@`
-
-force-dependency-check:
 
 clean:
-	rm -f test.timing*
-	rm -f test.output*
+	rm -f test*.out
+	rm -f test*.time
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

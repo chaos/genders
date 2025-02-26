@@ -7,8 +7,8 @@
 SUBDIRS              = testdatabases
 
 clean:
-	rm -f test.timing*
-	rm -f test.output*
+	rm -f test*.out
+	rm -f test*.time
 
 EXTRA_DIST = perf_tests.sh
 
