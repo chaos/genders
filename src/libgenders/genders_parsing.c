@@ -622,7 +622,7 @@ _genders_open_and_parse(genders_t handle,
                         int debug,
                         FILE *stream)
 {
-  int len, errcount = 0, rv = -1, line_count = 1;
+  int len = 0, errcount = 0, rv = -1, line_count = 1;
   char buf[GENDERS_BUFLEN];
 
   if (!filename || !strlen(filename))
