@@ -9,7 +9,7 @@ configuration of a cluster by modifying only one file.
 
 This package includes:
 
-* libgenders    
+* libgenders
   - A C library for parsing and querying a genders database.  See
     libgenders(3).
 
@@ -44,4 +44,4 @@ For a thorough introduction to Genders, please read the TUTORIAL.
 
 Albert Chu
 chu11@llnl.gov
-Lawrence Livermore National Laboratories    
+Lawrence Livermore National Laboratories
