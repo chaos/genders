@@ -958,6 +958,235 @@ genders_database_t genders_database_test_3 =
     &genders_database_data_test_3,
   };
 
+
+genders_database_data_t genders_database_data_test_4 =
+  {
+    "node1",
+    "attr1",
+    "attr2",
+    "val2",
+    8,
+    8,
+    4,
+    5,
+    5,
+    4,
+    {"node1", "node2", "node3", "node4",
+     "foo1", "foo2", "foo3", "foo4",
+     NULL},
+    8,
+    {"attr1", "attr2", "attr3", "attr4",
+     "attr5", "attr6", "attr7", "attr8",
+     NULL},
+    8,
+    {NULL,    "val2",  NULL,    "val4",
+     NULL,    "val6",  NULL,    "val8",
+     NULL},
+    8,
+    {
+      {
+	{"attr1", "attr2", "attr3", "attr4", NULL},
+	{"", "val2", "", "val4", NULL},
+	{NULL, "val2", NULL, "val4", NULL},
+	4,
+      },
+      {
+	{"attr5", "attr6", "attr7", "attr8", NULL},
+	{"", "val6", "", "val8", NULL},
+	{NULL, "val6", NULL, "val8", NULL},
+	4,
+      },
+      {
+	{"attr1", "attr2", "attr3", "attr4", NULL},
+	{"", "val2", "", "val4", NULL},
+	{NULL, "val2", NULL, "val4", NULL},
+	4,
+      },
+      {
+	{"attr5", "attr6", "attr7", "attr8", NULL},
+	{"", "val6", "", "val8", NULL},
+	{NULL, "val6", NULL, "val8", NULL},
+	4,
+      },
+      {
+	{"attr1", "attr2", "attr3", "attr4", NULL},
+	{"", "val2", "", "val4", NULL},
+	{NULL, "val2", NULL, "val4", NULL},
+	4,
+      },
+      {
+	{"attr5", "attr6", "attr7", "attr8", NULL},
+	{"", "val6", "", "val8", NULL},
+	{NULL, "val6", NULL, "val8", NULL},
+	4,
+      },
+      {
+	{"attr1", "attr2", "attr3", "attr4", NULL},
+	{"", "val2", "", "val4", NULL},
+	{NULL, "val2", NULL, "val4", NULL},
+	4,
+      },
+      {
+	{"attr5", "attr6", "attr7", "attr8", NULL},
+	{"", "val6", "", "val8", NULL},
+	{NULL, "val6", NULL, "val8", NULL},
+	4,
+      },
+    },
+    8,
+    {
+      {
+	NULL,
+	NULL,
+        {"node1", "node2", "node3", "node4",
+         "foo1", "foo2", "foo3", "foo4",
+         NULL},
+        8,
+      },
+      {
+	"",
+	"",
+        {"node1", "node2", "node3", "node4",
+         "foo1", "foo2", "foo3", "foo4",
+         NULL},
+        8,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr2",
+	"val2",
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr3",
+	NULL,
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr4",
+	NULL,
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr4",
+	"val4",
+	{"node1", "node3", "foo1", "foo3", NULL},
+	4,
+      },
+      {
+	"attr5",
+	NULL,
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+      {
+	"attr6",
+	NULL,
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+      {
+	"attr6",
+	"val6",
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+      {
+	"attr7",
+	NULL,
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+      {
+	"attr8",
+	NULL,
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+      {
+	"attr8",
+	"val8",
+	{"node2", "node4", "foo2", "foo4", NULL},
+	4,
+      },
+    },
+    14,
+  };
+
+genders_database_t genders_database_test_4 =
+  {
+    "testdatabases/genders.test_4",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_reorder =
+  {
+    "testdatabases/genders.test_4_reorder",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_comma =
+  {
+    "testdatabases/genders.test_4_comma",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_comma_reorder =
+  {
+    "testdatabases/genders.test_4_comma_reorder",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_comma_split =
+  {
+    "testdatabases/genders.test_4_comma_split",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_comma_split_reorder =
+  {
+    "testdatabases/genders.test_4_comma_split_reorder",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_hostrange =
+  {
+    "testdatabases/genders.test_4_hostrange",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_hostrange_reorder =
+  {
+    "testdatabases/genders.test_4_hostrange_reorder",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_hostrange_split =
+  {
+    "testdatabases/genders.test_4_hostrange_split",
+    &genders_database_data_test_4,
+  };
+
+genders_database_t genders_database_test_4_hostrange_split_reorder =
+  {
+    "testdatabases/genders.test_4_hostrange_split_reorder",
+    &genders_database_data_test_4,
+  };
+
 genders_database_data_t genders_database_data_empty =
   {
     NULL,
@@ -1638,6 +1867,16 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_test_2_comma,
     &genders_database_test_2_hostrange,
     &genders_database_test_3,
+    &genders_database_test_4,
+    &genders_database_test_4_reorder,
+    &genders_database_test_4_comma,
+    &genders_database_test_4_comma_reorder,
+    &genders_database_test_4_comma_split,
+    &genders_database_test_4_comma_split_reorder,
+    &genders_database_test_4_hostrange,
+    &genders_database_test_4_hostrange_reorder,
+    &genders_database_test_4_hostrange_split,
+    &genders_database_test_4_hostrange_split_reorder,
     &genders_database_empty,
     &genders_database_equal_sign_in_value,
     &genders_database_nodes_only_one,
