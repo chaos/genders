@@ -3223,6 +3223,8 @@ genders_copy_functionality(int verbose)
     try_next_database:
       if (genders_handle_destroy(handleorig) < 0)
 	genders_err_exit("genders_handle_destroy");
+      if (genders_handle_destroy(handlecopy) < 0)
+	genders_err_exit("genders_handle_destroy");
 
       num++;
       i++;
