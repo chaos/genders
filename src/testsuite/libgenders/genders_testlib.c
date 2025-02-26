@@ -560,7 +560,7 @@ genders_return_value_errnum_list_check(char *funcname,
 	 && (!(comp_type == GENDERS_COMPARISON_MATCH) ||
 	     (comp_type == GENDERS_COMPARISON_MATCH && expected_list && list))
 	 && (!(comp_type == GENDERS_COMPARISON_CLEAR) ||
-	     (comp_type == GENDERS_COMPARISON_CLEAR && !expected_list && list)));
+	     (comp_type == GENDERS_COMPARISON_CLEAR && !expected_list)));
 
   err += _genders_val_check(funcname,
 			    num,

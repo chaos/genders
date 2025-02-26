@@ -1008,7 +1008,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
 				  int verbose)
 {
   genders_t handle;
-  char **list;
+  char **list = NULL;
   int err, list_len, return_value, errnum;
 
   assert(funccreate && funcclear && funcdestroy && funcname);
