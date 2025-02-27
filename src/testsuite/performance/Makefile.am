@@ -10,5 +10,8 @@ clean:
 	rm -f test*.out
 	rm -f test*.time
 
-EXTRA_DIST = perf_tests.sh
+TESTSCRIPTS = perf_tests.sh
 
+TESTS = $(TESTSCRIPTS)
+
+EXTRA_DIST = perf_tests.sh
