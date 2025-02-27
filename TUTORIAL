@@ -10,6 +10,7 @@
 
                 (Revised by Albert Chu - May 2003, April 2004)
                 (Revised by Ben Casses - July 2015)
+                (Updated by Albert Chu - February 2025)
 
   ------------------------------------------------------------------------
 NOTE: This document is part of the "Genders" software package,
@@ -27,9 +28,8 @@ an MPP in this file, scripts and rdist Distfiles that might otherwise
 contain hard-coded node lists, can be generalized to work with different
 configurations of the same cluster, and even with multiple clusters.
 
-The framework has proven to be useful on clusters ranging in size from the
-ASCI Blue-Pacific SST system at 1464 nodes, to collections of two or three
-workstations.
+The framework has proven to be useful on clusters ranging in size from
+collections of two or three workstations to the 11,136 nodes in El Capitan.
 
 Basic Operation
 
@@ -44,11 +44,11 @@ Genders Format
 Each line of the genders file may have one of the following formats.  See
 the section "Host Ranges" below for most information on host ranges.
 
-     nodename                attr[=value],attr[=value],...
-     nodename1,nodename2,... attr[=value],attr[=value],...
      nodenames[A-B]          attr[=value],attr[=value],...
+     nodename1,nodename2,... attr[=value],attr[=value],...
+     nodename                attr[=value],attr[=value],...
 
-The nodename(s) is the shortened[2] hostname of a node.  This is followed by
+The nodename(s) are the shortened[2] hostname of a node.  This is followed by
 any number of spaces or tabs, and then the comma-separated list of attributes,
 each of which can optionally have a value.  The substitution string "%n" can
 be used in an attribute value to represent the nodename.  Nodenames can be
@@ -68,6 +68,12 @@ Here is an example genders file from a small 16-node linux cluster:
      slci                 passwdhost
      slci,slcj            management
      slc[1-15]            compute
+
+For optimal performance in genders, hostranges should be utilized as much
+as possible and the number of lines in the genders file limited.  For example,
+listing every node on a separate line would perform far worse than a
+set of hostranges on a smaller set of lines.  Users may also wish to consider
+using the nodeattr --compress-hosts option.
 
 Host Ranges
 
@@ -93,20 +99,23 @@ Nodeattr Usage
 
 A program called nodeattr is used to query data in the genders file.  Because
 the genders file is replicated on all nodes in a cluster, this query is a
-local operation, not dependent on the network.  Nodeattr is invoked as
+local operation, not dependent on the network.  Nodeattr is typically invoked as
 follows:
 
-     nodeattr [-f genders] [-q | -c | -n | -s] [-r] attr[=val]
+     nodeattr [-f genders] [-q | -c | -n | -s] [-r] query
      nodeattr [-f genders] [-v] [node] attr[=val]
      nodeattr [-f genders] -l [node]
      nodeattr [-f genders] -k
 
 The -f option specifies a genders file path other than the default.
 
-The -q, -c, -n, or -s options followed by an attribute name cause a list of
-nodes having the specified attribute to be printed on stdout, formatted
+The -q, -c, -n, or -s options followed by a query results in list of
+nodes matching that query to be printed on stdout, formatted
 according to the option specified: -q (default) is host range, -c is
 comma-separated, -n is newline separated, and -s is space separated.
+A query is typically a single attribute or attr=val, but multiple
+attributes can be specified separated by union (||), intersection (&&),
+difference (--), or complement (~) operators.
 
 If none of the formatting options are specified, nodeattr returns a zero
 value if the local node has the specified attribute, else nonzero.  The -v
@@ -121,18 +130,20 @@ will be listed.
 The -k option checks the genders file for proper formatting.  Information
 about improper formatting will be output to standard error.
 
-Nodeattr can usually be found in /usr/bin (Linux RPM) or /admin/scripts
-(other systems).
+More details about nodeattr can be found in the nodeattr(1) manpage.  It
+is usually found in /usr/bin (Linux RPM).
 
 Programming with Genders
 
-Three different APIs have been developed that allow programmers to parse
+Many different APIs have been developed that allow programmers to parse
 and query the genders file.  "libgenders" is a C API which can be linked
-by including genders.h and linking the library libgenders. "Libgenders"
-is a Perl module developed with Perl extensions.  "Genders" is another
-Perl modules, but offers a more traditional Perl API than "Libgenders."
-The reader can learn more about these libraries by reading the manpages
-libgenders(3), Libgenders(3), and Genders(3).
+by including genders.h and linking the library libgenders.  "libgendersplusplus"
+is a C++ class built on top of libgenders.  "Libgenders" is a Perl module
+developed with Perl extensions.  "Genders" is another Perl module, but offers
+a more traditional Perl API than "Libgenders."  Python bindings are also
+available under a "Genders" class.  The reader can learn more about these
+libraries by reading the manpages libgenders(3), Libgenders(3) and Genders(3).
+See "help(Genders)" for Python documentation.
 
 Example: Rc Script
 
