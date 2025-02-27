@@ -169,7 +169,7 @@ _insert_attrval(genders_t handle,
  *
  * Insert an attr into the attrlist and attr_index
  *
- * Returns 0 on success, -1 on error
+ * Returns 1 if inserted an attr, 0 if not, -1 on error
  */
 static int
 _insert_attr(genders_t handle,
@@ -622,7 +622,7 @@ _genders_open_and_parse(genders_t handle,
                         int debug,
                         FILE *stream)
 {
-  int len, errcount = 0, rv = -1, line_count = 1;
+  int len = 0, errcount = 0, rv = -1, line_count = 1;
   char buf[GENDERS_BUFLEN];
 
   if (!filename || !strlen(filename))

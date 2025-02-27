@@ -958,7 +958,7 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
 				   int verbose)
 {
   genders_t handle;
-  char **list;
+  char **list = NULL;
   int return_value, errnum, retval = 0;
 
   assert(funccreate && funcdestroy && funcname);
@@ -981,13 +981,8 @@ _genders_list_create_functionality(GendersListCreateFunc funccreate,
 					     msg,
 					     verbose);
 
-  if (expected_return_value >= 0
-      && expected_return_value == retval
-      && errnum == GENDERS_ERR_SUCCESS)
-    {
-      if (funcdestroy(handle, list) < 0)
-	genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
-    }
+  if (funcdestroy(handle, list) < 0)
+    genders_err_exit("funcdestroy: %s", genders_errormsg(handle));
 
   if (genders_handle_destroy(handle) < 0)
     genders_err_exit("genders_handle_destroy");
@@ -1008,7 +1003,7 @@ _genders_list_clear_functionality(GendersListCreateFunc funccreate,
 				  int verbose)
 {
   genders_t handle;
-  char **list;
+  char **list = NULL;
   int err, list_len, return_value, errnum;
 
   assert(funccreate && funcclear && funcdestroy && funcname);
@@ -1445,6 +1440,9 @@ genders_getnodes_functionality(int verbose)
 
       for (j = 0; j < databases[i]->data->attrval_nodes_len; j++)
 	{
+          if (genders_nodelist_clear(handle, nodelist) < 0)
+            genders_err_exit("genders_nodelist_clear: %s", genders_errormsg(handle));
+
 	  return_value = genders_getnodes(handle,
 					  nodelist,
 					  nodelist_len,
@@ -1548,6 +1546,12 @@ genders_getattr_functionality(int verbose)
 
       for (j = 0; j < databases[i]->data->nodeslen; j++)
 	{
+          if (genders_attrlist_clear(handle, attrlist) < 0)
+            genders_err_exit("genders_attrlist_clear: %s", genders_errormsg(handle));
+
+          if (genders_vallist_clear(handle, vallist) < 0)
+            genders_err_exit("genders_vallist_clear: %s", genders_errormsg(handle));
+
 	  err = 0;
 	  return_value = genders_getattr(handle,
 					 attrlist,
@@ -3213,6 +3217,8 @@ genders_copy_functionality(int verbose)
 
     try_next_database:
       if (genders_handle_destroy(handleorig) < 0)
+	genders_err_exit("genders_handle_destroy");
+      if (genders_handle_destroy(handlecopy) < 0)
 	genders_err_exit("genders_handle_destroy");
 
       num++;

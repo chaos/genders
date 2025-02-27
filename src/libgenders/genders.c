@@ -129,13 +129,7 @@ genders_handle_create(void)
   return handle;
 
  cleanup:
-  if (handle)
-    {
-      __list_destroy(handle->nodeslist);
-      __list_destroy(handle->attrvalslist);
-      __list_destroy(handle->attrslist);
-      free(handle);
-    }
+  genders_handle_destroy(handle);
   return NULL;
 }
 

@@ -44,7 +44,7 @@
 #define __list_append(list, item) \
         do { \
           if (!list_append((list), (item))) { \
-            handle->errnum = GENDERS_ERR_INTERNAL; \
+            handle->errnum = GENDERS_ERR_OUTMEM; \
             goto cleanup; \
           } \
         } while (0)

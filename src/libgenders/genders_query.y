@@ -539,6 +539,9 @@ _calc_query(genders_t handle, struct genders_treenode *t)
 	__hostlist_destroy(r);
 	return NULL;
       }
+
+    __hostlist_destroy(l);
+    __hostlist_destroy(r);
   }
 
   if (t->complement)
