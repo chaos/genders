@@ -45,7 +45,6 @@
 int _genders_open_and_parse(genders_t handle,
                             const char *filename,
                             int *numattrs,
-                            int *maxattrs,
                             int *maxnodelen,
                             int *maxattrlen,
                             int *maxvallen,

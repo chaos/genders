@@ -69,7 +69,10 @@ public class Genders
      * the genders database
      *
      * @throws GendersException on error
+     *
+     * @deprecated Use getnumattrs()
      */
+    @Deprecated
     public native int getmaxattrs() throws GendersException;
 
     /**
