@@ -25,3 +25,7 @@ genders_test_LDADD   = ../../libgenders/libgenders.la
 	@cd `dirname $@` && make `basename $@`
 
 force-dependency-check:
+
+check_programs = genders_test
+
+TESTS = $(check_programs)

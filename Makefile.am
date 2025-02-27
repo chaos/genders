@@ -14,5 +14,3 @@ SUBDIRS = \
 
 EXTRA_DIST = DISCLAIMER DISCLAIMER.UC TUTORIAL genders.sample genders.spec
 
-check:
-	cd src/testsuite/libgenders && ./genders_test
