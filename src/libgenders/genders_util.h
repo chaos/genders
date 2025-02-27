@@ -259,15 +259,4 @@ int _genders_rehash(genders_t handle,
                     hash_t *hash_ptr,
                     int *hash_size);
 
-/*
- * _genders_hash_copy
- *
- * Copy contents from src hash to dest hash.
- *
- * Returns 0 on success, -1 on error.
- */
-int _genders_hash_copy(genders_t handle,
-                       hash_t *hash_src,
-                       hash_t *hash_dest);
-
 #endif /* _GENDERS_COMMON_H */
