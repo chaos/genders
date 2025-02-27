@@ -47,39 +47,25 @@ _genders_list_is_all(void *x, void *key)
   return 1;
 }
 
-int
-_genders_list_is_str(void *x, void *key)
+void
+_genders_list_free_genders_hosts(void *x)
 {
-  if (!strcmp((char *)x, (char *)key))
-    return 1;
-  return 0;
+  genders_hosts_t gh;
+
+  gh = (genders_hosts_t)x;
+  __hostlist_destroy(gh->hl);
+  __hash_destroy(gh->attrval_index);
+  free(gh);
 }
 
 int
-_genders_list_is_attr_in_attrvals(void *x, void *key)
+_genders_hash_is_all(void *data, const void *key, void *arg)
 {
-  genders_attrval_t av;
-
-  av = (genders_attrval_t)x;
-  if (!strcmp(av->attr, (char *)key))
-    return 1;
-  return 0;
+  return 1;
 }
 
 void
-_genders_list_free_genders_node(void *x)
-{
-  genders_node_t n;
-
-  n = (genders_node_t)x;
-  __list_destroy(n->attrlist);
-  __hash_destroy(n->attrlist_index);
-  free(n->name);
-  free(n);
-}
-
-void
-_genders_list_free_genders_attrval(void *x)
+_genders_hash_free_genders_attrval(void *x)
 {
   genders_attrval_t av;
 
@@ -89,14 +75,12 @@ _genders_list_free_genders_attrval(void *x)
   free(av);
 }
 
-void
-_genders_list_free_attrvallist(void *x)
+void _genders_hostlist_delete_all(hostlist_t hl)
 {
-  genders_attrvals_container_t avc;
-
-  avc = (genders_attrvals_container_t)x;
-  __list_destroy(avc->attrvals);
-  free(avc);
+  int count = hostlist_count(hl);
+  int i;
+  for (i = 0; i < count; i++)
+    hostlist_delete_nth(hl, 0);
 }
 
 int
@@ -162,7 +146,7 @@ _genders_put_in_array(genders_t handle,
 
 int
 _genders_get_valptr(genders_t handle,
-                    genders_node_t n,
+                    const char *nodename,
                     genders_attrval_t av,
                     char **val,
                     int *subst_occurred)
@@ -192,14 +176,14 @@ _genders_get_valptr(genders_t handle,
             }
           else if ((*(valptr + 1)) == 'n')
             {
-              if ((strlen(av->val) - 2 + strlen(n->name)) >
+              if ((strlen(av->val) - 2 + strlen(nodename)) >
                   (handle->maxvallen + 1))
                 {
                   handle->errnum = GENDERS_ERR_INTERNAL;
                   return -1;
                 }
 
-              nodenameptr = n->name;
+              nodenameptr = nodename;
               while (*nodenameptr != '\0')
                 *(valbufptr)++ = *nodenameptr++;
               valptr++;
@@ -217,53 +201,6 @@ _genders_get_valptr(genders_t handle,
     *subst_occurred = 1;
   *val = handle->valbuf;
   return 0;
-}
-
-int
-_genders_find_attrval(genders_t handle,
-                      genders_node_t n,
-                      const char *attr,
-                      const char *val,
-                      genders_attrval_t *avptr)
-{
-  genders_attrvals_container_t avc;
-  int retval = -1;
-
-  *avptr = NULL;
-
-  if ((avc = hash_find(n->attrlist_index, attr)))
-    {
-      genders_attrval_t av;
-
-      if ((av = list_find_first(avc->attrvals,
-                                _genders_list_is_attr_in_attrvals,
-                                (char *)attr)))
-        {
-          if (!val)
-            {
-              *avptr = av;
-              goto out;
-            }
-          else if (av->val)
-            {
-              char *valptr;
-
-              if (_genders_get_valptr(handle, n, av, &valptr, NULL) < 0)
-                goto cleanup;
-
-              if (!strcmp(valptr, val))
-                {
-                  *avptr = av;
-                  goto out;
-                }
-            }
-        }
-    }
-
- out:
-  retval = 0;
- cleanup:
-  return retval;
 }
 
 static int

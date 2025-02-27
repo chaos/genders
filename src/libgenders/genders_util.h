@@ -139,43 +139,36 @@
 int _genders_list_is_all(void *x, void *key);
 
 /*
- * _genders_list_is_str
+ * _genders_list_free_genders_hosts
  *
- * x points to a string
- *
- * Returns 1 if string x is equal to key, 0 otherwise
+ * Free genders_hosts_t structure
  */
-int _genders_list_is_str(void *x, void *key);
+void _genders_list_free_genders_hosts(void *x);
 
 /*
- * _genders_list_is_attr_in_attrvals
- *
- * x points to a genders_attrval_t
- *
- * Returns 1 if attr in 'x' is equal to key, 0 otherwise
+ * Hash API Helper Functions
  */
-int _genders_list_is_attr_in_attrvals(void *x, void *key);
 
 /*
- * _genders_list_free_genders_node
+ * _genders_hash_is_all
  *
- * Free genders_node_t structure
+ * Returns 1
  */
-void _genders_list_free_genders_node(void *x);
+int _genders_hash_is_all(void *data, const void *key, void *arg);
 
 /*
- * _genders_list_free_genders_attrval
+ * _genders_hash_free_genders_attrval
  *
- * Free genders_attrval_t structure
+ * Free hash of genders_attrval_t structures
  */
-void _genders_list_free_genders_attrval(void *x);
+void _genders_hash_free_genders_attrval(void *x);
 
 /*
- * _genders_list_free_genders_attrvalllist
+ * _genders_hostlist_delete_all
  *
- * Free list of genders_attrval_t structures
+ * Clear a hostlist of all entries.
  */
-void _genders_list_free_attrvallist(void *x);
+void _genders_hostlist_delete_all(hostlist_t hl);
 
 /*
  * Common helper functions
@@ -229,23 +222,10 @@ int _genders_put_in_array(genders_t handle,
  * Return 0 on success, -1 on error
  */
 int _genders_get_valptr(genders_t handle,
-                        genders_node_t n,
+                        const char *node,
                         genders_attrval_t av,
                         char **val,
                         int *subst_occurred);
-
-/*
- * _genders_find_attrval
- *
- * Find genders_attrval_t with attr or attr=val in a node
- *
- * Return 0 on success, -1 on error
- */
-int _genders_find_attrval(genders_t handle,
-                          genders_node_t n,
-                          const char *attr,
-                          const char *val,
-                          genders_attrval_t *avptr);
 
 /*
  * _genders_rehash

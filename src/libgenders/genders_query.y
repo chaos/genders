@@ -613,7 +613,6 @@ genders_testquery(genders_t handle,
                   const char *node,
                   const char *query)
 {
-  genders_node_t n;
   char **nodelist = NULL;
   int i, len, num;
   int found = 0;
@@ -638,7 +637,7 @@ genders_testquery(genders_t handle,
       return -1;
     }
 
-  if (!(n = hash_find(handle->node_index, node)))
+  if (hostlist_find(handle->hostnames, node) < 0)
     {
       handle->errnum = GENDERS_ERR_NOTFOUND;
       return -1;
