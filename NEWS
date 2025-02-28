@@ -2,6 +2,14 @@ This file describes changes in recent versions of genders. It
 primarily documents those changes that are of interest to users
 and admins.
 
+Changes in genders-1.31
+=======================
+ -- Re-architect libgenders internal data structures to significantly
+    improve performance for very large clusters.
+ -- Deprecate the genders_getmaxattrs() function as well as
+    all extension associated functions.
+ -- Remove a genders_query() memory leak.
+
 Changes in genders-1.30
 =======================
  -- Fix multiple performance bottlenecks in libgenders parsing.
