@@ -1824,6 +1824,138 @@ genders_database_t genders_database_large_val =
     &genders_database_data_large_val,
   };
 
+genders_database_data_t genders_database_data_issue87_numnodes =
+  {
+    "node1",
+    "attr1",
+    "attr2",
+    "val2",
+    4,
+    7,
+    7,                          /* maxattrs deprecated, same as numattrs */
+    5,
+    5,
+    4,
+    {"node1", "node2", "node3", "node4", NULL},
+    4,
+    {"attr1", "attr2", "attr3", "attr4",
+     "attr5", "attr6", "attr7",
+     NULL},
+    7,
+    {NULL,    "val2",  NULL,    "val4",
+     NULL,    "val6",  NULL,
+     NULL},
+    7,
+    {
+      {
+	{"attr1", "attr3", "attr5", "attr7", NULL},
+	{"", "", "", "", NULL},
+	{NULL, NULL, NULL, NULL, NULL},
+	4,
+      },
+      {
+	{"attr1", "attr4", "attr6", "attr7", NULL},
+	{"", "val4", "val6", "", NULL},
+	{NULL, "val4", "val6", NULL, NULL},
+	4,
+      },
+      {
+	{"attr2", "attr3", "attr6", "attr7", NULL},
+	{"val2", "", "val6", "", NULL},
+	{"val2", NULL, "val6", NULL, NULL},
+	4,
+      },
+      {
+	{"attr2", "attr4", "attr5", "attr7", NULL},
+	{"val2", "val4", "", "", NULL},
+	{"val2", "val4", NULL, NULL, NULL},
+	4,
+      },
+    },
+    4,
+    {
+      {
+	NULL,
+	NULL,
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+      {
+	"",
+	"",
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+      {
+	"attr1",
+	NULL,
+	{"node1", "node2", NULL},
+	2,
+      },
+      {
+	"attr2",
+	NULL,
+	{"node3", "node4", NULL},
+	2,
+      },
+      {
+	"attr2",
+	"val2",
+	{"node3", "node4", NULL},
+	2,
+      },
+      {
+	"attr3",
+	NULL,
+	{"node1", "node3", NULL},
+	2,
+      },
+      {
+	"attr4",
+	NULL,
+	{"node2", "node4", NULL},
+	2,
+      },
+      {
+	"attr4",
+	"val4",
+	{"node2", "node4", NULL},
+	2,
+      },
+      {
+	"attr5",
+	NULL,
+	{"node1", "node4", NULL},
+	2,
+      },
+      {
+	"attr6",
+	NULL,
+	{"node2", "node3", NULL},
+	2,
+      },
+      {
+	"attr6",
+	"val6",
+	{"node2", "node3", NULL},
+	2,
+      },
+      {
+	"attr7",
+	NULL,
+	{"node1", "node2", "node3", "node4", NULL},
+	4,
+      },
+    },
+    12,
+  };
+
+genders_database_t genders_database_issue87_numnodes =
+  {
+    "testdatabases/genders.issue87_numnodes",
+    &genders_database_data_issue87_numnodes,
+  };
+
 genders_database_t *genders_functionality_databases[] =
   {
     &genders_database_base,
@@ -1890,6 +2022,7 @@ genders_database_t *genders_functionality_databases[] =
     &genders_database_subst_nodename_hostrange,
     &genders_database_large_attr,
     &genders_database_large_val,
+    &genders_database_issue87_numnodes,
     NULL,
   };
 
