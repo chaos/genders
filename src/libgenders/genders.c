@@ -178,10 +178,10 @@ genders_load_data(genders_t handle, const char *filename)
                               NULL) < 0)
     goto cleanup;
 
-  handle->numnodes = hostlist_count(handle->hostnames);
-
   hostlist_uniq(handle->hostnames);
   hostlist_sort(handle->hostnames);
+
+  handle->numnodes = hostlist_count(handle->hostnames);
 
   if (gethostname(handle->nodename, GENDERS_MAXHOSTNAMELEN+1) < 0)
     {
