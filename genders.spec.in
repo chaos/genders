@@ -27,7 +27,7 @@ BuildRoot: %{_tmppath}/%{name}-%{version}
 %global _numbuilds 0
 
 # build for python 2 unless specifically requested otherwise
-%{!?_with_python2: %define _with_python2 1}
+%{!?_with_python2: %{!?_without_python2: %define _with_python2 1}}
 %if 0%{?_with_python2}
 BuildRequires: python2
 BuildRequires: python2-devel
@@ -35,7 +35,7 @@ BuildRequires: python2-devel
 %endif
 
 # build for python 3 unless specifically requested otherwise
-%{!?_with_python3: %define _with_python3 1}
+%{!?_with_python3: %{!?_without_python3: %define _with_python3 1}}
 %if 0%{?_with_python3}
 BuildRequires: python3
 BuildRequires: python3-devel
