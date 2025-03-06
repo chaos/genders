@@ -1,4 +1,4 @@
-Name:    @PACKAGE@ 
+Name:    @PACKAGE@
 Version: @VERSION@
 Release: 1
 Summary: Static cluster configuration database
@@ -23,30 +23,26 @@ BuildRoot: %{_tmppath}/%{name}-%{version}
 # If python extensions are requested, then build versions
 %if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
 
-# Helper variable that tells us how many builds we have to do 
-%global _numbuilds 0
-
 # build for python 2 unless specifically requested otherwise
-%{!?_with_python2: %define _with_python2 1}
+%{!?_with_python2: %{!?_without_python2: %define _with_python2 1}}
 %if 0%{?_with_python2}
 BuildRequires: python2
 BuildRequires: python2-devel
-%global _numbuilds %(expr %{expand: %{_numbuilds}} + 1)
+%else
+%define _with_python2 0
+%define _without_python2 1
 %endif
 
 # build for python 3 unless specifically requested otherwise
-%{!?_with_python3: %define _with_python3 1}
+%{!?_with_python3: %{!?_without_python3: %define _with_python3 1}}
 %if 0%{?_with_python3}
 BuildRequires: python3
 BuildRequires: python3-devel
-%global _numbuilds %(expr %{expand: %{_numbuilds}} + 1)
+%else
+%define _with_python3 0
+%define _without_python3 1
 %endif
 
-%else
-# Helper variable that tells us how many builds we have to do 
-%global _numbuilds 1
-%define _with_python2 0
-%define _with_python3 0
 %endif
 
 %description
@@ -76,37 +72,45 @@ python3 bindings
 %endif
 
 %package compat
-Summary: Compatibility library 
+Summary: Compatibility library
 Group: System Environment/Base
 %description compat
 genders API that is compatible with earlier releases of genders
 
 %prep
-%if 0%{!?_numbuilds} || 0%{?_numbuilds} == 0
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+%if 0%{?_without_python2} && 0%{?_without_python3}
 echo -e "Python extensions were requested, but none will be built.\n\
 Are _with_python2 and _with_python3 both disabled?"
 exit 1
 %endif
+%endif
 
 %setup -q -n %{name}-%{version}
 
-%if 0%{?_with_python3}
+# if both python2 and python3 build, make extra dir for python3
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+%if 0%{?_with_python2} && 0%{?_with_python3}
 %{__rm} -rf %{py3dir}
 %{__cp} -a . %{py3dir}
+%endif
 %endif
 
 %build
 
-%if 0%{?_with_python2} || 0%{!?_with_python3}
-# Ensure that AC_PATH_PROG is set for python2
+# Ensure that AC_PATH_PROG is set for python2 or python3
+
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+# if both python2 and python3 build, start w/ python2 first
+%if 0%{?_with_python2} && 0%{?_with_python3}
 export PYTHON=%{__python2}
-# Ensure we change into the build directory
-pushd .
-%else
-# Ensure that AC_PATH_PROG is set for python3
+%endif
+%if 0%{?_with_python2} && 0%{?_without_python3}
+export PYTHON=%{__python2}
+%endif
+%if 0%{?_without_python2} && 0%{?_with_python3}
 export PYTHON=%{__python3}
-# Ensure we change into the build directory
-pushd %{py3dir}
+%endif
 %endif
 
 %configure --program-prefix=%{?_program_prefix:%{_program_prefix}} \
@@ -123,12 +127,12 @@ pushd %{py3dir}
     %{?_without_cplusplus_extensions} \
     %{?_with_java_extensions} \
     %{?_without_java_extensions}
-make 
-popd
+make
 
-%if 0%{?_numbuilds} && 0%{?_numbuilds} > 1 && 0%{?_with_python3}
-
-# We know that we have one more build *and* that this must be for python3
+# if building both python2 and python3, python2 was done first, now we
+# gotta build the python3 part
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+%if 0%{?_with_python2} && 0%{?_with_python3}
 
 # Ensure that AC_PATH_PROG is set for python3
 export PYTHON=%{__python3}
@@ -149,9 +153,10 @@ pushd %{py3dir}
     %{?_without_cplusplus_extensions} \
     %{?_with_java_extensions} \
     %{?_without_java_extensions}
-make 
+make
 popd
 
+%endif
 %endif
 
 %install
@@ -159,23 +164,27 @@ popd
 # Clean up any old remnanants
 rm -rf $RPM_BUILD_ROOT
 
-%if 0%{?_with_python2} || 0%{!?_with_python3}
-# Ensure that AC_PATH_PROG is set for python2
+# Ensure that AC_PATH_PROG is set for python2 or python3
+
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+# if both python2 and python3 build, start w/ python2 first
+%if 0%{?_with_python2} && 0%{?_with_python3}
 export PYTHON=%{__python2}
-# Ensure we change into the build directory
-pushd .
-%else
-# Ensure that AC_PATH_PROG is set for python3
+%endif
+%if 0%{?_with_python2} && 0%{?_without_python3}
+export PYTHON=%{__python2}
+%endif
+%if 0%{?_without_python2} && 0%{?_with_python3}
 export PYTHON=%{__python3}
-# Ensure we change into the build directory
-pushd %{py3dir}
+%endif
 %endif
 
-DESTDIR="$RPM_BUILD_ROOT" make install 
-popd
+DESTDIR="$RPM_BUILD_ROOT" make install
 
-%if 0%{?_numbuilds} && 0%{?_numbuilds} > 1 && 0%{?_with_python3}
-# We know that we have one more build *and* that this must be for python3
+# if installing both python2 and python3, python2 was done first, now we
+# gotta install the python3 part
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
+%if 0%{?_with_python2} && 0%{?_with_python3}
 
 # Ensure that AC_PATH_PROG is set for python3
 export PYTHON=%{__python3}
@@ -186,7 +195,7 @@ DESTDIR="$RPM_BUILD_ROOT" make install
 popd
 
 %endif
-
+%endif
 
 %files
 %defattr(-,root,root)
@@ -196,7 +205,7 @@ popd
 %doc %{_datadir}/doc/%{name}-%{version}-javadoc/*
 %endif
 # It doesn't matter if the user chooses a 32bit or 64bit target.  The
-# packaging must work off whatever Perl is installed.  
+# packaging must work off whatever Perl is installed.
 %if %{?_with_perl_site_arch:1}%{!?_with_perl_site_arch:0}
 %define _perldir %(perl -e 'use Config; $T=$Config{installsitearch}; $P=$Config{siteprefix}; $T=~/$P\\/(.*)/; print "%{_prefix}/$1\\n"')
 %endif
@@ -205,7 +214,7 @@ popd
 %endif
 %{_mandir}/man1/*
 %{_mandir}/man3/genders*
-%{_mandir}/man3/libgenders* 
+%{_mandir}/man3/libgenders*
 %{_includedir}/*
 %{_bindir}/*
 %{_libdir}/libgenders.*
@@ -227,15 +236,16 @@ popd
 %{_mandir}/man3/gendlib*
 %{_prefix}/lib/genders/*
 
+%if %{?_with_python_extensions:1}%{!?_with_python_extensions:0}
 %if 0%{?_with_python2}
 %files python
 %defattr(-,root,root)
 %{_libdir}/python2*
 %endif
 
-
 %if 0%{?_with_python3}
 %files python%{python3_version_nodots}
 %defattr(-,root,root)
 %{_libdir}/python3*
+%endif
 %endif
