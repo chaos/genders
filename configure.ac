@@ -67,6 +67,7 @@ PYTHONGENDERS_MINOR=2
 PYTHONGENDERS_VERSION=$PYTHONGENDERS_MAJOR.$PYTHONGENDERS_MINOR
 AC_SUBST([PYTHONGENDERS_VERSION])
 
+
 ##
 # Checks for programs.
 ##
@@ -85,6 +86,7 @@ AC_PATH_PROG([JAVAH], [javah])
 AC_PATH_PROG([JAVA], [java])
 AC_PATH_PROG([JAR], [jar])
 AC_PATH_PROG([JAVADOC], [javadoc])
+AC_PATH_PROG([JAVADOC], [lua])
 AC_DEBUG
 
 ##
@@ -205,6 +207,24 @@ AM_CONDITIONAL(WITH_CPLUSPLUS_EXTENSIONS, [test "$ac_with_cplusplus_extensions" 
 AC_JAVA_EXTENSIONS
 AM_CONDITIONAL(WITH_JAVA_EXTENSIONS, [test "$ac_with_java_extensions" = "yes"])
 
+#
+# Check for lua, which means create commanline conditional
+#
+AC_LUA_EXTENSIONS
+AM_CONDITIONAL(WITH_LUA_EXTENSIONS, [test "$ac_with_lua_extensions" = "yes"])
+#
+# expand lua
+#
+if test "x$ac_with_lua_extensions" = "xyes" ; then
+# beware, the ACTION-IF-NOT-FOUND is not working
+AX_PROG_LUA([5.3],,,:)
+# The test of headers fail, if LUA_VERSION is empty
+if test LUA_VERSION ; then
+AX_LUA_HEADERS
+AX_LUA_LIBS
+fi
+fi
+
 ##
 # Checks for typedefs, structures, and compiler characteristics.
 ##
@@ -245,6 +265,7 @@ AC_CONFIG_FILES( \
   src/extensions/perl/Genders/Makefile \
   src/extensions/perl/Genders/Genders.pm \
   src/extensions/python/Makefile \
+  src/extensions/lua/Makefile \
   src/extensions/python/genderssetup.py \
   src/extensions/java/Makefile \
   src/testsuite/Makefile \
