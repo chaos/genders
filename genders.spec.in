@@ -38,6 +38,7 @@ BuildRequires: python2-devel
 %if 0%{?_with_python3}
 BuildRequires: python3
 BuildRequires: python3-devel
+BuildRequires: python3-setuptools
 %else
 %define _with_python3 0
 %define _without_python3 1
