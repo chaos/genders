@@ -2,15 +2,31 @@ name: build CI
 
 on:
   push:
-      branches: [ master ]
   pull_request:
-      branches: [ master ]
+    branches: [master]
 
 jobs:
   build:
-      runs-on: ubuntu-22.04
-      steps:
-      - uses: actions/checkout@v2
+    name: Build on ${{ matrix.os }} with Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, macos-13]
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install setuptools for Python 3.12
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install setuptools
+
       - name: configure
         run: ./configure
       - name: make
