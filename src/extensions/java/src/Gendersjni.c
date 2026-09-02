@@ -256,7 +256,7 @@ Java_gov_llnl_lc_chaos_Genders_getnodename (JNIEnv *env, jobject obj)
 static  jobjectArray
 _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
 {
-  genders_t handle;
+  genders_t handle = NULL;
   char **nodelist = NULL;
   int nodelistlen;
   jclass string_class = NULL;
@@ -300,7 +300,8 @@ _getnodes (JNIEnv *env, jobject obj, const char *attr, const char *val)
  cleanup:
   if (!rv && jnodelist)
     (*env)->DeleteLocalRef (env, jnodelist);
-  genders_nodelist_destroy (handle, nodelist);
+  if (nodelist)
+    genders_nodelist_destroy (handle, nodelist);
   (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
@@ -368,7 +369,7 @@ Java_gov_llnl_lc_chaos_Genders_getnodes__Ljava_lang_String_2Ljava_lang_String_2 
 static  jobjectArray
 _getattr (JNIEnv *env, jobject obj, const char *node)
 {
-  genders_t handle;
+  genders_t handle = NULL;
   char **attrlist = NULL;
   int attrlistlen;
   jclass string_class = NULL;
@@ -412,7 +413,8 @@ _getattr (JNIEnv *env, jobject obj, const char *node)
  cleanup:
   if (!rv && jlist)
     (*env)->DeleteLocalRef (env, jlist);
-  genders_attrlist_destroy (handle, attrlist);
+  if (attrlist)
+    genders_attrlist_destroy (handle, attrlist);
   (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
@@ -426,7 +428,7 @@ Java_gov_llnl_lc_chaos_Genders_getattr__ (JNIEnv *env, jobject obj)
 JNIEXPORT jobjectArray JNICALL
 Java_gov_llnl_lc_chaos_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node)
 {
-  const jbyte *nodeutf;
+  const jbyte *nodeutf = NULL;
   jobjectArray rv = NULL;
 
   if (node)
@@ -446,7 +448,7 @@ Java_gov_llnl_lc_chaos_Genders_getattr__Ljava_lang_String_2 (JNIEnv *env, jobjec
 JNIEXPORT jobjectArray JNICALL
 Java_gov_llnl_lc_chaos_Genders_getattr_1all (JNIEnv *env, jobject obj)
 {
-  genders_t handle;
+  genders_t handle = NULL;
   char **attrlist = NULL;
   int attrlistlen;
   jclass string_class = NULL;
@@ -490,6 +492,8 @@ Java_gov_llnl_lc_chaos_Genders_getattr_1all (JNIEnv *env, jobject obj)
  cleanup:
   if (!rv && jattrlist)
     (*env)->DeleteLocalRef (env, jattrlist);
+  if (attrlist)
+    genders_attrlist_destroy (handle, attrlist);
   (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
@@ -542,7 +546,7 @@ _getattrval (JNIEnv *env, jobject obj, const char *node, const char *attr)
 JNIEXPORT jstring JNICALL
 Java_gov_llnl_lc_chaos_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring attr)
 {
-  const jbyte *attrutf;
+  const jbyte *attrutf = NULL;
   jstring rv = NULL;
 
   if (attr)
@@ -562,8 +566,8 @@ Java_gov_llnl_lc_chaos_Genders_getattrval__Ljava_lang_String_2 (JNIEnv *env, job
 JNIEXPORT jstring JNICALL
 Java_gov_llnl_lc_chaos_Genders_getattrval__Ljava_lang_String_2Ljava_lang_String_2 (JNIEnv *env, jobject obj, jstring node, jstring attr)
 {
-  const jbyte *nodeutf;
-  const jbyte *attrutf;
+  const jbyte *nodeutf = NULL;
+  const jbyte *attrutf = NULL;
   jstring rv = NULL;
 
   if (node)
@@ -868,7 +872,7 @@ Java_gov_llnl_lc_chaos_Genders_isattrval (JNIEnv *env, jobject obj, jstring attr
 JNIEXPORT jobjectArray JNICALL
 Java_gov_llnl_lc_chaos_Genders_query (JNIEnv *env, jobject obj, jstring query)
 {
-  genders_t handle;
+  genders_t handle = NULL;
   const jbyte *queryutf = NULL;
   char **nodelist = NULL;
   int nodelistlen;
@@ -919,7 +923,8 @@ Java_gov_llnl_lc_chaos_Genders_query (JNIEnv *env, jobject obj, jstring query)
  cleanup:
   if (!rv && jnodelist)
     (*env)->DeleteLocalRef (env, jnodelist);
-  genders_nodelist_destroy (handle, nodelist);
+  if (nodelist)
+    genders_nodelist_destroy (handle, nodelist);
   if (query && queryutf)
     (*env)->ReleaseStringUTFChars(env, query, queryutf);
   (*env)->DeleteLocalRef (env, string_class);

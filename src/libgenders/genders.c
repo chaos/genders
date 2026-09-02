@@ -206,7 +206,7 @@ genders_load_data(genders_t handle, const char *filename)
   return 0;
 
 cleanup:
-  if (handle && handle->magic == GENDERS_ERR_MAGIC)
+  if (handle && handle->magic == GENDERS_MAGIC_NUM)
     {
       free(handle->valbuf);
 
