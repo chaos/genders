@@ -490,6 +490,8 @@ Java_gov_llnl_lc_chaos_Genders_getattr_1all (JNIEnv *env, jobject obj)
  cleanup:
   if (!rv && jattrlist)
     (*env)->DeleteLocalRef (env, jattrlist);
+  if (attrlist)
+    genders_attrlist_destroy (handle, attrlist);
   (*env)->DeleteLocalRef (env, string_class);
   return (rv);
 }
